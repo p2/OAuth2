@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EE3174EC1945E83100210E62 /* OAuth2ImplicitGrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE3174EB1945E83100210E62 /* OAuth2ImplicitGrant.swift */; };
+		EE3174ED1945E83100210E62 /* OAuth2ImplicitGrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE3174EB1945E83100210E62 /* OAuth2ImplicitGrant.swift */; };
 		EEDB862A193FAAE500C4EEA1 /* OAuth2.h in Headers */ = {isa = PBXBuildFile; fileRef = EEDB8629193FAAE500C4EEA1 /* OAuth2.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EEDB8641193FAB9200C4EEA1 /* OAuth2.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDB8640193FAB9200C4EEA1 /* OAuth2.swift */; };
 		EEDB864C19421DAD00C4EEA1 /* extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDB864B19421DAD00C4EEA1 /* extensions.swift */; };
@@ -27,6 +29,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		EE3174EB1945E83100210E62 /* OAuth2ImplicitGrant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2ImplicitGrant.swift; sourceTree = "<group>"; };
 		EEDB8624193FAAE500C4EEA1 /* OAuth2-iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "OAuth2-iOS.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EEDB8629193FAAE500C4EEA1 /* OAuth2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAuth2.h; sourceTree = "<group>"; };
 		EEDB8640193FAB9200C4EEA1 /* OAuth2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2.swift; sourceTree = "<group>"; };
@@ -89,6 +92,7 @@
 			children = (
 				EEDB8629193FAAE500C4EEA1 /* OAuth2.h */,
 				EEDB8640193FAB9200C4EEA1 /* OAuth2.swift */,
+				EE3174EB1945E83100210E62 /* OAuth2ImplicitGrant.swift */,
 				EEDB864B19421DAD00C4EEA1 /* extensions.swift */,
 				EEE2093719424DB100736F1A /* OSX.playground */,
 				EEDB8627193FAAE500C4EEA1 /* Supporting Files */,
@@ -265,6 +269,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EE3174ED1945E83100210E62 /* OAuth2ImplicitGrant.swift in Sources */,
 				EEDB8641193FAB9200C4EEA1 /* OAuth2.swift in Sources */,
 				EEDB864C19421DAD00C4EEA1 /* extensions.swift in Sources */,
 			);
@@ -274,6 +279,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EE3174EC1945E83100210E62 /* OAuth2ImplicitGrant.swift in Sources */,
 				EEE209871942776500736F1A /* OAuth2.swift in Sources */,
 				EEE209881942776C00736F1A /* extensions.swift in Sources */,
 			);
@@ -528,6 +534,7 @@
 				EEE2095C1942772800736F1A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		EEE209AB19427DFE00736F1A /* Build configuration list for PBXNativeTarget "OAuth2 Tests" */ = {
 			isa = XCConfigurationList;
@@ -536,6 +543,7 @@
 				EEE209AD19427DFE00736F1A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

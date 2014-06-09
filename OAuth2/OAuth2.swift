@@ -256,7 +256,7 @@ class OAuth2 {
 	/**
 	 *  Debug logging, will only log if `verbose` is YES.
 	 */
-	func logIfVerbose (log: String...) {
+	func logIfVerbose(log: String...) {
 		if verbose {
 			println("OAuth2: ".join(log))
 		}

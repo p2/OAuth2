@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>B32BBC6E-4D1D-4E07-BA14-AE98FE44F950</string>
+	<key>IDESourceControlProjectName</key>
+	<string>OAuth2</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>218B0829-84C1-4CEF-B5EB-3A120EF34C96</key>
+		<string>ssh://github.com/p2/OAuth2.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>OAuth2.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>218B0829-84C1-4CEF-B5EB-3A120EF34C96</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>ssh://github.com/p2/OAuth2.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>218B0829-84C1-4CEF-B5EB-3A120EF34C96</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>218B0829-84C1-4CEF-B5EB-3A120EF34C96</string>
+			<key>IDESourceControlWCCName</key>
+			<string>OAuth2</string>
+		</dict>
+	</array>
+</dict>
+</plist>
