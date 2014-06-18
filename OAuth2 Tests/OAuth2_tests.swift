@@ -10,7 +10,7 @@ import XCTest
 import OAuth2
 
 
-class OAuth2_Tests: XCTestCase {
+class OAuth2Tests: XCTestCase {
 	
 	func genericOAuth2() -> OAuth2 {
 		return OAuth2(settings: [
@@ -31,13 +31,14 @@ class OAuth2_Tests: XCTestCase {
 		
 		let oa = self.genericOAuth2()
 		XCTAssertEqualObjects(oa.apiURL, NSURL(string: "https://api.ful.io"), "Must init `api_uri`")
-		XCTAssertEqualObjects(oa.authorizeURL, NSURL(string: "https://auth.ful.io"), "Must init `authorize_uri`")
+		XCTAssertEqualObjects(oa.authURL, NSURL(string: "https://auth.ful.io"), "Must init `authorize_uri`")
 		XCTAssertEqualObjects(oa.scope, "login", "Must init `scope`")
 		XCTAssertTrue(oa.verbose, "Must init `verbose`")
 	}
 	
 	func testAuthorizeURL() {
-		let auth = self.genericOAuth2().authorizeURL("oauth2app://callback", scope: "launch", params: nil)
+		let oa = genericOAuth2()
+		let auth = oa.authorizeURL(oa.authURL!, redirect: "oauth2app://callback", scope: "launch", responseType: "code", params: nil)
 		
 		let comp = NSURLComponents(URL: auth, resolvingAgainstBaseURL: true)
 		XCTAssertEqualObjects("https", comp.scheme, "Need correct scheme")

@@ -14,44 +14,51 @@ protocol OAuth2Delegate {
 }
 
 
+/*!
+ *  Base class for specific OAuth2 authentication flow implementations.
+ */
 class OAuth2 {
 	
-	/** An optional delegate. */
+	/*! An optional delegate. */
 	var delegate: OAuth2Delegate?
 	
-	/** Settings, as set upon initialization. */
+	/*! Settings, as set upon initialization. */
 	let settings: NSDictionary
 	
-	/** The client id. */
+	/*! The client id. */
 	let clientId: String
 	
-	/** Base API URL, all paths will be relative to this one. */
+	/*! Base API URL, all paths will be relative to this one. */
 	var apiURL: NSURL?
 	
-	/** The URL to authorize against. */
-	var authorizeURL: NSURL?
+	/*! The URL to authorize against. */
+	var authURL: NSURL?
 	
-	/** The receiver's access token. */
+	/*! The receiver's access token. */
 	var accessToken = ""
 	
-	/** The redirect URL string currently in use. */
+	/*! The redirect URL string currently in use. */
 	var redirect: String?
 	
-	/** The scope currently in use. */
-	var scope = ""
+	/*! The scope currently in use. */
+	var scope: String?
 	
-	/** The state sent to the server when requesting a token; we internally generate a UUID unless it's set manually. */
+	/*! The state sent to the server when requesting a token; we internally generate a UUID unless it's set manually. */
 	var state = ""
 	
-	/** Set to YES to log all the things. NO by default. */
+	/*! Set to YES to log all the things. NO by default. */
 	var verbose = false
 	
-	/**
-	 *  Designated initializer, key support is experimental and currently informed by MITREid's reference implementation, with these additional
-	 *  keys:
+	/*!
+	 *  Designated initializer.
+	 *
+	 *  Key support is experimental and currently informed by MITREid's reference implementation, with these keys:
+	 *    - client_id (string)
+	 *    - client_secret (string), only for code grant
 	 *    - api_uri (string)
 	 *    - authorize_uri (string)
-	 *    - token_uri (string, only needed for code grant type)
+	 *    - token_uri (string), only for code grant
+	 *    - redirect_uris (list of strings)
 	 *    - scope (string)
 	 *    - verbose (bool, applies to client logging, unrelated to the actual OAuth exchange)
 	 *  MITREid: https://github.com/mitreid-connect/
@@ -70,7 +77,7 @@ class OAuth2 {
 			apiURL = NSURL(string: api)
 		}
 		if let auth = settings["authorize_uri"] as? String {
-			authorizeURL = NSURL(string: auth)
+			authURL = NSURL(string: auth)
 		}
 		if let scp = settings["scope"] as? String {
 			scope = scp
@@ -86,30 +93,19 @@ class OAuth2 {
 	
 	// MARK: OAuth Actions
 	
-	/**
-	 *  Uses `authorizeURL` to construct the final authorize URL with the given parameters. It will thus crash if `authorizeURL` is nil!
+	/*!
+	 *  Constructs an authorize URL with the given parameters.
 	 *
-	 *  It is possible to use the `params` dictionary to override internally generated URL parameters, use it wisely.
-	 *
-	 *  @param redirect The redirect URI to supply. If it is nil, the first value of the settings' `redirect_uris` entries is used. Must be present in the end!
-	 *  @param scope The scope to request
-	 *  @param params Any additional parameters
-	 */
-	func authorizeURL(redirect: String?, scope: String?, params: Dictionary<String, String>?) -> NSURL {
-		return authorizeURL(authorizeURL!, redirect: redirect, scope: scope, params: params)
-	}
-	
-	/**
-	 *  Base method to construct the final authorize URL with the given parameters.
-	 *
-	 *  It is possible to use the `params` dictionary to override internally generated URL parameters, use it wisely.
+	 *  It is possible to use the `params` dictionary to override internally generated URL parameters, use it wisely. Subclasses generally provide shortcut
+	 *  methods to receive an appropriate authorize (or token) URL.
 	 *
 	 *  @param base The base URL (with path, if needed) to build the URL upon
-	 *  @param redirect The redirect URI to supply. If it is nil, the first value of the settings' `redirect_uris` entries is used. Must be present in the end!
+	 *  @param redirect The redirect URI string to supply. If it is nil, the first value of the settings' `redirect_uris` entries is used. Must be present in the end!
 	 *  @param scope The scope to request
-	 *  @param params Any additional parameters as dictionary with string keys and values
+	 *  @param responseType The response type to request; subclasses know which one to supply
+	 *  @param params Any additional parameters as dictionary with string keys and values that will be added to the query part
 	 */
-	func authorizeURL(base: NSURL, var redirect: String?, scope: String?, params: Dictionary<String, String>?) -> NSURL {
+	func authorizeURL(base: NSURL, var redirect: String?, scope: String?, responseType: String?, params: Dictionary<String, String>?) -> NSURL {
 		logIfVerbose("Starting authorization against", base.description)
 		
 		// verify that we have all parts
@@ -117,8 +113,8 @@ class OAuth2 {
 			NSException(name: "MCOAuth2IncompletSetup", reason: "I do not yet have a client id, cannot construct an authorize URL", userInfo: nil).raise()
 		}
 		
-		if let redir = redirect {
-			self.redirect = redir
+		if redirect {
+			self.redirect = redirect!
 		}
 		else if !self.redirect {
 			if let redirs = settings["redirect_uris"] as? NSArray {
@@ -129,13 +125,6 @@ class OAuth2 {
 		}
 		if !self.redirect {
 			NSException(name: "MCOAuth2IncompletSetup", reason: "I need a redirect URI, cannot construct an authorize URL", userInfo: nil).raise()
-		}
-		
-		if let myscope = scope {
-			self.scope = myscope
-		}
-		if self.scope.isEmpty {
-			NSException(name: "MCOAuth2IncompletSetup", reason: "I need a scope, cannot construct an authorize URL", userInfo: nil).raise()
 		}
 		
 		if state.isEmpty {
@@ -149,12 +138,20 @@ class OAuth2 {
 		var urlParams = [
 			"client_id": clientId,
 			"redirect_uri": self.redirect!,
-			"scope": self.scope,
 			"state": state
 		]
+		if scope {
+			self.scope = scope!
+		}
+		if self.scope {
+			urlParams["scope"] = self.scope!
+		}
+		if responseType {
+			urlParams["response_type"] = responseType!
+		}
 		
-		if let prms = params {
-			urlParams.addEntries(prms)
+		if params {
+			urlParams.addEntries(params!)
 		}
 		
 		comp.query = OAuth2.queryStringFor(urlParams)
@@ -171,19 +168,18 @@ class OAuth2 {
 	
 	// MARK: Utilities
 	
-	/**
+	/*!
 	 *  Create a query string from a dictionary of string: string pairs.
 	 */
 	class func queryStringFor(params: Dictionary<String, String>) -> String {
 		var arr: String[] = []
 		for (key, val) in params {
-			// TODO: how to check val != NSNull.self ??
 			arr.append("\(key)=\(val)")						// NSURLComponents will correctly encode the parameter string
 		}
 		return "&".join(arr)
 	}
 	
-	/**
+	/*!
 	 *  Parse a query string into a dictionary of string: string pairs.
 	 */
 	class func paramsFromQuery(query: String) -> Dictionary<String, String> {
@@ -199,22 +195,22 @@ class OAuth2 {
 		return params
 	}
 	
-	/**
+	/*!
 	 *  Handles access token error response.
 	 *  @param params The URL parameters passed into the redirect URL upon error
 	 *  @return An NSError instance with the "best" localized error key and all parameters in the userInfo dictionary; domain "MCOAuth2ErrorDomain", code 600
 	 */
-	class func errorForAccessTokenErrorResponse(params: NSDictionary?) -> NSError {
+	class func errorForAccessTokenErrorResponse(params: NSDictionary) -> NSError {
 		var message = ""
 		
 		// "error_description" is optional, we prefer it if it's present
-		if let err_msg = params?["error_description"] as? String {
+		if let err_msg = params["error_description"] as? String {
 			message = err_msg.stringByReplacingOccurrencesOfString("+", withString: " ")
 		}
 		
 		// the "error" response is required for error responses
 		if message.isEmpty {
-			if let err_code = params?["error"] as? String {
+			if let err_code = params["error"] as? String {
 				switch err_code {
 				case "invalid_request":
 					message = "The request is missing a required parameter, includes an invalid parameter value, includes a parameter more than once, or is otherwise malformed."
@@ -242,7 +238,7 @@ class OAuth2 {
 		}
 		
 		var error: NSError
-		if let prms = params?.mutableCopy() as? NSMutableDictionary {
+		if let prms = params.mutableCopy() as? NSMutableDictionary {
 			prms[NSLocalizedDescriptionKey] = message
 			error = NSError(domain: "MCOAuth2ErrorDomain", code: 600, userInfo: prms)
 		}
@@ -253,7 +249,7 @@ class OAuth2 {
 		return error
 	}
 	
-	/**
+	/*!
 	 *  Debug logging, will only log if `verbose` is YES.
 	 */
 	func logIfVerbose(log: String...) {

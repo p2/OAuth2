@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		EE3174EC1945E83100210E62 /* OAuth2ImplicitGrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE3174EB1945E83100210E62 /* OAuth2ImplicitGrant.swift */; };
 		EE3174ED1945E83100210E62 /* OAuth2ImplicitGrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE3174EB1945E83100210E62 /* OAuth2ImplicitGrant.swift */; };
+		EE44F692194F2C7D0094AB8B /* OAuth2CodeGrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE44F691194F2C7D0094AB8B /* OAuth2CodeGrant.swift */; };
 		EEDB862A193FAAE500C4EEA1 /* OAuth2.h in Headers */ = {isa = PBXBuildFile; fileRef = EEDB8629193FAAE500C4EEA1 /* OAuth2.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EEDB8641193FAB9200C4EEA1 /* OAuth2.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDB8640193FAB9200C4EEA1 /* OAuth2.swift */; };
 		EEDB864C19421DAD00C4EEA1 /* extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDB864B19421DAD00C4EEA1 /* extensions.swift */; };
@@ -19,6 +20,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		EE43B1551951F2440017679A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EEDB861B193FAAE500C4EEA1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EEE209461942772800736F1A;
+			remoteInfo = OAuth2;
+		};
 		EEE209A919427DFE00736F1A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = EEDB861B193FAAE500C4EEA1 /* Project object */;
@@ -30,6 +38,7 @@
 
 /* Begin PBXFileReference section */
 		EE3174EB1945E83100210E62 /* OAuth2ImplicitGrant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2ImplicitGrant.swift; sourceTree = "<group>"; };
+		EE44F691194F2C7D0094AB8B /* OAuth2CodeGrant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2CodeGrant.swift; sourceTree = "<group>"; };
 		EEDB8624193FAAE500C4EEA1 /* OAuth2-iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "OAuth2-iOS.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EEDB8629193FAAE500C4EEA1 /* OAuth2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAuth2.h; sourceTree = "<group>"; };
 		EEDB8640193FAB9200C4EEA1 /* OAuth2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2.swift; sourceTree = "<group>"; };
@@ -93,6 +102,7 @@
 				EEDB8629193FAAE500C4EEA1 /* OAuth2.h */,
 				EEDB8640193FAB9200C4EEA1 /* OAuth2.swift */,
 				EE3174EB1945E83100210E62 /* OAuth2ImplicitGrant.swift */,
+				EE44F691194F2C7D0094AB8B /* OAuth2CodeGrant.swift */,
 				EEDB864B19421DAD00C4EEA1 /* extensions.swift */,
 				EEE2093719424DB100736F1A /* OSX.playground */,
 				EEDB8627193FAAE500C4EEA1 /* Supporting Files */,
@@ -194,6 +204,7 @@
 			);
 			dependencies = (
 				EEE209AA19427DFE00736F1A /* PBXTargetDependency */,
+				EE43B1561951F2440017679A /* PBXTargetDependency */,
 			);
 			name = "OAuth2 Tests";
 			productName = "OAuth2 Tests";
@@ -281,6 +292,7 @@
 			files = (
 				EE3174EC1945E83100210E62 /* OAuth2ImplicitGrant.swift in Sources */,
 				EEE209871942776500736F1A /* OAuth2.swift in Sources */,
+				EE44F692194F2C7D0094AB8B /* OAuth2CodeGrant.swift in Sources */,
 				EEE209881942776C00736F1A /* extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -296,6 +308,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		EE43B1561951F2440017679A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EEE209461942772800736F1A /* OAuth2 */;
+			targetProxy = EE43B1551951F2440017679A /* PBXContainerItemProxy */;
+		};
 		EEE209AA19427DFE00736F1A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = EEE209461942772800736F1A /* OAuth2 */;
