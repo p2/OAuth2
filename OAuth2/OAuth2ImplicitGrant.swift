@@ -19,7 +19,7 @@ class OAuth2ImplicitGrant: OAuth2 {
 	}
 	
 	func handleRedirectURL(url: NSURL, callback: (didCancel: Bool, error: NSError?) -> ()) {
-		logIfVerbose("Handling redirect URL", url.description)
+		logIfVerbose("Handling redirect URL \(url.description)")
 		
 		var error: NSError?
 		var comp = NSURLComponents(URL: url, resolvingAgainstBaseURL: true)
@@ -65,7 +65,7 @@ class OAuth2ImplicitGrant: OAuth2 {
 		
 		// log, if needed, then call the callback
 		if error {
-			logIfVerbose("Error handling redirect URL:", error!.localizedDescription)
+			logIfVerbose("Error handling redirect URL: \(error!.localizedDescription)")
 		}
 		callback(didCancel: false, error: error)
 	}

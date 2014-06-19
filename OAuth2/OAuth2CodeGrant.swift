@@ -16,9 +16,6 @@ import Foundation
  */
 class OAuth2CodeGrant: OAuth2 {
 	
-	/*! The client secret */
-	let clientSecret: String
-	
 	/*! The URL string where we can exchange a code for a token; if nil `authURL` will be used. */
 	let tokenURL: NSURL?
 	
@@ -26,13 +23,6 @@ class OAuth2CodeGrant: OAuth2 {
 	var refreshToken = ""
 	
 	init(settings: NSDictionary) {
-		if let secret = settings["client_secret"] as? String {
-			clientSecret = secret
-		}
-		else {
-			fatalError("Must supply `client_secret` upon initialization; it may be an empty string")
-		}
-		
 		if let token = settings["token_uri"] as? String {
 			tokenURL = NSURL(string: token)
 		}
@@ -70,6 +60,19 @@ class OAuth2CodeGrant: OAuth2 {
 	}
 	
 	/*!
+	 *  Extracts the code from the redirect URL and exchanges it for a token.
+	 */
+	func exchangeTokenWithRedirectURL(redirect: NSURL, callback: (didCancel: Bool, error: NSError?) -> ()) {
+		let (code, error) = validateRedirectURL(redirect)
+		if error {
+			callback(didCancel: false, error: error)
+			return
+		}
+		
+		exchangeCodeForToken(code!, callback: callback)
+	}
+	
+	/*!
 	 *  Call this when we receive a code.
 	 */
 	func exchangeCodeForToken(code: String, callback: (didCancel: Bool, error: NSError?) -> ()) {
@@ -82,6 +85,7 @@ class OAuth2CodeGrant: OAuth2 {
 		}
 		
 		let post = tokenRequest(code)
+		logIfVerbose("Exchanging code \(code) for token at \(post.URL.description)")
 		
 		// perform the exchange
 		NSURLConnection.sendAsynchronousRequest(post, queue: NSOperationQueue.mainQueue(), completionHandler: { response, data, error in
@@ -102,6 +106,7 @@ class OAuth2CodeGrant: OAuth2 {
 								self.refreshToken = refresh
 							}
 							
+							self.logIfVerbose("Did receive access token: \(self.accessToken), refresh token: \(self.refreshToken)")
 							callback(didCancel: false, error: nil)
 							return
 						}
@@ -117,5 +122,46 @@ class OAuth2CodeGrant: OAuth2 {
 			
 			callback(didCancel: false, error: finalError)
 		})
+	}
+	
+	
+	// MARK: Utilities
+	
+	/*!
+	 *  Validates the redirect URI, returns a tuple weth the code and nil on success, nil and an error on failure.
+	 */
+	func validateRedirectURL(redirect: NSURL) -> (code: String?, error: NSError?) {
+		var code: String?
+		var error: NSError?
+		
+		let comp = NSURLComponents(URL: redirect, resolvingAgainstBaseURL: true)
+		let query = OAuth2CodeGrant.paramsFromQuery(comp.query)
+
+		if query.count > 0 {
+			if let cd = query["code"] {
+
+				// we got a code, check if state is correct
+				if let st = query["state"] {
+					if st == state {
+						code = cd
+					}
+					else {
+						error = NSError(domain: NSCocoaErrorDomain, code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid state \(st), will not use the code"])
+					}
+				}
+				else {
+					error = NSError(domain: NSCocoaErrorDomain, code: 0, userInfo: [NSLocalizedDescriptionKey: "No state was returned"])
+				}
+			}
+			else {
+				error = OAuth2CodeGrant.errorForAccessTokenErrorResponse(query)
+			}
+		}
+		else {
+			error = NSError(domain: NSCocoaErrorDomain, code: 0, userInfo: [NSLocalizedDescriptionKey: "The redirect URL contains no query fragment"])
+		}
+		
+		logIfVerbose("Did validate redirect URL with error: \(error?.localizedDescription)")
+		return (code, error)
 	}
 }

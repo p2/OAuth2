@@ -28,6 +28,9 @@ class OAuth2 {
 	/*! The client id. */
 	let clientId: String
 	
+	/*! The client secret, usually only needed for code grant. */
+	let clientSecret: String?
+	
 	/*! Base API URL, all paths will be relative to this one. */
 	var apiURL: NSURL?
 	
@@ -54,7 +57,7 @@ class OAuth2 {
 	 *
 	 *  Key support is experimental and currently informed by MITREid's reference implementation, with these keys:
 	 *    - client_id (string)
-	 *    - client_secret (string), only for code grant
+	 *    - client_secret (string), usually only needed for code grant
 	 *    - api_uri (string)
 	 *    - authorize_uri (string)
 	 *    - token_uri (string), only for code grant
@@ -73,6 +76,10 @@ class OAuth2 {
 			fatalError("Must supply `client_id` upon initialization")
 		}
 		
+		if let secret = settings["client_secret"] as? String {
+			clientSecret = secret
+		}
+		
 		if let api = settings["api_uri"] as? String {
 			apiURL = NSURL(string: api)
 		}
@@ -87,7 +94,7 @@ class OAuth2 {
 			verbose = verb
 		}
 		
-		logIfVerbose("Initialized with client id %@", clientId)
+		logIfVerbose("Initialized with client id \(clientId)")
 	}
 	
 	
@@ -106,7 +113,7 @@ class OAuth2 {
 	 *  @param params Any additional parameters as dictionary with string keys and values that will be added to the query part
 	 */
 	func authorizeURL(base: NSURL, var redirect: String?, scope: String?, responseType: String?, params: Dictionary<String, String>?) -> NSURL {
-		logIfVerbose("Starting authorization against", base.description)
+		logIfVerbose("Starting authorization against \(base.description)")
 		
 		// verify that we have all parts
 		if clientId.isEmpty {
@@ -157,7 +164,7 @@ class OAuth2 {
 		comp.query = OAuth2.queryStringFor(urlParams)
 		
 		let final = comp.URL
-		logIfVerbose("Authorizing against", final.description)
+		logIfVerbose("Authorizing against \(final.description)")
 		return final;
 	}
 	
@@ -252,9 +259,9 @@ class OAuth2 {
 	/*!
 	 *  Debug logging, will only log if `verbose` is YES.
 	 */
-	func logIfVerbose(log: String...) {
+	func logIfVerbose(log: String) {
 		if verbose {
-			println("OAuth2: ".join(log))
+			println("OAuth2: \(log)")
 		}
 	}
 }
