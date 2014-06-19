@@ -35,18 +35,24 @@ class OAuth2CodeGrant: OAuth2 {
 		return authorizeURL(authURL!, redirect: redirect, scope: scope, responseType: "code", params: params)
 	}
 	
-	func tokenURLWithRedirect(redirect: String?, params: Dictionary<String, String>?) -> NSURL {
+	func tokenURLWithRedirect(redirect: String?, code: String, params: Dictionary<String, String>?) -> NSURL {
 		let base = tokenURL ? tokenURL! : authURL!
-		return authorizeURL(base, redirect: redirect, scope: nil, responseType: nil, params: params)
+		var prms = ["code": code, "grant_type": "authorization_code"]
+		if clientSecret {
+			prms["client_secret"] = clientSecret!
+		}
+		
+		if params {
+			prms.addEntries(params!)
+		}
+		
+		return authorizeURL(base, redirect: redirect, scope: nil, responseType: nil, params: prms)
 	}
 	
 	func tokenRequest(code: String) -> NSURLRequest {
 		
 		// create a request for token exchange
-		let url = tokenURLWithRedirect(redirect, params: [
-			"grant_type": "authorization_code",
-			"code": code,
-		])
+		let url = tokenURLWithRedirect(redirect, code: code, params: nil)
 		let comp = NSURLComponents(URL: url, resolvingAgainstBaseURL: true)
 		let body = comp.query
 		comp.query = nil
@@ -85,7 +91,7 @@ class OAuth2CodeGrant: OAuth2 {
 		}
 		
 		let post = tokenRequest(code)
-		logIfVerbose("Exchanging code \(code) for token at \(post.URL.description)")
+		logIfVerbose("Exchanging code \(code) with redirect \(redirect) for token at \(post.URL.description)")
 		
 		// perform the exchange
 		NSURLConnection.sendAsynchronousRequest(post, queue: NSOperationQueue.mainQueue(), completionHandler: { response, data, error in
