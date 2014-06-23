@@ -50,6 +50,13 @@
 			remoteGlobalIDString = EEE209461942772800736F1A;
 			remoteInfo = OAuth2;
 		};
+		EE43B1CD19547C4A0017679A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EEDB861B193FAAE500C4EEA1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EEE209461942772800736F1A;
+			remoteInfo = OAuth2;
+		};
 		EEE209A919427DFE00736F1A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = EEDB861B193FAAE500C4EEA1 /* Project object */;
@@ -233,6 +240,7 @@
 				EE43B1581951F2440017679A /* PBXTargetDependency */,
 				EE43B15E1951FCFB0017679A /* PBXTargetDependency */,
 				EE43B1CC19547C4A0017679A /* PBXTargetDependency */,
+				EE43B1CE19547C4A0017679A /* PBXTargetDependency */,
 			);
 			name = "OAuth2 Tests";
 			productName = "OAuth2 Tests";
@@ -357,6 +365,11 @@
 			isa = PBXTargetDependency;
 			target = EEE209461942772800736F1A /* OAuth2 */;
 			targetProxy = EE43B1CB19547C4A0017679A /* PBXContainerItemProxy */;
+		};
+		EE43B1CE19547C4A0017679A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EEE209461942772800736F1A /* OAuth2 */;
+			targetProxy = EE43B1CD19547C4A0017679A /* PBXContainerItemProxy */;
 		};
 		EEE209AA19427DFE00736F1A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
