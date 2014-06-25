@@ -173,6 +173,13 @@ class OAuth2 {
 	}
 	
 	
+	// MARK: Requests
+	
+	func request(forURL url: NSURL) -> OAuth2Request {
+		return OAuth2Request(URL: url, oauth: self, cachePolicy: .ReturnCacheDataElseLoad, timeoutInterval: 20)
+	}
+	
+	
 	// MARK: Utilities
 	
 	/*!

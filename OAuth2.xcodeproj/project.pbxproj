@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EE29EABC195A0DB2008882C8 /* OAuth2Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29EABB195A0DB2008882C8 /* OAuth2Request.swift */; };
+		EE29EABD195A0DB2008882C8 /* OAuth2Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29EABB195A0DB2008882C8 /* OAuth2Request.swift */; };
 		EE3174EC1945E83100210E62 /* OAuth2ImplicitGrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE3174EB1945E83100210E62 /* OAuth2ImplicitGrant.swift */; };
 		EE3174ED1945E83100210E62 /* OAuth2ImplicitGrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE3174EB1945E83100210E62 /* OAuth2ImplicitGrant.swift */; };
 		EE43B15B1951FC450017679A /* OAuth2CodeGrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE44F691194F2C7D0094AB8B /* OAuth2CodeGrant.swift */; };
@@ -67,6 +69,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		EE29EABB195A0DB2008882C8 /* OAuth2Request.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2Request.swift; sourceTree = "<group>"; };
+		EE29EABE195B0813008882C8 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		EE3174EB1945E83100210E62 /* OAuth2ImplicitGrant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2ImplicitGrant.swift; sourceTree = "<group>"; };
 		EE43B1591951FAC70017679A /* OAuth2CodeGrant_tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2CodeGrant_tests.swift; sourceTree = "<group>"; };
 		EE44F691194F2C7D0094AB8B /* OAuth2CodeGrant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2CodeGrant.swift; sourceTree = "<group>"; };
@@ -111,6 +115,7 @@
 		EEDB861A193FAAE500C4EEA1 = {
 			isa = PBXGroup;
 			children = (
+				EE29EABE195B0813008882C8 /* README.md */,
 				EEDB8626193FAAE500C4EEA1 /* OAuth2 */,
 				EEE209A319427DFE00736F1A /* OAuth2 Tests */,
 				EEDB8625193FAAE500C4EEA1 /* Products */,
@@ -134,6 +139,7 @@
 				EEDB8640193FAB9200C4EEA1 /* OAuth2.swift */,
 				EE3174EB1945E83100210E62 /* OAuth2ImplicitGrant.swift */,
 				EE44F691194F2C7D0094AB8B /* OAuth2CodeGrant.swift */,
+				EE29EABB195A0DB2008882C8 /* OAuth2Request.swift */,
 				EEDB864B19421DAD00C4EEA1 /* extensions.swift */,
 				EEE2093719424DB100736F1A /* OSX.playground */,
 				EEDB8627193FAAE500C4EEA1 /* Supporting Files */,
@@ -320,6 +326,7 @@
 				EEDB8641193FAB9200C4EEA1 /* OAuth2.swift in Sources */,
 				EE43B15B1951FC450017679A /* OAuth2CodeGrant.swift in Sources */,
 				EEDB864C19421DAD00C4EEA1 /* extensions.swift in Sources */,
+				EE29EABD195A0DB2008882C8 /* OAuth2Request.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -331,6 +338,7 @@
 				EEE209871942776500736F1A /* OAuth2.swift in Sources */,
 				EE44F692194F2C7D0094AB8B /* OAuth2CodeGrant.swift in Sources */,
 				EEE209881942776C00736F1A /* extensions.swift in Sources */,
+				EE29EABC195A0DB2008882C8 /* OAuth2Request.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

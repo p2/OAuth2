@@ -1,6 +1,6 @@
 // Playground - noun: a place where people can play
 
-import Cocoa
+import Foundation
 
 // importing own modules is not yet supported!
 //let oauth = OAuth2(settings: [

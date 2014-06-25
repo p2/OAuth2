@@ -5,7 +5,7 @@ OAuth2 frameworks for **OS X** and **iOS** written in Swift.
 This is more of an academic exercise and very much WiP.
 Here is a very nice explanation of OAuth's basics: [The OAuth Bible](http://oauthbible.com/#oauth-2-three-legged).
 
-The code in this repo requires OS X 10.9+ or iOS 7+.
+The code in this repo requires Xcode 6 to compile and will run on OS X 10.9+ or iOS 7+.
 
 Flows
 -----
@@ -25,4 +25,4 @@ Playground
 ----------
 
 Instead of a sample app there is a Playground.
-Because it's not currently possible to import custom code into playgrounds it's not yet working.
+However, because it's not currently possible to import custom code into playgrounds it's not yet working.
