@@ -18,11 +18,11 @@ class OAuth2ImplicitGrant: OAuth2 {
 		return authorizeURL(authURL!, redirect: redirect, scope: scope, responseType: "token", params: params)
 	}
 	
-	func handleRedirectURL(url: NSURL, callback: (didCancel: Bool, error: NSError?) -> ()) {
-		logIfVerbose("Handling redirect URL \(url.description)")
+	override func handleRedirectURL(redirect: NSURL, callback: (error: NSError?) -> ()) {
+		logIfVerbose("Handling redirect URL \(redirect.description)")
 		
 		var error: NSError?
-		var comp = NSURLComponents(URL: url, resolvingAgainstBaseURL: true)
+		var comp = NSURLComponents(URL: redirect, resolvingAgainstBaseURL: true)
 		
 		// token should be in the URL fragment
 		if comp.fragment.utf16count > 0 {
@@ -60,14 +60,14 @@ class OAuth2ImplicitGrant: OAuth2 {
 			}
 		}
 		else {
-			error = NSError(domain: NSCocoaErrorDomain, code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid redirect URL: \(url)"])
+			error = NSError(domain: NSCocoaErrorDomain, code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid redirect URL: \(redirect)"])
 		}
 		
 		// log, if needed, then call the callback
 		if error {
 			logIfVerbose("Error handling redirect URL: \(error!.localizedDescription)")
 		}
-		callback(didCancel: false, error: error)
+		callback(error: error)
 	}
 }
 

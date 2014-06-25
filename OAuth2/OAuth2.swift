@@ -168,6 +168,10 @@ class OAuth2 {
 		return final;
 	}
 	
+	func handleRedirectURL(redirect: NSURL, callback: (error: NSError?) -> ()) {
+		callback(error: NSError(domain: NSCocoaErrorDomain, code: 0, userInfo: [NSLocalizedDescriptionKey: "Abstract class use"]))
+	}
+	
 	func didAuthorizeWithParameters(params: NSDictionary) {
 		delegate?.didAuthorize(self, withParameters: params)
 	}

@@ -68,10 +68,12 @@ class OAuth2CodeGrant: OAuth2 {
 	/*!
 	 *  Extracts the code from the redirect URL and exchanges it for a token.
 	 */
-	func exchangeTokenWithRedirectURL(redirect: NSURL, callback: (didCancel: Bool, error: NSError?) -> ()) {
+	override func handleRedirectURL(redirect: NSURL, callback: (error: NSError?) -> ()) {
+		logIfVerbose("Handling redirect URL \(redirect.description)")
+		
 		let (code, error) = validateRedirectURL(redirect)
 		if error {
-			callback(didCancel: false, error: error)
+			callback(error: error)
 			return
 		}
 		
@@ -81,12 +83,12 @@ class OAuth2CodeGrant: OAuth2 {
 	/*!
 	 *  Call this when we receive a code.
 	 */
-	func exchangeCodeForToken(code: String, callback: (didCancel: Bool, error: NSError?) -> ()) {
+	func exchangeCodeForToken(code: String, callback: (error: NSError?) -> ()) {
 		
 		// do we have a code?
 		if (code.isEmpty) {
 			let error = NSError(domain: NSCocoaErrorDomain, code: 0, userInfo: [NSLocalizedDescriptionKey: "I don't have a code to exchange, let the user authorize first"])
-			callback(didCancel: false, error: error)
+			callback(error: error)
 			return;
 		}
 		
@@ -113,7 +115,7 @@ class OAuth2CodeGrant: OAuth2 {
 							}
 							
 							self.logIfVerbose("Did receive access token: \(self.accessToken), refresh token: \(self.refreshToken)")
-							callback(didCancel: false, error: nil)
+							callback(error: nil)
 							return
 						}
 					}
@@ -126,7 +128,7 @@ class OAuth2CodeGrant: OAuth2 {
 				finalError = NSError(domain: NSCocoaErrorDomain, code: 0, userInfo: [NSLocalizedDescriptionKey: "Unknown connection error"])
 			}
 			
-			callback(didCancel: false, error: finalError)
+			callback(error: finalError)
 		})
 	}
 	
