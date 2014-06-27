@@ -7,6 +7,7 @@ Here is a very nice explanation of OAuth's basics: [The OAuth Bible](http://oaut
 
 The code in this repo requires Xcode 6 to compile and will run on OS X 10.9+ or iOS 7+.
 
+
 Flows
 -----
 
@@ -15,14 +16,18 @@ Flows
 For a full OAuth 2 code grant flow you want to use the `OAuth2CodeGrant` class.
 This flow is typically used by applications that can guard their secrets, like server-side apps, and not in distributed binaries.
 
+TODO: code example
+
 #### Implicit Grant
 
 An implicit grant is suitable for apps that are not capable of guarding their secret, such as distributed binaries or client-side web apps.
 Use the `OAuth2ImplicitGrant` class to receive a token and perform requests.
 
+TODO: code example
+
 
 Playground
 ----------
 
-Instead of a sample app there is a Playground.
-However, because it's not currently possible to import custom code into playgrounds it's not yet working.
+The idea is to add a Playground to see OAuth2 in use (instead of a sample app).
+However, it's not currently possible to import custom code into playgrounds, so currently there is no Playground.

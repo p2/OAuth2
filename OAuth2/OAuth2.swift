@@ -117,7 +117,7 @@ class OAuth2 {
 		
 		// verify that we have all parts
 		if clientId.isEmpty {
-			NSException(name: "MCOAuth2IncompletSetup", reason: "I do not yet have a client id, cannot construct an authorize URL", userInfo: nil).raise()
+			NSException(name: "OAuth2IncompleteSetup", reason: "I do not yet have a client id, cannot construct an authorize URL", userInfo: nil).raise()
 		}
 		
 		if redirect {
@@ -131,7 +131,7 @@ class OAuth2 {
 			}
 		}
 		if !self.redirect {
-			NSException(name: "MCOAuth2IncompletSetup", reason: "I need a redirect URI, cannot construct an authorize URL", userInfo: nil).raise()
+			NSException(name: "OAuth2IncompleteSetup", reason: "I need a redirect URI, cannot construct an authorize URL", userInfo: nil).raise()
 		}
 		
 		if state.isEmpty {
@@ -216,7 +216,7 @@ class OAuth2 {
 	/*!
 	 *  Handles access token error response.
 	 *  @param params The URL parameters passed into the redirect URL upon error
-	 *  @return An NSError instance with the "best" localized error key and all parameters in the userInfo dictionary; domain "MCOAuth2ErrorDomain", code 600
+	 *  @return An NSError instance with the "best" localized error key and all parameters in the userInfo dictionary; domain "OAuth2ErrorDomain", code 600
 	 */
 	class func errorForAccessTokenErrorResponse(params: NSDictionary) -> NSError {
 		var message = ""
@@ -258,10 +258,10 @@ class OAuth2 {
 		var error: NSError
 		if let prms = params.mutableCopy() as? NSMutableDictionary {
 			prms[NSLocalizedDescriptionKey] = message
-			error = NSError(domain: "MCOAuth2ErrorDomain", code: 600, userInfo: prms)
+			error = NSError(domain: "OAuth2ErrorDomain", code: 600, userInfo: prms)
 		}
 		else {
-			error = NSError(domain: "MCOAuth2ErrorDomain", code: 600, userInfo: [NSLocalizedDescriptionKey: message])
+			error = NSError(domain: "OAuth2ErrorDomain", code: 600, userInfo: [NSLocalizedDescriptionKey: message])
 		}
 		
 		return error
