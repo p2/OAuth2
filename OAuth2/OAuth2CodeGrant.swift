@@ -169,7 +169,12 @@ class OAuth2CodeGrant: OAuth2 {
 			error = NSError(domain: NSCocoaErrorDomain, code: 0, userInfo: [NSLocalizedDescriptionKey: "The redirect URL contains no query fragment"])
 		}
 		
-		logIfVerbose("Did validate redirect URL with error: \(error?.localizedDescription)")
+		if error {
+			logIfVerbose("Invalid redirect URL: \(error!.localizedDescription)")
+		}
+		else {
+			logIfVerbose("Successfully validated redirect URL")
+		}
 		return (code, error)
 	}
 }
