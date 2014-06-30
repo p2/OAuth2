@@ -9,8 +9,8 @@
 import Foundation
 
 
-protocol OAuth2Delegate {
-	func didAuthorize(oauth2: OAuth2, withParameters: NSDictionary)
+@class_protocol protocol OAuth2Delegate {
+	func didAuthorize(oauth2: OAuth2, parameters: NSDictionary)
 }
 
 
@@ -19,7 +19,9 @@ protocol OAuth2Delegate {
  */
 class OAuth2 {
 	
-	/*! An optional delegate. */
+	/*! An optional delegate.
+	 *  TODO: this should be `weak`, but when doing so the callback crashes with an EXC_BAD_ACCESS even if a) checking for delegate and b) delegate is not nil
+	 */
 	var delegate: OAuth2Delegate?
 	
 	/*! Settings, as set upon initialization. */
@@ -173,7 +175,7 @@ class OAuth2 {
 	}
 	
 	func didAuthorizeWithParameters(params: NSDictionary) {
-		delegate?.didAuthorize(self, withParameters: params)
+		delegate?.didAuthorize(self, parameters: params)
 	}
 	
 	
