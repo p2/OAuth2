@@ -14,6 +14,6 @@ import Foundation
 var b1 = true ? true : false
 //var b2 = true ?: false
 
-let params: Dictionary<String, String>?
-var d1 = params ? params! : Dictionary<String, String>()
-//var d2 = params ?: Dictionary<String, String>()
+let params: [String: String]?
+var d1 = params ? params! : [String: String]()
+//var d2 = params ?: [String: String]()

@@ -2,7 +2,7 @@ OAuth2
 ======
 
 OAuth2 frameworks for **OS X** and **iOS** written in Swift.
-This is more of an academic exercise and very much WiP.
+This is currently more of an academic exercise and very much WiP.
 Here is a very nice explanation of OAuth's basics: [The OAuth Bible](http://oauthbible.com/#oauth-2-three-legged).
 
 The code in this repo requires Xcode 6 to compile and will run on OS X 10.9+ or iOS 7+.

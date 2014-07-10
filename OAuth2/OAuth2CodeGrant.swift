@@ -31,11 +31,11 @@ class OAuth2CodeGrant: OAuth2 {
 	}
 	
 	
-	func authorizeURLWithRedirect(redirect: String?, scope: String?, params: Dictionary<String, String>?) -> NSURL {
+	func authorizeURLWithRedirect(redirect: String?, scope: String?, params: [String: String]?) -> NSURL {
 		return authorizeURL(authURL!, redirect: redirect, scope: scope, responseType: "code", params: params)
 	}
 	
-	func tokenURLWithRedirect(redirect: String?, code: String, params: Dictionary<String, String>?) -> NSURL {
+	func tokenURLWithRedirect(redirect: String?, code: String, params: [String: String]?) -> NSURL {
 		let base = tokenURL ? tokenURL! : authURL!
 		var prms = ["code": code, "grant_type": "authorization_code"]
 		if clientSecret {

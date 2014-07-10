@@ -114,7 +114,7 @@ class OAuth2 {
 	 *  @param responseType The response type to request; subclasses know which one to supply
 	 *  @param params Any additional parameters as dictionary with string keys and values that will be added to the query part
 	 */
-	func authorizeURL(base: NSURL, var redirect: String?, scope: String?, responseType: String?, params: Dictionary<String, String>?) -> NSURL {
+	func authorizeURL(base: NSURL, var redirect: String?, scope: String?, responseType: String?, params: [String: String]?) -> NSURL {
 		logIfVerbose("Starting authorization against \(base.description)")
 		
 		// verify that we have all parts
@@ -191,8 +191,8 @@ class OAuth2 {
 	/*!
 	 *  Create a query string from a dictionary of string: string pairs.
 	 */
-	class func queryStringFor(params: Dictionary<String, String>) -> String {
-		var arr: String[] = []
+	class func queryStringFor(params: [String: String]) -> String {
+		var arr: [String] = []
 		for (key, val) in params {
 			arr.append("\(key)=\(val)")						// NSURLComponents will correctly encode the parameter string
 		}
@@ -202,9 +202,9 @@ class OAuth2 {
 	/*!
 	 *  Parse a query string into a dictionary of string: string pairs.
 	 */
-	class func paramsFromQuery(query: String) -> Dictionary<String, String> {
+	class func paramsFromQuery(query: String) -> [String: String] {
 		let parts = query.componentsSeparatedByString("&")
-		var params: Dictionary<String, String> = Dictionary(minimumCapacity: parts.count)
+		var params: [String: String] = Dictionary(minimumCapacity: parts.count)
 		for part in parts {
 			let subparts = part.componentsSeparatedByString("=")
 			if 2 == subparts.count {
