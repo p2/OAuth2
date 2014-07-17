@@ -14,7 +14,7 @@ import Foundation
  */
 class OAuth2ImplicitGrant: OAuth2 {
 	
-	func authorizeURLWithRedirect(redirect: String?, scope: String?, params: [String: String]?) -> NSURL {
+	override func authorizeURLWithRedirect(redirect: String?, scope: String?, params: [String: String]?) -> NSURL {
 		return authorizeURL(authURL!, redirect: redirect, scope: scope, responseType: "token", params: params)
 	}
 	
@@ -65,7 +65,7 @@ class OAuth2ImplicitGrant: OAuth2 {
 		
 		// log, if needed, then report back
 		logIfVerbose("Error handling redirect URL: \(error!.localizedDescription)")
-		didFail(error!)
+		didFail(error)
 	}
 }
 

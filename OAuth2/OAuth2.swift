@@ -56,7 +56,10 @@ class OAuth2 {
 	var onAuthorize: ((parameters: NSDictionary) -> Void)?
 	
 	/*! When authorization fails. */
-	var onFailure: ((error: NSError) -> Void)?
+	var onFailure: ((error: NSError?) -> Void)?
+	
+	/*! Closure called after onAuthorize OR onFailure, useful for cleanup operations. */
+	var afterAuthorizeOrFailure: (wasFailure: Bool -> Void)?
 	
 	/*! Set to YES to log all the things. NO by default. */
 	var verbose = false
@@ -122,7 +125,6 @@ class OAuth2 {
 	 *  @param params Any additional parameters as dictionary with string keys and values that will be added to the query part
 	 */
 	func authorizeURL(base: NSURL, var redirect: String?, scope: String?, responseType: String?, params: [String: String]?) -> NSURL {
-		logIfVerbose("Starting authorization against \(base.description)")
 		
 		// verify that we have all parts
 		if clientId.isEmpty {
@@ -177,16 +179,26 @@ class OAuth2 {
 		return final;
 	}
 	
+	/*!
+	 *  Convenience method to be overridden by and used from subclasses.
+	 */
+	func authorizeURLWithRedirect(redirect: String?, scope: String?, params: [String: String]?) -> NSURL {
+		NSException(name: "OAuth2AbstractClassUse", reason: "Abstract class use", userInfo: nil).raise()
+		return NSURL()
+	}
+	
 	func handleRedirectURL(redirect: NSURL) {
 		NSException(name: "OAuth2AbstractClassUse", reason: "Abstract class use", userInfo: nil).raise()
 	}
 	
 	func didAuthorize(parameters: NSDictionary) {
 		onAuthorize?(parameters: parameters)
+		afterAuthorizeOrFailure?(false)
 	}
 	
-	func didFail(error: NSError) {
+	func didFail(error: NSError?) {
 		onFailure?(error: error)
+		afterAuthorizeOrFailure?(true)
 	}
 	
 	

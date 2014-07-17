@@ -31,7 +31,7 @@ class OAuth2CodeGrant: OAuth2 {
 	}
 	
 	
-	func authorizeURLWithRedirect(redirect: String?, scope: String?, params: [String: String]?) -> NSURL {
+	override func authorizeURLWithRedirect(redirect: String?, scope: String?, params: [String: String]?) -> NSURL {
 		return authorizeURL(authURL!, redirect: redirect, scope: scope, responseType: "code", params: params)
 	}
 	
@@ -74,7 +74,7 @@ class OAuth2CodeGrant: OAuth2 {
 		
 		let (code, error) = validateRedirectURL(redirect)
 		if error {
-			didFail(error!)
+			didFail(error)
 		}
 		else {
 			exchangeCodeForToken(code!)
@@ -89,6 +89,7 @@ class OAuth2CodeGrant: OAuth2 {
 		// do we have a code?
 		if (code.isEmpty) {
 			didFail(genOAuth2Error("I don't have a code to exchange, let the user authorize first", .PrerequisiteFailed))
+			logIfVerbose("No code to exchange for a token, cannot continue")
 			return;
 		}
 		
@@ -128,7 +129,7 @@ class OAuth2CodeGrant: OAuth2 {
 				finalError = genOAuth2Error("Unknown connection error", .NetworkError)
 			}
 			
-			self.didFail(finalError!)
+			self.didFail(finalError)
 		})
 	}
 	

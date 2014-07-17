@@ -2,22 +2,17 @@ OAuth2
 ======
 
 OAuth2 frameworks for **OS X** and **iOS** written in Swift.
-This is currently more of an academic exercise and very much WiP.
-Here is a very nice explanation of OAuth's basics: [The OAuth Bible](http://oauthbible.com/#oauth-2-three-legged).
+Still very much WiP and not feature complete.
 
-The code in this repo requires Xcode 6 to compile and will run on OS X 10.9+ or iOS 7+.
+The code in this repo requires Xcode 6, currently deployment targets have to be OS X 10.9+ or iOS 8+.
+The iOS 8 requirement is due to generating a framework, which is not compatible with iOS 7.
+When building static libraries from Swift code becomes possible it should be possible to lower the deployment target to iOS 7.
 
-
-Flows
+Usage
 -----
 
-#### Code Grant
-
-For a full OAuth 2 code grant flow you want to use the `OAuth2CodeGrant` class.
-This flow is typically used by applications that can guard their secrets, like server-side apps, and not in distributed binaries.
-In case an application cannot guard its secret, such as a distributed iOS app, you would use the _implicit grant_ or, in some cases, still a _code grant_ but omitting the client secret.
-
-For a typical code grant flow you want to perform the following steps:
+For a typical code grant flow you want to perform the following steps.
+The steps for other flows are mostly the same short of instantiating a different subclass and using different client settings.
 
 1. Create a settings dictionary.
     
@@ -42,29 +37,47 @@ For a typical code grant flow you want to perform the following steps:
     }
     ```
 
-3. Open the _authorize URL_ in the browser (or an embedded web view).
+3. Now either use the built-in web view controller or manually open the _authorize URL_ in the browser:
     
     ```swift
     let redir = "myapp://callback"        // don't forget to register this scheme
     let scope = "profile email"
+    ```
+    
+    **Embedded**:
+    
+    ```swift
+    let web = oauth.authorizeEmbedded(redir, scope: scope, params: nil)
+    oauth.afterAuthorizeOrFailure = { wasFailure in
+        web.dismissViewControllerAnimated(true, completion: nil)
+    }
+    ```
+    
+    **OS browser**:
+    
+    ```swift
     let url = oauth.authorizeURLWithRedirect(redir, scope: scope, params: nil)
     UIApplication.sharedApplication().openURL(url)
     ```
-
-4. When the callback is called (intercept in your app delegate or in your web view), let the OAuth2 instance handle the full URL.
     
-    ```swift
-    oauth.handleRedirectURL(<redirectURL>) { error in
-        if error {
-            // something went wrong
+    1. Since you opened the authorize URL in the browser you will need to intercept the callback.
+        When doing so (intercept in your app delegate), let the OAuth2 instance handle the full URL.
+        
+        ```swift
+        func application(application: UIApplication!,
+                         openURL url: NSURL!,
+                   sourceApplication: String!,
+                          annotation: AnyObject!) -> Bool {
+            // you should probably first check if this is your URL being opened
+            if <# check #> { 
+                oauth.handleRedirectURL(url)
+            }
         }
-        else {
-            // we now have `accessToken`!!
-        }
-    }
-    ```
+        ```
 
-5. You can now obtain a `OAuth2Request`, which is an already signed `NSMutableURLRequest`, to retrieve data from your server.
+4. After everything completes either the `onAuthorize` or the `onFailure` closure will be called.
+
+5. You can now obtain an `OAuth2Request`, which is an already signed `NSMutableURLRequest`, to retrieve data from your server.
     
     ```swift
     let req = oauth.request(forURL: <a resource URL>)
@@ -80,6 +93,18 @@ For a typical code grant flow you want to perform the following steps:
     }
     task.resume()
     ``` 
+
+Flows
+-----
+
+Based on which OAuth2 flow that you need to use you will want to use the correct subclass.
+For a very nice explanation of OAuth's basics: [The OAuth Bible](http://oauthbible.com/#oauth-2-three-legged).
+
+#### Code Grant
+
+For a full OAuth 2 code grant flow you want to use the `OAuth2CodeGrant` class.
+This flow is typically used by applications that can guard their secrets, like server-side apps, and not in distributed binaries.
+In case an application cannot guard its secret, such as a distributed iOS app, you would use the _implicit grant_ or, in some cases, still a _code grant_ but omitting the client secret.
 
 #### Implicit Grant
 
