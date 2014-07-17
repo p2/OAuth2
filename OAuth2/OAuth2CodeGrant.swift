@@ -49,9 +49,10 @@ class OAuth2CodeGrant: OAuth2 {
 		return authorizeURL(base, redirect: redirect, scope: nil, responseType: nil, params: prms)
 	}
 	
+	/*!
+	 *  Create a request for token exchange
+	 */
 	func tokenRequest(code: String) -> NSURLRequest {
-		
-		// create a request for token exchange
 		let url = tokenURLWithRedirect(redirect, code: code, params: nil)
 		let comp = NSURLComponents(URL: url, resolvingAgainstBaseURL: true)
 		let body = comp.query
@@ -68,26 +69,26 @@ class OAuth2CodeGrant: OAuth2 {
 	/*!
 	 *  Extracts the code from the redirect URL and exchanges it for a token.
 	 */
-	override func handleRedirectURL(redirect: NSURL, callback: (error: NSError?) -> ()) {
+	override func handleRedirectURL(redirect: NSURL) {
 		logIfVerbose("Handling redirect URL \(redirect.description)")
 		
 		let (code, error) = validateRedirectURL(redirect)
 		if error {
-			callback(error: error)
-			return
+			didFail(error!)
 		}
-		
-		exchangeCodeForToken(code!, callback: callback)
+		else {
+			exchangeCodeForToken(code!)
+		}
 	}
 	
 	/*!
 	 *  Takes the received code and exchanges it for a token.
 	 */
-	func exchangeCodeForToken(code: String, callback: (error: NSError?) -> ()) {
+	func exchangeCodeForToken(code: String) {
 		
 		// do we have a code?
 		if (code.isEmpty) {
-			callback(error: genOAuth2Error("I don't have a code to exchange, let the user authorize first", .PrerequisiteFailed))
+			didFail(genOAuth2Error("I don't have a code to exchange, let the user authorize first", .PrerequisiteFailed))
 			return;
 		}
 		
@@ -115,20 +116,19 @@ class OAuth2CodeGrant: OAuth2 {
 							
 							self.logIfVerbose("Did receive access token: \(self.accessToken), refresh token: \(self.refreshToken)")
 							self.didAuthorize(json)
-							callback(error: nil)
 							return
 						}
 					}
 				}
 				}
 			}
-
+			
 			// if we're still here an error must have happened
 			if !finalError {
 				finalError = genOAuth2Error("Unknown connection error", .NetworkError)
 			}
 			
-			callback(error: finalError)
+			self.didFail(finalError!)
 		})
 	}
 	
@@ -144,10 +144,10 @@ class OAuth2CodeGrant: OAuth2 {
 		
 		let comp = NSURLComponents(URL: redirect, resolvingAgainstBaseURL: true)
 		let query = OAuth2CodeGrant.paramsFromQuery(comp.query)
-
+		
 		if query.count > 0 {
 			if let cd = query["code"] {
-
+				
 				// we got a code, check if state is correct
 				if let st = query["state"] {
 					if st == state {

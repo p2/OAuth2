@@ -30,12 +30,15 @@ For a typical code grant flow you want to perform the following steps:
     ]
     ```
 
-2. Create an `OAuth2CodeGrant` instance, optionally setting the `onAuthorize` closure to call on successful authorization.
+2. Create an `OAuth2CodeGrant` instance, setting the `onAuthorize` and `onFailure` closures to keep informed about the status.
     
     ```swift
     let oauth = OAuth2CodeGrant(settings: settings)
     oauth.onAuthorize = { parameters in
         println("Did authorize with parameters: \(parameters)")
+    }
+    oauth.onFailure = { error in
+        println("Authorization went wrong: \(error.localizedDescription)")
     }
     ```
 

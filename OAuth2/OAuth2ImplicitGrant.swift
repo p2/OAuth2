@@ -18,7 +18,7 @@ class OAuth2ImplicitGrant: OAuth2 {
 		return authorizeURL(authURL!, redirect: redirect, scope: scope, responseType: "token", params: params)
 	}
 	
-	override func handleRedirectURL(redirect: NSURL, callback: (error: NSError?) -> ()) {
+	override func handleRedirectURL(redirect: NSURL) {
 		logIfVerbose("Handling redirect URL \(redirect.description)")
 		
 		var error: NSError?
@@ -38,10 +38,10 @@ class OAuth2ImplicitGrant: OAuth2 {
 								accessToken = token!
 								logIfVerbose("Successfully extracted access token \(token!)")
 								didAuthorize(params)
+								return
 							}
-							else {
-								error = genOAuth2Error("Invalid state \(tokState), will not use the token", .InvalidState)
-							}
+							
+							error = genOAuth2Error("Invalid state \(tokState), will not use the token", .InvalidState)
 						}
 						else {
 							error = genOAuth2Error("No state returned, will not use the token", .InvalidState)
@@ -63,11 +63,9 @@ class OAuth2ImplicitGrant: OAuth2 {
 			error = genOAuth2Error("Invalid redirect URL: \(redirect)", .PrerequisiteFailed)
 		}
 		
-		// log, if needed, then call the callback
-		if error {
-			logIfVerbose("Error handling redirect URL: \(error!.localizedDescription)")
-		}
-		callback(error: error)
+		// log, if needed, then report back
+		logIfVerbose("Error handling redirect URL: \(error!.localizedDescription)")
+		didFail(error!)
 	}
 }
 

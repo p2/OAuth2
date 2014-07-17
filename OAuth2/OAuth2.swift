@@ -55,6 +55,9 @@ class OAuth2 {
 	/*! Closure called on successful authentication. */
 	var onAuthorize: ((parameters: NSDictionary) -> Void)?
 	
+	/*! When authorization fails. */
+	var onFailure: ((error: NSError) -> Void)?
+	
 	/*! Set to YES to log all the things. NO by default. */
 	var verbose = false
 	
@@ -174,12 +177,16 @@ class OAuth2 {
 		return final;
 	}
 	
-	func handleRedirectURL(redirect: NSURL, callback: (error: NSError?) -> ()) {
-		callback(error: NSError(domain: NSCocoaErrorDomain, code: 0, userInfo: [NSLocalizedDescriptionKey: "Abstract class use"]))
+	func handleRedirectURL(redirect: NSURL) {
+		NSException(name: "OAuth2AbstractClassUse", reason: "Abstract class use", userInfo: nil).raise()
 	}
 	
 	func didAuthorize(parameters: NSDictionary) {
 		onAuthorize?(parameters: parameters)
+	}
+	
+	func didFail(error: NSError) {
+		onFailure?(error: error)
 	}
 	
 	
