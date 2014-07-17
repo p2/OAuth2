@@ -81,14 +81,13 @@ class OAuth2CodeGrant: OAuth2 {
 	}
 	
 	/*!
-	 *  Call this when we receive a code.
+	 *  Takes the received code and exchanges it for a token.
 	 */
 	func exchangeCodeForToken(code: String, callback: (error: NSError?) -> ()) {
 		
 		// do we have a code?
 		if (code.isEmpty) {
-			let error = NSError(domain: NSCocoaErrorDomain, code: 0, userInfo: [NSLocalizedDescriptionKey: "I don't have a code to exchange, let the user authorize first"])
-			callback(error: error)
+			callback(error: genOAuth2Error("I don't have a code to exchange, let the user authorize first", .PrerequisiteFailed))
 			return;
 		}
 		
@@ -126,7 +125,7 @@ class OAuth2CodeGrant: OAuth2 {
 
 			// if we're still here an error must have happened
 			if !finalError {
-				finalError = NSError(domain: NSCocoaErrorDomain, code: 0, userInfo: [NSLocalizedDescriptionKey: "Unknown connection error"])
+				finalError = genOAuth2Error("Unknown connection error", .NetworkError)
 			}
 			
 			callback(error: finalError)
@@ -155,11 +154,11 @@ class OAuth2CodeGrant: OAuth2 {
 						code = cd
 					}
 					else {
-						error = NSError(domain: NSCocoaErrorDomain, code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid state \(st), will not use the code"])
+						error = genOAuth2Error("Invalid state \(st), will not use the code", .InvalidState)
 					}
 				}
 				else {
-					error = NSError(domain: NSCocoaErrorDomain, code: 0, userInfo: [NSLocalizedDescriptionKey: "No state was returned"])
+					error = genOAuth2Error("No state was returned", .InvalidState)
 				}
 			}
 			else {
@@ -167,7 +166,7 @@ class OAuth2CodeGrant: OAuth2 {
 			}
 		}
 		else {
-			error = NSError(domain: NSCocoaErrorDomain, code: 0, userInfo: [NSLocalizedDescriptionKey: "The redirect URL contains no query fragment"])
+			error = genOAuth2Error("The redirect URL contains no query fragment", .PrerequisiteFailed)
 		}
 		
 		if error {

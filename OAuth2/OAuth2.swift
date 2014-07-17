@@ -8,6 +8,17 @@
 
 import Foundation
 
+let OAuth2ErrorDomain = "OAuth2ErrorDomain"
+
+enum OAuth2Error: Int {
+	case Generic = 600
+	case Unsupported
+	case NetworkError
+	case PrerequisiteFailed
+	case InvalidState
+	case AuthorizationError
+}
+
 
 /*!
  *  Base class for specific OAuth2 authentication flow implementations.
@@ -253,10 +264,10 @@ class OAuth2 {
 		var error: NSError
 		if let prms = params.mutableCopy() as? NSMutableDictionary {
 			prms[NSLocalizedDescriptionKey] = message
-			error = NSError(domain: "OAuth2ErrorDomain", code: 600, userInfo: prms)
+			error = NSError(domain: OAuth2ErrorDomain, code: OAuth2Error.AuthorizationError.toRaw(), userInfo: prms)
 		}
 		else {
-			error = NSError(domain: "OAuth2ErrorDomain", code: 600, userInfo: [NSLocalizedDescriptionKey: message])
+			error = genOAuth2Error(message, .AuthorizationError)
 		}
 		
 		return error
@@ -270,5 +281,14 @@ class OAuth2 {
 			println("OAuth2: \(log)")
 		}
 	}
+}
+
+
+func genOAuth2Error(message: String) -> NSError {
+	return genOAuth2Error(message, .Generic)
+}
+
+func genOAuth2Error(message: String, code: OAuth2Error) -> NSError {
+	return NSError(domain: OAuth2ErrorDomain, code: code.toRaw(), userInfo: [NSLocalizedDescriptionKey: message])
 }
 

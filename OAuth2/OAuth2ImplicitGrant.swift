@@ -40,19 +40,19 @@ class OAuth2ImplicitGrant: OAuth2 {
 								didAuthorize(params)
 							}
 							else {
-								error = NSError(domain: NSCocoaErrorDomain, code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid state \(tokState), will not use the token"])
+								error = genOAuth2Error("Invalid state \(tokState), will not use the token", .InvalidState)
 							}
 						}
 						else {
-							error = NSError(domain: NSCocoaErrorDomain, code: 0, userInfo: [NSLocalizedDescriptionKey: "No state returned, will not use the token"])
+							error = genOAuth2Error("No state returned, will not use the token", .InvalidState)
 						}
 					}
 					else {
-						error = NSError(domain: NSCocoaErrorDomain, code: 0, userInfo: [NSLocalizedDescriptionKey: "Only \"bearer\" token is supported, but received \"\(tokType)\""])
+						error = genOAuth2Error("Only \"bearer\" token is supported, but received \"\(tokType)\"", .Unsupported)
 					}
 				}
 				else {
-					error = NSError(domain: NSCocoaErrorDomain, code: 0, userInfo: [NSLocalizedDescriptionKey: "No token type received, will not use the token"])
+					error = genOAuth2Error("No token type received, will not use the token", .PrerequisiteFailed)
 				}
 			}
 			else {
@@ -60,7 +60,7 @@ class OAuth2ImplicitGrant: OAuth2 {
 			}
 		}
 		else {
-			error = NSError(domain: NSCocoaErrorDomain, code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid redirect URL: \(redirect)"])
+			error = genOAuth2Error("Invalid redirect URL: \(redirect)", .PrerequisiteFailed)
 		}
 		
 		// log, if needed, then call the callback
