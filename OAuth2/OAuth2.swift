@@ -9,20 +9,10 @@
 import Foundation
 
 
-@class_protocol protocol OAuth2Delegate {
-	func didAuthorize(oauth2: OAuth2, parameters: NSDictionary)
-}
-
-
 /*!
  *  Base class for specific OAuth2 authentication flow implementations.
  */
 class OAuth2 {
-	
-	/*! An optional delegate.
-	 *  TODO: this should be `weak`, but when doing so the callback crashes with an EXC_BAD_ACCESS even if a) checking for delegate and b) delegate is not nil
-	 */
-	var delegate: OAuth2Delegate?
 	
 	/*! Settings, as set upon initialization. */
 	let settings: NSDictionary
@@ -39,17 +29,20 @@ class OAuth2 {
 	/*! The URL to authorize against. */
 	var authURL: NSURL?
 	
-	/*! The receiver's access token. */
-	var accessToken = ""
+	/*! The scope currently in use. */
+	var scope: String?
 	
 	/*! The redirect URL string currently in use. */
 	var redirect: String?
 	
-	/*! The scope currently in use. */
-	var scope: String?
-	
 	/*! The state sent to the server when requesting a token; we internally generate a UUID unless it's set manually. */
 	var state = ""
+	
+	/*! The receiver's access token. */
+	var accessToken = ""
+	
+	/*! Closure called on successful authentication. */
+	var onAuthorize: ((parameters: NSDictionary) -> Void)?
 	
 	/*! Set to YES to log all the things. NO by default. */
 	var verbose = false
@@ -174,8 +167,8 @@ class OAuth2 {
 		callback(error: NSError(domain: NSCocoaErrorDomain, code: 0, userInfo: [NSLocalizedDescriptionKey: "Abstract class use"]))
 	}
 	
-	func didAuthorizeWithParameters(params: NSDictionary) {
-		delegate?.didAuthorize(self, parameters: params)
+	func didAuthorize(parameters: NSDictionary) {
+		onAuthorize?(parameters: parameters)
 	}
 	
 	

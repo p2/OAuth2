@@ -115,7 +115,7 @@ class OAuth2CodeGrant: OAuth2 {
 							}
 							
 							self.logIfVerbose("Did receive access token: \(self.accessToken), refresh token: \(self.refreshToken)")
-							self.didAuthorizeWithParameters(json)
+							self.didAuthorize(json)
 							callback(error: nil)
 							return
 						}

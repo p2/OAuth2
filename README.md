@@ -30,11 +30,13 @@ For a typical code grant flow you want to perform the following steps:
     ]
     ```
 
-2. Create an `OAuth2CodeGrant` instance, setting the delegate if you want to receive the `didAuthorize` callback.
+2. Create an `OAuth2CodeGrant` instance, optionally setting the `onAuthorize` closure to call on successful authorization.
     
     ```swift
     let oauth = OAuth2CodeGrant(settings: settings)
-    oauth.delegate = self
+    oauth.onAuthorize = { parameters in
+        println("Did authorize with parameters: \(parameters)")
+    }
     ```
 
 3. Open the _authorize URL_ in the browser (or an embedded web view).

@@ -37,7 +37,7 @@ class OAuth2ImplicitGrant: OAuth2 {
 							if tokState == state {
 								accessToken = token!
 								logIfVerbose("Successfully extracted access token \(token!)")
-								didAuthorizeWithParameters(params)
+								didAuthorize(params)
 							}
 							else {
 								error = NSError(domain: NSCocoaErrorDomain, code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid state \(tokState), will not use the token"])
