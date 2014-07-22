@@ -5,7 +5,7 @@ OAuth2 frameworks for **OS X** and **iOS** written in Swift.
 Still very much WiP and not feature complete.
 
 The code in this repo requires Xcode 6, currently deployment targets have to be OS X 10.9+ or iOS 8+.
-The iOS 8 requirement is due to generating a framework, which is not compatible with iOS 7.
+The iOS 8 requirement stems from us using frameworks which are not compatible with iOS 7.
 When building static libraries from Swift code becomes possible it should be possible to lower the deployment target to iOS 7.
 
 Usage

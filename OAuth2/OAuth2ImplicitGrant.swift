@@ -9,26 +9,26 @@
 import Foundation
 
 
-/*!
+/**
  *  Class to handle OAuth2 requests for public clients, such as distributed Mac/iOS Apps.
  */
-class OAuth2ImplicitGrant: OAuth2 {
+public class OAuth2ImplicitGrant: OAuth2 {
 	
-	override func authorizeURLWithRedirect(redirect: String?, scope: String?, params: [String: String]?) -> NSURL {
+	override public func authorizeURLWithRedirect(redirect: String?, scope: String?, params: [String: String]?) -> NSURL {
 		return authorizeURL(authURL!, redirect: redirect, scope: scope, responseType: "token", params: params)
 	}
 	
-	override func handleRedirectURL(redirect: NSURL) {
+	override public func handleRedirectURL(redirect: NSURL) {
 		logIfVerbose("Handling redirect URL \(redirect.description)")
 		
 		var error: NSError?
 		var comp = NSURLComponents(URL: redirect, resolvingAgainstBaseURL: true)
 		
 		// token should be in the URL fragment
-		if comp.fragment.utf16count > 0 {
+		if countElements(comp.fragment!) > 0 {
 			let params = OAuth2ImplicitGrant.paramsFromQuery(comp.fragment)
 			let token: String? = params["access_token"]
-			if token?.utf16count > 0 {
+			if countElements(token!) > 0 {
 				if let tokType = params["token_type"] {
 					if "bearer" == tokType.lowercaseString {
 						

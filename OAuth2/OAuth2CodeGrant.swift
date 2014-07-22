@@ -9,20 +9,20 @@
 import Foundation
 
 
-/*!
+/**
  *  A class to handle authorization for confidential clients via the authorization code grant method.
  *
  *  This auth flow is designed for clients that are capable of protecting their client secret, which a distributed Mac/iOS App **is not**!
  */
-class OAuth2CodeGrant: OAuth2 {
+public class OAuth2CodeGrant: OAuth2 {
 	
-	/*! The URL string where we can exchange a code for a token; if nil `authURL` will be used. */
-	let tokenURL: NSURL?
+	/** The URL string where we can exchange a code for a token; if nil `authURL` will be used. */
+	public let tokenURL: NSURL?
 	
-	/*! The receiver's long-time refresh token. */
-	var refreshToken = ""
+	/** The receiver's long-time refresh token. */
+	public var refreshToken = ""
 	
-	init(settings: NSDictionary) {
+	public init(settings: NSDictionary) {
 		if let token = settings["token_uri"] as? String {
 			tokenURL = NSURL(string: token)
 		}
@@ -31,11 +31,11 @@ class OAuth2CodeGrant: OAuth2 {
 	}
 	
 	
-	override func authorizeURLWithRedirect(redirect: String?, scope: String?, params: [String: String]?) -> NSURL {
+	override public func authorizeURLWithRedirect(redirect: String?, scope: String?, params: [String: String]?) -> NSURL {
 		return authorizeURL(authURL!, redirect: redirect, scope: scope, responseType: "code", params: params)
 	}
 	
-	func tokenURLWithRedirect(redirect: String?, code: String, params: [String: String]?) -> NSURL {
+	public func tokenURLWithRedirect(redirect: String?, code: String, params: [String: String]?) -> NSURL {
 		let base = tokenURL ? tokenURL! : authURL!
 		var prms = ["code": code, "grant_type": "authorization_code"]
 		if clientSecret {
@@ -49,10 +49,10 @@ class OAuth2CodeGrant: OAuth2 {
 		return authorizeURL(base, redirect: redirect, scope: nil, responseType: nil, params: prms)
 	}
 	
-	/*!
+	/**
 	 *  Create a request for token exchange
 	 */
-	func tokenRequest(code: String) -> NSURLRequest {
+	public func tokenRequest(code: String) -> NSURLRequest {
 		let url = tokenURLWithRedirect(redirect, code: code, params: nil)
 		let comp = NSURLComponents(URL: url, resolvingAgainstBaseURL: true)
 		let body = comp.query
@@ -66,10 +66,10 @@ class OAuth2CodeGrant: OAuth2 {
 		return post
 	}
 	
-	/*!
+	/**
 	 *  Extracts the code from the redirect URL and exchanges it for a token.
 	 */
-	override func handleRedirectURL(redirect: NSURL) {
+	override public func handleRedirectURL(redirect: NSURL) {
 		logIfVerbose("Handling redirect URL \(redirect.description)")
 		
 		let (code, error) = validateRedirectURL(redirect)
@@ -81,7 +81,7 @@ class OAuth2CodeGrant: OAuth2 {
 		}
 	}
 	
-	/*!
+	/**
 	 *  Takes the received code and exchanges it for a token.
 	 */
 	func exchangeCodeForToken(code: String) {
@@ -134,9 +134,9 @@ class OAuth2CodeGrant: OAuth2 {
 	}
 	
 	
-	// MARK: Utilities
+	// MARK: - Utilities
 	
-	/*!
+	/**
 	 *  Validates the redirect URI, returns a tuple weth the code and nil on success, nil and an error on failure.
 	 */
 	func validateRedirectURL(redirect: NSURL) -> (code: String?, error: NSError?) {

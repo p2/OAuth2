@@ -20,51 +20,51 @@ enum OAuth2Error: Int {
 }
 
 
-/*!
+/**
  *  Base class for specific OAuth2 authentication flow implementations.
  */
-class OAuth2 {
+public class OAuth2 {
 	
-	/*! Settings, as set upon initialization. */
+	/** Settings, as set upon initialization. */
 	let settings: NSDictionary
 	
-	/*! The client id. */
-	let clientId: String
+	/** The client id. */
+	public let clientId: String
 	
-	/*! The client secret, usually only needed for code grant. */
-	let clientSecret: String?
+	/** The client secret, usually only needed for code grant. */
+	public let clientSecret: String?
 	
-	/*! Base API URL, all paths will be relative to this one. */
-	var apiURL: NSURL?
+	/** Base API URL, all paths will be relative to this one. */
+	public var apiURL: NSURL?
 	
-	/*! The URL to authorize against. */
-	var authURL: NSURL?
+	/** The URL to authorize against. */
+	public var authURL: NSURL?
 	
-	/*! The scope currently in use. */
-	var scope: String?
+	/** The scope currently in use. */
+	public var scope: String?
 	
-	/*! The redirect URL string currently in use. */
-	var redirect: String?
+	/** The redirect URL string currently in use. */
+	public var redirect: String?
 	
-	/*! The state sent to the server when requesting a token; we internally generate a UUID unless it's set manually. */
+	/** The state sent to the server when requesting a token; we internally generate a UUID unless it's set manually. */
 	var state = ""
 	
-	/*! The receiver's access token. */
-	var accessToken = ""
+	/** The receiver's access token. */
+	public var accessToken = ""
 	
-	/*! Closure called on successful authentication. */
-	var onAuthorize: ((parameters: NSDictionary) -> Void)?
+	/** Closure called on successful authentication. */
+	public var onAuthorize: ((parameters: NSDictionary) -> Void)?
 	
-	/*! When authorization fails. */
-	var onFailure: ((error: NSError?) -> Void)?
+	/** When authorization fails. */
+	public var onFailure: ((error: NSError?) -> Void)?
 	
-	/*! Closure called after onAuthorize OR onFailure, useful for cleanup operations. */
-	var afterAuthorizeOrFailure: (wasFailure: Bool -> Void)?
+	/** Closure called after onAuthorize OR onFailure, useful for cleanup operations. */
+	public var afterAuthorizeOrFailure: (wasFailure: Bool -> Void)?
 	
-	/*! Set to YES to log all the things. NO by default. */
-	var verbose = false
+	/** Set to YES to log all the things. NO by default. */
+	public var verbose = false
 	
-	/*!
+	/**
 	 *  Designated initializer.
 	 *
 	 *  Key support is experimental and currently informed by MITREid's reference implementation, with these keys:
@@ -78,7 +78,7 @@ class OAuth2 {
 	 *    - verbose (bool, applies to client logging, unrelated to the actual OAuth exchange)
 	 *  MITREid: https://github.com/mitreid-connect/
 	 */
-	init(settings: NSDictionary) {
+	public init(settings: NSDictionary) {
 		self.settings = settings.copy() as NSDictionary
 		
 		if let cid = settings["client_id"] as? String {
@@ -110,9 +110,9 @@ class OAuth2 {
 	}
 	
 	
-	// MARK: OAuth Actions
+	// MARK: - OAuth Actions
 	
-	/*!
+	/**
 	 *  Constructs an authorize URL with the given parameters.
 	 *
 	 *  It is possible to use the `params` dictionary to override internally generated URL parameters, use it wisely. Subclasses generally provide shortcut
@@ -124,7 +124,7 @@ class OAuth2 {
 	 *  @param responseType The response type to request; subclasses know which one to supply
 	 *  @param params Any additional parameters as dictionary with string keys and values that will be added to the query part
 	 */
-	func authorizeURL(base: NSURL, var redirect: String?, scope: String?, responseType: String?, params: [String: String]?) -> NSURL {
+	public func authorizeURL(base: NSURL, var redirect: String?, scope: String?, responseType: String?, params: [String: String]?) -> NSURL {
 		
 		// verify that we have all parts
 		if clientId.isEmpty {
@@ -179,15 +179,15 @@ class OAuth2 {
 		return final;
 	}
 	
-	/*!
+	/**
 	 *  Convenience method to be overridden by and used from subclasses.
 	 */
-	func authorizeURLWithRedirect(redirect: String?, scope: String?, params: [String: String]?) -> NSURL {
+	public func authorizeURLWithRedirect(redirect: String?, scope: String?, params: [String: String]?) -> NSURL {
 		NSException(name: "OAuth2AbstractClassUse", reason: "Abstract class use", userInfo: nil).raise()
 		return NSURL()
 	}
 	
-	func handleRedirectURL(redirect: NSURL) {
+	public func handleRedirectURL(redirect: NSURL) {
 		NSException(name: "OAuth2AbstractClassUse", reason: "Abstract class use", userInfo: nil).raise()
 	}
 	
@@ -202,19 +202,19 @@ class OAuth2 {
 	}
 	
 	
-	// MARK: Requests
+	// MARK: - Requests
 	
-	func request(forURL url: NSURL) -> OAuth2Request {
+	public func request(forURL url: NSURL) -> OAuth2Request {
 		return OAuth2Request(URL: url, oauth: self, cachePolicy: .ReturnCacheDataElseLoad, timeoutInterval: 20)
 	}
 	
 	
-	// MARK: Utilities
+	// MARK: - Utilities
 	
-	/*!
+	/**
 	 *  Create a query string from a dictionary of string: string pairs.
 	 */
-	class func queryStringFor(params: [String: String]) -> String {
+	public class func queryStringFor(params: [String: String]) -> String {
 		var arr: [String] = []
 		for (key, val) in params {
 			arr.append("\(key)=\(val)")						// NSURLComponents will correctly encode the parameter string
@@ -222,10 +222,10 @@ class OAuth2 {
 		return "&".join(arr)
 	}
 	
-	/*!
+	/**
 	 *  Parse a query string into a dictionary of string: string pairs.
 	 */
-	class func paramsFromQuery(query: String) -> [String: String] {
+	public class func paramsFromQuery(query: String) -> [String: String] {
 		let parts = query.componentsSeparatedByString("&")
 		var params: [String: String] = Dictionary(minimumCapacity: parts.count)
 		for part in parts {
@@ -238,7 +238,7 @@ class OAuth2 {
 		return params
 	}
 	
-	/*!
+	/**
 	 *  Handles access token error response.
 	 *  @param params The URL parameters passed into the redirect URL upon error
 	 *  @return An NSError instance with the "best" localized error key and all parameters in the userInfo dictionary; domain "OAuth2ErrorDomain", code 600
@@ -292,7 +292,7 @@ class OAuth2 {
 		return error
 	}
 	
-	/*!
+	/**
 	 *  Debug logging, will only log if `verbose` is YES.
 	 */
 	func logIfVerbose(log: String) {

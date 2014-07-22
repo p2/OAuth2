@@ -11,7 +11,7 @@ import UIKit
 
 extension OAuth2 {
 	
-	/*!
+	/**
 	 *  Displays an embedded web view controller on the root view controller and loads the authorize URL.
 	 *
 	 *  Automatically intercepts the redirect URL and performs the token exchange. It does NOT however dismiss the
@@ -19,7 +19,7 @@ extension OAuth2 {
 	 *  call this method first, then assign that closure in which you call `dismissViewController()` on the returned web
 	 *  view controller instance.
 	 */
-	func authorizeEmbedded(redirect: String, scope: String, params: [String: String]?) -> OAuth2WebViewController {
+	public func authorizeEmbedded(redirect: String, scope: String, params: [String: String]?) -> OAuth2WebViewController {
 		let url = authorizeURLWithRedirect(redirect, scope: scope, params: params)
 		let web = OAuth2WebViewController()
 		web.startURL = url
@@ -43,12 +43,12 @@ extension OAuth2 {
 }
 
 
-/*!
+/**
  *  A simple iOS web view controller that allows you to display the login/authorization screen.
  */
-class OAuth2WebViewController: UIViewController, UIWebViewDelegate
+public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 {
-	/*! The URL to load on first show. */
+	/** The URL to load on first show. */
 	var startURL: NSURL? {
 		didSet(oldURL) {
 			if startURL && !oldURL && isViewLoaded() {
@@ -57,7 +57,7 @@ class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 		}
 	}
 	
-	/*! The URL string to intercept and respond to. */
+	/** The URL string to intercept and respond to. */
 	var interceptURLString: String? {
 		didSet(oldURL) {
 			if interceptURLString {
@@ -67,10 +67,10 @@ class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 	}
 	var interceptComponents: NSURLComponents?
 	
-	/*! Closure called when the web view gets asked to load the redirect URL, specified in `interceptURLString`. */
+	/** Closure called when the web view gets asked to load the redirect URL, specified in `interceptURLString`. */
 	var onIntercept: ((url: NSURL) -> Bool)?
 	
-	/*! Called when the web view gets dismissed. */
+	/** Called when the web view gets dismissed. */
 	var onDismiss: ((didCancel: Bool) -> Void)?
 	
 	var cancelButton: UIBarButtonItem?
@@ -82,9 +82,9 @@ class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 	}
 	
 	
-	// MARK: View Handling
+	// MARK: - View Handling
 	
-	override func loadView() {
+	override public func loadView() {
 		title = "SMART"
 		edgesForExtendedLayout = .All
 		extendedLayoutIncludesOpaqueBars = true
@@ -108,7 +108,7 @@ class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 		view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[web]|", options: nil, metrics: nil, views: views))
 	}
 	
-	override func viewWillAppear(animated: Bool) {
+	override public func viewWillAppear(animated: Bool) {
 		super.viewWillAppear(animated)
 		
 		if !webView.canGoBack {
@@ -144,7 +144,7 @@ class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 	}
 	
 	
-	// MARK: Actions
+	// MARK: - Actions
 	
 	func loadURL(url: NSURL) {
 		webView.loadRequest(NSURLRequest(URL: url))
@@ -173,9 +173,9 @@ class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 	}
 	
 	
-	// MARK: Web View Delegate
+	// MARK: - Web View Delegate
 	
-	func webView(webView: UIWebView!, shouldStartLoadWithRequest request: NSURLRequest!, navigationType: UIWebViewNavigationType) -> Bool {
+	public func webView(webView: UIWebView!, shouldStartLoadWithRequest request: NSURLRequest!, navigationType: UIWebViewNavigationType) -> Bool {
 		
 		// we compare the scheme and host first, then check the path (if there is any). Not sure if a simple string comparison
 		// would work as there may be URL parameters attached
@@ -188,18 +188,18 @@ class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 		return true
 	}
 	
-	func webViewDidStartLoad(webView: UIWebView!) {
+	public func webViewDidStartLoad(webView: UIWebView!) {
 		if "file" != webView.request.URL.scheme {
 			showLoadingIndicator()
 		}
 	}
 	
-	func webViewDidFinishLoad(webView: UIWebView!) {
+	public func webViewDidFinishLoad(webView: UIWebView!) {
 		hideLoadingIndicator()
 		showHideBackButton(webView.canGoBack)
 	}
 	
-	func webView(webView: UIWebView!, didFailLoadWithError error: NSError!) {
+	public func webView(webView: UIWebView!, didFailLoadWithError error: NSError!) {
 		if NSURLErrorDomain == error.domain && NSURLErrorCancelled == error.code {
 			return
 		}
