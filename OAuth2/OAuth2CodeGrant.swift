@@ -22,7 +22,7 @@ public class OAuth2CodeGrant: OAuth2 {
 	/** The receiver's long-time refresh token. */
 	public var refreshToken = ""
 	
-	public init(settings: NSDictionary) {
+	public override init(settings: NSDictionary) {
 		if let token = settings["token_uri"] as? String {
 			tokenURL = NSURL(string: token)
 		}
@@ -36,13 +36,13 @@ public class OAuth2CodeGrant: OAuth2 {
 	}
 	
 	public func tokenURLWithRedirect(redirect: String?, code: String, params: [String: String]?) -> NSURL {
-		let base = tokenURL ? tokenURL! : authURL!
+		let base = tokenURL ?? authURL!
 		var prms = ["code": code, "grant_type": "authorization_code"]
-		if clientSecret {
+		if nil != clientSecret {
 			prms["client_secret"] = clientSecret!
 		}
 		
-		if params {
+		if nil != params {
 			prms.addEntries(params!)
 		}
 		
@@ -73,7 +73,7 @@ public class OAuth2CodeGrant: OAuth2 {
 		logIfVerbose("Handling redirect URL \(redirect.description)")
 		
 		let (code, error) = validateRedirectURL(redirect)
-		if error {
+		if nil != error {
 			didFail(error)
 		}
 		else {
@@ -125,7 +125,7 @@ public class OAuth2CodeGrant: OAuth2 {
 			}
 			
 			// if we're still here an error must have happened
-			if !finalError {
+			if nil == finalError {
 				finalError = genOAuth2Error("Unknown connection error", .NetworkError)
 			}
 			
@@ -170,7 +170,7 @@ public class OAuth2CodeGrant: OAuth2 {
 			error = genOAuth2Error("The redirect URL contains no query fragment", .PrerequisiteFailed)
 		}
 		
-		if error {
+		if nil != error {
 			logIfVerbose("Invalid redirect URL: \(error!.localizedDescription)")
 		}
 		else {

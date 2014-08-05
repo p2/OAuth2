@@ -59,7 +59,7 @@ public class OAuth2 {
 	public var onFailure: ((error: NSError?) -> Void)?
 	
 	/** Closure called after onAuthorize OR onFailure, useful for cleanup operations. */
-	public var afterAuthorizeOrFailure: (wasFailure: Bool -> Void)?
+	public var afterAuthorizeOrFailure: ((wasFailure: Bool) -> Void)?
 	
 	/** Set to YES to log all the things. NO by default. */
 	public var verbose = false
@@ -131,17 +131,17 @@ public class OAuth2 {
 			NSException(name: "OAuth2IncompleteSetup", reason: "I do not yet have a client id, cannot construct an authorize URL", userInfo: nil).raise()
 		}
 		
-		if redirect {
+		if nil != redirect {
 			self.redirect = redirect!
 		}
-		else if !self.redirect {
+		else if nil == self.redirect {
 			if let redirs = settings["redirect_uris"] as? NSArray {
 				if redirs.count > 0 {
 					self.redirect = redirs[0] as? String
 				}
 			}
 		}
-		if !self.redirect {
+		if nil == self.redirect {
 			NSException(name: "OAuth2IncompleteSetup", reason: "I need a redirect URI, cannot construct an authorize URL", userInfo: nil).raise()
 		}
 		
@@ -158,17 +158,17 @@ public class OAuth2 {
 			"redirect_uri": self.redirect!,
 			"state": state
 		]
-		if scope {
+		if nil != scope {
 			self.scope = scope!
 		}
-		if self.scope {
+		if nil != self.scope {
 			urlParams["scope"] = self.scope!
 		}
-		if responseType {
+		if nil != responseType {
 			urlParams["response_type"] = responseType!
 		}
 		
-		if params {
+		if nil != params {
 			urlParams.addEntries(params!)
 		}
 		
@@ -193,12 +193,12 @@ public class OAuth2 {
 	
 	func didAuthorize(parameters: NSDictionary) {
 		onAuthorize?(parameters: parameters)
-		afterAuthorizeOrFailure?(false)
+		afterAuthorizeOrFailure?(wasFailure: false)
 	}
 	
 	func didFail(error: NSError?) {
 		onFailure?(error: error)
-		afterAuthorizeOrFailure?(true)
+		afterAuthorizeOrFailure?(wasFailure: true)
 	}
 	
 	

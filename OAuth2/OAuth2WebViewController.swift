@@ -51,7 +51,7 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 	/** The URL to load on first show. */
 	var startURL: NSURL? {
 		didSet(oldURL) {
-			if startURL && !oldURL && isViewLoaded() {
+			if nil != startURL && nil == oldURL && isViewLoaded() {
 				loadURL(startURL!)
 			}
 		}
@@ -60,7 +60,7 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 	/** The URL string to intercept and respond to. */
 	var interceptURLString: String? {
 		didSet(oldURL) {
-			if interceptURLString {
+			if nil != interceptURLString {
 				interceptComponents = NSURLComponents(URL: NSURL(string: interceptURLString!), resolvingAgainstBaseURL: true)
 			}
 		}
@@ -77,8 +77,12 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 	var webView: UIWebView!
 	var loadingView: UIView?
 	
-	init() {
+	override init() {
 		super.init(nibName: nil, bundle: nil)
+	}
+	
+	required public init(coder aDecoder: NSCoder!) {
+		super.init(coder: aDecoder)
 	}
 	
 	
@@ -112,7 +116,7 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 		super.viewWillAppear(animated)
 		
 		if !webView.canGoBack {
-			if startURL {
+			if nil != startURL {
 				loadURL(startURL!)
 			}
 			else {
@@ -155,7 +159,7 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 	}
 	
 	func cancel(sender: AnyObject?) {
-		dismiss(asCancel: true, animated: sender ? true : false)
+		dismiss(asCancel: true, animated: nil != sender ? true : false)
 	}
 	
 	func dismiss(# animated: Bool) {
@@ -166,7 +170,7 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 		webView.stopLoading()
 		
 		presentingViewController.dismissViewControllerAnimated(animated) {
-			if self.onDismiss {
+			if nil != self.onDismiss {
 				self.onDismiss!(didCancel: asCancel)
 			}
 		}
@@ -179,7 +183,7 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 		
 		// we compare the scheme and host first, then check the path (if there is any). Not sure if a simple string comparison
 		// would work as there may be URL parameters attached
-		if onIntercept && request.URL.scheme == interceptComponents?.scheme && request.URL.host == interceptComponents?.host {
+		if nil != onIntercept && request.URL.scheme == interceptComponents?.scheme && request.URL.host == interceptComponents?.host {
 			if (request.URL.pathComponents as NSArray).componentsJoinedByString("/") == interceptComponents?.path {
 				return onIntercept!(url: request.URL)
 			}
@@ -205,7 +209,7 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 		}
 		// do we still need to intercept "WebKitErrorDomain" error 102?
 		
-		if loadingView {
+		if nil != loadingView {
 			showErrorMessage(error.localizedDescription, animated: true)
 		}
 	}
