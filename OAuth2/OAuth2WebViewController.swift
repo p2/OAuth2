@@ -12,7 +12,8 @@ import UIKit
 extension OAuth2 {
 	
 	/**
-	 *  Displays an embedded web view controller on the supplied view controller and loads the authorize URL.
+	 *  Presents a web view controller, contained in a UINavigationController, on the supplied view controller and loads
+	 *  the authorize URL.
 	 *
 	 *  Automatically intercepts the redirect URL and performs the token exchange. It does NOT however dismiss the
 	 *  web view controller automatically, you probably want to do this in the `afterAuthorizeOrFailure` closure. Simply

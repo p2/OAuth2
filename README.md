@@ -47,7 +47,7 @@ The steps for other flows are mostly the same short of instantiating a different
     **Embedded**:
     
     ```swift
-    let web = oauth.authorizeEmbedded(redir, scope: scope, params: nil)
+    let web = oauth.authorizeEmbedded(redir, scope: scope, params: nil, from: <# view controller #>)
     oauth.afterAuthorizeOrFailure = { wasFailure in
         web.dismissViewControllerAnimated(true, completion: nil)
     }
