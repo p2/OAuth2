@@ -25,8 +25,8 @@ public class OAuth2ImplicitGrant: OAuth2 {
 		var comp = NSURLComponents(URL: redirect, resolvingAgainstBaseURL: true)
 		
 		// token should be in the URL fragment
-		if countElements(comp.fragment!) > 0 {
-			let params = OAuth2ImplicitGrant.paramsFromQuery(comp.fragment)
+		if nil != comp.fragment && countElements(comp.fragment!) > 0 {
+			let params = OAuth2ImplicitGrant.paramsFromQuery(comp.fragment!)
 			let token: String? = params["access_token"]
 			if countElements(token!) > 0 {
 				if let tokType = params["token_type"] {

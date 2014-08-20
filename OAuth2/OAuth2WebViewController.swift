@@ -12,14 +12,18 @@ import UIKit
 extension OAuth2 {
 	
 	/**
-	 *  Displays an embedded web view controller on the root view controller and loads the authorize URL.
+	 *  Displays an embedded web view controller on the supplied view controller and loads the authorize URL.
 	 *
 	 *  Automatically intercepts the redirect URL and performs the token exchange. It does NOT however dismiss the
 	 *  web view controller automatically, you probably want to do this in the `afterAuthorizeOrFailure` closure. Simply
 	 *  call this method first, then assign that closure in which you call `dismissViewController()` on the returned web
 	 *  view controller instance.
+	 *  @param redirect The redirect URL to use
+	 *  @param scope The scope to use
+	 *  @param params Optional additional URL parameters
+	 *  @param from The view controller to use for presentation
 	 */
-	public func authorizeEmbedded(redirect: String, scope: String, params: [String: String]?) -> OAuth2WebViewController {
+	public func authorizeEmbedded(redirect: String, scope: String, params: [String: String]?, from: UIViewController) -> OAuth2WebViewController {
 		let url = authorizeURLWithRedirect(redirect, scope: scope, params: params)
 		let web = OAuth2WebViewController()
 		web.startURL = url
@@ -35,7 +39,6 @@ extension OAuth2 {
 		}
 		
 		let navi = UINavigationController(rootViewController: web)
-		let from = UIApplication.sharedApplication().keyWindow.rootViewController
 		from.presentViewController(navi, animated: true, completion: nil)
 		
 		return web
@@ -49,7 +52,7 @@ extension OAuth2 {
 public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 {
 	/** The URL to load on first show. */
-	var startURL: NSURL? {
+	public var startURL: NSURL? {
 		didSet(oldURL) {
 			if nil != startURL && nil == oldURL && isViewLoaded() {
 				loadURL(startURL!)
@@ -81,7 +84,7 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 		super.init(nibName: nil, bundle: nil)
 	}
 	
-	required public init(coder aDecoder: NSCoder!) {
+	required public init(coder aDecoder: NSCoder) {
 		super.init(coder: aDecoder)
 	}
 	
@@ -150,7 +153,8 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 	
 	// MARK: - Actions
 	
-	func loadURL(url: NSURL) {
+	public func loadURL(url: NSURL) {
+		print(webView)
 		webView.loadRequest(NSURLRequest(URL: url))
 	}
 	

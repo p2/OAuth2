@@ -10,29 +10,29 @@
 	<string>OAuth2</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>218B0829-84C1-4CEF-B5EB-3A120EF34C96</key>
+		<key>2045D86BC5D391C299DCC498309E722E037BFF4E</key>
 		<string>ssh://github.com/p2/OAuth2.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>OAuth2.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>218B0829-84C1-4CEF-B5EB-3A120EF34C96</key>
+		<key>2045D86BC5D391C299DCC498309E722E037BFF4E</key>
 		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>ssh://github.com/p2/OAuth2.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>218B0829-84C1-4CEF-B5EB-3A120EF34C96</string>
+	<string>2045D86BC5D391C299DCC498309E722E037BFF4E</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>218B0829-84C1-4CEF-B5EB-3A120EF34C96</string>
+			<string>2045D86BC5D391C299DCC498309E722E037BFF4E</string>
 			<key>IDESourceControlWCCName</key>
 			<string>OAuth2</string>
 		</dict>

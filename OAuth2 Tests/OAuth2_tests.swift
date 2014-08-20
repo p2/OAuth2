@@ -44,7 +44,7 @@ class OAuth2Tests: XCTestCase {
 		XCTAssertEqual("https", comp.scheme!, "Need correct scheme")
 		XCTAssertEqual("auth.ful.io", comp.host!, "Need correct host")
 		
-		let params = OAuth2.paramsFromQuery(comp.query)
+		let params = OAuth2.paramsFromQuery(comp.query!)
 		XCTAssertEqual(params["redirect_uri"]!, "oauth2app://callback", "Expecting `` in query")
 		XCTAssertEqual(params["scope"]!, "launch", "Expecting `scope` in query")
 //		XCTAssertTrue(String(params["state"] as String).utf16count > 0, "Expecting `state` in query")

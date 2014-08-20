@@ -61,7 +61,7 @@ public class OAuth2CodeGrant: OAuth2 {
 		let post = NSMutableURLRequest(URL: comp.URL)
 		post.HTTPMethod = "POST"
 		post.setValue("application/x-www-form-urlencoded; charset=utf-8", forHTTPHeaderField: "Content-Type")
-		post.HTTPBody = body.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+		post.HTTPBody = body?.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
 		
 		return post
 	}
@@ -100,11 +100,10 @@ public class OAuth2CodeGrant: OAuth2 {
 		NSURLConnection.sendAsynchronousRequest(post, queue: NSOperationQueue.mainQueue(), completionHandler: { response, data, error in
 			var finalError: NSError?
 			
-			if error {
+			if nil != error {
 				finalError = error
 			}
-			else if response {
-				if data {				// Swift compiler bug, cannot test two implicitly unwrapped optionals with `&&`
+			else if nil != response && nil != data {
 				if let http = response as? NSHTTPURLResponse {
 					if 200 == http.statusCode {
 						if let json = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: &finalError) as? NSDictionary {
@@ -120,7 +119,6 @@ public class OAuth2CodeGrant: OAuth2 {
 							return
 						}
 					}
-				}
 				}
 			}
 			
@@ -144,9 +142,8 @@ public class OAuth2CodeGrant: OAuth2 {
 		var error: NSError?
 		
 		let comp = NSURLComponents(URL: redirect, resolvingAgainstBaseURL: true)
-		let query = OAuth2CodeGrant.paramsFromQuery(comp.query)
-		
-		if query.count > 0 {
+		if nil != comp.query {
+			let query = OAuth2CodeGrant.paramsFromQuery(comp.query!)
 			if let cd = query["code"] {
 				
 				// we got a code, check if state is correct

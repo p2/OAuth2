@@ -80,10 +80,10 @@ The steps for other flows are mostly the same short of instantiating a different
 5. You can now obtain an `OAuth2Request`, which is an already signed `NSMutableURLRequest`, to retrieve data from your server.
     
     ```swift
-    let req = oauth.request(forURL: <a resource URL>)
+    let req = oauth.request(forURL: <# resource URL #>)
     let session = NSURLSession()
     let task = session.dataTaskWithRequest(req) { data, response, error in
-        if error {
+        if nil != error {
             // something went wrong
         }
         else {
