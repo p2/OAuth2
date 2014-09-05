@@ -94,10 +94,11 @@ public class OAuth2CodeGrant: OAuth2 {
 		}
 		
 		let post = tokenRequest(code)
-		logIfVerbose("Exchanging code \(code) with redirect \(redirect) for token at \(post.URL.description)")
+		logIfVerbose("Exchanging code \(code) with redirect \(redirect!) for token at \(post.URL.description)")
 		
 		// perform the exchange
-		NSURLConnection.sendAsynchronousRequest(post, queue: NSOperationQueue.mainQueue(), completionHandler: { response, data, error in
+		let session = NSURLSession.sharedSession()
+		let task = session.dataTaskWithRequest(post) { data, response, error in
 			var finalError: NSError?
 			
 			if nil != error {
@@ -119,37 +120,42 @@ public class OAuth2CodeGrant: OAuth2 {
 							return
 						}
 					}
+					else {
+						finalError = genOAuth2Error(http.statusString, .AuthorizationError)
+					}
 				}
 			}
 			
 			// if we're still here an error must have happened
 			if nil == finalError {
-				finalError = genOAuth2Error("Unknown connection error", .NetworkError)
+				finalError = genOAuth2Error("Unknown connection error for response \(response) with data \(data)", .NetworkError)
 			}
 			
 			self.didFail(finalError)
-		})
+		}
+		task.resume()
 	}
 	
 	
 	// MARK: - Utilities
 	
 	/**
-	 *  Validates the redirect URI, returns a tuple weth the code and nil on success, nil and an error on failure.
+	 *  Validates the redirect URI: returns a tuple with the code and nil on success, nil and an error on failure.
 	 */
 	func validateRedirectURL(redirect: NSURL) -> (code: String?, error: NSError?) {
 		var code: String?
 		var error: NSError?
 		
 		let comp = NSURLComponents(URL: redirect, resolvingAgainstBaseURL: true)
-		if nil != comp.query {
+		if nil != comp.query && countElements(comp.query!) > 0 {
 			let query = OAuth2CodeGrant.paramsFromQuery(comp.query!)
 			if let cd = query["code"] {
 				
-				// we got a code, check if state is correct
+				// we got a code, use it if state is correct (and reset state)
 				if let st = query["state"] {
 					if st == state {
 						code = cd
+						state = ""
 					}
 					else {
 						error = genOAuth2Error("Invalid state \(st), will not use the code", .InvalidState)

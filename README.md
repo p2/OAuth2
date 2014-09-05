@@ -81,7 +81,7 @@ The steps for other flows are mostly the same short of instantiating a different
     
     ```swift
     let req = oauth.request(forURL: <# resource URL #>)
-    let session = NSURLSession()
+    let session = NSURLSession.sharedSession()
     let task = session.dataTaskWithRequest(req) { data, response, error in
         if nil != error {
             // something went wrong
@@ -118,4 +118,8 @@ Playground
 ----------
 
 The idea is to add a Playground to see OAuth2 in use (instead of a sample app).
-However, it's not currently possible to import custom code into playgrounds, so currently there is no Playground.
+However, it's not currently possible to interact view WebViews inside a playground, which would be needed to login to a demo server.
+
+There is some stub code in `OSX.playground` if you'd like to tinker.
+It's not working as one needs to open the authorize URL in a browser, then copy-paste the redirect URL from OS X's warning window into the Playground – which makes OAuth2 regenerate its state, making your redirect URL invalid.
+Fun times.

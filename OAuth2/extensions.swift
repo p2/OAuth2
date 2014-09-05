@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Pascal Pfiffner. All rights reserved.
 //
 
+import Foundation
+
 
 extension Dictionary {
 	mutating func addEntries(from: Dictionary) -> Dictionary {
@@ -13,5 +15,13 @@ extension Dictionary {
 			self.updateValue(val, forKey: key)
 		}
 		return self
+	}
+}
+
+extension NSHTTPURLResponse {
+	public var statusString: String {
+		get {
+			return NSHTTPURLResponse.localizedStringForStatusCode(self.statusCode)
+		}
 	}
 }

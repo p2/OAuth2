@@ -46,7 +46,8 @@ public class OAuth2 {
 	/** The redirect URL string currently in use. */
 	public var redirect: String?
 	
-	/** The state sent to the server when requesting a token; we internally generate a UUID unless it's set manually. */
+	/** The state sent to the server when requesting a token.
+	 *  We internally generate a UUID and use the first 8 chars. */
 	var state = ""
 	
 	/** The receiver's access token. */
@@ -147,7 +148,9 @@ public class OAuth2 {
 		
 		if state.isEmpty {
 			state = NSUUID().UUIDString
+			state = state[state.startIndex..<advance(state.startIndex, 8)]		// only use the first 8 chars, should be enough
 		}
+		
 		
 		// compose the URL
 		let comp = NSURLComponents(URL: base, resolvingAgainstBaseURL: true)
