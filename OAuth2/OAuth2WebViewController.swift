@@ -174,7 +174,7 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 	func dismiss(# asCancel: Bool, animated: Bool) {
 		webView.stopLoading()
 		
-		presentingViewController.dismissViewControllerAnimated(animated) {
+		presentingViewController?.dismissViewControllerAnimated(animated) {
 			if nil != self.onDismiss {
 				self.onDismiss!(didCancel: asCancel)
 			}
@@ -198,7 +198,7 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 	}
 	
 	public func webViewDidStartLoad(webView: UIWebView!) {
-		if "file" != webView.request.URL?.scheme {
+		if "file" != webView.request?.URL.scheme {
 			showLoadingIndicator()
 		}
 	}

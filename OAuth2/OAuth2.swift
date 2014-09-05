@@ -10,7 +10,7 @@ import Foundation
 
 let OAuth2ErrorDomain = "OAuth2ErrorDomain"
 
-enum OAuth2Error: Int {
+public enum OAuth2Error: Int {
 	case Generic = 600
 	case Unsupported
 	case NetworkError
@@ -175,8 +175,12 @@ public class OAuth2 {
 		comp.query = OAuth2.queryStringFor(urlParams)
 		
 		let final = comp.URL
-		logIfVerbose("Authorizing against \(final.description)")
-		return final;
+		if nil == final {
+			NSException(name: "OAuth2InvalidURL", reason: "Failed to create authorize URL", userInfo: urlParams).raise()
+		}
+		
+		logIfVerbose("Authorizing against \(final!.description)")
+		return final!;
 	}
 	
 	/**
@@ -308,11 +312,11 @@ public class OAuth2 {
 }
 
 
-func genOAuth2Error(message: String) -> NSError {
+public func genOAuth2Error(message: String) -> NSError {
 	return genOAuth2Error(message, .Generic)
 }
 
-func genOAuth2Error(message: String, code: OAuth2Error) -> NSError {
+public func genOAuth2Error(message: String, code: OAuth2Error) -> NSError {
 	return NSError(domain: OAuth2ErrorDomain, code: code.toRaw(), userInfo: [NSLocalizedDescriptionKey: message])
 }
 
