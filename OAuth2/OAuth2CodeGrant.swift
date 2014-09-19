@@ -61,6 +61,7 @@ public class OAuth2CodeGrant: OAuth2 {
 		let post = NSMutableURLRequest(URL: comp.URL!)
 		post.HTTPMethod = "POST"
 		post.setValue("application/x-www-form-urlencoded; charset=utf-8", forHTTPHeaderField: "Content-Type")
+		post.setValue("application/json", forHTTPHeaderField: "Accept")
 		post.HTTPBody = body?.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
 		
 		return post
