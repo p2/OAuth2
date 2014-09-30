@@ -36,7 +36,9 @@ oauth.onAuthorize = { parameters in
 	task.resume()
 }
 oauth.onFailure = { error in
-	println("Authorization failed: \(error.localizedDescription)")
+	if nil != error {
+		println("Authorization failed: \(error!.localizedDescription)")
+	}
 }
 
 // construct the authorize URL which you would then load in a browser or web view

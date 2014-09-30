@@ -33,7 +33,7 @@ extension OAuth2 {
 			self.handleRedirectURL(url)
 			return true
 		}
-		web.onDismiss = { didCancel in
+		web.onWillDismiss = { didCancel in
 			if didCancel {
 				self.didFail(nil)
 			}
@@ -74,8 +74,8 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 	/** Closure called when the web view gets asked to load the redirect URL, specified in `interceptURLString`. */
 	var onIntercept: ((url: NSURL) -> Bool)?
 	
-	/** Called when the web view gets dismissed. */
-	var onDismiss: ((didCancel: Bool) -> Void)?
+	/** Called when the web view is about to be dismissed. */
+	var onWillDismiss: ((didCancel: Bool) -> Void)?
 	
 	var cancelButton: UIBarButtonItem?
 	var webView: UIWebView!
@@ -174,11 +174,10 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 	func dismiss(# asCancel: Bool, animated: Bool) {
 		webView.stopLoading()
 		
-		presentingViewController?.dismissViewControllerAnimated(animated) {
-			if nil != self.onDismiss {
-				self.onDismiss!(didCancel: asCancel)
-			}
+		if nil != self.onWillDismiss {
+			self.onWillDismiss!(didCancel: asCancel)
 		}
+		presentingViewController?.dismissViewControllerAnimated(animated, nil)
 	}
 	
 	

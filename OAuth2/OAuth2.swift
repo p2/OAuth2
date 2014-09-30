@@ -56,8 +56,8 @@ public class OAuth2 {
 	/** Closure called on successful authentication. */
 	public var onAuthorize: ((parameters: NSDictionary) -> Void)?
 	
-	/** When authorization fails. */
-	public var onFailure: ((error: NSError) -> Void)?
+	/** When authorization fails (if error is not nil) or is cancelled. */
+	public var onFailure: ((error: NSError?) -> Void)?
 	
 	/** Closure called after onAuthorize OR onFailure, useful for cleanup operations. */
 	public var afterAuthorizeOrFailure: ((wasFailure: Bool) -> Void)?
@@ -204,12 +204,7 @@ public class OAuth2 {
 	}
 	
 	func didFail(error: NSError?) {
-		if nil == error {
-			onFailure?(error: genOAuth2Error("I failed, sorry"))
-		}
-		else {
-			onFailure?(error: error!)
-		}
+		onFailure?(error: error)
 		afterAuthorizeOrFailure?(wasFailure: true)
 	}
 	

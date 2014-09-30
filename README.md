@@ -32,8 +32,10 @@ The steps for other flows are mostly the same short of instantiating a different
     oauth.onAuthorize = { parameters in
         println("Did authorize with parameters: \(parameters)")
     }
-    oauth.onFailure = { error in
-        println("Authorization went wrong: \(error.localizedDescription)")
+    oauth.onFailure = { error in		// `error` is nil on cancel
+		if nil != error {
+			println("Authorization went wrong: \(error!.localizedDescription)")
+		}
     }
     ```
 
