@@ -154,7 +154,7 @@ public class OAuth2 {
 		
 		// compose the URL
 		let comp = NSURLComponents(URL: base, resolvingAgainstBaseURL: true)
-		assert("https" == comp.scheme, "You MUST use HTTPS")
+		assert(nil != comp && "https" == comp!.scheme, "You MUST use HTTPS")
 		
 		var urlParams = [
 			"client_id": clientId,
@@ -175,9 +175,9 @@ public class OAuth2 {
 			urlParams.addEntries(params!)
 		}
 		
-		comp.query = OAuth2.queryStringFor(urlParams)
+		comp!.query = OAuth2.queryStringFor(urlParams)
 		
-		let final = comp.URL
+		let final = comp!.URL
 		if nil == final {
 			NSException(name: "OAuth2InvalidURL", reason: "Failed to create authorize URL", userInfo: urlParams).raise()
 		}
@@ -290,7 +290,7 @@ public class OAuth2 {
 		var error: NSError
 		if let prms = params.mutableCopy() as? NSMutableDictionary {
 			prms[NSLocalizedDescriptionKey] = message
-			error = NSError(domain: OAuth2ErrorDomain, code: OAuth2Error.AuthorizationError.toRaw(), userInfo: prms)
+			error = NSError(domain: OAuth2ErrorDomain, code: OAuth2Error.AuthorizationError.rawValue, userInfo: prms)
 		}
 		else {
 			error = genOAuth2Error(message, .AuthorizationError)
@@ -315,6 +315,6 @@ public func genOAuth2Error(message: String) -> NSError {
 }
 
 public func genOAuth2Error(message: String, code: OAuth2Error) -> NSError {
-	return NSError(domain: OAuth2ErrorDomain, code: code.toRaw(), userInfo: [NSLocalizedDescriptionKey: message])
+	return NSError(domain: OAuth2ErrorDomain, code: code.rawValue, userInfo: [NSLocalizedDescriptionKey: message])
 }
 

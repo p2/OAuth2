@@ -55,10 +55,11 @@ public class OAuth2CodeGrant: OAuth2 {
 	public func tokenRequest(code: String) -> NSURLRequest {
 		let url = tokenURLWithRedirect(redirect, code: code, params: nil)
 		let comp = NSURLComponents(URL: url, resolvingAgainstBaseURL: true)
-		let body = comp.query
-		comp.query = nil
+		assert(comp != nil, "It seems NSURLComponents cannot parse \(url)");
+		let body = comp!.query
+		comp!.query = nil
 		
-		let post = NSMutableURLRequest(URL: comp.URL!)
+		let post = NSMutableURLRequest(URL: comp!.URL!)
 		post.HTTPMethod = "POST"
 		post.setValue("application/x-www-form-urlencoded; charset=utf-8", forHTTPHeaderField: "Content-Type")
 		post.setValue("application/json", forHTTPHeaderField: "Accept")
@@ -148,8 +149,8 @@ public class OAuth2CodeGrant: OAuth2 {
 		var error: NSError?
 		
 		let comp = NSURLComponents(URL: redirect, resolvingAgainstBaseURL: true)
-		if nil != comp.query && countElements(comp.query!) > 0 {
-			let query = OAuth2CodeGrant.paramsFromQuery(comp.query!)
+		if nil != comp && nil != comp!.query && countElements(comp!.query!) > 0 {
+			let query = OAuth2CodeGrant.paramsFromQuery(comp!.query!)
 			if let cd = query["code"] {
 				
 				// we got a code, use it if state is correct (and reset state)

@@ -40,7 +40,7 @@ extension OAuth2 {
 		}
 		
 		let navi = UINavigationController(rootViewController: web)
-		from.presentViewController(navi, animated: true, completion: nil)
+		from.presentViewController(navi!, animated: true, completion: nil)
 		
 		return web
 	}
@@ -65,7 +65,16 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 	var interceptURLString: String? {
 		didSet(oldURL) {
 			if nil != interceptURLString {
-				interceptComponents = NSURLComponents(URL: NSURL(string: interceptURLString!), resolvingAgainstBaseURL: true)
+				if let url = NSURL(string: interceptURLString!) {
+					interceptComponents = NSURLComponents(URL: url, resolvingAgainstBaseURL: true)
+				}
+				else {
+					println("Failed to parse URL \(interceptURLString), discarding")
+					interceptURLString = nil
+				}
+			}
+			else {
+				interceptComponents = nil
 			}
 		}
 	}
