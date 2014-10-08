@@ -2,11 +2,10 @@ OAuth2
 ======
 
 OAuth2 frameworks for **OS X** and **iOS** written in Swift.
-Still very much WiP and not feature complete.
 
-The code in this repo requires Xcode 6, currently deployment targets have to be OS X 10.9+ or iOS 8+.
-The iOS 8 requirement stems from us using frameworks which are not compatible with iOS 7.
-When building static libraries from Swift code becomes possible it should be possible to lower the deployment target to iOS 7.
+The code in this repo requires Xcode 6, the built framework can be used on **OS X 10.9** or **iOS 7** and later.
+Supported OAuth2 [flows](#flows) are the _code grant_ (`response_type=code`) and the _implicit grant_ (`response_type=token`).
+
 
 Usage
 -----
@@ -15,86 +14,88 @@ For a typical code grant flow you want to perform the following steps.
 The steps for other flows are mostly the same short of instantiating a different subclass and using different client settings.
 
 1. Create a settings dictionary.
-    
-    ```swift
-    settings = [
-        "client_id" = "my_swift_app",
-        "client_secret" = "C7447242-A0CF-47C5-BAC7-B38BA91970A9",
-        "authorize_uri" = "https://authorize.smartplatforms.org/authorize",
-        "token_uri" = "https://authorize.smartplatforms.org/token",
-    ]
-    ```
+	
+	```swift
+	settings = [
+		"client_id" = "my_swift_app",
+		"client_secret" = "C7447242-A0CF-47C5-BAC7-B38BA91970A9",
+		"authorize_uri" = "https://authorize.smartplatforms.org/authorize",
+		"token_uri" = "https://authorize.smartplatforms.org/token",
+	]
+	```
 
 2. Create an `OAuth2CodeGrant` instance, setting the `onAuthorize` and `onFailure` closures to keep informed about the status.
-    
-    ```swift
-    let oauth = OAuth2CodeGrant(settings: settings)
-    oauth.onAuthorize = { parameters in
-        println("Did authorize with parameters: \(parameters)")
-    }
-    oauth.onFailure = { error in		// `error` is nil on cancel
+	
+	```swift
+	let oauth = OAuth2CodeGrant(settings: settings)
+	oauth.onAuthorize = { parameters in
+		println("Did authorize with parameters: \(parameters)")
+	}
+	oauth.onFailure = { error in		// `error` is nil on cancel
 		if nil != error {
 			println("Authorization went wrong: \(error!.localizedDescription)")
 		}
-    }
-    ```
+	}
+	```
 
 3. Now either use the built-in web view controller or manually open the _authorize URL_ in the browser:
-    
-    ```swift
-    let redir = "myapp://callback"        // don't forget to register this scheme
-    let scope = "profile email"
-    ```
-    
-    **Embedded**:
-    
-    ```swift
-    let web = oauth.authorizeEmbedded(redir, scope: scope, params: nil, from: <# view controller #>)
-    oauth.afterAuthorizeOrFailure = { wasFailure in
-        web.dismissViewControllerAnimated(true, completion: nil)
-    }
-    ```
-    
-    **OS browser**:
-    
-    ```swift
-    let url = oauth.authorizeURLWithRedirect(redir, scope: scope, params: nil)
-    UIApplication.sharedApplication().openURL(url)
-    ```
-    
-    1. Since you opened the authorize URL in the browser you will need to intercept the callback.
-        When doing so (intercept in your app delegate), let the OAuth2 instance handle the full URL.
-        
-        ```swift
-        func application(application: UIApplication!,
-                         openURL url: NSURL!,
-                   sourceApplication: String!,
-                          annotation: AnyObject!) -> Bool {
-            // you should probably first check if this is your URL being opened
-            if <# check #> { 
-                oauth.handleRedirectURL(url)
-            }
-        }
-        ```
+	
+	```swift
+	let redir = "myapp://callback"        // don't forget to register this scheme
+	let scope = "profile email"
+	```
+	
+	**Embedded**:
+	
+	```swift
+	let vc = <# presenting view controller #>
+	let web = oauth.authorizeEmbedded(redir, scope: scope, params: nil, from: vc)
+	oauth.afterAuthorizeOrFailure = { wasFailure in
+		web.dismissViewControllerAnimated(true, completion: nil)
+	}
+	```
+	
+	**OS browser**:
+	
+	```swift
+	let url = oauth.authorizeURLWithRedirect(redir, scope: scope, params: nil)
+	UIApplication.sharedApplication().openURL(url)
+	```
+	
+	Since you opened the authorize URL in the browser you will need to intercept the callback in your app delegate.
+	Let the OAuth2 instance handle the full URL.
+	
+	```swift
+	func application(application: UIApplication!,
+	                 openURL url: NSURL!,
+	           sourceApplication: String!,
+	                  annotation: AnyObject!) -> Bool {
+		// you should probably first check if this is your URL being opened
+		if <# check #> { 
+			oauth.handleRedirectURL(url)
+		}
+	}
+	```
 
-4. After everything completes either the `onAuthorize` or the `onFailure` closure will be called.
+4. After everything completes either the `onAuthorize` or the `onFailure` closure will be called, and after that the `afterAuthorizeOrFailure` closure if it has been set.
 
 5. You can now obtain an `OAuth2Request`, which is an already signed `NSMutableURLRequest`, to retrieve data from your server.
-    
-    ```swift
-    let req = oauth.request(forURL: <# resource URL #>)
-    let session = NSURLSession.sharedSession()
-    let task = session.dataTaskWithRequest(req) { data, response, error in
-        if nil != error {
-            // something went wrong
-        }
-        else {
-            // check the response and the data
-            // you have just received data with an OAuth2-signed request!
-        }
-    }
-    task.resume()
-    ``` 
+	
+	```swift
+	let req = oauth.request(forURL: <# resource URL #>)
+	let session = NSURLSession.sharedSession()
+	let task = session.dataTaskWithRequest(req) { data, response, error in
+		if nil != error {
+			// something went wrong
+		}
+		else {
+			// check the response and the data
+			// you have just received data with an OAuth2-signed request!
+		}
+	}
+	task.resume()
+	``` 
+
 
 Flows
 -----
