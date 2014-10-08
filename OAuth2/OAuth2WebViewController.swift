@@ -164,7 +164,6 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 	// MARK: - Actions
 	
 	public func loadURL(url: NSURL) {
-		print(webView)
 		webView.loadRequest(NSURLRequest(URL: url))
 	}
 	
@@ -197,7 +196,8 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 		// we compare the scheme and host first, then check the path (if there is any). Not sure if a simple string comparison
 		// would work as there may be URL parameters attached
 		if nil != onIntercept && request.URL.scheme == interceptComponents?.scheme && request.URL.host == interceptComponents?.host {
-			if (request.URL.pathComponents as NSArray).componentsJoinedByString("/") == interceptComponents?.path {
+			let haveComponents = NSURLComponents(URL: request.URL, resolvingAgainstBaseURL: true)
+			if haveComponents?.path == interceptComponents?.path {
 				return onIntercept!(url: request.URL)
 			}
 		}
