@@ -40,7 +40,7 @@ extension OAuth2 {
 		}
 		
 		let navi = UINavigationController(rootViewController: web)
-		from.presentViewController(navi!, animated: true, completion: nil)
+		from.presentViewController(navi, animated: true, completion: nil)
 		
 		return web
 	}
