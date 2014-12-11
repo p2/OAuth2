@@ -34,13 +34,13 @@ extension OAuth2
 	
 		:raises: Will raise if the authorize URL cannot be constructed from the settings used during initialization.
 	
-		:param: params   Optional additional URL parameters
-		:param: from     The view controller to use for presentation
+		:param: controller The view controller to use for presentation
+		:param: params     Optional additional URL parameters
 		:returns: OAuth2WebViewController, embedded in a UINavigationController being presented automatically
 	*/
-	public func authorizeEmbedded(params: [String: String]?, from: UIViewController) -> OAuth2WebViewController {
+	public func authorizeEmbeddedFrom(controller: UIViewController, params: [String: String]?) -> OAuth2WebViewController {
 		let url = authorizeURL()
-		return presentAuthorizeViewFor(url, intercept: redirect!, from: from)
+		return presentAuthorizeViewFor(url, intercept: redirect!, from: controller)
 	}
 	
 	/**
@@ -52,15 +52,18 @@ extension OAuth2
 		call this method first, then assign that closure in which you call `dismissViewController()` on the returned web
 		view controller instance.
 		
-		:param: redirect The redirect URL to use
-		:param: scope    The scope to use
-		:param: params   Optional additional URL parameters
-		:param: from     The view controller to use for presentation
+		:param: controller The view controller to use for presentation
+		:param: redirect   The redirect URL to use
+		:param: scope      The scope to use
+		:param: params     Optional additional URL parameters
 		:returns: OAuth2WebViewController, embedded in a UINavigationController being presented automatically
 	 */
-	public func authorizeEmbedded(redirect: String, scope: String, params: [String: String]?, from: UIViewController) -> OAuth2WebViewController {
+	public func authorizeEmbeddedFrom(controller: UIViewController,
+	                                    redirect: String,
+	                                       scope: String,
+	                                      params: [String: String]?) -> OAuth2WebViewController {
 		let url = authorizeURLWithRedirect(redirect, scope: scope, params: params)
-		return presentAuthorizeViewFor(url, intercept: redirect, from: from)
+		return presentAuthorizeViewFor(url, intercept: redirect, from: controller)
 	}
 	
 	/**

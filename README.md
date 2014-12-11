@@ -48,7 +48,7 @@ If you need to provide additional parameters to the authorize URL take a look at
     
     ```swift
     let vc = <# presenting view controller #>
-    let web = oauth.authorizeEmbedded(params: nil, from: vc)
+    let web = oauth.authorizeEmbeddedFrom(vc, params: nil)
     oauth.afterAuthorizeOrFailure = { wasFailure, error in
         web.dismissViewControllerAnimated(true, completion: nil)
     }
