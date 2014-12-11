@@ -17,7 +17,7 @@ The steps for other flows are mostly the same short of instantiating a different
 1. Create a settings dictionary.
 	
 	```swift
-	settings = [
+	let settings = [
 		"client_id": "my_swift_app",
 		"client_secret": "C7447242-A0CF-47C5-BAC7-B38BA91970A9",
 		"authorize_uri": "https://authorize.smartplatforms.org/authorize",
@@ -51,7 +51,7 @@ The steps for other flows are mostly the same short of instantiating a different
 	```swift
 	let vc = <# presenting view controller #>
 	let web = oauth.authorizeEmbedded(redir, scope: scope, params: nil, from: vc)
-	oauth.afterAuthorizeOrFailure = { wasFailure in
+	oauth.afterAuthorizeOrFailure = { wasFailure, error in
 		web.dismissViewControllerAnimated(true, completion: nil)
 	}
 	```

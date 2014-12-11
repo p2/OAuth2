@@ -47,7 +47,8 @@ public class OAuth2 {
 	public var redirect: String?
 	
 	/** The state sent to the server when requesting a token.
-	 *  We internally generate a UUID and use the first 8 chars. */
+		We internally generate a UUID and use the first 8 chars.
+	 */
 	var state = ""
 	
 	/** The receiver's access token. */
@@ -59,25 +60,33 @@ public class OAuth2 {
 	/** When authorization fails (if error is not nil) or is cancelled. */
 	public var onFailure: ((error: NSError?) -> Void)?
 	
-	/** Closure called after onAuthorize OR onFailure, useful for cleanup operations. */
-	public var afterAuthorizeOrFailure: ((wasFailure: Bool) -> Void)?
+	/**
+		Closure called after onAuthorize OR onFailure, useful for cleanup operations.
+	
+		:param: wasFailure Bool indicating success or failure
+		:param: error NSError describing the reason for failure, as supplied to the `onFailure` callback. If it is nil and
+		              wasFailure is true, the process was aborted.
+	 */
+	public var afterAuthorizeOrFailure: ((wasFailure: Bool, error: NSError?) -> Void)?
 	
 	/** Set to YES to log all the things. NO by default. */
 	public var verbose = false
 	
 	/**
-	 *  Designated initializer.
-	 *
-	 *  Key support is experimental and currently informed by MITREid's reference implementation, with these keys:
-	 *    - client_id (string)
-	 *    - client_secret (string), usually only needed for code grant
-	 *    - api_uri (string)
-	 *    - authorize_uri (string)
-	 *    - token_uri (string), only for code grant
-	 *    - redirect_uris (list of strings)
-	 *    - scope (string)
-	 *    - verbose (bool, applies to client logging, unrelated to the actual OAuth exchange)
-	 *  MITREid: https://github.com/mitreid-connect/
+		Designated initializer.
+	
+		Key support is experimental and currently informed by MITREid's reference implementation, with these keys:
+	
+		- client_id (string)
+		- client_secret (string), usually only needed for code grant
+		- api_uri (string)
+		- authorize_uri (string)
+		- token_uri (string), only for code grant
+		- redirect_uris (list of strings)
+		- scope (string)
+		- verbose (bool, applies to client logging, unrelated to the actual OAuth exchange)
+	
+		MITREid: https://github.com/mitreid-connect/
 	 */
 	public init(settings: NSDictionary) {
 		self.settings = settings.copy() as NSDictionary
@@ -114,16 +123,18 @@ public class OAuth2 {
 	// MARK: - OAuth Actions
 	
 	/**
-	 *  Constructs an authorize URL with the given parameters.
-	 *
-	 *  It is possible to use the `params` dictionary to override internally generated URL parameters, use it wisely. Subclasses generally provide shortcut
-	 *  methods to receive an appropriate authorize (or token) URL.
-	 *
-	 *  @param base The base URL (with path, if needed) to build the URL upon
-	 *  @param redirect The redirect URI string to supply. If it is nil, the first value of the settings' `redirect_uris` entries is used. Must be present in the end!
-	 *  @param scope The scope to request
-	 *  @param responseType The response type to request; subclasses know which one to supply
-	 *  @param params Any additional parameters as dictionary with string keys and values that will be added to the query part
+		Constructs an authorize URL with the given parameters.
+	
+		It is possible to use the `params` dictionary to override internally generated URL parameters, use it wisely.
+		Subclasses generally provide shortcut methods to receive an appropriate authorize (or token) URL.
+	
+		:param: base         The base URL (with path, if needed) to build the URL upon
+		:param: redirect     The redirect URI string to supply. If it is nil, the first value of the settings'
+		                     `redirect_uris` entries is used. Must be present in the end!
+		:param: scope        The scope to request
+		:param: responseType The response type to request; subclasses know which one to supply
+		:param: params       Any additional parameters as dictionary with string keys and values that will be added to
+		                     the query part
 	 */
 	public func authorizeURL(base: NSURL, var redirect: String?, scope: String?, responseType: String?, params: [String: String]?) -> NSURL {
 		
@@ -187,7 +198,7 @@ public class OAuth2 {
 	}
 	
 	/**
-	 *  Convenience method to be overridden by and used from subclasses.
+		Convenience method to be overridden by and used from subclasses.
 	 */
 	public func authorizeURLWithRedirect(redirect: String?, scope: String?, params: [String: String]?) -> NSURL {
 		NSException(name: "OAuth2AbstractClassUse", reason: "Abstract class use", userInfo: nil).raise()
@@ -200,12 +211,12 @@ public class OAuth2 {
 	
 	func didAuthorize(parameters: NSDictionary) {
 		onAuthorize?(parameters: parameters)
-		afterAuthorizeOrFailure?(wasFailure: false)
+		afterAuthorizeOrFailure?(wasFailure: false, error: nil)
 	}
 	
 	func didFail(error: NSError?) {
 		onFailure?(error: error)
-		afterAuthorizeOrFailure?(wasFailure: true)
+		afterAuthorizeOrFailure?(wasFailure: true, error: error)
 	}
 	
 	
@@ -219,7 +230,7 @@ public class OAuth2 {
 	// MARK: - Utilities
 	
 	/**
-	 *  Create a query string from a dictionary of string: string pairs.
+		Create a query string from a dictionary of string: string pairs.
 	 */
 	public class func queryStringFor(params: [String: String]) -> String {
 		var arr: [String] = []
@@ -230,7 +241,7 @@ public class OAuth2 {
 	}
 	
 	/**
-	 *  Parse a query string into a dictionary of string: string pairs.
+		Parse a query string into a dictionary of string: string pairs.
 	 */
 	public class func paramsFromQuery(query: String) -> [String: String] {
 		let parts = query.componentsSeparatedByString("&")
@@ -246,9 +257,11 @@ public class OAuth2 {
 	}
 	
 	/**
-	 *  Handles access token error response.
-	 *  @param params The URL parameters passed into the redirect URL upon error
-	 *  @return An NSError instance with the "best" localized error key and all parameters in the userInfo dictionary; domain "OAuth2ErrorDomain", code 600
+		Handles access token error response.
+	
+		:param: params The URL parameters passed into the redirect URL upon error
+		:returns: An NSError instance with the "best" localized error key and all parameters in the userInfo dictionary;
+		          domain "OAuth2ErrorDomain", code 600
 	 */
 	class func errorForAccessTokenErrorResponse(params: NSDictionary) -> NSError {
 		var message = ""
@@ -300,7 +313,7 @@ public class OAuth2 {
 	}
 	
 	/**
-	 *  Debug logging, will only log if `verbose` is YES.
+		Debug logging, will only log if `verbose` is YES.
 	 */
 	func logIfVerbose(log: String) {
 		if verbose {

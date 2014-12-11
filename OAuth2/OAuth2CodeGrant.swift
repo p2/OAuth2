@@ -50,7 +50,7 @@ public class OAuth2CodeGrant: OAuth2 {
 	}
 	
 	/**
-	 *  Create a request for token exchange
+		Create a request for token exchange
 	 */
 	public func tokenRequest(code: String) -> NSURLRequest {
 		let url = tokenURLWithRedirect(redirect, code: code, params: nil)
@@ -69,7 +69,7 @@ public class OAuth2CodeGrant: OAuth2 {
 	}
 	
 	/**
-	 *  Extracts the code from the redirect URL and exchanges it for a token.
+		Extracts the code from the redirect URL and exchanges it for a token.
 	 */
 	override public func handleRedirectURL(redirect: NSURL) {
 		logIfVerbose("Handling redirect URL \(redirect.description)")
@@ -84,7 +84,7 @@ public class OAuth2CodeGrant: OAuth2 {
 	}
 	
 	/**
-	 *  Takes the received code and exchanges it for a token.
+		Takes the received code and exchanges it for a token.
 	 */
 	func exchangeCodeForToken(code: String) {
 		
@@ -142,7 +142,7 @@ public class OAuth2CodeGrant: OAuth2 {
 	// MARK: - Utilities
 	
 	/**
-	 *  Validates the redirect URI: returns a tuple with the code and nil on success, nil and an error on failure.
+		Validates the redirect URI: returns a tuple with the code and nil on success, nil and an error on failure.
 	 */
 	func validateRedirectURL(redirect: NSURL) -> (code: String?, error: NSError?) {
 		var code: String?

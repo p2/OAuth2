@@ -12,17 +12,18 @@ import UIKit
 extension OAuth2 {
 	
 	/**
-	 *  Presents a web view controller, contained in a UINavigationController, on the supplied view controller and loads
-	 *  the authorize URL.
-	 *
-	 *  Automatically intercepts the redirect URL and performs the token exchange. It does NOT however dismiss the
-	 *  web view controller automatically, you probably want to do this in the `afterAuthorizeOrFailure` closure. Simply
-	 *  call this method first, then assign that closure in which you call `dismissViewController()` on the returned web
-	 *  view controller instance.
-	 *  @param redirect The redirect URL to use
-	 *  @param scope The scope to use
-	 *  @param params Optional additional URL parameters
-	 *  @param from The view controller to use for presentation
+		Presents a web view controller, contained in a UINavigationController, on the supplied view controller and loads
+		the authorize URL.
+	
+		Automatically intercepts the redirect URL and performs the token exchange. It does NOT however dismiss the
+		web view controller automatically, you probably want to do this in the `afterAuthorizeOrFailure` closure. Simply
+		call this method first, then assign that closure in which you call `dismissViewController()` on the returned web
+		view controller instance.
+		
+		:param: redirect The redirect URL to use
+		:param: scope    The scope to use
+		:param: params   Optional additional URL parameters
+		:param: from     The view controller to use for presentation
 	 */
 	public func authorizeEmbedded(redirect: String, scope: String, params: [String: String]?, from: UIViewController) -> OAuth2WebViewController {
 		let url = authorizeURLWithRedirect(redirect, scope: scope, params: params)
