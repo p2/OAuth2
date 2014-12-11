@@ -6,6 +6,7 @@ OAuth2 frameworks for **OS X** and **iOS** written in Swift.
 The code in this repo requires Xcode 6, the built framework can be used on **OS X 10.9** or **iOS 7** and later.
 Supported OAuth2 [flows](#flows) are the _code grant_ (`response_type=code`) and the _implicit grant_ (`response_type=token`).
 
+Since the Swift language is constantly evolving I am [adding tags](https://github.com/p2/OAuth2/releases) that mark which revision should work with which Xcode version.
 
 Usage
 -----
