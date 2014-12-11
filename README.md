@@ -13,6 +13,7 @@ Usage
 
 For a typical code grant flow you want to perform the following steps.
 The steps for other flows are mostly the same short of instantiating a different subclass and using different client settings.
+If you need to provide additional parameters to the authorize URL take a look at `authorizeURLWithRedirect(redirect:scope:params:)`.
 
 1. Create a settings dictionary.
 	
@@ -22,6 +23,8 @@ The steps for other flows are mostly the same short of instantiating a different
 		"client_secret": "C7447242-A0CF-47C5-BAC7-B38BA91970A9",
 		"authorize_uri": "https://authorize.smartplatforms.org/authorize",
 		"token_uri": "https://authorize.smartplatforms.org/token",
+		"scope": "profile email",
+		"redirect_uris": ["myapp://oauth/callback"],				// don't forget to register this scheme
 	]
 	```
 

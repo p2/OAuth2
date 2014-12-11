@@ -135,6 +135,7 @@ public class OAuth2 {
 		:param: responseType The response type to request; subclasses know which one to supply
 		:param: params       Any additional parameters as dictionary with string keys and values that will be added to
 		                     the query part
+		:returns: NSURL to be used to start the OAuth dance
 	 */
 	public func authorizeURL(base: NSURL, var redirect: String?, scope: String?, responseType: String?, params: [String: String]?) -> NSURL {
 		
@@ -198,7 +199,23 @@ public class OAuth2 {
 	}
 	
 	/**
+		Most convenient method if you want the authorize URL to be created as defined in your settings dictionary.
+	
+		:returns: NSURL to be used to start the OAuth dance
+	 */
+	public func authorizeURL() -> NSURL {
+		return authorizeURLWithRedirect(nil, scope: nil, params: nil)
+	}
+	
+	/**
 		Convenience method to be overridden by and used from subclasses.
+	
+		:param: redirect  The redirect URI string to supply. If it is nil, the first value of the settings'
+		                  `redirect_uris` entries is used. Must be present in the end!
+		:param: scope     The scope to request
+		:param: params    Any additional parameters as dictionary with string keys and values that will be added to the
+		                  query part
+		:returns: NSURL to be used to start the OAuth dance
 	 */
 	public func authorizeURLWithRedirect(redirect: String?, scope: String?, params: [String: String]?) -> NSURL {
 		NSException(name: "OAuth2AbstractClassUse", reason: "Abstract class use", userInfo: nil).raise()
