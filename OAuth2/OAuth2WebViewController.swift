@@ -9,7 +9,27 @@
 import UIKit
 
 
-extension OAuth2 {
+extension OAuth2
+{
+	/**
+		Presents a web view controller, contained in a UINavigationController, on the supplied view controller and loads
+		the authorize URL.
+	
+		Automatically intercepts the redirect URL and performs the token exchange. It does NOT however dismiss the
+		web view controller automatically, you probably want to do this in the `afterAuthorizeOrFailure` closure. Simply
+		call this method first, then assign that closure in which you call `dismissViewController()` on the returned web
+		view controller instance.
+	
+		:raises: Will raise if the authorize URL cannot be constructed from the settings used during initialization.
+	
+		:param: params   Optional additional URL parameters
+		:param: from     The view controller to use for presentation
+		:returns: OAuth2WebViewController, embedded in a UINavigationController being presented automatically
+	*/
+	public func authorizeEmbedded(params: [String: String]?, from: UIViewController) -> OAuth2WebViewController {
+		let url = authorizeURL()
+		return presentAuthorizeViewFor(url, intercept: redirect!, from: from)
+	}
 	
 	/**
 		Presents a web view controller, contained in a UINavigationController, on the supplied view controller and loads
@@ -24,12 +44,22 @@ extension OAuth2 {
 		:param: scope    The scope to use
 		:param: params   Optional additional URL parameters
 		:param: from     The view controller to use for presentation
+		:returns: OAuth2WebViewController, embedded in a UINavigationController being presented automatically
 	 */
 	public func authorizeEmbedded(redirect: String, scope: String, params: [String: String]?, from: UIViewController) -> OAuth2WebViewController {
 		let url = authorizeURLWithRedirect(redirect, scope: scope, params: params)
+		return presentAuthorizeViewFor(url, intercept: redirect, from: from)
+	}
+	
+	/**
+		Presents and returns a web view controller loading the given URL and intercepting the given URL.
+		
+		:returns: OAuth2WebViewController, embedded in a UINavigationController being presented automatically
+	 */
+	func presentAuthorizeViewFor(url: NSURL, intercept: String, from: UIViewController) -> OAuth2WebViewController {
 		let web = OAuth2WebViewController()
 		web.startURL = url
-		web.interceptURLString = redirect
+		web.interceptURLString = intercept
 		web.onIntercept = { url in
 			self.handleRedirectURL(url)
 			return true

@@ -44,16 +44,11 @@ If you need to provide additional parameters to the authorize URL take a look at
 
 3. Now either use the built-in web view controller or manually open the _authorize URL_ in the browser:
 	
-	```swift
-	let redir = "myapp://callback"        // don't forget to register this scheme
-	let scope = "profile email"
-	```
-	
 	**Embedded**:
 	
 	```swift
 	let vc = <# presenting view controller #>
-	let web = oauth.authorizeEmbedded(redir, scope: scope, params: nil, from: vc)
+	let web = oauth.authorizeEmbedded(params: nil, from: vc)
 	oauth.afterAuthorizeOrFailure = { wasFailure, error in
 		web.dismissViewControllerAnimated(true, completion: nil)
 	}
@@ -62,7 +57,7 @@ If you need to provide additional parameters to the authorize URL take a look at
 	**OS browser**:
 	
 	```swift
-	let url = oauth.authorizeURLWithRedirect(redir, scope: scope, params: nil)
+	let url = oauth.authorizeURL()
 	UIApplication.sharedApplication().openURL(url)
 	```
 	
