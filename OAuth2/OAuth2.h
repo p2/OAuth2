@@ -18,7 +18,7 @@
 //  limitations under the License.
 //
 
-@import Foundation
+@import Foundation;
 
 //! Project version number for OAuth2.
 FOUNDATION_EXPORT double OAuth2VersionNumber;

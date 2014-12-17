@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EE012EFC1A4162ED002FFD6C /* OAuth2.h in Headers */ = {isa = PBXBuildFile; fileRef = EEDB8629193FAAE500C4EEA1 /* OAuth2.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EE12A3A41975B335001B8C28 /* OAuth2WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE12A3A31975B335001B8C28 /* OAuth2WebViewController.swift */; };
 		EE29EABC195A0DB2008882C8 /* OAuth2Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29EABB195A0DB2008882C8 /* OAuth2Request.swift */; };
 		EE29EABD195A0DB2008882C8 /* OAuth2Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29EABB195A0DB2008882C8 /* OAuth2Request.swift */; };
@@ -191,6 +192,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EE012EFC1A4162ED002FFD6C /* OAuth2.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

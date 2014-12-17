@@ -119,8 +119,9 @@ Would be nice to add another code example here, but it's pretty much the same as
 Playground
 ----------
 
-The idea is to add a Playground to see OAuth2 in use (instead of a sample app).
+The idea is to add a Playground to see OAuth2 in use.
 However, it's not currently possible to interact view WebViews inside a playground, which would be needed to login to a demo server.
+Hence I made a [sample OS X App](https://github.com/p2/OAuth2App) that uses the GitHub API do demonstrate how you could use this framework.
 
 There is some stub code in `OSX.playground` if you'd like to tinker.
 It's not working as one needs to open the authorize URL in a browser, then copy-paste the redirect URL from OS X's warning window into the Playground – which makes OAuth2 regenerate its state, making your redirect URL invalid.
