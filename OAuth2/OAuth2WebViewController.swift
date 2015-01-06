@@ -73,6 +73,7 @@ extension OAuth2
 	 */
 	func presentAuthorizeViewFor(url: NSURL, intercept: String, from: UIViewController) -> OAuth2WebViewController {
 		let web = OAuth2WebViewController()
+		web.title = viewTitle
 		web.startURL = url
 		web.interceptURLString = intercept
 		web.onIntercept = { url in
@@ -148,7 +149,6 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 	// MARK: - View Handling
 	
 	override public func loadView() {
-		title = "SMART"
 		edgesForExtendedLayout = .All
 		extendedLayoutIncludesOpaqueBars = true
 		automaticallyAdjustsScrollViewInsets = true

@@ -81,6 +81,9 @@ public class OAuth2 {
 	 */
 	public var afterAuthorizeOrFailure: ((wasFailure: Bool, error: NSError?) -> Void)?
 	
+	/** An optional title that will propagate to views handled by OAuth2, such as OAuth2WebViewController. */
+	public var viewTitle: String?
+	
 	/** Set to YES to log all the things. NO by default. */
 	public var verbose = false
 	

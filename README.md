@@ -32,6 +32,7 @@ If you need to provide additional parameters to the authorize URL take a look at
     
     ```swift
     let oauth = OAuth2CodeGrant(settings: settings)
+    oauth.viewTitle = "My Service"      // optional
     oauth.onAuthorize = { parameters in
         println("Did authorize with parameters: \(parameters)")
     }
