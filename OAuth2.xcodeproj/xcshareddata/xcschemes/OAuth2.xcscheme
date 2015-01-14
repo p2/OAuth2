@@ -29,8 +29,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "EEE209A119427DFE00736F1A"
-               BuildableName = "OAuth2 Tests.xctest"
-               BlueprintName = "OAuth2 Tests"
+               BuildableName = "OAuth2Tests.xctest"
+               BlueprintName = "OAuth2Tests"
                ReferencedContainer = "container:OAuth2.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -47,8 +47,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "EEE209A119427DFE00736F1A"
-               BuildableName = "OAuth2 Tests.xctest"
-               BlueprintName = "OAuth2 Tests"
+               BuildableName = "OAuth2Tests.xctest"
+               BlueprintName = "OAuth2Tests"
                ReferencedContainer = "container:OAuth2.xcodeproj">
             </BuildableReference>
          </TestableReference>

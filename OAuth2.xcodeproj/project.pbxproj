@@ -84,7 +84,7 @@
 		EEDB864B19421DAD00C4EEA1 /* extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = extensions.swift; sourceTree = "<group>"; };
 		EEE209471942772800736F1A /* OAuth2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OAuth2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EEE2098B1942778300736F1A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		EEE209A219427DFE00736F1A /* OAuth2 Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "OAuth2 Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EEE209A219427DFE00736F1A /* OAuth2Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OAuth2Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EEE209A519427DFE00736F1A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EEE209A619427DFE00736F1A /* OAuth2_tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuth2_tests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -131,7 +131,7 @@
 			children = (
 				EEDB8624193FAAE500C4EEA1 /* OAuth2.framework */,
 				EEE209471942772800736F1A /* OAuth2.framework */,
-				EEE209A219427DFE00736F1A /* OAuth2 Tests.xctest */,
+				EEE209A219427DFE00736F1A /* OAuth2Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -235,9 +235,9 @@
 			productReference = EEE209471942772800736F1A /* OAuth2.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		EEE209A119427DFE00736F1A /* OAuth2 Tests */ = {
+		EEE209A119427DFE00736F1A /* OAuth2Tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = EEE209AB19427DFE00736F1A /* Build configuration list for PBXNativeTarget "OAuth2 Tests" */;
+			buildConfigurationList = EEE209AB19427DFE00736F1A /* Build configuration list for PBXNativeTarget "OAuth2Tests" */;
 			buildPhases = (
 				EEE2099E19427DFE00736F1A /* Sources */,
 				EEE2099F19427DFE00736F1A /* Frameworks */,
@@ -253,9 +253,9 @@
 				EE43B1CC19547C4A0017679A /* PBXTargetDependency */,
 				EE43B1CE19547C4A0017679A /* PBXTargetDependency */,
 			);
-			name = "OAuth2 Tests";
+			name = OAuth2Tests;
 			productName = "OAuth2 Tests";
-			productReference = EEE209A219427DFE00736F1A /* OAuth2 Tests.xctest */;
+			productReference = EEE209A219427DFE00736F1A /* OAuth2Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -293,7 +293,7 @@
 			targets = (
 				EEE209461942772800736F1A /* OAuth2 */,
 				EEDB8623193FAAE500C4EEA1 /* OAuth2iOS */,
-				EEE209A119427DFE00736F1A /* OAuth2 Tests */,
+				EEE209A119427DFE00736F1A /* OAuth2Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -527,7 +527,6 @@
 				INFOPLIST_FILE = OAuth2/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_NAME = OAuth2;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -547,7 +546,6 @@
 				INFOPLIST_FILE = OAuth2/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_NAME = OAuth2;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -562,13 +560,8 @@
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(inherited)",
 				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
 				INFOPLIST_FILE = "OAuth2 Tests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				METAL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -586,7 +579,6 @@
 				);
 				INFOPLIST_FILE = "OAuth2 Tests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				METAL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -623,7 +615,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		EEE209AB19427DFE00736F1A /* Build configuration list for PBXNativeTarget "OAuth2 Tests" */ = {
+		EEE209AB19427DFE00736F1A /* Build configuration list for PBXNativeTarget "OAuth2Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EEE209AC19427DFE00736F1A /* Debug */,
