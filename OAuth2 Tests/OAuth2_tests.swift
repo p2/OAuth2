@@ -62,6 +62,15 @@ class OAuth2Tests: XCTestCase {
 //		XCTAssertTrue(String(params["state"] as String).utf16count > 0, "Expecting `state` in query")
 	}
 	
+	func testQueryParamParsing() {
+		let params = OAuth2.paramsFromQuery("access_token=xxx&expires=2015-00-00&more=stuff")
+		XCTAssert(3 == countElements(params), "Expecting 3 URL params")
+		
+		XCTAssertEqual(params["access_token"]!, "xxx")
+		XCTAssertEqual(params["expires"]!, "2015-00-00")
+		XCTAssertEqual(params["more"]!, "stuff")
+	}
+	
 	func testQueryParamConversion() {
 		let qry = OAuth2.queryStringFor(["a": "AA", "b": "BB", "x": "yz"])
 		XCTAssertTrue(14 == countElements(qry), "Expecting a 14 character string")
