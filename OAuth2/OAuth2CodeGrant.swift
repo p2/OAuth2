@@ -26,15 +26,15 @@ import Foundation
  *
  *  This auth flow is designed for clients that are capable of protecting their client secret, which a distributed Mac/iOS App **is not**!
  */
-public class OAuth2CodeGrant: OAuth2 {
-	
+public class OAuth2CodeGrant: OAuth2
+{
 	/** The URL string where we can exchange a code for a token; if nil `authURL` will be used. */
 	public let tokenURL: NSURL?
 	
 	/** The receiver's long-time refresh token. */
 	public var refreshToken = ""
 	
-	public override init(settings: NSDictionary) {
+	public override init(settings: JSONDictionary) {
 		if let token = settings["token_uri"] as? String {
 			tokenURL = NSURL(string: token)
 		}
@@ -49,16 +49,14 @@ public class OAuth2CodeGrant: OAuth2 {
 	
 	public func tokenURLWithRedirect(redirect: String?, code: String, params: [String: String]?) -> NSURL {
 		let base = tokenURL ?? authURL!
-		var prms = ["code": code, "grant_type": "authorization_code"]
+		var urlParams = params ?? [String: String]()
+		urlParams["code"] = code
+		urlParams["grant_type"] = "authorization_code"
 		if nil != clientSecret {
-			prms["client_secret"] = clientSecret!
+			urlParams["client_secret"] = clientSecret!
 		}
 		
-		if nil != params {
-			prms.addEntries(params!)
-		}
-		
-		return authorizeURL(base, redirect: redirect, scope: nil, responseType: nil, params: prms)
+		return authorizeURL(base, redirect: redirect, scope: nil, responseType: nil, params: urlParams)
 	}
 	
 	/**
@@ -121,7 +119,7 @@ public class OAuth2CodeGrant: OAuth2 {
 			else if nil != response && nil != data {
 				if let http = response as? NSHTTPURLResponse {
 					if 200 == http.statusCode {
-						if let json = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: &finalError) as? NSDictionary {
+						if let json = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: &finalError) as? JSONDictionary {
 							if let access = json["access_token"] as? String {
 								self.accessToken = access
 							}

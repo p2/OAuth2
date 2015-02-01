@@ -31,14 +31,16 @@ public enum OAuth2Error: Int {
 	case AuthorizationError
 }
 
+public typealias JSONDictionary = [String: AnyObject]
+
 
 /**
  *  Base class for specific OAuth2 authentication flow implementations.
  */
-public class OAuth2 {
-	
+public class OAuth2
+{
 	/** Settings, as set upon initialization. */
-	let settings: NSDictionary
+	let settings: JSONDictionary
 	
 	/** The client id. */
 	public let clientId: String
@@ -67,7 +69,7 @@ public class OAuth2 {
 	public var accessToken = ""
 	
 	/** Closure called on successful authentication. */
-	public var onAuthorize: ((parameters: NSDictionary) -> Void)?
+	public var onAuthorize: ((parameters: JSONDictionary) -> Void)?
 	
 	/** When authorization fails (if error is not nil) or is cancelled. */
 	public var onFailure: ((error: NSError?) -> Void)?
@@ -103,8 +105,8 @@ public class OAuth2 {
 	
 		MITREid: https://github.com/mitreid-connect/
 	 */
-	public init(settings: NSDictionary) {
-		self.settings = settings.copy() as NSDictionary
+	public init(settings: JSONDictionary) {
+		self.settings = settings
 		
 		if let cid = settings["client_id"] as? String {
 			clientId = cid
@@ -183,11 +185,11 @@ public class OAuth2 {
 		let comp = NSURLComponents(URL: base, resolvingAgainstBaseURL: true)
 		assert(nil != comp && "https" == comp!.scheme, "You MUST use HTTPS")
 		
-		var urlParams = [
-			"client_id": clientId,
-			"redirect_uri": self.redirect!,
-			"state": state
-		]
+		var urlParams = params ?? [String: String]()
+		urlParams["client_id"] = clientId
+		urlParams["redirect_uri"] = self.redirect!
+		urlParams["state"] = state
+		
 		if nil != scope {
 			self.scope = scope!
 		}
@@ -196,10 +198,6 @@ public class OAuth2 {
 		}
 		if nil != responseType {
 			urlParams["response_type"] = responseType!
-		}
-		
-		if nil != params {
-			urlParams.addEntries(params!)
 		}
 		
 		comp!.query = OAuth2.queryStringFor(urlParams)
@@ -241,7 +239,7 @@ public class OAuth2 {
 		NSException(name: "OAuth2AbstractClassUse", reason: "Abstract class use", userInfo: nil).raise()
 	}
 	
-	func didAuthorize(parameters: NSDictionary) {
+	func didAuthorize(parameters: JSONDictionary) {
 		onAuthorize?(parameters: parameters)
 		afterAuthorizeOrFailure?(wasFailure: false, error: nil)
 	}
@@ -295,7 +293,7 @@ public class OAuth2 {
 		:returns: An NSError instance with the "best" localized error key and all parameters in the userInfo dictionary;
 		          domain "OAuth2ErrorDomain", code 600
 	 */
-	class func errorForAccessTokenErrorResponse(params: NSDictionary) -> NSError {
+	class func errorForAccessTokenErrorResponse(params: JSONDictionary) -> NSError {
 		var message = ""
 		
 		// "error_description" is optional, we prefer it if it's present
@@ -332,16 +330,9 @@ public class OAuth2 {
 			message = "Unknown error."
 		}
 		
-		var error: NSError
-		if let prms = params.mutableCopy() as? NSMutableDictionary {
-			prms[NSLocalizedDescriptionKey] = message
-			error = NSError(domain: OAuth2ErrorDomain, code: OAuth2Error.AuthorizationError.rawValue, userInfo: prms)
-		}
-		else {
-			error = genOAuth2Error(message, .AuthorizationError)
-		}
-		
-		return error
+		var prms = params
+		prms[NSLocalizedDescriptionKey] = message
+		return NSError(domain: OAuth2ErrorDomain, code: OAuth2Error.AuthorizationError.rawValue, userInfo: prms)
 	}
 	
 	/**

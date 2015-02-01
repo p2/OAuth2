@@ -8,19 +8,19 @@
 
 /* Begin PBXBuildFile section */
 		EE012EFC1A4162ED002FFD6C /* OAuth2.h in Headers */ = {isa = PBXBuildFile; fileRef = EEDB8629193FAAE500C4EEA1 /* OAuth2.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EE12A3A41975B335001B8C28 /* OAuth2WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE12A3A31975B335001B8C28 /* OAuth2WebViewController.swift */; };
-		EE29EABC195A0DB2008882C8 /* OAuth2Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29EABB195A0DB2008882C8 /* OAuth2Request.swift */; };
-		EE29EABD195A0DB2008882C8 /* OAuth2Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29EABB195A0DB2008882C8 /* OAuth2Request.swift */; };
-		EE3174EC1945E83100210E62 /* OAuth2ImplicitGrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE3174EB1945E83100210E62 /* OAuth2ImplicitGrant.swift */; };
-		EE3174ED1945E83100210E62 /* OAuth2ImplicitGrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE3174EB1945E83100210E62 /* OAuth2ImplicitGrant.swift */; };
-		EE43B15B1951FC450017679A /* OAuth2CodeGrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE44F691194F2C7D0094AB8B /* OAuth2CodeGrant.swift */; };
 		EE43B15F1952E4700017679A /* OAuth2CodeGrant_tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE43B1591951FAC70017679A /* OAuth2CodeGrant_tests.swift */; };
-		EE44F692194F2C7D0094AB8B /* OAuth2CodeGrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE44F691194F2C7D0094AB8B /* OAuth2CodeGrant.swift */; };
+		EEACE1C91A7E8C66009BF3A7 /* OAuth2WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE12A3A31975B335001B8C28 /* OAuth2WebViewController.swift */; };
+		EEACE1D41A7E8DE8009BF3A7 /* OAuth2.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDB8640193FAB9200C4EEA1 /* OAuth2.swift */; };
+		EEACE1D51A7E8DE8009BF3A7 /* OAuth2.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDB8640193FAB9200C4EEA1 /* OAuth2.swift */; };
+		EEACE1D61A7E8DEB009BF3A7 /* OAuth2ImplicitGrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE3174EB1945E83100210E62 /* OAuth2ImplicitGrant.swift */; };
+		EEACE1D71A7E8DEB009BF3A7 /* OAuth2ImplicitGrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE3174EB1945E83100210E62 /* OAuth2ImplicitGrant.swift */; };
+		EEACE1D81A7E8DEE009BF3A7 /* OAuth2CodeGrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE44F691194F2C7D0094AB8B /* OAuth2CodeGrant.swift */; };
+		EEACE1D91A7E8DEE009BF3A7 /* OAuth2CodeGrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE44F691194F2C7D0094AB8B /* OAuth2CodeGrant.swift */; };
+		EEACE1DA1A7E8DF1009BF3A7 /* OAuth2Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29EABB195A0DB2008882C8 /* OAuth2Request.swift */; };
+		EEACE1DB1A7E8DF1009BF3A7 /* OAuth2Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE29EABB195A0DB2008882C8 /* OAuth2Request.swift */; };
+		EEACE1DC1A7E8DF6009BF3A7 /* extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDB864B19421DAD00C4EEA1 /* extensions.swift */; };
+		EEACE1DD1A7E8DF7009BF3A7 /* extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDB864B19421DAD00C4EEA1 /* extensions.swift */; };
 		EEDB862A193FAAE500C4EEA1 /* OAuth2.h in Headers */ = {isa = PBXBuildFile; fileRef = EEDB8629193FAAE500C4EEA1 /* OAuth2.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EEDB8641193FAB9200C4EEA1 /* OAuth2.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDB8640193FAB9200C4EEA1 /* OAuth2.swift */; };
-		EEDB864C19421DAD00C4EEA1 /* extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDB864B19421DAD00C4EEA1 /* extensions.swift */; };
-		EEE209871942776500736F1A /* OAuth2.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDB8640193FAB9200C4EEA1 /* OAuth2.swift */; };
-		EEE209881942776C00736F1A /* extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDB864B19421DAD00C4EEA1 /* extensions.swift */; };
 		EEE209A719427DFE00736F1A /* OAuth2_tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEE209A619427DFE00736F1A /* OAuth2_tests.swift */; };
 		EEE209A819427DFE00736F1A /* OAuth2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EEE209471942772800736F1A /* OAuth2.framework */; };
 /* End PBXBuildFile section */
@@ -327,12 +327,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EE3174ED1945E83100210E62 /* OAuth2ImplicitGrant.swift in Sources */,
-				EEDB8641193FAB9200C4EEA1 /* OAuth2.swift in Sources */,
-				EE12A3A41975B335001B8C28 /* OAuth2WebViewController.swift in Sources */,
-				EE43B15B1951FC450017679A /* OAuth2CodeGrant.swift in Sources */,
-				EEDB864C19421DAD00C4EEA1 /* extensions.swift in Sources */,
-				EE29EABD195A0DB2008882C8 /* OAuth2Request.swift in Sources */,
+				EEACE1D71A7E8DEB009BF3A7 /* OAuth2ImplicitGrant.swift in Sources */,
+				EEACE1D51A7E8DE8009BF3A7 /* OAuth2.swift in Sources */,
+				EEACE1D91A7E8DEE009BF3A7 /* OAuth2CodeGrant.swift in Sources */,
+				EEACE1C91A7E8C66009BF3A7 /* OAuth2WebViewController.swift in Sources */,
+				EEACE1DB1A7E8DF1009BF3A7 /* OAuth2Request.swift in Sources */,
+				EEACE1DD1A7E8DF7009BF3A7 /* extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -340,11 +340,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EE3174EC1945E83100210E62 /* OAuth2ImplicitGrant.swift in Sources */,
-				EEE209871942776500736F1A /* OAuth2.swift in Sources */,
-				EE44F692194F2C7D0094AB8B /* OAuth2CodeGrant.swift in Sources */,
-				EEE209881942776C00736F1A /* extensions.swift in Sources */,
-				EE29EABC195A0DB2008882C8 /* OAuth2Request.swift in Sources */,
+				EEACE1DC1A7E8DF6009BF3A7 /* extensions.swift in Sources */,
+				EEACE1D61A7E8DEB009BF3A7 /* OAuth2ImplicitGrant.swift in Sources */,
+				EEACE1D81A7E8DEE009BF3A7 /* OAuth2CodeGrant.swift in Sources */,
+				EEACE1DA1A7E8DF1009BF3A7 /* OAuth2Request.swift in Sources */,
+				EEACE1D41A7E8DE8009BF3A7 /* OAuth2.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

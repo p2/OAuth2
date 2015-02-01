@@ -21,15 +21,6 @@
 import Foundation
 
 
-extension Dictionary {
-	mutating func addEntries(from: Dictionary) -> Dictionary {
-		for (key, val) in from {
-			self.updateValue(val, forKey: key)
-		}
-		return self
-	}
-}
-
 extension NSHTTPURLResponse {
 	public var statusString: String {
 		get {

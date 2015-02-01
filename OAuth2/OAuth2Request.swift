@@ -24,8 +24,8 @@ import Foundation
 /**
  *  A request that can be signed by an OAuth2 instance.
  */
-public class OAuth2Request: NSMutableURLRequest {
-	
+public class OAuth2Request: NSMutableURLRequest
+{
 	convenience init(URL: NSURL!, oauth: OAuth2, cachePolicy: NSURLRequestCachePolicy, timeoutInterval: NSTimeInterval) {
 		self.init(URL: URL, cachePolicy: cachePolicy, timeoutInterval: timeoutInterval)
 		self.sign(oauth)

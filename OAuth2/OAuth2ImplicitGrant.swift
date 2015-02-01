@@ -24,8 +24,8 @@ import Foundation
 /**
  *  Class to handle OAuth2 requests for public clients, such as distributed Mac/iOS Apps.
  */
-public class OAuth2ImplicitGrant: OAuth2 {
-	
+public class OAuth2ImplicitGrant: OAuth2
+{
 	override public func authorizeURLWithRedirect(redirect: String?, scope: String?, params: [String: String]?) -> NSURL {
 		return authorizeURL(authURL!, redirect: redirect, scope: scope, responseType: "token", params: params)
 	}
