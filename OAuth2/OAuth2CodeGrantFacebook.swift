@@ -25,7 +25,7 @@ import Foundation
 	Facebook only returns an "access_token=xyz&..." string, no true JSON, hence we override `parseTokenExchangeResponse`
 	and deal with the situation in a subclass.
  */
-class OAuth2CodeGrantFacebook: OAuth2CodeGrant
+public class OAuth2CodeGrantFacebook: OAuth2CodeGrant
 {
 	override func parseTokenExchangeResponse(data: NSData, error: NSErrorPointer) -> JSONDictionary? {
 		if let str = NSString(data: data, encoding: NSUTF8StringEncoding) as? String {

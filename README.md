@@ -120,6 +120,14 @@ Use the `OAuth2ImplicitGrant` class to receive a token and perform requests.
 Would be nice to add another code example here, but it's pretty much the same as for the _code grant_.
 
 
+### Site-Specific Peculiarities
+
+Some sites might not strictly adhere to the OAuth2 flow.
+The framework deals with those deviations by creating site-specific subclasses.
+
+- Facebook: `OAuth2CodeGrantFacebook` to deal with the [URL-query-style response](https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow/v2.2) instead of the expected JSON dictionary.
+
+
 Playground
 ----------
 
