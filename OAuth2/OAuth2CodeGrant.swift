@@ -119,14 +119,7 @@ public class OAuth2CodeGrant: OAuth2
 			else if nil != response && nil != data {
 				if let http = response as? NSHTTPURLResponse {
 					if 200 == http.statusCode {
-						if let json = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: &finalError) as? JSONDictionary {
-							if let access = json["access_token"] as? String {
-								self.accessToken = access
-							}
-							if let refresh = json["refresh_token"] as? String {
-								self.refreshToken = refresh
-							}
-							
+						if let json = self.parseTokenExchangeResponse(data, error: &finalError) {
 							self.logIfVerbose("Did receive access token: \(self.accessToken), refresh token: \(self.refreshToken)")
 							self.didAuthorize(json)
 							return
@@ -146,6 +139,25 @@ public class OAuth2CodeGrant: OAuth2
 			self.didFail(finalError)
 		}
 		task.resume()
+	}
+	
+	/**
+		Parse the NSData object returned while exchanging the code for a token in `exchangeCodeForToken`.
+	
+		:returns: A JSONDictionary, which is usually returned upon token exchange and may contain additional information
+	 */
+	func parseTokenExchangeResponse(data: NSData, error: NSErrorPointer) -> JSONDictionary? {
+		if let json = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: error) as? JSONDictionary {
+			if let access = json["access_token"] as? String {
+				accessToken = access
+			}
+			if let refresh = json["refresh_token"] as? String {
+				refreshToken = refresh
+			}
+			
+			return json
+		}
+		return nil
 	}
 	
 	

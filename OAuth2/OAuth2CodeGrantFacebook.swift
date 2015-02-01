@@ -1,0 +1,41 @@
+//
+//  OAuth2CodeGrantFacebook.swift
+//  OAuth2
+//
+//  Created by Pascal Pfiffner on 2/1/15.
+//  Copyright 2015 Pascal Pfiffner
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
+//
+
+import Foundation
+
+
+/**
+	Facebook only returns an "access_token=xyz" string, no true JSON, hence we override `parseTokenExchangeResponse` and
+	deal with the situation in a subclass.
+ */
+class OAuth2CodeGrantFacebook: OAuth2CodeGrant
+{
+	override func parseTokenExchangeResponse(data: NSData, error: NSErrorPointer) -> JSONDictionary? {
+		if let str = NSString(data: data, encoding: NSUTF8StringEncoding) as? String {
+			let parts = split(str, {$0 == "="}, maxSplit: 2, allowEmptySlices: false)
+			if 2 == countElements(parts) && "access_token" == parts[0] {
+				accessToken = parts[1]
+				return ["access_token": accessToken]
+			}
+		}
+		return nil
+	}
+}
+
