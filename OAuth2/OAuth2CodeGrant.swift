@@ -126,7 +126,13 @@ public class OAuth2CodeGrant: OAuth2
 						}
 					}
 					else {
-						finalError = genOAuth2Error(http.statusString, .AuthorizationError)
+						if let json = self.parseTokenExchangeResponse(data, error: nil) {
+							let desc = json["error_description"] as? String ?? json["error"] as? String
+							finalError = genOAuth2Error(desc ?? http.statusString, .AuthorizationError)
+						}
+						else {
+							finalError = genOAuth2Error(http.statusString, .AuthorizationError)
+						}
 					}
 				}
 			}

@@ -68,18 +68,18 @@ public class OAuth2
 	/** The receiver's access token. */
 	public var accessToken = ""
 	
-	/** Closure called on successful authentication. */
+	/** Closure called on successful authentication on the main thread. */
 	public var onAuthorize: ((parameters: JSONDictionary) -> Void)?
 	
-	/** When authorization fails (if error is not nil) or is cancelled. */
+	/** When authorization fails (if error is not nil) or is cancelled, this block is executed on the main thread. */
 	public var onFailure: ((error: NSError?) -> Void)?
 	
 	/**
-		Closure called after onAuthorize OR onFailure, useful for cleanup operations.
+		Closure called after onAuthorize OR onFailure, on the main thread; useful for cleanup operations.
 	
 		:param: wasFailure Bool indicating success or failure
-		:param: error NSError describing the reason for failure, as supplied to the `onFailure` callback. If it is nil and
-		              wasFailure is true, the process was aborted.
+		:param: error NSError describing the reason for failure, as supplied to the `onFailure` callback. If it is nil
+		        and wasFailure is true, the process was aborted.
 	 */
 	public var afterAuthorizeOrFailure: ((wasFailure: Bool, error: NSError?) -> Void)?
 	
@@ -240,13 +240,17 @@ public class OAuth2
 	}
 	
 	func didAuthorize(parameters: JSONDictionary) {
-		onAuthorize?(parameters: parameters)
-		afterAuthorizeOrFailure?(wasFailure: false, error: nil)
+		callOnMainThread() {
+			self.onAuthorize?(parameters: parameters)
+			self.afterAuthorizeOrFailure?(wasFailure: false, error: nil)
+		}
 	}
 	
 	func didFail(error: NSError?) {
-		onFailure?(error: error)
-		afterAuthorizeOrFailure?(wasFailure: true, error: error)
+		callOnMainThread() {
+			self.onFailure?(error: error)
+			self.afterAuthorizeOrFailure?(wasFailure: true, error: error)
+		}
 	}
 	
 	
@@ -345,6 +349,18 @@ public class OAuth2
 	}
 }
 
+
+
+func callOnMainThread(callback: (Void -> Void)) {
+	if NSThread.isMainThread() {
+		callback()
+	}
+	else {
+		dispatch_sync(dispatch_get_main_queue(), {
+			callback()
+		})
+	}
+}
 
 public func genOAuth2Error(message: String) -> NSError {
 	return genOAuth2Error(message, .Generic)
