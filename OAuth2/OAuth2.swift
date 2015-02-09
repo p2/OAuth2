@@ -165,10 +165,8 @@ public class OAuth2
 			self.redirect = redirect!
 		}
 		else if nil == self.redirect {
-			if let redirs = settings["redirect_uris"] as? NSArray {
-				if redirs.count > 0 {
-					self.redirect = redirs[0] as? String
-				}
+			if let redirs = settings["redirect_uris"] as? [String] {
+				self.redirect = redirs.first
 			}
 		}
 		if nil == self.redirect {
