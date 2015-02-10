@@ -37,18 +37,17 @@ public class OAuth2ImplicitGrant: OAuth2
 		var comp = NSURLComponents(URL: redirect, resolvingAgainstBaseURL: true)
 		
 		// token should be in the URL fragment
-		if nil != comp && nil != comp!.fragment && countElements(comp!.fragment!) > 0 {
-			let params = OAuth2ImplicitGrant.paramsFromQuery(comp!.fragment!)
-			let token: String? = params["access_token"]
-			if countElements(token!) > 0 {
+		if let fragment = comp?.fragment where count(fragment) > 0 {
+			let params = OAuth2ImplicitGrant.paramsFromQuery(fragment)
+			if let token = params["access_token"] where count(token) > 0 {
 				if let tokType = params["token_type"] {
 					if "bearer" == tokType.lowercaseString {
 						
 						// got a "bearer" token, use it if state checks out
 						if let tokState = params["state"] {
 							if tokState == state {
-								accessToken = token!
-								logIfVerbose("Successfully extracted access token \(token!)")
+								accessToken = token
+								logIfVerbose("Successfully extracted access token \(token)")
 								didAuthorize(params)
 								return
 							}

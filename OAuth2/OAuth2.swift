@@ -114,6 +114,9 @@ public class OAuth2
 		if let secret = settings["client_secret"] as? String {
 			clientSecret = secret
 		}
+		else {
+			clientSecret = nil
+		}
 		
 		if let auth = settings["authorize_uri"] as? String {
 			authURL = NSURL(string: auth)
@@ -266,13 +269,13 @@ public class OAuth2
 	}
 	
 	/**
-		Parse a query string into a dictionary of string: string pairs.
+		Parse a query string into a dictionary of String: String pairs.
 	 */
 	public class func paramsFromQuery(query: String) -> [String: String] {
-		let parts = split(query) { $0 == "&" }
-		var params: [String: String] = Dictionary(minimumCapacity: parts.count)
+		let parts = split(query, { $0 == "&" }, maxSplit: .max, allowEmptySlices: false)
+		var params = [String: String](minimumCapacity: parts.count)
 		for part in parts {
-			let subparts = split(part) { $0 == "=" }
+			let subparts = split(part, { $0 == "=" }, maxSplit: .max, allowEmptySlices: false)
 			if 2 == subparts.count {
 				params[subparts[0]] = subparts[1]
 			}

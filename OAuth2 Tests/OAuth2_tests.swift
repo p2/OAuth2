@@ -62,7 +62,7 @@ class OAuth2Tests: XCTestCase {
 	
 	func testQueryParamParsing() {
 		let params = OAuth2.paramsFromQuery("access_token=xxx&expires=2015-00-00&more=stuff")
-		XCTAssert(3 == countElements(params), "Expecting 3 URL params")
+		XCTAssert(3 == count(params), "Expecting 3 URL params")
 		
 		XCTAssertEqual(params["access_token"]!, "xxx")
 		XCTAssertEqual(params["expires"]!, "2015-00-00")
@@ -71,7 +71,7 @@ class OAuth2Tests: XCTestCase {
 	
 	func testQueryParamConversion() {
 		let qry = OAuth2.queryStringFor(["a": "AA", "b": "BB", "x": "yz"])
-		XCTAssertTrue(14 == countElements(qry), "Expecting a 14 character string")
+		XCTAssertTrue(14 == count(qry), "Expecting a 14 character string")
 		
 		let dict = OAuth2.paramsFromQuery(qry)
 		XCTAssertEqual(dict["a"]!, "AA", "Must unpack `a`")
