@@ -48,9 +48,6 @@ public class OAuth2
 	/** The client secret, usually only needed for code grant. */
 	public let clientSecret: String?
 	
-	/** Base API URL, all paths will be relative to this one. */
-	public var apiURL: NSURL?
-	
 	/** The URL to authorize against. */
 	public var authURL: NSURL?
 	
@@ -96,7 +93,6 @@ public class OAuth2
 	
 		- client_id (string)
 		- client_secret (string), usually only needed for code grant
-		- api_uri (string)
 		- authorize_uri (string)
 		- token_uri (string), only for code grant
 		- redirect_uris (list of strings)
@@ -119,9 +115,6 @@ public class OAuth2
 			clientSecret = secret
 		}
 		
-		if let api = settings["api_uri"] as? String {
-			apiURL = NSURL(string: api)
-		}
 		if let auth = settings["authorize_uri"] as? String {
 			authURL = NSURL(string: auth)
 		}

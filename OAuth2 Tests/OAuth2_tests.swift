@@ -27,7 +27,6 @@ class OAuth2Tests: XCTestCase {
 	func genericOAuth2() -> OAuth2 {
 		return OAuth2(settings: [
 			"client_id": "abc",
-			"api_uri": "https://api.ful.io",
 			"authorize_uri": "https://auth.ful.io",
 			"scope": "login",
 			"verbose": true
@@ -42,7 +41,6 @@ class OAuth2Tests: XCTestCase {
 		XCTAssertEqual(oauth.clientId, "def", "Must init `client_id`")
 		
 		let oa = self.genericOAuth2()
-		XCTAssertEqual(oa.apiURL!, NSURL(string: "https://api.ful.io")!, "Must init `api_uri`")
 		XCTAssertEqual(oa.authURL!, NSURL(string: "https://auth.ful.io")!, "Must init `authorize_uri`")
 		XCTAssertEqual(oa.scope!, "login", "Must init `scope`")
 		XCTAssertTrue(oa.verbose, "Must init `verbose`")
