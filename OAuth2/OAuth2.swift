@@ -60,10 +60,13 @@ public class OAuth2
 	/** The state sent to the server when requesting a token.
 		We internally generate a UUID and use the first 8 chars.
 	 */
-	var state = ""
+	internal(set) public var state = ""
 	
 	/** The receiver's access token. */
 	public var accessToken = ""
+	
+	/** The access token's expiry date. */
+	public var accessTokenExpiry: NSDate?
 	
 	/** Closure called on successful authentication on the main thread. */
 	public var onAuthorize: ((parameters: JSONDictionary) -> Void)?
@@ -122,6 +125,9 @@ public class OAuth2
 			scope = scp
 		}
 		
+		if let st = settings["scope_for_testing"] as? String {
+			state = st
+		}
 		if let verb = settings["verbose"] as? Bool {
 			verbose = verb
 		}
@@ -131,6 +137,19 @@ public class OAuth2
 	
 	
 	// MARK: - OAuth Actions
+	
+	/** If the instance has an accessToken, checks if its expiry time has not yet passed. If we don't have an expiry
+		date we assume the token is still valid.
+	 */
+	public func hasUnexpiredAccessToken() -> Bool {
+		if !accessToken.isEmpty {
+			if let expiry = accessTokenExpiry {
+				return expiry == expiry.laterDate(NSDate())
+			}
+			return true
+		}
+		return false
+	}
 	
 	/**
 		Constructs an authorize URL with the given parameters.

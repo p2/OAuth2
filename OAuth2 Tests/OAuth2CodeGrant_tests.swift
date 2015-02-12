@@ -22,8 +22,8 @@ import XCTest
 import OAuth2
 
 
-class OAuth2CodeGrantTests: XCTestCase {
-	
+class OAuth2CodeGrantTests: XCTestCase
+{
 	func testInit() {
 		//var oauth = OAuth2(settings: NSDictionary())		// TODO: how to test that this raises?
 		
