@@ -272,10 +272,10 @@ public class OAuth2
 		Parse a query string into a dictionary of String: String pairs.
 	 */
 	public class func paramsFromQuery(query: String) -> [String: String] {
-		let parts = split(query, { $0 == "&" }, maxSplit: .max, allowEmptySlices: false)
+		let parts = split(query, maxSplit: .max, allowEmptySlices: false) { $0 == "&" }
 		var params = [String: String](minimumCapacity: parts.count)
 		for part in parts {
-			let subparts = split(part, { $0 == "=" }, maxSplit: .max, allowEmptySlices: false)
+			let subparts = split(part, maxSplit: .max, allowEmptySlices: false) { $0 == "=" }
 			if 2 == subparts.count {
 				params[subparts[0]] = subparts[1]
 			}
