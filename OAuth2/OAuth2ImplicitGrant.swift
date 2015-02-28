@@ -47,6 +47,10 @@ public class OAuth2ImplicitGrant: OAuth2
 						if let tokState = params["state"] {
 							if tokState == state {
 								accessToken = token
+								accessTokenExpiry = nil
+								if let expires = params["expires_in"]?.toInt() {
+									accessTokenExpiry = NSDate(timeIntervalSinceNow: NSTimeInterval(expires))
+								}
 								logIfVerbose("Successfully extracted access token \(token)")
 								didAuthorize(params)
 								return

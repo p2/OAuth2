@@ -152,6 +152,10 @@ public class OAuth2CodeGrant: OAuth2
 			if let access = json["access_token"] as? String {
 				accessToken = access
 			}
+			accessTokenExpiry = nil
+			if let expires = json["expires_in"] as? NSTimeInterval {
+				accessTokenExpiry = NSDate(timeIntervalSinceNow: expires)
+			}
 			if let refresh = json["refresh_token"] as? String {
 				refreshToken = refresh
 			}

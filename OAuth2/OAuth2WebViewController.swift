@@ -244,7 +244,7 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 		if nil != onIntercept && request.URL.scheme == interceptComponents?.scheme && request.URL.host == interceptComponents?.host {
 			let haveComponents = NSURLComponents(URL: request.URL, resolvingAgainstBaseURL: true)
 			if haveComponents?.path == interceptComponents?.path {
-				return onIntercept!(url: request.URL)
+				return !onIntercept!(url: request.URL)
 			}
 		}
 		
