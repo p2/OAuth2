@@ -31,7 +31,7 @@ public enum OAuth2Error: Int {
 	case AuthorizationError
 }
 
-public typealias JSONDictionary = [String: AnyObject]
+public typealias OAuth2JSON = [String: AnyObject]
 
 
 /**
@@ -40,7 +40,7 @@ public typealias JSONDictionary = [String: AnyObject]
 public class OAuth2
 {
 	/** Settings, as set upon initialization. */
-	let settings: JSONDictionary
+	let settings: OAuth2JSON
 	
 	/** The client id. */
 	public let clientId: String
@@ -69,7 +69,7 @@ public class OAuth2
 	public var accessTokenExpiry: NSDate?
 	
 	/** Closure called on successful authentication on the main thread. */
-	public var onAuthorize: ((parameters: JSONDictionary) -> Void)?
+	public var onAuthorize: ((parameters: OAuth2JSON) -> Void)?
 	
 	/** When authorization fails (if error is not nil) or is cancelled, this block is executed on the main thread. */
 	public var onFailure: ((error: NSError?) -> Void)?
@@ -104,7 +104,7 @@ public class OAuth2
 	
 		MITREid: https://github.com/mitreid-connect/
 	 */
-	public init(settings: JSONDictionary) {
+	public init(settings: OAuth2JSON) {
 		self.settings = settings
 		
 		if let cid = settings["client_id"] as? String {
@@ -249,7 +249,7 @@ public class OAuth2
 		NSException(name: "OAuth2AbstractClassUse", reason: "Abstract class use", userInfo: nil).raise()
 	}
 	
-	func didAuthorize(parameters: JSONDictionary) {
+	func didAuthorize(parameters: OAuth2JSON) {
 		callOnMainThread() {
 			self.onAuthorize?(parameters: parameters)
 			self.afterAuthorizeOrFailure?(wasFailure: false, error: nil)
@@ -307,7 +307,7 @@ public class OAuth2
 		:returns: An NSError instance with the "best" localized error key and all parameters in the userInfo dictionary;
 		          domain "OAuth2ErrorDomain", code 600
 	 */
-	class func errorForAccessTokenErrorResponse(params: JSONDictionary) -> NSError {
+	class func errorForAccessTokenErrorResponse(params: OAuth2JSON) -> NSError {
 		var message = ""
 		
 		// "error_description" is optional, we prefer it if it's present

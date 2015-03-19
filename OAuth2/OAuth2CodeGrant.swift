@@ -34,7 +34,7 @@ public class OAuth2CodeGrant: OAuth2
 	/** The receiver's long-time refresh token. */
 	public var refreshToken = ""
 	
-	public override init(settings: JSONDictionary) {
+	public override init(settings: OAuth2JSON) {
 		if let token = settings["token_uri"] as? String {
 			tokenURL = NSURL(string: token)
 		}
@@ -150,10 +150,10 @@ public class OAuth2CodeGrant: OAuth2
 	/**
 		Parse the NSData object returned while exchanging the code for a token in `exchangeCodeForToken`.
 	
-		:returns: A JSONDictionary, which is usually returned upon token exchange and may contain additional information
+		:returns: A OAuth2JSON, which is usually returned upon token exchange and may contain additional information
 	 */
-	func parseTokenExchangeResponse(data: NSData, error: NSErrorPointer) -> JSONDictionary? {
-		if let json = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: error) as? JSONDictionary {
+	func parseTokenExchangeResponse(data: NSData, error: NSErrorPointer) -> OAuth2JSON? {
+		if let json = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: error) as? OAuth2JSON {
 			if let access = json["access_token"] as? String {
 				accessToken = access
 			}
