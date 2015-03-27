@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>OAuth2 Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script type="text/javascript">
+    window.jazzy = {'docset': false}
+    if (typeof window.dash != 'undefined') {
+      document.documentElement.className += ' dash'
+      window.jazzy.docset = true
+    }
+    if (navigator.userAgent.match(/xcode/i)) {
+      document.documentElement.className += ' xcode'
+      window.jazzy.docset = true
+    }
+    </script>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+  </head>
+  <body id="reference" class="Swift">
+    <a name="//apple_ref/swift/Class/OAuth2" class="dashAnchor"></a>
+    <a title="OAuth2 Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p class="header-text"><a href="../index.html">OAuth2 Docs</a> (94% documented)</p>
+        <p id="header-links"><a href="https://github.com/p2/OAuth2"><img id="header-icon" src="../img/gh.png" height="16px" width="16px" />View on GitHub</a></p>
+        <p id="header-links"><a href="dash-feed://http%3A%2F%2Fp2%2Egithub%2Eio%2Fdocsets%2FOAuth2%2Exml"><img id="header-icon" src="../img/dash.png" height="16px" width="16px" />Install in Dash</a></p>
+      </div>
+    </header>
+    <section id="valence">
+      <div class="content-wrapper">
+        <p id="hierarchial_navigation">
+        <a href="../index.html" id="design_resources_link">OAuth2 Reference</a>
+        <img id="carat" src="../img/carat.png" height="10px" width="6px" />
+        OAuth2 Class Reference
+        </p>
+      </div>
+    </section>
+    <div class="content-wrapper">
+      <nav class="book-parts">
+        <ul class="nav-parts">
+          <li class="part-name tasks">
+          <a href="../Classes.html">Classes</a>
+            <ul class="nav-chapters">
+              <li class="nav-chapter">
+                <a href="../Classes/OAuth2.html">OAuth2</a>
+              </li>
+              <li class="nav-chapter">
+                <a href="../Classes/OAuth2CodeGrant.html">OAuth2CodeGrant</a>
+              </li>
+              <li class="nav-chapter">
+                <a href="../Classes/OAuth2CodeGrantBasicAuth.html">OAuth2CodeGrantBasicAuth</a>
+              </li>
+              <li class="nav-chapter">
+                <a href="../Classes/OAuth2CodeGrantFacebook.html">OAuth2CodeGrantFacebook</a>
+              </li>
+              <li class="nav-chapter">
+                <a href="../Classes/OAuth2ImplicitGrant.html">OAuth2ImplicitGrant</a>
+              </li>
+              <li class="nav-chapter">
+                <a href="../Classes/OAuth2Request.html">OAuth2Request</a>
+              </li>
+            </ul>
+          </li>
+          <li class="part-name tasks">
+          <a href="../Global Variables.html">Global Variables</a>
+            <ul class="nav-chapters">
+              <li class="nav-chapter">
+                <a href="../Global Variables.html#/s:v6OAuth217OAuth2ErrorDomainSS">OAuth2ErrorDomain</a>
+              </li>
+            </ul>
+          </li>
+          <li class="part-name tasks">
+          <a href="../Enums.html">Enums</a>
+            <ul class="nav-chapters">
+              <li class="nav-chapter">
+                <a href="../Enums.html#/s:O6OAuth211OAuth2Error">OAuth2Error</a>
+              </li>
+            </ul>
+          </li>
+          <li class="part-name tasks">
+          <a href="../Extensions.html">Extensions</a>
+            <ul class="nav-chapters">
+              <li class="nav-chapter">
+                <a href="../Extensions/NSHTTPURLResponse.html">NSHTTPURLResponse</a>
+              </li>
+            </ul>
+          </li>
+          <li class="part-name tasks">
+          <a href="../Functions.html">Functions</a>
+            <ul class="nav-chapters">
+              <li class="nav-chapter">
+                <a href="../Functions.html#/s:F6OAuth216callOnMainThreadFFT_T_T_">callOnMainThread(_:)</a>
+              </li>
+              <li class="nav-chapter">
+                <a href="../Functions.html#/s:F6OAuth214genOAuth2ErrorFTSSOS_11OAuth2Error_CSo7NSError">genOAuth2Error(_:_:)</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <div class="pixel-line"></div>
+      <div class="rubber-band-gap"></div>
+      <article class="chapter">
+      <a name="/"></a>
+        <h1 class="chapter-name">OAuth2</h1>
+        <section>
+          <section class="section">
+            <p class="para">Base class for specific OAuth2 authentication flow implementations.</p>
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <div class="task-name-container">
+                
+                <a name="/Unnamed"></a>
+                
+              </div>
+              <ul class="task-group-list">
+                <li class="item symbol">
+                  <div class="task-group-term">
+                    <code>
+                    <a name="/s:vC6OAuth26OAuth28settingsGVSs10DictionarySSPSs9AnyObject__">
+                    <a name="//apple_ref/swift/Property/settings" class="dashAnchor"></a>
+                    <a class="x-instance-method Swift" href="#/s:vC6OAuth26OAuth28settingsGVSs10DictionarySSPSs9AnyObject__">settings</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointy-thing-container"></div>
+                    <section class="section instance-method">
+                      <div class="pointy-thing"></div>
+                      <div class="abstract">
+                        <p class="para">Settings, as set upon initialization. </p>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+            
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">let</span> <span class="nv">settings</span><span class="p">:</span> <span class="kt">OAuth2JSON</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item symbol">
+                  <div class="task-group-term">
+                    <code>
+                    <a name="/s:vC6OAuth26OAuth28clientIdSS">
+                    <a name="//apple_ref/swift/Property/clientId" class="dashAnchor"></a>
+                    <a class="x-instance-method Swift" href="#/s:vC6OAuth26OAuth28clientIdSS">clientId</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointy-thing-container"></div>
+                    <section class="section instance-method">
+                      <div class="pointy-thing"></div>
+                      <div class="abstract">
+                        <p class="para">The client id. </p>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+            
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">clientId</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item symbol">
+                  <div class="task-group-term">
+                    <code>
+                    <a name="/s:vC6OAuth26OAuth212clientSecretGSqSS_">
+                    <a name="//apple_ref/swift/Property/clientSecret" class="dashAnchor"></a>
+                    <a class="x-instance-method Swift" href="#/s:vC6OAuth26OAuth212clientSecretGSqSS_">clientSecret</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointy-thing-container"></div>
+                    <section class="section instance-method">
+                      <div class="pointy-thing"></div>
+                      <div class="abstract">
+                        <p class="para">The client secret, usually only needed for code grant. </p>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+            
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">clientSecret</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item symbol">
+                  <div class="task-group-term">
+                    <code>
+                    <a name="/s:vC6OAuth26OAuth27authURLGSqCSo5NSURL_">
+                    <a name="//apple_ref/swift/Property/authURL" class="dashAnchor"></a>
+                    <a class="x-instance-method Swift" href="#/s:vC6OAuth26OAuth27authURLGSqCSo5NSURL_">authURL</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointy-thing-container"></div>
+                    <section class="section instance-method">
+                      <div class="pointy-thing"></div>
+                      <div class="abstract">
+                        <p class="para">The URL to authorize against. </p>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+            
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">authURL</span><span class="p">:</span> <span class="kt">NSURL</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item symbol">
+                  <div class="task-group-term">
+                    <code>
+                    <a name="/s:vC6OAuth26OAuth25scopeGSqSS_">
+                    <a name="//apple_ref/swift/Property/scope" class="dashAnchor"></a>
+                    <a class="x-instance-method Swift" href="#/s:vC6OAuth26OAuth25scopeGSqSS_">scope</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointy-thing-container"></div>
+                    <section class="section instance-method">
+                      <div class="pointy-thing"></div>
+                      <div class="abstract">
+                        <p class="para">The scope currently in use. </p>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+            
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">scope</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item symbol">
+                  <div class="task-group-term">
+                    <code>
+                    <a name="/s:vC6OAuth26OAuth28redirectGSqSS_">
+                    <a name="//apple_ref/swift/Property/redirect" class="dashAnchor"></a>
+                    <a class="x-instance-method Swift" href="#/s:vC6OAuth26OAuth28redirectGSqSS_">redirect</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointy-thing-container"></div>
+                    <section class="section instance-method">
+                      <div class="pointy-thing"></div>
+                      <div class="abstract">
+                        <p class="para">The redirect URL string currently in use. </p>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+            
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">redirect</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item symbol">
+                  <div class="task-group-term">
+                    <code>
+                    <a name="/s:vC6OAuth26OAuth25stateSS">
+                    <a name="//apple_ref/swift/Property/state" class="dashAnchor"></a>
+                    <a class="x-instance-method Swift" href="#/s:vC6OAuth26OAuth25stateSS">state</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointy-thing-container"></div>
+                    <section class="section instance-method">
+                      <div class="pointy-thing"></div>
+                      <div class="abstract">
+                        <dl><dt>The state sent to the server when requesting a token.</dt><dd>We internally generate a UUID and use the first 8 chars.</dd></dl>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+            
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">internal(set)</span> <span class="kd">public</span> <span class="k">var</span> <span class="nv">state</span> <span class="o">=</span> <span class="s">""</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item symbol">
+                  <div class="task-group-term">
+                    <code>
+                    <a name="/s:vC6OAuth26OAuth211accessTokenSS">
+                    <a name="//apple_ref/swift/Property/accessToken" class="dashAnchor"></a>
+                    <a class="x-instance-method Swift" href="#/s:vC6OAuth26OAuth211accessTokenSS">accessToken</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointy-thing-container"></div>
+                    <section class="section instance-method">
+                      <div class="pointy-thing"></div>
+                      <div class="abstract">
+                        <p class="para">The receiver&rsquo;s access token. </p>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+            
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">accessToken</span> <span class="o">=</span> <span class="s">""</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item symbol">
+                  <div class="task-group-term">
+                    <code>
+                    <a name="/s:vC6OAuth26OAuth217accessTokenExpiryGSqCSo6NSDate_">
+                    <a name="//apple_ref/swift/Property/accessTokenExpiry" class="dashAnchor"></a>
+                    <a class="x-instance-method Swift" href="#/s:vC6OAuth26OAuth217accessTokenExpiryGSqCSo6NSDate_">accessTokenExpiry</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointy-thing-container"></div>
+                    <section class="section instance-method">
+                      <div class="pointy-thing"></div>
+                      <div class="abstract">
+                        <p class="para">The access token&rsquo;s expiry date. </p>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+            
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">accessTokenExpiry</span><span class="p">:</span> <span class="kt">NSDate</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item symbol">
+                  <div class="task-group-term">
+                    <code>
+                    <a name="/s:vC6OAuth26OAuth211onAuthorizeGSqFT10parametersGVSs10DictionarySSPSs9AnyObject___T__">
+                    <a name="//apple_ref/swift/Property/onAuthorize" class="dashAnchor"></a>
+                    <a class="x-instance-method Swift" href="#/s:vC6OAuth26OAuth211onAuthorizeGSqFT10parametersGVSs10DictionarySSPSs9AnyObject___T__">onAuthorize</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointy-thing-container"></div>
+                    <section class="section instance-method">
+                      <div class="pointy-thing"></div>
+                      <div class="abstract">
+                        <p class="para">Closure called on successful authentication on the main thread. </p>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+            
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">onAuthorize</span><span class="p">:</span> <span class="p">((</span><span class="nv">parameters</span><span class="p">:</span> <span class="kt">OAuth2JSON</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item symbol">
+                  <div class="task-group-term">
+                    <code>
+                    <a name="/s:vC6OAuth26OAuth29onFailureGSqFT5errorGSqCSo7NSError__T__">
+                    <a name="//apple_ref/swift/Property/onFailure" class="dashAnchor"></a>
+                    <a class="x-instance-method Swift" href="#/s:vC6OAuth26OAuth29onFailureGSqFT5errorGSqCSo7NSError__T__">onFailure</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointy-thing-container"></div>
+                    <section class="section instance-method">
+                      <div class="pointy-thing"></div>
+                      <div class="abstract">
+                        <p class="para">When authorization fails (if error is not nil) or is cancelled, this block is executed on the main thread. </p>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+            
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">onFailure</span><span class="p">:</span> <span class="p">((</span><span class="nv">error</span><span class="p">:</span> <span class="kt">NSError</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item symbol">
+                  <div class="task-group-term">
+                    <code>
+                    <a name="/s:vC6OAuth26OAuth223afterAuthorizeOrFailureGSqFT10wasFailureSb5errorGSqCSo7NSError__T__">
+                    <a name="//apple_ref/swift/Property/afterAuthorizeOrFailure" class="dashAnchor"></a>
+                    <a class="x-instance-method Swift" href="#/s:vC6OAuth26OAuth223afterAuthorizeOrFailureGSqFT10wasFailureSb5errorGSqCSo7NSError__T__">afterAuthorizeOrFailure</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointy-thing-container"></div>
+                    <section class="section instance-method">
+                      <div class="pointy-thing"></div>
+                      <div class="abstract">
+                        <p class="para">Closure called after onAuthorize OR onFailure, on the main thread; useful for cleanup operations.</p>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+            
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">afterAuthorizeOrFailure</span><span class="p">:</span> <span class="p">((</span><span class="nv">wasFailure</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">,</span> <span class="nv">error</span><span class="p">:</span> <span class="kt">NSError</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="parameters">
+                        <h4>Parameters</h4>
+                        <table class="graybox" border="0" cellspacing="0" cellpadding="5">
+                          <tbody>
+                            <tr>
+                              <td scope="row">
+                                <code>
+                                <em class="term">wasFailure</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div class="definition">
+                                  <p class="para">Bool indicating success or failure</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td scope="row">
+                                <code>
+                                <em class="term">error</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div class="definition">
+                                  <p class="para">NSError describing the reason for failure, as supplied to the <code>onFailure</code> callback. If it is nil and wasFailure is true, the process was aborted.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item symbol">
+                  <div class="task-group-term">
+                    <code>
+                    <a name="/s:vC6OAuth26OAuth29viewTitleGSqSS_">
+                    <a name="//apple_ref/swift/Property/viewTitle" class="dashAnchor"></a>
+                    <a class="x-instance-method Swift" href="#/s:vC6OAuth26OAuth29viewTitleGSqSS_">viewTitle</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointy-thing-container"></div>
+                    <section class="section instance-method">
+                      <div class="pointy-thing"></div>
+                      <div class="abstract">
+                        <p class="para">An optional title that will propagate to views handled by OAuth2, such as OAuth2WebViewController. </p>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+            
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">viewTitle</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item symbol">
+                  <div class="task-group-term">
+                    <code>
+                    <a name="/s:vC6OAuth26OAuth27verboseSb">
+                    <a name="//apple_ref/swift/Property/verbose" class="dashAnchor"></a>
+                    <a class="x-instance-method Swift" href="#/s:vC6OAuth26OAuth27verboseSb">verbose</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointy-thing-container"></div>
+                    <section class="section instance-method">
+                      <div class="pointy-thing"></div>
+                      <div class="abstract">
+                        <p class="para">Set to YES to log all the things. NO by default. </p>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+            
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">verbose</span> <span class="o">=</span> <span class="kc">false</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item symbol">
+                  <div class="task-group-term">
+                    <code>
+                    <a name="/s:FC6OAuth26OAuth2cFMS0_FT8settingsGVSs10DictionarySSPSs9AnyObject___S0_">
+                    <a name="//apple_ref/swift/Method/init(settings:)" class="dashAnchor"></a>
+                    <a class="x-instance-method Swift" href="#/s:FC6OAuth26OAuth2cFMS0_FT8settingsGVSs10DictionarySSPSs9AnyObject___S0_">init(settings:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointy-thing-container"></div>
+                    <section class="section instance-method">
+                      <div class="pointy-thing"></div>
+                      <div class="abstract">
+                        <p class="para">Designated initializer.Key support is experimental and currently informed by MITREid&rsquo;s reference implementation, with these keys:<ul><li>client_id (string)</li><li>client_secret (string), usually only needed for code grant</li><li>authorize_uri (string)</li><li>token_uri (string), only for code grant</li><li>redirect_uris (list of strings)</li><li>scope (string)</li><li>verbose (bool, applies to client logging, unrelated to the actual OAuth exchange)</li></ul>MITREid: <a href="https://github.com/mitreid-connect/">https://github.com/mitreid-connect/</a></p>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+            
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">settings</span><span class="p">:</span> <span class="kt">OAuth2JSON</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <hr/>
+                <a name="/OAuth%20Actions"></a>
+                <a name="//apple_ref/swift/Section/OAuth Actions" class="dashAnchor"></a>
+                <a href="#/OAuth%20Actions">
+                  <h3 class="section-name">OAuth Actions</h3>
+                </a>
+                
+              </div>
+              <ul class="task-group-list">
+                <li class="item symbol">
+                  <div class="task-group-term">
+                    <code>
+                    <a name="/s:FC6OAuth26OAuth223hasUnexpiredAccessTokenFS0_FT_Sb">
+                    <a name="//apple_ref/swift/Method/hasUnexpiredAccessToken()" class="dashAnchor"></a>
+                    <a class="x-instance-method Swift" href="#/s:FC6OAuth26OAuth223hasUnexpiredAccessTokenFS0_FT_Sb">hasUnexpiredAccessToken()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointy-thing-container"></div>
+                    <section class="section instance-method">
+                      <div class="pointy-thing"></div>
+                      <div class="abstract">
+                        <dl><dt>If the instance has an accessToken, checks if its expiry time has not yet passed. If we don&rsquo;t have an expiry</dt><dd>date we assume the token is still valid.</dd></dl>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+            
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">hasUnexpiredAccessToken</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item symbol">
+                  <div class="task-group-term">
+                    <code>
+                    <a name="/s:FC6OAuth26OAuth212authorizeURLFS0_FTCSo5NSURL8redirectGSqSS_5scopeGSqSS_12responseTypeGSqSS_6paramsGSqGVSs10DictionarySSSS___S1_">
+                    <a name="//apple_ref/swift/Method/authorizeURL(_:redirect:scope:responseType:params:)" class="dashAnchor"></a>
+                    <a class="x-instance-method Swift" href="#/s:FC6OAuth26OAuth212authorizeURLFS0_FTCSo5NSURL8redirectGSqSS_5scopeGSqSS_12responseTypeGSqSS_6paramsGSqGVSs10DictionarySSSS___S1_">authorizeURL(_:redirect:scope:responseType:params:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointy-thing-container"></div>
+                    <section class="section instance-method">
+                      <div class="pointy-thing"></div>
+                      <div class="abstract">
+                        <p class="para">Constructs an authorize URL with the given parameters.It is possible to use the <code>params</code> dictionary to override internally generated URL parameters, use it wisely. Subclasses generally provide shortcut methods to receive an appropriate authorize (or token) URL.</p>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+            
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">authorizeURL</span><span class="p">(</span><span class="nv">base</span><span class="p">:</span> <span class="kt">NSURL</span><span class="p">,</span> <span class="k">var</span> <span class="nv">redirect</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">scope</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">responseType</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">params</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">String</span><span class="p">]?)</span> <span class="o">-&gt;</span> <span class="kt">NSURL</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="parameters">
+                        <h4>Parameters</h4>
+                        <table class="graybox" border="0" cellspacing="0" cellpadding="5">
+                          <tbody>
+                            <tr>
+                              <td scope="row">
+                                <code>
+                                <em class="term">base</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div class="definition">
+                                  <p class="para">The base URL (with path, if needed) to build the URL upon</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td scope="row">
+                                <code>
+                                <em class="term">redirect</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div class="definition">
+                                  <p class="para">The redirect URI string to supply. If it is nil, the first value of the settings&rsquo; <code>redirect_uris</code> entries is used. Must be present in the end!</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td scope="row">
+                                <code>
+                                <em class="term">scope</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div class="definition">
+                                  <p class="para">The scope to request</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td scope="row">
+                                <code>
+                                <em class="term">responseType</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div class="definition">
+                                  <p class="para">The response type to request; subclasses know which one to supply</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td scope="row">
+                                <code>
+                                <em class="term">params</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div class="definition">
+                                  <p class="para">Any additional parameters as dictionary with string keys and values that will be added to the query part</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="result-description">
+                        <h4>Return Value</h4>
+                        <p class="para">NSURL to be used to start the OAuth dance</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item symbol">
+                  <div class="task-group-term">
+                    <code>
+                    <a name="/s:FC6OAuth26OAuth212authorizeURLFS0_FT_CSo5NSURL">
+                    <a name="//apple_ref/swift/Method/authorizeURL()" class="dashAnchor"></a>
+                    <a class="x-instance-method Swift" href="#/s:FC6OAuth26OAuth212authorizeURLFS0_FT_CSo5NSURL">authorizeURL()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointy-thing-container"></div>
+                    <section class="section instance-method">
+                      <div class="pointy-thing"></div>
+                      <div class="abstract">
+                        <p class="para">Most convenient method if you want the authorize URL to be created as defined in your settings dictionary.</p>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+            
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">authorizeURL</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">NSURL</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="result-description">
+                        <h4>Return Value</h4>
+                        <p class="para">NSURL to be used to start the OAuth dance</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item symbol">
+                  <div class="task-group-term">
+                    <code>
+                    <a name="/s:FC6OAuth26OAuth224authorizeURLWithRedirectFS0_FTGSqSS_5scopeGSqSS_6paramsGSqGVSs10DictionarySSSS___CSo5NSURL">
+                    <a name="//apple_ref/swift/Method/authorizeURLWithRedirect(_:scope:params:)" class="dashAnchor"></a>
+                    <a class="x-instance-method Swift" href="#/s:FC6OAuth26OAuth224authorizeURLWithRedirectFS0_FTGSqSS_5scopeGSqSS_6paramsGSqGVSs10DictionarySSSS___CSo5NSURL">authorizeURLWithRedirect(_:scope:params:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointy-thing-container"></div>
+                    <section class="section instance-method">
+                      <div class="pointy-thing"></div>
+                      <div class="abstract">
+                        <p class="para">Convenience method to be overridden by and used from subclasses.</p>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+            
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">authorizeURLWithRedirect</span><span class="p">(</span><span class="nv">redirect</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">scope</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">params</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">String</span><span class="p">]?)</span> <span class="o">-&gt;</span> <span class="kt">NSURL</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="parameters">
+                        <h4>Parameters</h4>
+                        <table class="graybox" border="0" cellspacing="0" cellpadding="5">
+                          <tbody>
+                            <tr>
+                              <td scope="row">
+                                <code>
+                                <em class="term">redirect</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div class="definition">
+                                  <p class="para">The redirect URI string to supply. If it is nil, the first value of the settings&rsquo; <code>redirect_uris</code> entries is used. Must be present in the end!</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td scope="row">
+                                <code>
+                                <em class="term">scope</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div class="definition">
+                                  <p class="para">The scope to request</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td scope="row">
+                                <code>
+                                <em class="term">params</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div class="definition">
+                                  <p class="para">Any additional parameters as dictionary with string keys and values that will be added to the query part</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="result-description">
+                        <h4>Return Value</h4>
+                        <p class="para">NSURL to be used to start the OAuth dance</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item symbol">
+                  <div class="task-group-term">
+                    <code>
+                    <a name="/s:FC6OAuth26OAuth217handleRedirectURLFS0_FCSo5NSURLT_">
+                    <a name="//apple_ref/swift/Method/handleRedirectURL(_:)" class="dashAnchor"></a>
+                    <a class="x-instance-method Swift" href="#/s:FC6OAuth26OAuth217handleRedirectURLFS0_FCSo5NSURLT_">handleRedirectURL(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointy-thing-container"></div>
+                    <section class="section instance-method">
+                      <div class="pointy-thing"></div>
+                      <div class="abstract">
+                        <p class="para">Subclasses override this method to extract information from the supplied redirect URL.</p>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+            
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">handleRedirectURL</span><span class="p">(</span><span class="nv">redirect</span><span class="p">:</span> <span class="kt">NSURL</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item symbol">
+                  <div class="task-group-term">
+                    <code>
+                    <a name="/s:FC6OAuth26OAuth212didAuthorizeFS0_FGVSs10DictionarySSPSs9AnyObject__T_">
+                    <a name="//apple_ref/swift/Method/didAuthorize(_:)" class="dashAnchor"></a>
+                    <a class="x-instance-method Swift" href="#/s:FC6OAuth26OAuth212didAuthorizeFS0_FGVSs10DictionarySSPSs9AnyObject__T_">didAuthorize(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointy-thing-container"></div>
+                    <section class="section instance-method">
+                      <div class="pointy-thing"></div>
+                      <div class="abstract">
+                        <p class="para">Internally used on success. Calls the <code>onAuthorize</code> and <code>afterAuthorizeOrFailure</code> callbacks on the main thread.</p>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+            
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">didAuthorize</span><span class="p">(</span><span class="nv">parameters</span><span class="p">:</span> <span class="kt">OAuth2JSON</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item symbol">
+                  <div class="task-group-term">
+                    <code>
+                    <a name="/s:FC6OAuth26OAuth27didFailFS0_FGSqCSo7NSError_T_">
+                    <a name="//apple_ref/swift/Method/didFail(_:)" class="dashAnchor"></a>
+                    <a class="x-instance-method Swift" href="#/s:FC6OAuth26OAuth27didFailFS0_FGSqCSo7NSError_T_">didFail(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointy-thing-container"></div>
+                    <section class="section instance-method">
+                      <div class="pointy-thing"></div>
+                      <div class="abstract">
+                        <p class="para">Internally used on error. Calls the <code>onFailure</code> and <code>afterAuthorizeOrFailure</code> callbacks on the main thread.</p>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+            
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">didFail</span><span class="p">(</span><span class="nv">error</span><span class="p">:</span> <span class="kt">NSError</span><span class="p">?)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <hr/>
+                <a name="/Requests"></a>
+                <a name="//apple_ref/swift/Section/Requests" class="dashAnchor"></a>
+                <a href="#/Requests">
+                  <h3 class="section-name">Requests</h3>
+                </a>
+                
+              </div>
+              <ul class="task-group-list">
+                <li class="item symbol">
+                  <div class="task-group-term">
+                    <code>
+                    <a name="/s:FC6OAuth26OAuth27requestFS0_FT6forURLCSo5NSURL_CS_13OAuth2Request">
+                    <a name="//apple_ref/swift/Method/request(forURL:)" class="dashAnchor"></a>
+                    <a class="x-instance-method Swift" href="#/s:FC6OAuth26OAuth27requestFS0_FT6forURLCSo5NSURL_CS_13OAuth2Request">request(forURL:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointy-thing-container"></div>
+                    <section class="section instance-method">
+                      <div class="pointy-thing"></div>
+                      <div class="abstract">
+                        <p class="para">Return an OAuth2Request, a NSMutableURLRequest subclass, that has already been signed and can be used against your OAuth2 endpoint.This method prefers cached data and specifies a timeout interval of 20 seconds.</p>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+            
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">request</span><span class="p">(</span><span class="n">forURL</span> <span class="nv">url</span><span class="p">:</span> <span class="kt">NSURL</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">OAuth2Request</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <hr/>
+                <a name="/Utilities"></a>
+                <a name="//apple_ref/swift/Section/Utilities" class="dashAnchor"></a>
+                <a href="#/Utilities">
+                  <h3 class="section-name">Utilities</h3>
+                </a>
+                
+              </div>
+              <ul class="task-group-list">
+                <li class="item symbol">
+                  <div class="task-group-term">
+                    <code>
+                    <a name="/s:FC6OAuth26OAuth214queryStringForFMS0_FGVSs10DictionarySSSS_SS">
+                    <a name="//apple_ref/swift/Method/queryStringFor(_:)" class="dashAnchor"></a>
+                    <a class="x-instance-method Swift" href="#/s:FC6OAuth26OAuth214queryStringForFMS0_FGVSs10DictionarySSSS_SS">queryStringFor(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointy-thing-container"></div>
+                    <section class="section instance-method">
+                      <div class="pointy-thing"></div>
+                      <div class="abstract">
+                        <p class="para">Create a query string from a dictionary of string: string pairs.</p>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+            
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">queryStringFor</span><span class="p">(</span><span class="nv">params</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">String</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item symbol">
+                  <div class="task-group-term">
+                    <code>
+                    <a name="/s:FC6OAuth26OAuth215paramsFromQueryFMS0_FSSGVSs10DictionarySSSS_">
+                    <a name="//apple_ref/swift/Method/paramsFromQuery(_:)" class="dashAnchor"></a>
+                    <a class="x-instance-method Swift" href="#/s:FC6OAuth26OAuth215paramsFromQueryFMS0_FSSGVSs10DictionarySSSS_">paramsFromQuery(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointy-thing-container"></div>
+                    <section class="section instance-method">
+                      <div class="pointy-thing"></div>
+                      <div class="abstract">
+                        <p class="para">Parse a query string into a dictionary of string: string pairs.</p>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+            
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">paramsFromQuery</span><span class="p">(</span><span class="nv">query</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">String</span><span class="p">]</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item symbol">
+                  <div class="task-group-term">
+                    <code>
+                    <a name="/s:FC6OAuth26OAuth232errorForAccessTokenErrorResponseFMS0_FGVSs10DictionarySSPSs9AnyObject__CSo7NSError">
+                    <a name="//apple_ref/swift/Method/errorForAccessTokenErrorResponse(_:)" class="dashAnchor"></a>
+                    <a class="x-instance-method Swift" href="#/s:FC6OAuth26OAuth232errorForAccessTokenErrorResponseFMS0_FGVSs10DictionarySSPSs9AnyObject__CSo7NSError">errorForAccessTokenErrorResponse(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointy-thing-container"></div>
+                    <section class="section instance-method">
+                      <div class="pointy-thing"></div>
+                      <div class="abstract">
+                        <p class="para">Handles access token error response.</p>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+            
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">class</span> <span class="kd">func</span> <span class="nf">errorForAccessTokenErrorResponse</span><span class="p">(</span><span class="nv">params</span><span class="p">:</span> <span class="kt">OAuth2JSON</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">NSError</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="parameters">
+                        <h4>Parameters</h4>
+                        <table class="graybox" border="0" cellspacing="0" cellpadding="5">
+                          <tbody>
+                            <tr>
+                              <td scope="row">
+                                <code>
+                                <em class="term">params</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div class="definition">
+                                  <p class="para">The URL parameters passed into the redirect URL upon error</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="result-description">
+                        <h4>Return Value</h4>
+                        <p class="para">An NSError instance with the <q>best</q> localized error key and all parameters in the userInfo dictionary; domain <q>OAuth2ErrorDomain</q>, code 600</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item symbol">
+                  <div class="task-group-term">
+                    <code>
+                    <a name="/s:FC6OAuth26OAuth212logIfVerboseFS0_FSST_">
+                    <a name="//apple_ref/swift/Method/logIfVerbose(_:)" class="dashAnchor"></a>
+                    <a class="x-instance-method Swift" href="#/s:FC6OAuth26OAuth212logIfVerboseFS0_FSST_">logIfVerbose(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointy-thing-container"></div>
+                    <section class="section instance-method">
+                      <div class="pointy-thing"></div>
+                      <div class="abstract">
+                        <p class="para">Debug logging, will only log if <code>verbose</code> is YES.</p>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+            
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">logIfVerbose</span><span class="p">(</span><span class="nv">log</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p class="copyright">&copy; 2015 <a class="link" href="http://www.github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2015-03-27)</p>
+          <p class="copyright">Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.1.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>
