@@ -50,6 +50,12 @@ public class OAuth2CodeGrant: OAuth2
 		return authorizeURL(authURL!, redirect: redirect, scope: scope, responseType: "code", params: params)
 	}
 	
+	/**
+		Generate the URL to be used for the token request from know instance variables and supplied parameters.
+	
+		This will set "grant_type" to "authorization_code", add the "code" provided and forward to `authorizeURL()` to
+		fill the remaining parameters.
+	 */
 	public func tokenURLWithRedirect(redirect: String?, code: String, params: [String: String]?) -> NSURL {
 		let base = tokenURL ?? authURL!
 		var urlParams = params ?? [String: String]()

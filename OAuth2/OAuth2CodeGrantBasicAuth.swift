@@ -49,7 +49,10 @@ public class OAuth2CodeGrantBasicAuth: OAuth2CodeGrant
 		super.init(settings: settings)
 	}
 	
-	override public func tokenRequest(code: String) -> NSMutableURLRequest {
+	/**
+		Calls super's implementation to obtain a token request, then adds a "Basic" authorization header.
+	 */
+	public override func tokenRequest(code: String) -> NSMutableURLRequest {
 		let req = super.tokenRequest(code)
 		if let basic = basicToken {
 			logIfVerbose("Adding \"Basic\" authorization header from full token string")

@@ -11,6 +11,8 @@ Supported OAuth2 [flows](#flows) are the _code grant_ (`response_type=code`) and
 Since the Swift language is constantly evolving I am [adding tags](https://github.com/p2/OAuth2/releases) to mark which revision should work with which Swift version.
 Take a look at the [OS X sample app](https://github.com/p2/OAuth2App) for basic usage of this framework.
 
+Technical documentation is available at [p2.github.io/OAuth2](https://p2.github.io/OAuth2).
+
 
 Installation
 ------------
@@ -61,7 +63,7 @@ If you need to provide additional parameters to the authorize URL take a look at
         "token_uri": "https://authorize.smartplatforms.org/token",
         "scope": "profile email",
         "redirect_uris": ["myapp://oauth/callback"],   // don't forget to register this scheme
-    ]
+    ] as OAuth2JSON      // the "as" part may or may not be needed
     ```
 
 2. Create an `OAuth2CodeGrant` instance, optionally setting the `onAuthorize` and `onFailure` closures to keep informed about the status.
