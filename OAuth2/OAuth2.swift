@@ -20,8 +20,12 @@
 
 import Foundation
 
+/// The error domain used for errors during the OAuth2 flow.
 let OAuth2ErrorDomain = "OAuth2ErrorDomain"
 
+/**
+ *  Errors supplanting NSError codes if no HTTP status code is available (hence >= 600).
+ */
 public enum OAuth2Error: Int {
 	case Generic = 600
 	case Unsupported
@@ -31,7 +35,7 @@ public enum OAuth2Error: Int {
 	case AuthorizationError
 }
 
-public typealias JSONDictionary = [String: AnyObject]
+public typealias OAuth2JSON = [String: AnyObject]
 
 
 /**
@@ -40,7 +44,7 @@ public typealias JSONDictionary = [String: AnyObject]
 public class OAuth2
 {
 	/** Settings, as set upon initialization. */
-	let settings: JSONDictionary
+	let settings: OAuth2JSON
 	
 	/** The client id. */
 	public let clientId: String
@@ -69,7 +73,7 @@ public class OAuth2
 	public var accessTokenExpiry: NSDate?
 	
 	/** Closure called on successful authentication on the main thread. */
-	public var onAuthorize: ((parameters: JSONDictionary) -> Void)?
+	public var onAuthorize: ((parameters: OAuth2JSON) -> Void)?
 	
 	/** When authorization fails (if error is not nil) or is cancelled, this block is executed on the main thread. */
 	public var onFailure: ((error: NSError?) -> Void)?
@@ -104,7 +108,7 @@ public class OAuth2
 	
 		MITREid: https://github.com/mitreid-connect/
 	 */
-	public init(settings: JSONDictionary) {
+	public init(settings: OAuth2JSON) {
 		self.settings = settings
 		
 		if let cid = settings["client_id"] as? String {
@@ -248,17 +252,26 @@ public class OAuth2
 		return NSURL()
 	}
 	
+	/**
+		Subclasses override this method to extract information from the supplied redirect URL.
+	 */
 	public func handleRedirectURL(redirect: NSURL) {
 		NSException(name: "OAuth2AbstractClassUse", reason: "Abstract class use", userInfo: nil).raise()
 	}
 	
-	func didAuthorize(parameters: JSONDictionary) {
+	/**
+		Internally used on success. Calls the `onAuthorize` and `afterAuthorizeOrFailure` callbacks on the main thread.
+	 */
+	func didAuthorize(parameters: OAuth2JSON) {
 		callOnMainThread() {
 			self.onAuthorize?(parameters: parameters)
 			self.afterAuthorizeOrFailure?(wasFailure: false, error: nil)
 		}
 	}
 	
+	/**
+		Internally used on error. Calls the `onFailure` and `afterAuthorizeOrFailure` callbacks on the main thread.
+	 */
 	func didFail(error: NSError?) {
 		callOnMainThread() {
 			self.onFailure?(error: error)
@@ -269,6 +282,12 @@ public class OAuth2
 	
 	// MARK: - Requests
 	
+	/**
+		Return an OAuth2Request, a NSMutableURLRequest subclass, that has already been signed and can be used against
+		your OAuth2 endpoint.
+		
+		This method prefers cached data and specifies a timeout interval of 20 seconds.
+	 */
 	public func request(forURL url: NSURL) -> OAuth2Request {
 		return OAuth2Request(URL: url, oauth: self, cachePolicy: .ReturnCacheDataElseLoad, timeoutInterval: 20)
 	}
@@ -310,7 +329,7 @@ public class OAuth2
 		:returns: An NSError instance with the "best" localized error key and all parameters in the userInfo dictionary;
 		          domain "OAuth2ErrorDomain", code 600
 	 */
-	class func errorForAccessTokenErrorResponse(params: JSONDictionary) -> NSError {
+	class func errorForAccessTokenErrorResponse(params: OAuth2JSON) -> NSError {
 		var message = ""
 		
 		// "error_description" is optional, we prefer it if it's present
@@ -363,7 +382,9 @@ public class OAuth2
 }
 
 
-
+/**
+	Helper function to ensure that the callback is executed on the main thread.
+ */
 func callOnMainThread(callback: (Void -> Void)) {
 	if NSThread.isMainThread() {
 		callback()
@@ -375,11 +396,10 @@ func callOnMainThread(callback: (Void -> Void)) {
 	}
 }
 
-public func genOAuth2Error(message: String) -> NSError {
-	return genOAuth2Error(message, .Generic)
-}
-
-public func genOAuth2Error(message: String, code: OAuth2Error) -> NSError {
+/**
+	Convenience function to create an error in the "OAuth2ErrorDomain" error domain.
+ */
+public func genOAuth2Error(message: String, _ code: OAuth2Error = .Generic) -> NSError {
 	return NSError(domain: OAuth2ErrorDomain, code: code.rawValue, userInfo: [NSLocalizedDescriptionKey: message])
 }
 

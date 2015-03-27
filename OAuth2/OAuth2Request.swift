@@ -26,11 +26,19 @@ import Foundation
  */
 public class OAuth2Request: NSMutableURLRequest
 {
+	/**
+		Convenience initalizer to instantiate and sign a mutable URL request in one go.
+	 */
 	convenience init(URL: NSURL!, oauth: OAuth2, cachePolicy: NSURLRequestCachePolicy, timeoutInterval: NSTimeInterval) {
 		self.init(URL: URL, cachePolicy: cachePolicy, timeoutInterval: timeoutInterval)
 		self.sign(oauth)
 	}
 	
+	/**
+		Signs the receiver by setting its "Authorization" header to "Bearer {token}".
+	
+		Will raise if the OAuth2 instance does not have an access token!
+	 */
 	func sign(oauth: OAuth2) {
 		if oauth.accessToken.isEmpty {
 			fatalError("Cannot sign the request with an empty access token")

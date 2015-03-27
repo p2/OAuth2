@@ -21,7 +21,10 @@
 import Foundation
 
 
-extension NSHTTPURLResponse {
+extension NSHTTPURLResponse
+{
+	
+	/// A localized string explaining the current `statusCode`.
 	public var statusString: String {
 		get {
 			return NSHTTPURLResponse.localizedStringForStatusCode(self.statusCode)

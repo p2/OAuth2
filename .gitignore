@@ -2,4 +2,8 @@
 
 # Xcode
 *.xcuserdatad
+build
+
+# Documentation
+docs
 
