@@ -9,6 +9,7 @@ _Note_ that it's possible to run embedded frameworks in iOS 7 with some tricks, 
 Supported OAuth2 [flows](#flows) are the _code grant_ (`response_type=code`) and the _implicit grant_ (`response_type=token`).
 
 Since the Swift language is constantly evolving I am [adding tags](https://github.com/p2/OAuth2/releases) to mark which revision should work with which Swift version.
+Take a look at the [OS X sample app](https://github.com/p2/OAuth2App) for basic usage of this framework.
 
 
 Installation
@@ -157,7 +158,14 @@ Would be nice to add another code example here, but it's pretty much the same as
 Some sites might not strictly adhere to the OAuth2 flow.
 The framework deals with those deviations by creating site-specific subclasses.
 
-- Facebook: `OAuth2CodeGrantFacebook` to deal with the [URL-query-style response](https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow/v2.2) instead of the expected JSON dictionary.
+- **Facebook**: `OAuth2CodeGrantFacebook` to deal with the [URL-query-style response](https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow/v2.2) instead of the expected JSON dictionary.
+- **Reddit**: `OAuth2CodeGrantBasicAuth` adds a _Basic_ authorization header when requesting the token.
+    It automatically creates the header from _client\_id_ and _client\_secret_:  
+  
+        Authorization: Basic {base64: "client_id:client_secret"}
+  
+    Note that you **must** specify your client_secret; if there is none (like for [Reddit](https://github.com/reddit/reddit/wiki/OAuth2#token-retrieval-code-flow)) specify the empty string.
+    There is a [RedditLoader](https://github.com/p2/OAuth2App/blob/master/OAuth2App/RedditLoader.swift) example in the OAuth2App sample app for a basic usage example.
 
 
 Playground

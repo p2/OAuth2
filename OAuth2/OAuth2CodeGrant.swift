@@ -34,6 +34,9 @@ public class OAuth2CodeGrant: OAuth2
 	/** The receiver's long-time refresh token. */
 	public var refreshToken = ""
 	
+	/**
+		Adds support for the "token_uri" setting.
+	 */
 	public override init(settings: OAuth2JSON) {
 		if let token = settings["token_uri"] as? String {
 			tokenURL = NSURL(string: token)
@@ -43,7 +46,7 @@ public class OAuth2CodeGrant: OAuth2
 	}
 	
 	
-	override public func authorizeURLWithRedirect(redirect: String?, scope: String?, params: [String: String]?) -> NSURL {
+	public override func authorizeURLWithRedirect(redirect: String?, scope: String?, params: [String: String]?) -> NSURL {
 		return authorizeURL(authURL!, redirect: redirect, scope: scope, responseType: "code", params: params)
 	}
 	
@@ -60,28 +63,30 @@ public class OAuth2CodeGrant: OAuth2
 	}
 	
 	/**
-		Create a request for token exchange
+		Create a request for token exchange.
+		
+		This method is public to enable unit testing.
 	 */
-	public func tokenRequest(code: String) -> NSURLRequest {
+	public func tokenRequest(code: String) -> NSMutableURLRequest {
 		let url = tokenURLWithRedirect(redirect, code: code, params: nil)
 		let comp = NSURLComponents(URL: url, resolvingAgainstBaseURL: true)
 		assert(comp != nil, "It seems NSURLComponents cannot parse \(url)");
 		let body = comp!.query
 		comp!.query = nil
 		
-		let post = NSMutableURLRequest(URL: comp!.URL!)
-		post.HTTPMethod = "POST"
-		post.setValue("application/x-www-form-urlencoded; charset=utf-8", forHTTPHeaderField: "Content-Type")
-		post.setValue("application/json", forHTTPHeaderField: "Accept")
-		post.HTTPBody = body?.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+		let req = NSMutableURLRequest(URL: comp!.URL!)
+		req.HTTPMethod = "POST"
+		req.setValue("application/x-www-form-urlencoded; charset=utf-8", forHTTPHeaderField: "Content-Type")
+		req.setValue("application/json", forHTTPHeaderField: "Accept")
+		req.HTTPBody = body?.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
 		
-		return post
+		return req
 	}
 	
 	/**
 		Extracts the code from the redirect URL and exchanges it for a token.
 	 */
-	override public func handleRedirectURL(redirect: NSURL) {
+	public override func handleRedirectURL(redirect: NSURL) {
 		logIfVerbose("Handling redirect URL \(redirect.description)")
 		
 		let (code, error) = validateRedirectURL(redirect)
@@ -106,7 +111,7 @@ public class OAuth2CodeGrant: OAuth2
 		}
 		
 		let post = tokenRequest(code)
-		logIfVerbose("Exchanging code \(code) with redirect \(redirect!) for token at \(post.URL.description)")
+		logIfVerbose("Exchanging code \(code) with redirect \(redirect!) for token at \(post.URL?.description)")
 		
 		// perform the exchange
 		let session = NSURLSession.sharedSession()
