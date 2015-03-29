@@ -3,6 +3,9 @@ OAuth2
 
 OAuth2 frameworks for **OS X** and **iOS** written in Swift.
 
+Technical documentation is available at [p2.github.io/OAuth2](https://p2.github.io/OAuth2).
+Take a look at the [OS X sample app](https://github.com/p2/OAuth2App) for basic usage of this framework.
+
 The code in this repo requires Xcode 6, the built framework can be used on **OS X 10.9** or **iOS 8** and later.
 To use on **iOS 7** you'll have to include the source files in your main project.
 _Note_ that it's possible to run embedded frameworks in iOS 7 with some tricks, however you will not be able to submit such an App to the App Store.
@@ -10,8 +13,7 @@ Supported OAuth2 [flows](#flows) are the _code grant_ (`response_type=code`) and
 
 Since the Swift language is constantly evolving I am [adding tags](https://github.com/p2/OAuth2/releases) to mark which revision should work with which Swift version.
 
-Technical documentation is available at [p2.github.io/OAuth2](https://p2.github.io/OAuth2).
-Take a look at the [OS X sample app](https://github.com/p2/OAuth2App) for basic usage of this framework.
+Licensed under [Apache 2](LICENSE.txt).
 
 
 Installation

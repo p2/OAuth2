@@ -2,6 +2,7 @@
 
 # Xcode
 *.xcuserdatad
+*.xccheckout
 build
 
 # Documentation
