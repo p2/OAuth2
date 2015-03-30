@@ -77,7 +77,7 @@ public class OAuth2CodeGrant: OAuth2
 		let url = tokenURLWithRedirect(redirect, code: code, params: nil)
 		let comp = NSURLComponents(URL: url, resolvingAgainstBaseURL: true)
 		assert(comp != nil, "It seems NSURLComponents cannot parse \(url)");
-		let body = comp!.query
+		let body = comp!.percentEncodedQuery
 		comp!.query = nil
 		
 		let req = NSMutableURLRequest(URL: comp!.URL!)

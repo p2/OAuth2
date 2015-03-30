@@ -195,7 +195,7 @@ public class OAuth2
 		}
 		
 		
-		// compose the URL
+		// compose the URL query component
 		let comp = NSURLComponents(URL: base, resolvingAgainstBaseURL: true)
 		assert(nil != comp && "https" == comp!.scheme, "You MUST use HTTPS")
 		
@@ -214,7 +214,7 @@ public class OAuth2
 			urlParams["response_type"] = responseType!
 		}
 		
-		comp!.query = OAuth2.queryStringFor(urlParams)
+		comp!.percentEncodedQuery = OAuth2.queryStringFor(urlParams)
 		
 		let final = comp!.URL
 		if nil == final {
@@ -298,7 +298,7 @@ public class OAuth2
 	public class func queryStringFor(params: [String: String]) -> String {
 		var arr: [String] = []
 		for (key, val) in params {
-			arr.append("\(key)=\(val)")						// NSURLComponents will correctly encode the parameter string
+			arr.append("\(key)=\(val.wwwFormURLEncodedString)")
 		}
 		return "&".join(arr)
 	}

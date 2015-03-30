@@ -71,11 +71,21 @@ class OAuth2Tests: XCTestCase {
 	
 	func testQueryParamConversion() {
 		let qry = OAuth2.queryStringFor(["a": "AA", "b": "BB", "x": "yz"])
-		XCTAssertTrue(14 == countElements(qry), "Expecting a 14 character string")
+		XCTAssertEqual(14, countElements(qry), "Expecting a 14 character string")
 		
 		let dict = OAuth2.paramsFromQuery(qry)
 		XCTAssertEqual(dict["a"]!, "AA", "Must unpack `a`")
 		XCTAssertEqual(dict["b"]!, "BB", "Must unpack `b`")
 		XCTAssertEqual(dict["x"]!, "yz", "Must unpack `x`")
+	}
+	
+	func testQueryParamEncoding() {
+		let qry = OAuth2.queryStringFor(["uri": "https://api.io", "str": "a string: cool!", "num": "3.14159"])
+		XCTAssertEqual(60, countElements(qry), "Expecting a 60 character string")
+		
+		let dict = OAuth2.paramsFromQuery(qry)
+		XCTAssertEqual(dict["uri"]!, "https%3A%2F%2Fapi.io", "Must unpack `uri`")
+		XCTAssertEqual(dict["str"]!, "a+string%3A+cool%21", "Must unpack `str`")
+		XCTAssertEqual(dict["num"]!, "3.14159", "Must unpack `num`")
 	}
 }

@@ -81,7 +81,7 @@ class OAuth2CodeGrantTests: XCTestCase
 		XCTAssertEqual(query["client_secret"]!, "xyz", "Expecting correct `client_secret`")
 		XCTAssertEqual(query["code"]!, "pp", "Expecting correct `code`")
 		XCTAssertEqual(query["grant_type"]!, "authorization_code", "Expecting correct `grant_type`")
-		XCTAssertEqual(query["redirect_uri"]!, "oauth2://callback", "Expecting correct `redirect_uri`")
+		XCTAssertEqual(query["redirect_uri"]!, "oauth2://callback", "Expecting correct `redirect_uri`")		// using "comp.query" percent-decodes the query fragment
 		XCTAssertTrue(8 == countElements(query["state"]!), "Expecting an auto-generated UUID for `state`")
 		
 		// test authURL fallback
@@ -112,7 +112,7 @@ class OAuth2CodeGrantTests: XCTestCase
 		XCTAssertEqual(query["client_secret"]!, "xyz", "Expecting correct `client_secret`")
 		XCTAssertEqual(query["code"]!, "pp", "Expecting correct `code`")
 		XCTAssertEqual(query["grant_type"]!, "authorization_code", "Expecting correct `grant_type`")
-		XCTAssertEqual(query["redirect_uri"]!, "oauth2://callback", "Expecting correct `redirect_uri`")
+		XCTAssertEqual(query["redirect_uri"]!, "oauth2%3A%2F%2Fcallback", "Expecting correct `redirect_uri`")
 		XCTAssertTrue(8 == countElements(query["state"]!), "Expecting an auto-generated UUID for `state`")
 	}
 
