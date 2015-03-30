@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>OAuth2CodeGrantFacebook Class Reference</title>
+    <title>NSMutableCharacterSet Extension Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -20,8 +20,8 @@
     <script src="../js/jazzy.js" defer></script>
   </head>
   <body id="reference" class="Swift">
-    <a name="//apple_ref/swift/Class/OAuth2CodeGrantFacebook" class="dashAnchor"></a>
-    <a title="OAuth2CodeGrantFacebook Class Reference"></a>
+    <a name="//apple_ref/swift/Extension/NSMutableCharacterSet" class="dashAnchor"></a>
+    <a title="NSMutableCharacterSet Extension Reference"></a>
     <header>
       <div class="content-wrapper">
         <p class="header-text"><a href="../index.html">OAuth2 Docs</a> (95% documented)</p>
@@ -34,7 +34,7 @@
         <p id="hierarchial_navigation">
         <a href="../index.html" id="design_resources_link">OAuth2 Reference</a>
         <img id="carat" src="../img/carat.png" height="10px" width="6px" />
-        OAuth2CodeGrantFacebook Class Reference
+        NSMutableCharacterSet Extension Reference
         </p>
       </div>
     </section>
@@ -111,10 +111,10 @@
       <div class="rubber-band-gap"></div>
       <article class="chapter">
       <a name="/"></a>
-        <h1 class="chapter-name">OAuth2CodeGrantFacebook</h1>
+        <h1 class="chapter-name">NSMutableCharacterSet</h1>
         <section>
           <section class="section">
-            <p class="para">Facebook only returns an <q>access_token=xyz&&hellip;</q> string, no true JSON, hence we override <code>parseTokenExchangeResponse</code> and deal with the situation in a subclass.</p>
+            <p class="para">Undocumented</p>
           </section>
           <section class="section task-group-section">
             <div class="task-group">
@@ -127,9 +127,9 @@
                 <li class="item symbol">
                   <div class="task-group-term">
                     <code>
-                    <a name="/s:FC6OAuth223OAuth2CodeGrantFacebook26parseTokenExchangeResponseFS0_FTCSo6NSData5errorGVSs33AutoreleasingUnsafeMutablePointerGSqCSo7NSError___GSqGVSs10DictionarySSPSs9AnyObject___">
-                    <a name="//apple_ref/swift/Method/parseTokenExchangeResponse(_:error:)" class="dashAnchor"></a>
-                    <a class="x-instance-method Swift" href="#/s:FC6OAuth223OAuth2CodeGrantFacebook26parseTokenExchangeResponseFS0_FTCSo6NSData5errorGVSs33AutoreleasingUnsafeMutablePointerGSqCSo7NSError___GSqGVSs10DictionarySSPSs9AnyObject___">parseTokenExchangeResponse(_:error:)</a>
+                    <a name="/s:FE6OAuth2CSo21NSMutableCharacterSet31wwwFormURLPlusSpaceCharacterSetFMS0_FT_S0_">
+                    <a name="//apple_ref/swift/Method/wwwFormURLPlusSpaceCharacterSet()" class="dashAnchor"></a>
+                    <a class="x-instance-method Swift" href="#/s:FE6OAuth2CSo21NSMutableCharacterSet31wwwFormURLPlusSpaceCharacterSetFMS0_FT_S0_">wwwFormURLPlusSpaceCharacterSet()</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -137,14 +137,14 @@
                     <section class="section instance-method">
                       <div class="pointy-thing"></div>
                       <div class="abstract">
-                        <p class="para">Facebook doesn&rsquo;t return JSON but a plain URL-query-like string. This override takes care of the situation and extracts the token from the response.</p>
+                        <p class="para">Return the character set that does NOT need percent-encoding for x-www-form-urlencoded requests INCLUDING SPACE. YOU are responsible for replacing spaces &ldquo; <q>with the plus sign</q>+<q>.RFC3986 and the W3C spec are not entirely consistent, we&rsquo;re using W3C&rsquo;s spec which says: http://www.w3.org/TR/html5/forms.html#application/x-www-form-urlencoded-encoding-algorithm<ul><li><dl><dt>If the byte is 0x20 (U+0020 SPACE if interpreted as ASCII):</dt><dd><ul><li>Replace the byte with a single 0x2B byte (</q>+&rdquo; (U+002B) character if interpreted as ASCII).</li></ul></dd></dl></li><li>If the byte is in the range 0x2A (*), 0x2D (-), 0x2E (.), 0x30 to 0x39 (0-9), 0x41 to 0x5A (A-Z), 0x5F (_), 0x61 to 0x7A (a-z)<blockquote><ul><li>Leave byte as-is</li></ul></blockquote></li></ul></p>
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
             
                         <div class="Swift">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">override</span> <span class="kd">func</span> <span class="nf">parseTokenExchangeResponse</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="kt">NSData</span><span class="p">,</span> <span class="nv">error</span><span class="p">:</span> <span class="kt">NSErrorPointer</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">OAuth2JSON</span><span class="p">?</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">class</span> <span class="kd">func</span> <span class="nf">wwwFormURLPlusSpaceCharacterSet</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">NSMutableCharacterSet</span></code></pre>
 
                         </div>
                       </div>

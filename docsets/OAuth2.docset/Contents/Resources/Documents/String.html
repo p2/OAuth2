@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>OAuth2CodeGrantFacebook Class Reference</title>
+    <title>String Extension Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -20,8 +20,8 @@
     <script src="../js/jazzy.js" defer></script>
   </head>
   <body id="reference" class="Swift">
-    <a name="//apple_ref/swift/Class/OAuth2CodeGrantFacebook" class="dashAnchor"></a>
-    <a title="OAuth2CodeGrantFacebook Class Reference"></a>
+    <a name="//apple_ref/swift/Extension/String" class="dashAnchor"></a>
+    <a title="String Extension Reference"></a>
     <header>
       <div class="content-wrapper">
         <p class="header-text"><a href="../index.html">OAuth2 Docs</a> (95% documented)</p>
@@ -34,7 +34,7 @@
         <p id="hierarchial_navigation">
         <a href="../index.html" id="design_resources_link">OAuth2 Reference</a>
         <img id="carat" src="../img/carat.png" height="10px" width="6px" />
-        OAuth2CodeGrantFacebook Class Reference
+        String Extension Reference
         </p>
       </div>
     </section>
@@ -111,10 +111,10 @@
       <div class="rubber-band-gap"></div>
       <article class="chapter">
       <a name="/"></a>
-        <h1 class="chapter-name">OAuth2CodeGrantFacebook</h1>
+        <h1 class="chapter-name">String</h1>
         <section>
           <section class="section">
-            <p class="para">Facebook only returns an <q>access_token=xyz&&hellip;</q> string, no true JSON, hence we override <code>parseTokenExchangeResponse</code> and deal with the situation in a subclass.</p>
+            <p class="para">An arbitrary Unicode string value.</p><p class="para">Unicode-Correct ===============Swift strings are designed to be Unicode-correct.  In particular, the APIs make it easy to write code that works correctly, and does not surprise end-users, regardless of where you venture in the Unicode character space.  For example,<ul><li>The <code>==</code> operator checks for Unicode canonical equivalence, so two different representations of the same string will always compare equal.</li><li>String elements are <code>Characters</code> (Unicode extended grapheme clusters), a unit of text that is meaningful to most humans.</li></ul>Locale-Insensitive ==================The fundamental operations on Swift strings are not sensitive to locale settings.  That&rsquo;s because, for example, the validity of a <code>Dictionary&lt;String, T&gt;</code> in a running program depends on a given string comparison having a single, stable result.  Therefore, Swift always uses the default, un-tailored Unicode algorithms for basic string operations.Importing <code>Foundation</code> endows swift strings with the full power of the <code>NSString</code> API, which allows you to choose more complex locale-sensitive operations explicitly.Value Semantics ===============Each string variable, <code>let</code> binding, or stored property has an independent value, so mutations to the string are not observable through its copies::<blockquote>var a = <q>foo</q> var b = a b[b.endIndex.predecessor()] = <q>x</q> println(<q>a=\(a), b=\(b)</q>)     // a=foo, b=fox</blockquote>Strings use Copy-on-Write so that their data is only copied lazily, upon mutation, when more than one string instance is using the same buffer.  Therefore, the first in any sequence of mutating operations may cost <code>O(N)</code> time and space, where <code>N</code> is the length of the string&rsquo;s (unspecified) underlying representation,.Growth and Capacity ===================When a string&rsquo;s contiguous storage fills up, new storage must be allocated and characters must be moved to the new storage. <code>String</code> uses an exponential growth strategy that makes <code>append</code> a constant time operation <em>when amortized over many invocations</em>.Objective-C Bridge ==================<code>String</code> is bridged to Objective-C as <code>NSString</code>, and a <code>String</code> that originated in Objective-C may store its characters in an <code>NSString</code>.  Since any arbitrary subclass of <code>NSSString</code> can become a <code>String</code>, there are no guarantees about representation or efficiency in this case.  Since <code>NSString</code> is immutable, it is just as though the storage was shared by some copy: the first in any sequence of mutating operations causes elements to be copied into unique, contiguous storage which may cost <code>O(N)</code> time and space, where <code>N</code> is the length of the string representation (or more, if the underlying <code>NSString</code> is has unusual performance characteristics).</p>
           </section>
           <section class="section task-group-section">
             <div class="task-group">
@@ -127,9 +127,9 @@
                 <li class="item symbol">
                   <div class="task-group-term">
                     <code>
-                    <a name="/s:FC6OAuth223OAuth2CodeGrantFacebook26parseTokenExchangeResponseFS0_FTCSo6NSData5errorGVSs33AutoreleasingUnsafeMutablePointerGSqCSo7NSError___GSqGVSs10DictionarySSPSs9AnyObject___">
-                    <a name="//apple_ref/swift/Method/parseTokenExchangeResponse(_:error:)" class="dashAnchor"></a>
-                    <a class="x-instance-method Swift" href="#/s:FC6OAuth223OAuth2CodeGrantFacebook26parseTokenExchangeResponseFS0_FTCSo6NSData5errorGVSs33AutoreleasingUnsafeMutablePointerGSqCSo7NSError___GSqGVSs10DictionarySSPSs9AnyObject___">parseTokenExchangeResponse(_:error:)</a>
+                    <a name="/s:vE6OAuth2SS23wwwFormURLEncodedStringSS">
+                    <a name="//apple_ref/swift/Property/wwwFormURLEncodedString" class="dashAnchor"></a>
+                    <a class="x-instance-method Swift" href="#/s:vE6OAuth2SS23wwwFormURLEncodedStringSS">wwwFormURLEncodedString</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -137,14 +137,14 @@
                     <section class="section instance-method">
                       <div class="pointy-thing"></div>
                       <div class="abstract">
-                        <p class="para">Facebook doesn&rsquo;t return JSON but a plain URL-query-like string. This override takes care of the situation and extracts the token from the response.</p>
+                        <p class="para">Encodes a string to become x-www-form-urlencoded; the space is encoded as plus sign (+).</p>
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
             
                         <div class="Swift">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">override</span> <span class="kd">func</span> <span class="nf">parseTokenExchangeResponse</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="kt">NSData</span><span class="p">,</span> <span class="nv">error</span><span class="p">:</span> <span class="kt">NSErrorPointer</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">OAuth2JSON</span><span class="p">?</span></code></pre>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">wwwFormURLEncodedString</span><span class="p">:</span> <span class="kt">String</span></code></pre>
 
                         </div>
                       </div>
