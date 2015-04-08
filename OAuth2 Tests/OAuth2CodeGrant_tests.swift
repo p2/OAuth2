@@ -54,7 +54,7 @@ class OAuth2CodeGrantTests: XCTestCase
 		XCTAssertNotNil(oauth.authURL, "Must init `authorize_uri`")
 		let comp = NSURLComponents(URL: oauth.authorizeURLWithRedirect("oauth2://callback", scope: nil, params: nil), resolvingAgainstBaseURL: true)!
 		XCTAssertEqual(comp.host!, "auth.ful.io", "Correct host")
-		let query = OAuth2CodeGrant.paramsFromQuery(comp.query!)
+		let query = OAuth2CodeGrant.paramsFromQuery(comp.percentEncodedQuery!)
 		XCTAssertEqual(query["client_id"]!, "abc", "Expecting correct `client_id`")
 		XCTAssertNil(query["client_secret"], "Must not have `client_secret`")
 		XCTAssertEqual(query["response_type"]!, "code", "Expecting correct `response_type`")
@@ -76,7 +76,7 @@ class OAuth2CodeGrantTests: XCTestCase
 		let comp = NSURLComponents(URL: oauth.tokenURLWithRedirect("oauth2://callback", code: "pp", params: nil), resolvingAgainstBaseURL: true)!
 		XCTAssertEqual(comp.host!, "token.ful.io", "Correct host")
 		
-		let query = OAuth2CodeGrant.paramsFromQuery(comp.query!)
+		let query = OAuth2CodeGrant.paramsFromQuery(comp.percentEncodedQuery!)
 		XCTAssertEqual(query["client_id"]!, "abc", "Expecting correct `client_id`")
 		XCTAssertEqual(query["client_secret"]!, "xyz", "Expecting correct `client_secret`")
 		XCTAssertEqual(query["code"]!, "pp", "Expecting correct `code`")
@@ -112,7 +112,7 @@ class OAuth2CodeGrantTests: XCTestCase
 		XCTAssertEqual(query["client_secret"]!, "xyz", "Expecting correct `client_secret`")
 		XCTAssertEqual(query["code"]!, "pp", "Expecting correct `code`")
 		XCTAssertEqual(query["grant_type"]!, "authorization_code", "Expecting correct `grant_type`")
-		XCTAssertEqual(query["redirect_uri"]!, "oauth2%3A%2F%2Fcallback", "Expecting correct `redirect_uri`")
+		XCTAssertEqual(query["redirect_uri"]!, "oauth2://callback", "Expecting correct `redirect_uri`")
 		XCTAssertTrue(8 == countElements(query["state"]!), "Expecting an auto-generated UUID for `state`")
 	}
 

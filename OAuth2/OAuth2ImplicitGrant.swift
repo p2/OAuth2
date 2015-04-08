@@ -38,7 +38,7 @@ public class OAuth2ImplicitGrant: OAuth2
 		
 		// token should be in the URL fragment
 		if nil != comp && nil != comp!.fragment && countElements(comp!.fragment!) > 0 {
-			let params = OAuth2ImplicitGrant.paramsFromQuery(comp!.fragment!)
+			let params = OAuth2ImplicitGrant.paramsFromQuery(comp!.percentEncodedFragment!)
 			if let token = params["access_token"] {
 				if let tokType = params["token_type"] {
 					if "bearer" == tokType.lowercaseString {

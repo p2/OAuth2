@@ -193,7 +193,7 @@ public class OAuth2CodeGrant: OAuth2
 		
 		let comp = NSURLComponents(URL: redirect, resolvingAgainstBaseURL: true)
 		if nil != comp && nil != comp!.query && countElements(comp!.query!) > 0 {
-			let query = OAuth2CodeGrant.paramsFromQuery(comp!.query!)
+			let query = OAuth2CodeGrant.paramsFromQuery(comp!.percentEncodedQuery!)
 			if let cd = query["code"] {
 				
 				// we got a code, use it if state is correct (and reset state)

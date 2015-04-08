@@ -41,6 +41,12 @@ extension String
 		let characterSet = String.wwwFormURLPlusSpaceCharacterSet
 		return (stringByAddingPercentEncodingWithAllowedCharacters(characterSet) ?? "").stringByReplacingOccurrencesOfString(" ", withString: "+")
 	}
+	
+	/// Decodes a percent-encoded string and converts the plus sign into a space.
+	var wwwFormURLDecodedString: String {
+		let rep = stringByReplacingOccurrencesOfString("+", withString: " ")
+		return rep.stringByRemovingPercentEncoding ?? rep
+	}
 }
 
 

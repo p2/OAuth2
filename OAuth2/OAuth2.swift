@@ -294,6 +294,9 @@ public class OAuth2
 	
 	/**
 		Create a query string from a dictionary of string: string pairs.
+	
+		This method does **form encode** the value part. If you're using NSURLComponents you want to assign the return
+		value to `percentEncodedQuery`, NOT `query` as this would double-encode the value.
 	 */
 	public class func queryStringFor(params: [String: String]) -> String {
 		var arr: [String] = []
@@ -305,6 +308,9 @@ public class OAuth2
 	
 	/**
 		Parse a query string into a dictionary of string: string pairs.
+	
+		If you're retrieving a query or fragment from NSURLComponents, use the `percentEncoded##` variant as the others
+		automatically perform percent decoding, potentially messing with your query string.
 	 */
 	public class func paramsFromQuery(query: String) -> [String: String] {
 		let parts = split(query) { $0 == "&" }
@@ -312,7 +318,7 @@ public class OAuth2
 		for part in parts {
 			let subparts = split(part) { $0 == "=" }
 			if 2 == subparts.count {
-				params[subparts[0]] = subparts[1]
+				params[subparts[0]] = subparts[1].wwwFormURLDecodedString
 			}
 		}
 		
