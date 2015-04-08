@@ -198,7 +198,7 @@ public class OAuth2
 		}
 		
 		
-		// compose the URL
+		// compose the URL query component
 		let comp = NSURLComponents(URL: base, resolvingAgainstBaseURL: true)
 		assert(nil != comp && "https" == comp!.scheme, "You MUST use HTTPS")
 		
@@ -217,7 +217,7 @@ public class OAuth2
 			urlParams["response_type"] = responseType!
 		}
 		
-		comp!.query = OAuth2.queryStringFor(urlParams)
+		comp!.percentEncodedQuery = OAuth2.queryStringFor(urlParams)
 		
 		let final = comp!.URL
 		if nil == final {
@@ -297,17 +297,23 @@ public class OAuth2
 	
 	/**
 		Create a query string from a dictionary of string: string pairs.
+	
+		This method does **form encode** the value part. If you're using NSURLComponents you want to assign the return
+		value to `percentEncodedQuery`, NOT `query` as this would double-encode the value.
 	 */
 	public class func queryStringFor(params: [String: String]) -> String {
 		var arr: [String] = []
 		for (key, val) in params {
-			arr.append("\(key)=\(val)")						// NSURLComponents will correctly encode the parameter string
+			arr.append("\(key)=\(val.wwwFormURLEncodedString)")
 		}
 		return "&".join(arr)
 	}
 	
 	/**
 		Parse a query string into a dictionary of String: String pairs.
+	
+		If you're retrieving a query or fragment from NSURLComponents, use the `percentEncoded##` variant as the others
+		automatically perform percent decoding, potentially messing with your query string.
 	 */
 	public class func paramsFromQuery(query: String) -> [String: String] {
 		let parts = split(query, maxSplit: .max, allowEmptySlices: false) { $0 == "&" }
@@ -315,7 +321,7 @@ public class OAuth2
 		for part in parts {
 			let subparts = split(part, maxSplit: .max, allowEmptySlices: false) { $0 == "=" }
 			if 2 == subparts.count {
-				params[subparts[0]] = subparts[1]
+				params[subparts[0]] = subparts[1].wwwFormURLDecodedString
 			}
 		}
 		
@@ -334,7 +340,7 @@ public class OAuth2
 		
 		// "error_description" is optional, we prefer it if it's present
 		if let err_msg = params["error_description"] as? String {
-			message = err_msg.stringByReplacingOccurrencesOfString("+", withString: " ")
+			message = err_msg
 		}
 		
 		// the "error" response is required for error responses

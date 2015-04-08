@@ -76,11 +76,11 @@ public class OAuth2CodeGrant: OAuth2
 		
 		This method is public to enable unit testing.
 	 */
-	public func tokenRequest(code: String) -> NSMutableURLRequest {
+	public func tokenRequestWithCode(code: String) -> NSMutableURLRequest {
 		let url = tokenURLWithRedirect(redirect, code: code, params: nil)
 		let comp = NSURLComponents(URL: url, resolvingAgainstBaseURL: true)
 		assert(comp != nil, "It seems NSURLComponents cannot parse \(url)");
-		let body = comp!.query
+		let body = comp!.percentEncodedQuery
 		comp!.query = nil
 		
 		let req = NSMutableURLRequest(URL: comp!.URL!)
@@ -119,7 +119,7 @@ public class OAuth2CodeGrant: OAuth2
 			return;
 		}
 		
-		let post = tokenRequest(code)
+		let post = tokenRequestWithCode(code)
 		logIfVerbose("Exchanging code \(code) with redirect \(redirect!) for token at \(post.URL?.description)")
 		
 		// perform the exchange
@@ -188,7 +188,7 @@ public class OAuth2CodeGrant: OAuth2
 		
 		let comp = NSURLComponents(URL: redirect, resolvingAgainstBaseURL: true)
 		if let compQuery = comp?.query where count(compQuery) > 0 {
-			let query = OAuth2CodeGrant.paramsFromQuery(comp!.query!)
+			let query = OAuth2CodeGrant.paramsFromQuery(comp!.percentEncodedQuery!)
 			if let cd = query["code"] {
 				
 				// we got a code, use it if state is correct (and reset state)

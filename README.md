@@ -3,6 +3,9 @@ OAuth2
 
 OAuth2 frameworks for **OS X** and **iOS** written in Swift.
 
+Technical documentation is available at [p2.github.io/OAuth2](https://p2.github.io/OAuth2).
+Take a look at the [OS X sample app](https://github.com/p2/OAuth2App) for basic usage of this framework.
+
 The code in this repo requires Xcode 6, the built framework can be used on **OS X 10.9** or **iOS 8** and later.
 To use on **iOS 7** you'll have to include the source files in your main project.
 _Note_ that it's possible to run embedded frameworks in iOS 7 with some tricks, however you will not be able to submit such an App to the App Store.
@@ -11,14 +14,22 @@ Supported OAuth2 [flows](#flows) are the _code grant_ (`response_type=code`) and
 Since the Swift language is constantly evolving I am [adding tags](https://github.com/p2/OAuth2/releases) that mark which revision should work with which Swift version.
 Brand new Swift releases are likely to be found on the `develop` branch.
 
-Technical documentation is available at [p2.github.io/OAuth2](https://p2.github.io/OAuth2).
-Take a look at the [OS X sample app](https://github.com/p2/OAuth2App) for basic usage of this framework.
-
 
 Installation
 ------------
 
-Currently the best way to obtain the framework is via git.
+You can use use git or CocoaPods to install the framework.
+
+#### CocoaPods
+
+Add a `Podfile` that contains at least the following information to the root of your app project, then do `pod install`.
+If you're unfamiliar with CocoaPods, read [using CocoaPods](http://guides.cocoapods.org/using/using-cocoapods.html).
+
+```ruby
+platform :ios, '8.0'      # or platform :osx, '10.9'
+pod 'p2.OAuth2'
+use_frameworks!
+```
 
 #### git
 
@@ -47,8 +58,11 @@ These three steps are needed to:
 > Also make sure you select the framework for the platform (OS X vs. iOS).
 > This is currently a bit tricky since Xcode shows both as _OAuth2.framework_; I've filed a bug report with Apple so that it also shows the target name, fingers crossed.
 
+
 Usage
 -----
+
+To use OAuth2 in your own code, start by importing it with `import OAuth2` (use `p2_OAuth2` if you installed via CocoaPods) in your source files.
 
 For a typical code grant flow you want to perform the following steps.
 The steps for other flows are mostly the same short of instantiating a different subclass and using different client settings.
@@ -139,7 +153,7 @@ If you need to provide additional parameters to the authorize URL take a look at
 Flows
 -----
 
-Based on which OAuth2 flow that you need to use you will want to use the correct subclass.
+Based on which OAuth2 flow that you need you will want to use the correct subclass.
 For a very nice explanation of OAuth's basics: [The OAuth Bible](http://oauthbible.com/#oauth-2-three-legged).
 
 #### Code Grant
@@ -186,19 +200,5 @@ Fun times.
 License
 -------
 
-This code is released under the _Apache 2.0 license_, which means that you can use it in open as well as closed source projects.
+This code is released under the [_Apache 2.0 license_](LICENSE.txt), which means that you can use it in open as well as closed source projects.
 Since there is no `NOTICE` file there is nothing that you have to include in your product.
-
-> Copyright 2015 Pascal Pfiffner
-> 
-> Licensed under the Apache License, Version 2.0 (the "License");
-> you may not use this file except in compliance with the License.
-> You may obtain a copy of the License at
-> 
->   [http://www.apache.org/licenses/LICENSE-2.0]()
-> 
-> Unless required by applicable law or agreed to in writing, software
-> distributed under the License is distributed on an "AS IS" BASIS,
-> WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-> See the License for the specific language governing permissions and
-> limitations under the License.
