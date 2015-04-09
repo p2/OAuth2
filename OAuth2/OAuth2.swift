@@ -121,6 +121,9 @@ public class OAuth2
 		if let secret = settings["client_secret"] as? String {
 			clientSecret = secret
 		}
+		else {
+			clientSecret = nil
+		}
 		
 		if let auth = settings["authorize_uri"] as? String {
 			authURL = NSURL(string: auth)
@@ -307,16 +310,16 @@ public class OAuth2
 	}
 	
 	/**
-		Parse a query string into a dictionary of string: string pairs.
+		Parse a query string into a dictionary of String: String pairs.
 	
 		If you're retrieving a query or fragment from NSURLComponents, use the `percentEncoded##` variant as the others
 		automatically perform percent decoding, potentially messing with your query string.
 	 */
 	public class func paramsFromQuery(query: String) -> [String: String] {
-		let parts = split(query) { $0 == "&" }
-		var params: [String: String] = Dictionary(minimumCapacity: parts.count)
+		let parts = split(query, maxSplit: .max, allowEmptySlices: false) { $0 == "&" }
+		var params = [String: String](minimumCapacity: parts.count)
 		for part in parts {
-			let subparts = split(part) { $0 == "=" }
+			let subparts = split(part, maxSplit: .max, allowEmptySlices: false) { $0 == "=" }
 			if 2 == subparts.count {
 				params[subparts[0]] = subparts[1].wwwFormURLDecodedString
 			}
@@ -337,7 +340,7 @@ public class OAuth2
 		
 		// "error_description" is optional, we prefer it if it's present
 		if let err_msg = params["error_description"] as? String {
-			message = err_msg.stringByReplacingOccurrencesOfString("+", withString: " ")
+			message = err_msg
 		}
 		
 		// the "error" response is required for error responses

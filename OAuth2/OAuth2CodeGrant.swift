@@ -41,6 +41,9 @@ public class OAuth2CodeGrant: OAuth2
 		if let token = settings["token_uri"] as? String {
 			tokenURL = NSURL(string: token)
 		}
+		else {
+			tokenURL = nil
+		}
 		
 		super.init(settings: settings)
 	}
@@ -73,7 +76,7 @@ public class OAuth2CodeGrant: OAuth2
 		
 		This method is public to enable unit testing.
 	 */
-	public func tokenRequest(code: String) -> NSMutableURLRequest {
+	public func tokenRequestWithCode(code: String) -> NSMutableURLRequest {
 		let url = tokenURLWithRedirect(redirect, code: code, params: nil)
 		let comp = NSURLComponents(URL: url, resolvingAgainstBaseURL: true)
 		assert(comp != nil, "It seems NSURLComponents cannot parse \(url)");
@@ -116,41 +119,33 @@ public class OAuth2CodeGrant: OAuth2
 			return;
 		}
 		
-		let post = tokenRequest(code)
+		let post = tokenRequestWithCode(code)
 		logIfVerbose("Exchanging code \(code) with redirect \(redirect!) for token at \(post.URL?.description)")
 		
 		// perform the exchange
 		let session = NSURLSession.sharedSession()
-		let task = session.dataTaskWithRequest(post) { data, response, error in
+		let task = session.dataTaskWithRequest(post) { sessData, sessResponse, error in
 			var finalError: NSError?
 			
 			if nil != error {
 				finalError = error
 			}
-			else if nil != response && nil != data {
-				if let http = response as? NSHTTPURLResponse {
+			else if let data = sessData, let http = sessResponse as? NSHTTPURLResponse {
+				if let json = self.parseTokenExchangeResponse(data, error: &finalError) {
 					if 200 == http.statusCode {
-						if let json = self.parseTokenExchangeResponse(data, error: &finalError) {
-							self.logIfVerbose("Did receive access token: \(self.accessToken), refresh token: \(self.refreshToken)")
-							self.didAuthorize(json)
-							return
-						}
+						self.logIfVerbose("Did receive access token: \(self.accessToken), refresh token: \(self.refreshToken)")
+						self.didAuthorize(json)
+						return
 					}
-					else {
-						if let json = self.parseTokenExchangeResponse(data, error: nil) {
-							let desc = json["error_description"] as? String ?? json["error"] as? String
-							finalError = genOAuth2Error(desc ?? http.statusString, .AuthorizationError)
-						}
-						else {
-							finalError = genOAuth2Error(http.statusString, .AuthorizationError)
-						}
-					}
+					
+					let desc = (json["error_description"] ?? json["error"]) as? String
+					finalError = genOAuth2Error(desc ?? http.statusString, .AuthorizationError)
 				}
 			}
 			
 			// if we're still here an error must have happened
 			if nil == finalError {
-				finalError = genOAuth2Error("Unknown connection error for response \(response) with data \(data)", .NetworkError)
+				finalError = genOAuth2Error("Unknown connection error for response \(sessResponse) with data \(sessData)", .NetworkError)
 			}
 			
 			self.didFail(finalError)
@@ -192,22 +187,17 @@ public class OAuth2CodeGrant: OAuth2
 		var error: NSError?
 		
 		let comp = NSURLComponents(URL: redirect, resolvingAgainstBaseURL: true)
-		if nil != comp && nil != comp!.query && countElements(comp!.query!) > 0 {
+		if let compQuery = comp?.query where count(compQuery) > 0 {
 			let query = OAuth2CodeGrant.paramsFromQuery(comp!.percentEncodedQuery!)
 			if let cd = query["code"] {
 				
 				// we got a code, use it if state is correct (and reset state)
-				if let st = query["state"] {
-					if st == state {
-						code = cd
-						state = ""
-					}
-					else {
-						error = genOAuth2Error("Invalid state \(st), will not use the code", .InvalidState)
-					}
+				if let st = query["state"] where st == state {
+					code = cd
+					state = ""
 				}
 				else {
-					error = genOAuth2Error("No state was returned", .InvalidState)
+					error = genOAuth2Error("Invalid state, will not use the code", .InvalidState)
 				}
 			}
 			else {
