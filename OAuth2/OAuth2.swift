@@ -73,10 +73,10 @@ public class OAuth2
 	public var accessTokenExpiry: NSDate?
 	
 	/** Closure called on successful authentication on the main thread. */
-	public var onAuthorize: ((parameters: OAuth2JSON) -> Void)?
+	public final var onAuthorize: ((parameters: OAuth2JSON) -> Void)?
 	
 	/** When authorization fails (if error is not nil) or is cancelled, this block is executed on the main thread. */
-	public var onFailure: ((error: NSError?) -> Void)?
+	public final var onFailure: ((error: NSError?) -> Void)?
 	
 	/**
 		Closure called after onAuthorize OR onFailure, on the main thread; useful for cleanup operations.
@@ -85,7 +85,7 @@ public class OAuth2
 		:param: error NSError describing the reason for failure, as supplied to the `onFailure` callback. If it is nil
 		        and wasFailure is true, the process was aborted.
 	 */
-	public var afterAuthorizeOrFailure: ((wasFailure: Bool, error: NSError?) -> Void)?
+	public final var afterAuthorizeOrFailure: ((wasFailure: Bool, error: NSError?) -> Void)?
 	
 	/** An optional title that will propagate to views handled by OAuth2, such as OAuth2WebViewController. */
 	public var viewTitle: String?
@@ -301,7 +301,7 @@ public class OAuth2
 		This method does **form encode** the value part. If you're using NSURLComponents you want to assign the return
 		value to `percentEncodedQuery`, NOT `query` as this would double-encode the value.
 	 */
-	public class func queryStringFor(params: [String: String]) -> String {
+	public final class func queryStringFor(params: [String: String]) -> String {
 		var arr: [String] = []
 		for (key, val) in params {
 			arr.append("\(key)=\(val.wwwFormURLEncodedString)")
@@ -315,7 +315,7 @@ public class OAuth2
 		If you're retrieving a query or fragment from NSURLComponents, use the `percentEncoded##` variant as the others
 		automatically perform percent decoding, potentially messing with your query string.
 	 */
-	public class func paramsFromQuery(query: String) -> [String: String] {
+	public final class func paramsFromQuery(query: String) -> [String: String] {
 		let parts = split(query, maxSplit: .max, allowEmptySlices: false) { $0 == "&" }
 		var params = [String: String](minimumCapacity: parts.count)
 		for part in parts {
