@@ -134,10 +134,13 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 	var onWillDismiss: ((didCancel: Bool) -> Void)?
 	
 	var cancelButton: UIBarButtonItem?
+	
+	/// Our web view; implicitly unwrapped so do not attempt to use it unless isViewLoaded() returns true.
 	var webView: UIWebView!
+	
 	var loadingView: UIView?
 	
-	override init() {
+	init() {
 		super.init(nibName: nil, bundle: nil)
 	}
 	
@@ -165,8 +168,8 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 		webView.scrollView.decelerationRate = UIScrollViewDecelerationRateNormal
 		webView.delegate = self
 		
-		view.addSubview(webView!)
-		let views = NSDictionary(object: webView, forKey: "web")		// doesn't like ["web": webView!]
+		view.addSubview(webView)
+		let views = ["web": webView]
 		view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[web]|", options: nil, metrics: nil, views: views))
 		view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[web]|", options: nil, metrics: nil, views: views))
 	}
@@ -231,38 +234,41 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 		if nil != self.onWillDismiss {
 			self.onWillDismiss!(didCancel: asCancel)
 		}
-		presentingViewController?.dismissViewControllerAnimated(animated, nil)
+		presentingViewController?.dismissViewControllerAnimated(animated, completion: nil)
 	}
 	
 	
 	// MARK: - Web View Delegate
 	
-	public func webView(webView: UIWebView!, shouldStartLoadWithRequest request: NSURLRequest!, navigationType: UIWebViewNavigationType) -> Bool {
+	public func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
+		if nil == onIntercept {
+			return true
+		}
 		
 		// we compare the scheme and host first, then check the path (if there is any). Not sure if a simple string comparison
 		// would work as there may be URL parameters attached
-		if nil != onIntercept && request.URL.scheme == interceptComponents?.scheme && request.URL.host == interceptComponents?.host {
-			let haveComponents = NSURLComponents(URL: request.URL, resolvingAgainstBaseURL: true)
+		if let url = request.URL where url.scheme == interceptComponents?.scheme && url.host == interceptComponents?.host {
+			let haveComponents = NSURLComponents(URL: url, resolvingAgainstBaseURL: true)
 			if haveComponents?.path == interceptComponents?.path {
-				return !onIntercept!(url: request.URL)
+				return !onIntercept!(url: url)
 			}
 		}
 		
 		return true
 	}
 	
-	public func webViewDidStartLoad(webView: UIWebView!) {
-		if "file" != webView.request?.URL.scheme {
+	public func webViewDidStartLoad(webView: UIWebView) {
+		if "file" != webView.request?.URL?.scheme {
 			showLoadingIndicator()
 		}
 	}
 	
-	public func webViewDidFinishLoad(webView: UIWebView!) {
+	public func webViewDidFinishLoad(webView: UIWebView) {
 		hideLoadingIndicator()
 		showHideBackButton(webView.canGoBack)
 	}
 	
-	public func webView(webView: UIWebView!, didFailLoadWithError error: NSError!) {
+	public func webView(webView: UIWebView, didFailLoadWithError error: NSError) {
 		if NSURLErrorDomain == error.domain && NSURLErrorCancelled == error.code {
 			return
 		}
