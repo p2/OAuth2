@@ -120,7 +120,9 @@ public class OAuth2
 		
 		if let secret = settings["client_secret"] as? String {
 			clientSecret = secret
-		}
+        } else {
+            clientSecret = nil
+        }
 		
 		if let auth = settings["authorize_uri"] as? String {
 			authURL = NSURL(string: auth)

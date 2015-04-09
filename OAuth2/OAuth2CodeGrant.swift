@@ -40,7 +40,9 @@ public class OAuth2CodeGrant: OAuth2
 	public override init(settings: OAuth2JSON) {
 		if let token = settings["token_uri"] as? String {
 			tokenURL = NSURL(string: token)
-		}
+        } else {
+            tokenURL = nil
+        }
 		
 		super.init(settings: settings)
 	}
@@ -192,7 +194,7 @@ public class OAuth2CodeGrant: OAuth2
 		var error: NSError?
 		
 		let comp = NSURLComponents(URL: redirect, resolvingAgainstBaseURL: true)
-		if nil != comp && nil != comp!.query && countElements(comp!.query!) > 0 {
+		if nil != comp && nil != comp!.query && count(comp!.query!) > 0 {
 			let query = OAuth2CodeGrant.paramsFromQuery(comp!.percentEncodedQuery!)
 			if let cd = query["code"] {
 				
