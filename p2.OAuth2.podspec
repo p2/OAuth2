@@ -7,7 +7,7 @@
 
 Pod::Spec.new do |s|
   s.name         = "p2.OAuth2"
-  s.version      = "1.2.0"
+  s.version      = "1.2.1"
   s.summary      = "OAuth2 framework for OS X and iOS, written in Swift."
   s.description  = <<-DESC
                    OAuth2 frameworks for OS X and iOS written in Swift.
@@ -22,7 +22,7 @@ Pod::Spec.new do |s|
   s.homepage     = "https://github.com/p2/OAuth2"
   s.license      = "Apache 2"
   s.author       = { "Pascal Pfiffner" => "phase.of.matter@gmail.com" }
-  s.source       = { :git => "https://github.com/p2/OAuth2.git", :tag => "1.2.0" }
+  s.source       = { :git => "https://github.com/p2/OAuth2.git", :tag => "1.2.1" }
 
   s.ios.deployment_target = "8.0"
   s.osx.deployment_target = "10.9"

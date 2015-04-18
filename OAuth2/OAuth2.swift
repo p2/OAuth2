@@ -173,7 +173,7 @@ public class OAuth2
 		                     the query part
 		:returns: NSURL to be used to start the OAuth dance
 	 */
-	public func authorizeURL(base: NSURL, var redirect: String?, scope: String?, responseType: String?, params: [String: String]?) -> NSURL {
+	public func authorizeURLWithBase(base: NSURL, redirect: String?, scope: String?, responseType: String?, params: [String: String]?) -> NSURL {
 		
 		// verify that we have all parts
 		if clientId.isEmpty {
@@ -231,10 +231,11 @@ public class OAuth2
 	/**
 		Most convenient method if you want the authorize URL to be created as defined in your settings dictionary.
 	
+		:param: params Optional, additional URL params to supply to the request
 		:returns: NSURL to be used to start the OAuth dance
 	 */
-	public func authorizeURL() -> NSURL {
-		return authorizeURLWithRedirect(nil, scope: nil, params: nil)
+	public func authorizeURL(params: [String: String]? = nil) -> NSURL {
+		return authorizeURLWithRedirect(nil, scope: nil, params: params)
 	}
 	
 	/**
@@ -332,10 +333,11 @@ public class OAuth2
 		Handles access token error response.
 	
 		:param: params The URL parameters passed into the redirect URL upon error
+		:param: fallback The message string to use in case no error description is found in the parameters
 		:returns: An NSError instance with the "best" localized error key and all parameters in the userInfo dictionary;
 		          domain "OAuth2ErrorDomain", code 600
 	 */
-	class func errorForAccessTokenErrorResponse(params: OAuth2JSON) -> NSError {
+	func errorForAccessTokenErrorResponse(params: OAuth2JSON, fallback: String? = nil) -> NSError {
 		var message = ""
 		
 		// "error_description" is optional, we prefer it if it's present
@@ -369,12 +371,10 @@ public class OAuth2
 		
 		// still unknown, oh well
 		if message.isEmpty {
-			message = "Unknown error."
+			message = fallback ?? "Unknown error."
 		}
 		
-		var prms = params
-		prms[NSLocalizedDescriptionKey] = message
-		return NSError(domain: OAuth2ErrorDomain, code: OAuth2Error.AuthorizationError.rawValue, userInfo: prms)
+		return genOAuth2Error(message, .AuthorizationError)
 	}
 	
 	/**

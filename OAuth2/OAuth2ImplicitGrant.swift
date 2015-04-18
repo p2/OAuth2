@@ -27,7 +27,7 @@ import Foundation
 public class OAuth2ImplicitGrant: OAuth2
 {
 	public override func authorizeURLWithRedirect(redirect: String?, scope: String?, params: [String: String]?) -> NSURL {
-		return authorizeURL(authURL!, redirect: redirect, scope: scope, responseType: "token", params: params)
+		return authorizeURLWithBase(authURL!, redirect: redirect, scope: scope, responseType: "token", params: params)
 	}
 	
 	public override func handleRedirectURL(redirect: NSURL) {
@@ -71,7 +71,7 @@ public class OAuth2ImplicitGrant: OAuth2
 				}
 			}
 			else {
-				error = OAuth2ImplicitGrant.errorForAccessTokenErrorResponse(params)
+				error = errorForAccessTokenErrorResponse(params)
 			}
 		}
 		else {
