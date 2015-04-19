@@ -29,5 +29,6 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   
   s.source_files = "OAuth2/*"
-  s.ios.source_files = "OAuth2-iOS/*"
+  s.ios.source_files = "OAuth2+iOS/*"
+  s.osx.source_files = "OAuth2+OSX/*"
 end

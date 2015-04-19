@@ -25,6 +25,8 @@
 		EEACE1DF1A7E8FC1009BF3A7 /* OAuth2CodeGrantFacebook.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEACE1DE1A7E8FC1009BF3A7 /* OAuth2CodeGrantFacebook.swift */; };
 		EEACE1E01A7E8FC5009BF3A7 /* OAuth2CodeGrantFacebook.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEACE1DE1A7E8FC1009BF3A7 /* OAuth2CodeGrantFacebook.swift */; };
 		EEBA36AC1A8D030F00CF4230 /* OAuth2ImplicitGrant_tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEBA36AB1A8D030F00CF4230 /* OAuth2ImplicitGrant_tests.swift */; };
+		EEC7A8C71AE46C33008C30E7 /* OAuth2+OSX.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC7A8C61AE46C33008C30E7 /* OAuth2+OSX.swift */; };
+		EEC7A8C91AE47111008C30E7 /* OAuth2+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC7A8C81AE47111008C30E7 /* OAuth2+iOS.swift */; };
 		EEDB862A193FAAE500C4EEA1 /* OAuth2.h in Headers */ = {isa = PBXBuildFile; fileRef = EEDB8629193FAAE500C4EEA1 /* OAuth2.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EEE209A719427DFE00736F1A /* OAuth2_tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEE209A619427DFE00736F1A /* OAuth2_tests.swift */; };
 		EEE209A819427DFE00736F1A /* OAuth2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EEE209471942772800736F1A /* OAuth2.framework */; };
@@ -87,6 +89,8 @@
 		EE450CD31AD57578008AB6FC /* p2.OAuth2.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = p2.OAuth2.podspec; sourceTree = SOURCE_ROOT; };
 		EEACE1DE1A7E8FC1009BF3A7 /* OAuth2CodeGrantFacebook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2CodeGrantFacebook.swift; sourceTree = "<group>"; };
 		EEBA36AB1A8D030F00CF4230 /* OAuth2ImplicitGrant_tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2ImplicitGrant_tests.swift; sourceTree = "<group>"; };
+		EEC7A8C61AE46C33008C30E7 /* OAuth2+OSX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "OAuth2+OSX.swift"; sourceTree = "<group>"; };
+		EEC7A8C81AE47111008C30E7 /* OAuth2+iOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "OAuth2+iOS.swift"; sourceTree = "<group>"; };
 		EEDB8624193FAAE500C4EEA1 /* OAuth2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OAuth2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EEDB8629193FAAE500C4EEA1 /* OAuth2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAuth2.h; sourceTree = "<group>"; };
 		EEDB8640193FAB9200C4EEA1 /* OAuth2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2.swift; sourceTree = "<group>"; };
@@ -124,12 +128,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		EE2486281AC85DD4002B31AF /* OAuth2-iOS */ = {
+		EE2486281AC85DD4002B31AF /* OAuth2+iOS */ = {
 			isa = PBXGroup;
 			children = (
+				EEC7A8C81AE47111008C30E7 /* OAuth2+iOS.swift */,
 				EE2486291AC85DD4002B31AF /* OAuth2WebViewController.swift */,
 			);
-			path = "OAuth2-iOS";
+			path = "OAuth2+iOS";
+			sourceTree = "<group>";
+		};
+		EEC7A8C51AE46C33008C30E7 /* OAuth2+OSX */ = {
+			isa = PBXGroup;
+			children = (
+				EEC7A8C61AE46C33008C30E7 /* OAuth2+OSX.swift */,
+			);
+			path = "OAuth2+OSX";
 			sourceTree = "<group>";
 		};
 		EEDB861A193FAAE500C4EEA1 = {
@@ -138,7 +151,8 @@
 				EE29EABE195B0813008882C8 /* README.md */,
 				EE3428A119A4F9D000376265 /* OSX.playground */,
 				EEDB8626193FAAE500C4EEA1 /* OAuth2 */,
-				EE2486281AC85DD4002B31AF /* OAuth2-iOS */,
+				EE2486281AC85DD4002B31AF /* OAuth2+iOS */,
+				EEC7A8C51AE46C33008C30E7 /* OAuth2+OSX */,
 				EEE209A319427DFE00736F1A /* OAuth2 Tests */,
 				EEDB8625193FAAE500C4EEA1 /* Products */,
 			);
@@ -348,6 +362,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EEC7A8C91AE47111008C30E7 /* OAuth2+iOS.swift in Sources */,
 				EEACE1DD1A7E8DF7009BF3A7 /* extensions.swift in Sources */,
 				EEACE1D51A7E8DE8009BF3A7 /* OAuth2.swift in Sources */,
 				EEACE1DB1A7E8DF1009BF3A7 /* OAuth2Request.swift in Sources */,
@@ -364,6 +379,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EEACE1DC1A7E8DF6009BF3A7 /* extensions.swift in Sources */,
+				EEC7A8C71AE46C33008C30E7 /* OAuth2+OSX.swift in Sources */,
 				EEACE1D41A7E8DE8009BF3A7 /* OAuth2.swift in Sources */,
 				EEACE1DA1A7E8DF1009BF3A7 /* OAuth2Request.swift in Sources */,
 				EEACE1D61A7E8DEB009BF3A7 /* OAuth2ImplicitGrant.swift in Sources */,

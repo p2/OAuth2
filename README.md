@@ -4,7 +4,7 @@ OAuth2
 OAuth2 frameworks for **OS X** and **iOS** written in Swift.
 
 Technical documentation is available at [p2.github.io/OAuth2](https://p2.github.io/OAuth2).
-Take a look at the [OS X sample app](https://github.com/p2/OAuth2App) for basic usage of this framework.
+Take a look at the [OS X sample app][sample] for basic usage of this framework.
 
 The code in this repo requires Xcode 6, the built framework can be used on **OS X 10.9** or **iOS 8** and later.
 To use on **iOS 7** you'll have to include the source files in your main project.
@@ -18,7 +18,7 @@ Brand new Swift releases are likely to be found on the `develop` branch.
 Installation
 ------------
 
-You can use use git or CocoaPods to install the framework.
+You can use git or CocoaPods to install the framework.
 
 #### CocoaPods
 
@@ -98,7 +98,7 @@ If you need to provide additional parameters to the authorize URL take a look at
 
 3. Now either use the built-in web view controller or manually open the _authorize URL_ in the browser:
     
-    **Embedded (iOS)**:
+    **Embedded (iOS only)**:
     
     ```swift
     let vc = <# presenting view controller #>
@@ -108,15 +108,18 @@ If you need to provide additional parameters to the authorize URL take a look at
     }
     ```
     
-    **iOS browser**:
+    **iOS/OS X browser**:
     
     ```swift
-    let url = oauth.authorizeURL()
-    UIApplication.sharedApplication().openURL(url)
+    if !oauth2.openAuthorizeURLInBrowser() {
+        fatalError("Cannot open authorize URL")
+    }
     ```
     
     Since you opened the authorize URL in the browser you will need to intercept the callback in your app delegate.
     Let the OAuth2 instance handle the full URL:
+    
+    **iOS**
     
     ```swift
     func application(application: UIApplication!,
@@ -129,6 +132,10 @@ If you need to provide additional parameters to the authorize URL take a look at
         }
     }
     ```
+    
+    **OS X**
+    
+    See the [OAuth2 Sample App][sample]'s AppDelegate class on how to receive the callback URL in your Mac app.
 
 4. After everything completes either the `onAuthorize` or the `onFailure` closure will be called, and after that the `afterAuthorizeOrFailure` closure if it has been set.
 
@@ -190,7 +197,7 @@ Playground
 
 The idea is to add a Playground to see OAuth2 in use.
 However, it's not currently possible to interact view WebViews inside a playground, which would be needed to login to a demo server.
-Hence I made a [sample OS X App](https://github.com/p2/OAuth2App) that uses the GitHub API do demonstrate how you could use this framework.
+Hence I made a [sample OS X App][sample] that uses the GitHub API do demonstrate how you could use this framework.
 
 There is some stub code in `OSX.playground` if you'd like to tinker.
 It's not working as one needs to open the authorize URL in a browser, then copy-paste the redirect URL from OS X's warning window into the Playground – which makes OAuth2 regenerate its state, making your redirect URL invalid.
@@ -202,3 +209,7 @@ License
 
 This code is released under the [_Apache 2.0 license_](LICENSE.txt), which means that you can use it in open as well as closed source projects.
 Since there is no `NOTICE` file there is nothing that you have to include in your product.
+
+
+[sample]: https://github.com/p2/OAuth2App
+
