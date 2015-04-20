@@ -43,7 +43,7 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 					interceptComponents = NSURLComponents(URL: url, resolvingAgainstBaseURL: true)
 				}
 				else {
-					println("Failed to parse URL \(interceptURLString), discarding")
+					NSLog("Failed to parse URL \(interceptURLString), discarding")
 					interceptURLString = nil
 				}
 			}
@@ -133,7 +133,7 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 	}
 	
 	func showErrorMessage(message: String, animated: Bool) {
-		println("Error: \(message)")
+		NSLog("Error: \(message)")
 	}
 	
 	

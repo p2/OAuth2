@@ -72,6 +72,33 @@ public class OAuth2CodeGrant: OAuth2
 	}
 	
 	
+	// MARK: - Keychain
+	
+	override func updateFromKeychainItems(items: [String: NSCoding]) {
+		super.updateFromKeychainItems(items)
+		
+		if let token = items["refreshToken"] as? String where !token.isEmpty {
+			logIfVerbose("Found refresh token")
+			refreshToken = token
+		}
+	}
+	
+	override func storableKeychainItems() -> [String: NSCoding]? {
+		if var items = super.storableKeychainItems() {
+			if let refresh = refreshToken where !refresh.isEmpty {
+				items["refreshToken"] = refresh
+			}
+			return items
+		}
+		return nil
+	}
+	
+	override public func forgetTokens() {
+		super.forgetTokens()
+		refreshToken = nil
+	}
+	
+	
 	// MARK: - Token Request
 	
 	/**
@@ -263,7 +290,6 @@ public class OAuth2CodeGrant: OAuth2
 	 */
 	func parseRefreshTokenResponse(data: NSData, error: NSErrorPointer) -> OAuth2JSON? {
 		if let json = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: error) as? OAuth2JSON {
-			println("2 Got \(json)")
 			if let access = json["access_token"] as? String {
 				accessToken = access
 			}

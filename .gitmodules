@@ -1,0 +1,3 @@
+[submodule "SwiftKeychain"]
+	path = SwiftKeychain
+	url = https://github.com/p2/SwiftKeychain.git

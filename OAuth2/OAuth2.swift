@@ -23,6 +23,10 @@ import Foundation
 /// The error domain used for errors during the OAuth2 flow.
 let OAuth2ErrorDomain = "OAuth2ErrorDomain"
 
+/// We store the current tokens under this keychain key name.
+let OAuth2KeychainTokenKey = "currentTokens"
+
+
 /**
  *  Errors supplanting NSError codes if no HTTP status code is available (hence >= 600).
  */
@@ -90,6 +94,15 @@ public class OAuth2
 	/** An optional title that will propagate to views handled by OAuth2, such as OAuth2WebViewController. */
 	public var viewTitle: String?
 	
+	/** If set to `true` (the default) will use system keychain to store tokens. Use `"keychain": bool` in settings. */
+	public var useKeychain = true {
+		didSet {
+			if useKeychain {
+				updateFromKeychain()
+			}
+		}
+	}
+	
 	/** Set to `true` to log all the things. `false` by default. Use `"verbose": bool` in settings. */
 	public var verbose = false
 	
@@ -104,7 +117,12 @@ public class OAuth2
 		- token_uri (string), only for code grant
 		- redirect_uris (list of strings)
 		- scope (string)
+	
+		- keychain (bool, applies to using keychain, unrelated to OAuth)
 		- verbose (bool, applies to client logging, unrelated to the actual OAuth exchange)
+	
+		NOTE that you **must** supply at least `client_id` and `authorize_uri` upon authorization. If you forget the
+		former a _fatalError_ will be raised, if you forget the latter `http://localhost` will be used.
 	
 		MITREid: https://github.com/mitreid-connect/
 	 */
@@ -139,11 +157,89 @@ public class OAuth2
 		if let st = settings["state_for_testing"] as? String {
 			state = st
 		}
+		
+		// client settings
+		if let keychain = settings["keychain"] as? Bool {
+			useKeychain = keychain
+		}
 		if let verb = settings["verbose"] as? Bool {
 			verbose = verb
 		}
 		
+		// init from keychain
+		if useKeychain {
+			updateFromKeychain()
+		}
+		
 		logIfVerbose("Initialized with client id \(clientId)")
+	}
+	
+	
+	// MARK: - Keychain Integration
+	
+	/** Queries the keychain for tokens stored for the receiver's authorize URL, and updates the token properties
+		accordingly. */
+	private func updateFromKeychain() {
+		logIfVerbose("Looking for tokens in keychain")
+		
+		let keychain = Keychain(serviceName: authURL.description)
+		let key = ArchiveKey(keyName: OAuth2KeychainTokenKey)
+		if let items = keychain.get(key).item?.object as? [String: NSCoding] {
+			updateFromKeychainItems(items)
+		}
+	}
+	
+	/** Updates the token properties according to the items found in the passed dictionary. */
+	func updateFromKeychainItems(items: [String: NSCoding]) {
+		if let token = items["accessToken"] as? String where !token.isEmpty {
+			if let date = items["accessTokenDate"] as? NSDate where date == date.laterDate(NSDate()) {
+				logIfVerbose("Found access token, valid until \(date)")
+				accessTokenExpiry = date
+				accessToken = token
+			}
+			else {
+				logIfVerbose("Found access token but it seems to have expired")
+			}
+		}
+	}
+	
+	/** Stores our current token(s) in the keychain. */
+	private func storeToKeychain() {
+		if let items = storableKeychainItems() {
+			logIfVerbose("Storing tokens to keychain")
+			
+			let keychain = Keychain(serviceName: authURL.description)
+			let key = ArchiveKey(keyName: OAuth2KeychainTokenKey, object: items)
+			if let error = keychain.update(key) {
+				NSLog("Failed to store tokens to keychain: \(error.localizedDescription)")
+			}
+		}
+	}
+	
+	/** Returns a dictionary of our tokens and expiration date, ready to be stored to the keychain. */
+	func storableKeychainItems() -> [String: NSCoding]? {
+		if let access = accessToken where !access.isEmpty {
+			var items: [String: NSCoding] = ["accessToken": access]
+			
+			if let date = accessTokenExpiry where date == date.laterDate(NSDate()) {
+				items["accessTokenDate"] = date
+			}
+			return items
+		}
+		return nil
+	}
+	
+	/** Unsets the tokens and deletes them from the keychain. */
+	public func forgetTokens() {
+		logIfVerbose("Deleting tokens and removing them from keychain")
+		let keychain = Keychain(serviceName: authURL.description)
+		let key = ArchiveKey(keyName: OAuth2KeychainTokenKey)
+		if let error = keychain.remove(key) {
+			NSLog("Failed to delete tokens from keychain: \(error.localizedDescription)")
+		}
+		
+		accessToken = nil
+		accessTokenExpiry = nil
 	}
 	
 	
@@ -268,6 +364,10 @@ public class OAuth2
 		Internally used on success. Calls the `onAuthorize` and `afterAuthorizeOrFailure` callbacks on the main thread.
 	 */
 	func didAuthorize(parameters: OAuth2JSON) {
+		if useKeychain {
+			storeToKeychain()
+		}
+		
 		callOnMainThread() {
 			self.onAuthorize?(parameters: parameters)
 			self.afterAuthorizeOrFailure?(wasFailure: false, error: nil)

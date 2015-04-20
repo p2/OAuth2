@@ -30,6 +30,7 @@ class OAuth2ImplicitGrantTests: XCTestCase
 		var oauth = OAuth2ImplicitGrant(settings: [
 			"client_id": "abc",
 			"verbose": true,
+			"keychain": false,
 			"authorize_uri": "https://auth.ful.io",
 		])
 		XCTAssertEqual(oauth.clientId, "abc", "Must init `client_id`")
@@ -44,6 +45,7 @@ class OAuth2ImplicitGrantTests: XCTestCase
 			"client_id": "abc",
 			"authorize_uri": "https://auth.ful.io",
 			"state_for_testing": "ONSTUH",
+			"keychain": false,
 		])
 		
 		// Empty URL

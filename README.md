@@ -15,50 +15,6 @@ Since the Swift language is constantly evolving I am [adding tags](https://githu
 Brand new Swift releases are likely to be found on the `develop` branch.
 
 
-Installation
-------------
-
-You can use git or CocoaPods to install the framework.
-
-#### CocoaPods
-
-Add a `Podfile` that contains at least the following information to the root of your app project, then do `pod install`.
-If you're unfamiliar with CocoaPods, read [using CocoaPods](http://guides.cocoapods.org/using/using-cocoapods.html).
-
-```ruby
-platform :ios, '8.0'      # or platform :osx, '10.9'
-pod 'p2.OAuth2'
-use_frameworks!
-```
-
-#### git
-
-Using Terminal.app, clone the OAuth2 repository, best into a subdirectory of your app project:  
-
-    $ cd path/to/your/app
-    $ git clone https://github.com/p2/OAuth2.git
-
-If you're using git you'll want to add it as a submodule.
-Once cloning completes, open your app project in Xcode and add `OAuth2.xcodeproj` to your app:
-
-![Adding to Xcode](assets/step-adding.png)
-
-Now link the framework to your app:
-
-![Linking](assets/step-linking.png)
-
-These three steps are needed to:
-
-1. Make your App also build the framework
-2. Link the framework into your app
-3. Embed the framework in your app when distributing
-
-> NOTE that as of Xcode 6.2, the "embed" step happens in the "General" tab.
-> You may want to perform step 2 and 3 from the "General" tab.
-> Also make sure you select the framework for the platform (OS X vs. iOS).
-> This is currently a bit tricky since Xcode shows both as _OAuth2.framework_; I've filed a bug report with Apple so that it also shows the target name, fingers crossed.
-
-
 Usage
 -----
 
@@ -78,7 +34,8 @@ If you need to provide additional parameters to the authorize URL take a look at
         "token_uri": "https://authorize.smartplatforms.org/token",
         "scope": "profile email",
         "redirect_uris": ["myapp://oauth/callback"],   // don't forget to register this scheme
-    ] as OAuth2JSON      // the "as" part may or may not be needed
+        "keychain": false,  // if you DON'T want keychain integration
+    ] as OAuth2JSON         // the "as" part may or may not be needed
     ```
 
 2. Create an `OAuth2CodeGrant` instance, optionally setting the `onAuthorize` and `onFailure` closures to keep informed about the status.
@@ -190,6 +147,61 @@ The framework deals with those deviations by creating site-specific subclasses.
   
     Note that you **must** specify your client_secret; if there is none (like for [Reddit](https://github.com/reddit/reddit/wiki/OAuth2#token-retrieval-code-flow)) specify the empty string.
     There is a [RedditLoader](https://github.com/p2/OAuth2App/blob/master/OAuth2App/RedditLoader.swift) example in the OAuth2App sample app for a basic usage example.
+
+
+Keychain
+--------
+
+This framework can transparently use the iOS and OS X keychain.
+It is controlled by the `useKeychain` property, which can be disabled during initialization with the "keychain" setting.
+Since this is **enabled by default**, if you do _not_ turn it off during initialization, the keychain will be queried for tokens related to the authorization URL.
+If you turn it off _after_ initialization, the keychain will be queried for existing tokens, but new tokens will not be written to the keychain.
+
+If you want to delete the tokens from keychain, i.e. **log the user out** completely, call `forgetTokens()`.
+
+
+Installation
+------------
+
+You can use git or CocoaPods to install the framework.
+
+#### CocoaPods
+
+Add a `Podfile` that contains at least the following information to the root of your app project, then do `pod install`.
+If you're unfamiliar with CocoaPods, read [using CocoaPods](http://guides.cocoapods.org/using/using-cocoapods.html).
+
+```ruby
+platform :ios, '8.0'      # or platform :osx, '10.9'
+pod 'p2.OAuth2'
+use_frameworks!
+```
+
+#### git
+
+Using Terminal.app, clone the OAuth2 repository, best into a subdirectory of your app project:  
+
+    $ cd path/to/your/app
+    $ git clone https://github.com/p2/OAuth2.git
+
+If you're using git you'll want to add it as a submodule.
+Once cloning completes, open your app project in Xcode and add `OAuth2.xcodeproj` to your app:
+
+![Adding to Xcode](assets/step-adding.png)
+
+Now link the framework to your app:
+
+![Linking](assets/step-linking.png)
+
+These three steps are needed to:
+
+1. Make your App also build the framework
+2. Link the framework into your app
+3. Embed the framework in your app when distributing
+
+> NOTE that as of Xcode 6.2, the "embed" step happens in the "General" tab.
+> You may want to perform step 2 and 3 from the "General" tab.
+> Also make sure you select the framework for the platform (OS X vs. iOS).
+> This is currently a bit tricky since Xcode shows both as _OAuth2.framework_; I've filed a bug report with Apple so that it also shows the target name, fingers crossed.
 
 
 Playground
