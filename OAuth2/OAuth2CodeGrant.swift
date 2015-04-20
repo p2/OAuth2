@@ -32,7 +32,7 @@ public class OAuth2CodeGrant: OAuth2
 	public let tokenURL: NSURL?
 	
 	/** The receiver's long-time refresh token. */
-	public var refreshToken = ""
+	public var refreshToken: String?
 	
 	
 	/**
@@ -50,7 +50,7 @@ public class OAuth2CodeGrant: OAuth2
 	}
 	
 	public override func authorizeURLWithRedirect(redirect: String?, scope: String?, params: [String: String]?) -> NSURL {
-		return authorizeURLWithBase(authURL!, redirect: redirect, scope: scope, responseType: "code", params: params)
+		return authorizeURLWithBase(authURL, redirect: redirect, scope: scope, responseType: "code", params: params)
 	}
 	
 	/**
@@ -88,7 +88,7 @@ public class OAuth2CodeGrant: OAuth2
 			urlParams["client_secret"] = clientSecret!
 		}
 		
-		return authorizeURLWithBase(tokenURL ?? authURL!, redirect: redirect, scope: nil, responseType: nil, params: urlParams)
+		return authorizeURLWithBase(tokenURL ?? authURL, redirect: redirect, scope: nil, responseType: nil, params: urlParams)
 	}
 	
 	/**
@@ -201,7 +201,7 @@ public class OAuth2CodeGrant: OAuth2
 			urlParams["client_secret"] = clientSecret!
 		}
 		
-		return authorizeURLWithBase(tokenURL ?? authURL!, redirect: redirect, scope: nil, responseType: nil, params: urlParams)
+		return authorizeURLWithBase(tokenURL ?? authURL, redirect: redirect, scope: nil, responseType: nil, params: urlParams)
 	}
 	
 	/**

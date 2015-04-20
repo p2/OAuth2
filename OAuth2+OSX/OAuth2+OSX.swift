@@ -20,6 +20,7 @@
 
 import Cocoa
 
+
 extension OAuth2
 {
 	/**
@@ -28,7 +29,7 @@ extension OAuth2
 		:param: params Additional parameters to pass to the authorize URL
 		:returs: A bool indicating success
 	 */
-	public func openAuthorizeURLInBrowser(params: [String: String]? = nil) -> Bool {
+	public final func openAuthorizeURLInBrowser(params: [String: String]? = nil) -> Bool {
 		let url = authorizeURL(params: params)
 		return NSWorkspace.sharedWorkspace().openURL(url)
 	}

@@ -29,7 +29,7 @@ extension OAuth2
 		:param: params Additional parameters to pass to the authorize URL
 		:returs: A bool indicating success
 	 */
-	public func openAuthorizeURLInBrowser(params: [String: String]? = nil) -> Bool {
+	public final func openAuthorizeURLInBrowser(params: [String: String]? = nil) -> Bool {
 		let url = authorizeURL(params: params)
 		UIApplication.sharedApplication().openURL(url)
 	}
@@ -85,7 +85,7 @@ extension OAuth2
 		
 		:returns: OAuth2WebViewController, embedded in a UINavigationController being presented automatically
 	 */
-	func presentAuthorizeViewFor(url: NSURL, intercept: String, from: UIViewController) -> OAuth2WebViewController {
+	final func presentAuthorizeViewFor(url: NSURL, intercept: String, from: UIViewController) -> OAuth2WebViewController {
 		let web = OAuth2WebViewController()
 		web.title = viewTitle
 		web.startURL = url

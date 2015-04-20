@@ -39,7 +39,7 @@ class OAuth2CodeGrantTests: XCTestCase
 		XCTAssertTrue(oauth.verbose, "Set to verbose")
 		XCTAssertNil(oauth.scope, "Empty scope")
 		
-		XCTAssertEqual(oauth.authURL!, NSURL(string: "https://auth.ful.io")!, "Must init `authorize_uri`")
+		XCTAssertEqual(oauth.authURL, NSURL(string: "https://auth.ful.io")!, "Must init `authorize_uri`")
 		XCTAssertEqual(oauth.tokenURL!, NSURL(string: "https://token.ful.io")!, "Must init `token_uri`")
 	}
 	

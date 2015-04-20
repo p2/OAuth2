@@ -44,16 +44,16 @@ public typealias OAuth2JSON = [String: AnyObject]
 public class OAuth2
 {
 	/** Settings, as set upon initialization. */
-	let settings: OAuth2JSON
+	final let settings: OAuth2JSON
 	
 	/** The client id. */
-	public let clientId: String
+	public final let clientId: String
 	
 	/** The client secret, usually only needed for code grant. */
-	public let clientSecret: String?
+	public final let clientSecret: String?
 	
 	/** The URL to authorize against. */
-	public var authURL: NSURL?
+	public final let authURL: NSURL
 	
 	/** The scope currently in use. */
 	public var scope: String?
@@ -67,7 +67,7 @@ public class OAuth2
 	internal(set) public var state = ""
 	
 	/** The receiver's access token. */
-	public var accessToken = ""
+	public var accessToken: String?
 	
 	/** The access token's expiry date. */
 	public var accessTokenExpiry: NSDate?
@@ -90,7 +90,7 @@ public class OAuth2
 	/** An optional title that will propagate to views handled by OAuth2, such as OAuth2WebViewController. */
 	public var viewTitle: String?
 	
-	/** Set to YES to log all the things. NO by default. */
+	/** Set to `true` to log all the things. `false` by default. Use `"verbose": bool` in settings. */
 	public var verbose = false
 	
 	/**
@@ -125,14 +125,18 @@ public class OAuth2
 			clientSecret = nil
 		}
 		
+		// authorize URL
+		var aURL: NSURL?
 		if let auth = settings["authorize_uri"] as? String {
-			authURL = NSURL(string: auth)
+			aURL = NSURL(string: auth)
 		}
+		authURL = aURL ?? NSURL(string: "http://localhost")!
+		
+		// scope and state (should only be manually set for testing)
 		if let scp = settings["scope"] as? String {
 			scope = scp
 		}
-		
-		if let st = settings["scope_for_testing"] as? String {
+		if let st = settings["state_for_testing"] as? String {
 			state = st
 		}
 		if let verb = settings["verbose"] as? Bool {
@@ -149,7 +153,7 @@ public class OAuth2
 		date we assume the token is still valid.
 	 */
 	public func hasUnexpiredAccessToken() -> Bool {
-		if !accessToken.isEmpty {
+		if let access = accessToken where !access.isEmpty {
 			if let expiry = accessTokenExpiry {
 				return expiry == expiry.laterDate(NSDate())
 			}
