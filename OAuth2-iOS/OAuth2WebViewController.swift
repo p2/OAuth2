@@ -73,6 +73,7 @@ extension OAuth2
 	 */
 	func presentAuthorizeViewFor(url: NSURL, intercept: String, from: UIViewController) -> OAuth2WebViewController {
 		let web = OAuth2WebViewController()
+		web.oauth = self
 		web.title = viewTitle
 		web.startURL = url
 		web.interceptURLString = intercept
@@ -99,6 +100,9 @@ extension OAuth2
  */
 public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 {
+	/// Handle to the OAuth2 instance in play, only used for debug lugging at this time.
+	var oauth: OAuth2?
+	
 	/** The URL to load on first show. */
 	public var startURL: NSURL? {
 		didSet(oldURL) {
@@ -116,7 +120,7 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 					interceptComponents = NSURLComponents(URL: url, resolvingAgainstBaseURL: true)
 				}
 				else {
-					println("Failed to parse URL \(interceptURLString), discarding")
+					oauth?.logIfVerbose("Failed to parse URL \(interceptURLString), discarding")
 					interceptURLString = nil
 				}
 			}
@@ -263,7 +267,24 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 		}
 	}
 	
+	/* Special handling for Google's `urn:ietf:wg:oauth:2.0:oob` callback */
 	public func webViewDidFinishLoad(webView: UIWebView) {
+		if let scheme = interceptComponents?.scheme where "urn" == scheme {
+			if let path = interceptComponents?.path where path.hasPrefix("ietf:wg:oauth:2.0:oob") {
+				if let title = webView.stringByEvaluatingJavaScriptFromString("document.title") where title.hasPrefix("Success ") {
+					oauth?.logIfVerbose("Creating redirect URL from document.title")
+					let qry = title.stringByReplacingOccurrencesOfString("Success ", withString: "")
+					if let url = NSURL(string: "http://localhost/?\(qry)") {
+						onIntercept?(url: url)
+						return
+					}
+					else {
+						oauth?.logIfVerbose("Failed to create a URL with query parts \"\(qry)\"")
+					}
+				}
+			}
+		}
+		
 		hideLoadingIndicator()
 		showHideBackButton(webView.canGoBack)
 	}
