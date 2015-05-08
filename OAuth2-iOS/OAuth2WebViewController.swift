@@ -253,7 +253,7 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 		// would work as there may be URL parameters attached
 		if let url = request.URL where url.scheme == interceptComponents?.scheme && url.host == interceptComponents?.host {
 			let haveComponents = NSURLComponents(URL: url, resolvingAgainstBaseURL: true)
-			if haveComponents?.path == interceptComponents?.path {
+			if let hp = haveComponents?.path, ip = interceptComponents?.path where hp == ip || ("/" == hp + ip) {
 				return !onIntercept!(url: url)
 			}
 		}

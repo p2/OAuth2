@@ -183,7 +183,7 @@ The framework deals with those deviations by creating site-specific subclasses.
   
     Note that you **must** specify your client_secret; if there is none (like for [Reddit](https://github.com/reddit/reddit/wiki/OAuth2#token-retrieval-code-flow)) specify the empty string.
     There is a [RedditLoader](https://github.com/p2/OAuth2App/blob/master/OAuth2App/RedditLoader.swift) example in the OAuth2App sample app for a basic usage example.
-- **Google**: If you authorize against Google with a `OAuth2CodeGrant`, the built-in iOS web view will intercept the `http://localhost/` (note the trailing slash) as well as the `urn:ietf:wg:oauth:2.0:oob` (with or without `:auto`) callbacks.
+- **Google**: If you authorize against Google with a `OAuth2CodeGrant`, the built-in iOS web view will intercept the `http://localhost` as well as the `urn:ietf:wg:oauth:2.0:oob` (with or without `:auto`) callbacks.
 
 
 Playground
