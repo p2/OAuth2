@@ -38,29 +38,55 @@ If you need to provide additional parameters to the authorize URL take a look at
     ] as OAuth2JSON         // the "as" part may or may not be needed
     ```
 
-2. Create an `OAuth2CodeGrant` instance, optionally setting the `onAuthorize` and `onFailure` closures to keep informed about the status.
+2. Create an `OAuth2CodeGrant` instance, **optionally** setting the `onAuthorize` and `onFailure` closures or just the `afterAuthorizeOrFailure` closure to keep informed about the status.
     
     ```swift
-    let oauth = OAuth2CodeGrant(settings: settings)
-    oauth.viewTitle = "My Service"      // optional
-    oauth.onAuthorize = { parameters in
+    let oauth2 = OAuth2CodeGrant(settings: settings)
+    oauth2.viewTitle = "My Service"      // optional
+    oauth2.onAuthorize = { parameters in
         println("Did authorize with parameters: \(parameters)")
     }
-    oauth.onFailure = { error in        // `error` is nil on cancel
+    oauth2.onFailure = { error in        // `error` is nil on cancel
         if nil != error {
             println("Authorization went wrong: \(error!.localizedDescription)")
         }
     }
     ```
 
-3. Now either use the built-in web view controller or manually open the _authorize URL_ in the browser:
+3. There are three ways to have the user authorize:
+    
+    - An access token is still in the user's keychain
+    - User logs in via OS browser
+    - User uses a built-in web view (iOS only)
+    
+    By default the OS browser will be used if there is no access token present in the keychain.
+    If you want to use the embedded web-view, change `oauth2.authConfig.authorizeEmbedded` to `true` (remember, currently iOS only) and set a root view controller, from which to present the login screen if needed, as the authorize context.
+    Then call `authorize()`:
+    
+    ```swift
+    oauth2.authConfig.authorizeEmbedded = true
+    oauth2.authConfig.authorizeContext = <# presenting view controller #>
+    oauth2.afterAuthorizeOrFailure = { wasFailure, error in
+        // all done, now check `wasFailure` and `error`
+    }
+    oauth2.authorize()
+    ```
+    
+    The `authorize()` method will:
+    
+    1. Check if an access token that has not yet expired is in the keychain, if not
+    2. Check if a refresh token is in the keychain, if found
+    3. Try to use the refresh token to get a new access token, if it fails
+    4. Start the OAuth2 dance by using the `authConfig` settings to determine how to display an authorize screen to the user
+    
+    If you do not wish this kind of automation, the manual steps to show the authorize screens are:
     
     **Embedded (iOS only)**:
     
     ```swift
     let vc = <# presenting view controller #>
-    let web = oauth.authorizeEmbeddedFrom(vc, params: nil)
-    oauth.afterAuthorizeOrFailure = { wasFailure, error in
+    let web = oauth2.authorizeEmbeddedFrom(vc, params: nil)
+    oauth2.afterAuthorizeOrFailure = { wasFailure, error in
         web.dismissViewControllerAnimated(true, completion: nil)
     }
     ```
@@ -84,8 +110,8 @@ If you need to provide additional parameters to the authorize URL take a look at
                sourceApplication: String!,
                       annotation: AnyObject!) -> Bool {
         // you should probably first check if this is your URL being opened
-        if <# check #> { 
-            oauth.handleRedirectURL(url)
+        if <# check #> {
+            oauth2.handleRedirectURL(url)
         }
     }
     ```
@@ -95,6 +121,7 @@ If you need to provide additional parameters to the authorize URL take a look at
     See the [OAuth2 Sample App][sample]'s AppDelegate class on how to receive the callback URL in your Mac app.
 
 4. After everything completes either the `onAuthorize` or the `onFailure` closure will be called, and after that the `afterAuthorizeOrFailure` closure if it has been set.
+You can use any of those.
 
 5. You can now obtain an `OAuth2Request`, which is an already signed `NSMutableURLRequest`, to retrieve data from your server.
     

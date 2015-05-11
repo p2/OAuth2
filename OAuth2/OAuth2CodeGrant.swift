@@ -99,6 +99,29 @@ public class OAuth2CodeGrant: OAuth2
 	}
 	
 	
+	// MARK: - Authorization
+	
+	override public func obtainAccessToken(callback: (Bool -> Void)) {
+		if hasUnexpiredAccessToken() {
+			callback(true)
+		}
+		else {
+			logIfVerbose("No access token, maybe I can refresh")
+			doRefreshToken({ successParams, error in
+				if let success = successParams {
+					callback(true)
+				}
+				else {
+					if let err = error {
+						self.logIfVerbose("\(err.localizedDescription)")
+					}
+					callback(false)
+				}
+			})
+		}
+	}
+	
+	
 	// MARK: - Token Request
 	
 	/**
@@ -151,7 +174,6 @@ public class OAuth2CodeGrant: OAuth2
 		// do we have a code?
 		if (code.isEmpty) {
 			didFail(genOAuth2Error("I don't have a code to exchange, let the user authorize first", .PrerequisiteFailed))
-			logIfVerbose("No code to exchange for a token, cannot continue")
 			return;
 		}
 		
@@ -169,7 +191,11 @@ public class OAuth2CodeGrant: OAuth2
 			else if let data = sessData, let http = sessResponse as? NSHTTPURLResponse {
 				if let json = self.parseTokenExchangeResponse(data, error: &finalError) {
 					if 200 == http.statusCode {
+						#if DEBUG
 						self.logIfVerbose("Did receive access token: \(self.accessToken), refresh token: \(self.refreshToken)")
+						#else
+						self.logIfVerbose("Did exchange code for access [\(nil != self.accessToken)] and refresh [\(nil != self.refreshToken)] tokens")
+						#endif
 						self.didAuthorize(json)
 						return
 					}
@@ -236,23 +262,24 @@ public class OAuth2CodeGrant: OAuth2
 	
 		This method is public to enable unit testing.
 	 */
-	public func tokenRequestWithRefreshToken(refreshToken: String) -> NSMutableURLRequest {
+	func tokenRequestWithRefreshToken(refreshToken: String) -> NSMutableURLRequest {
 		let url = tokenURLWithRefreshToken(redirect, refreshToken: refreshToken)
 		return tokenRequestWithURL(url)
 	}
 	
 	/**
-		Use the refresh token to receive a fresh access token.
+		If there is a refresh token, use it to receive a fresh access token.
+		
+		:param: callback The callback to call after the refresh token exchange has finished
 	 */
-	public func refreshTokenWithRefreshToken(refreshToken: String) {
-		if (refreshToken.isEmpty) {
-			didFail(genOAuth2Error("I don't have a refresh token", .PrerequisiteFailed))
-			logIfVerbose("No refresh token, cannot continue")
-			return;
+	func doRefreshToken(callback: ((successParams: OAuth2JSON?, error: NSError?) -> Void)) {
+		if nil == refreshToken || refreshToken!.isEmpty {
+			callback(successParams: nil, error: genOAuth2Error("I don't have a refresh token, not trying to refresh", .PrerequisiteFailed))
+			return
 		}
 		
-		let post = tokenRequestWithRefreshToken(refreshToken)
-		logIfVerbose("Using refresh token with redirect \(redirect!) to receive access token from \(post.URL?.description)")
+		let post = tokenRequestWithRefreshToken(refreshToken!)
+		logIfVerbose("Using refresh token to receive access token from \(post.URL?.description)")
 		
 		// perform the request
 		let session = NSURLSession.sharedSession()
@@ -264,9 +291,13 @@ public class OAuth2CodeGrant: OAuth2
 			}
 			else if let data = sessData, let http = sessResponse as? NSHTTPURLResponse {
 				if let json = self.parseRefreshTokenResponse(data, error: &finalError) {
-					if 200 == http.statusCode {
-						self.logIfVerbose("Did receive access token: \(self.accessToken)")
-						self.didAuthorize(json)
+					if http.statusCode < 400 {
+						#if DEBUG
+						self.logIfVerbose("Did use refresh token for access token: \(self.accessToken)")
+						#else
+						self.logIfVerbose("Did use refresh token for access token [\(nil != self.accessToken)]")
+						#endif
+						callback(successParams: json, error: nil)
 						return
 					}
 					
@@ -278,7 +309,7 @@ public class OAuth2CodeGrant: OAuth2
 			if nil == finalError {
 				finalError = genOAuth2Error("Unknown refresh token error for response \(sessResponse) with data \(sessData)", .NetworkError)
 			}
-			self.didFail(finalError)
+			callback(successParams: nil, error: finalError)
 		}
 		task.resume()
 	}

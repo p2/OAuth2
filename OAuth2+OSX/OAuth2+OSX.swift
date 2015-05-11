@@ -33,5 +33,28 @@ extension OAuth2
 		let url = authorizeURL(params: params)
 		return NSWorkspace.sharedWorkspace().openURL(url)
 	}
+	
+	
+	// MARK: - Embedded View (NOT IMPLEMENTED)
+	
+	/**
+		Tries to use the given context, which on OS X should be a NSViewController, to present the authorization screen.
+	
+		:returns: A bool indicating whether the method was able to show the authorize screen
+	*/
+	public func authorizeEmbeddedWith(context: AnyObject?, params: [String: String]?) -> Bool {
+		if let controller = context as? NSViewController {
+			let web: AnyObject = authorizeEmbeddedFrom(controller, params: params)
+			internalAfterAuthorizeOrFailure = { wasFailure, error in
+				self.logIfVerbose("Should now dismiss \(web)")
+			}
+			return true
+		}
+		return false
+	}
+	
+	public func authorizeEmbeddedFrom(controller: NSViewController, params: [String: String]?) -> AnyObject {
+		fatalError("Not yet implemented")
+	}
 }
 

@@ -39,7 +39,20 @@ public enum OAuth2Error: Int {
 	case AuthorizationError
 }
 
+/// Typealias to ease working with JSON dictionaries.
 public typealias OAuth2JSON = [String: AnyObject]
+
+/**
+ *  Simple struct to hold client-side authorization configuration variables.
+ */
+public struct OAuth2AuthConfig
+{
+	/// Whether to use an embedded web view for authorization (true), the OS browser (false, the default) or don't do anything (nil).
+	public var authorizeEmbedded: Bool? = false
+	
+	/// Context information for the authorization flow; e.g. the parent view controller to use on iOS.
+	public var authorizeContext: AnyObject? = nil
+}
 
 
 /**
@@ -47,8 +60,11 @@ public typealias OAuth2JSON = [String: AnyObject]
  */
 public class OAuth2
 {
-	/** Settings, as set upon initialization. */
+	/** Server-side settings, as set upon initialization. */
 	final let settings: OAuth2JSON
+	
+	/** Client-side configurations. */
+	public var authConfig: OAuth2AuthConfig
 	
 	/** The client id. */
 	public final let clientId: String
@@ -90,6 +106,9 @@ public class OAuth2
 		        and wasFailure is true, the process was aborted.
 	 */
 	public final var afterAuthorizeOrFailure: ((wasFailure: Bool, error: NSError?) -> Void)?
+	
+	/** Same as `afterAuthorizeOrFailure`, but only for internal use and called right BEFORE the public variant. */
+	final var internalAfterAuthorizeOrFailure: ((wasFailure: Bool, error: NSError?) -> Void)?
 	
 	/** An optional title that will propagate to views handled by OAuth2, such as OAuth2WebViewController. */
 	public var viewTitle: String?
@@ -150,7 +169,7 @@ public class OAuth2
 		}
 		authURL = aURL ?? NSURL(string: "http://localhost")!
 		
-		// scope and state (should only be manually set for testing)
+		// scope and state (state should only be manually set for testing purposes!)
 		if let scp = settings["scope"] as? String {
 			scope = scp
 		}
@@ -165,6 +184,7 @@ public class OAuth2
 		if let verb = settings["verbose"] as? Bool {
 			verbose = verb
 		}
+		authConfig = OAuth2AuthConfig()
 		
 		// init from keychain
 		if useKeychain {
@@ -243,10 +263,43 @@ public class OAuth2
 	}
 	
 	
-	// MARK: - OAuth Actions
+	// MARK: - Authorization
+	
+	/**
+		Use this method, together with `authConfig`, to obtain an access token.
+ 
+		This method will first check if the client already has an unexpired access token (possibly from the keychain),
+		if not and it's able to use a refresh token (code grant flow) it will try to use the refresh token, then if this
+		fails it will show the authorize screen IF you have `authConfig` set up sufficiently. If `authConfig` is not set
+		up sufficiently this method will end up calling the `onFailure` callback.
+	 */
+	public func authorize(params: [String: String]? = nil) {
+		obtainAccessToken() { success in
+			if success {
+				self.didAuthorize(OAuth2JSON())
+			}
+			else {
+				if let embed = self.authConfig.authorizeEmbedded {
+					if embed {
+						if !self.authorizeEmbeddedWith(self.authConfig.authorizeContext, params: params) {
+							self.didFail(genOAuth2Error("Client settings insufficient to show an authorization screen (no or invalid context given)", .PrerequisiteFailed))
+						}
+					}
+					else {
+						if !self.openAuthorizeURLInBrowser(params: params) {
+							fatalError("Cannot open authorize URL")
+						}
+					}
+				}
+				else {
+					self.didFail(genOAuth2Error("Client settings insufficient to show an authorization screen (`authorizeEmbedded` is not set)", .PrerequisiteFailed))
+				}
+			}
+		}
+	}
 	
 	/** If the instance has an accessToken, checks if its expiry time has not yet passed. If we don't have an expiry
-		date we assume the token is still valid.
+	    date we assume the token is still valid.
 	 */
 	public func hasUnexpiredAccessToken() -> Bool {
 		if let access = accessToken where !access.isEmpty {
@@ -256,6 +309,20 @@ public class OAuth2
 			return true
 		}
 		return false
+	}
+	
+	/**
+		Indicates, in the callback, whether the client has been able to obtain an access token that is likely to still
+		work (but there is no guarantee).
+		
+		This method calls the callback immediately with the result of `hasUnexpiredAccessToken()`. Subclasses such as
+		the code grant however might perform a refresh token call and only call the callback after this succeeds or
+		fails.
+		
+		:param: callback The callback to call once the client knows whether it has an access token or not
+	 */
+	func obtainAccessToken(callback: ((success: Bool) -> Void)) {
+		callback(success: hasUnexpiredAccessToken())
 	}
 	
 	/**
@@ -370,6 +437,7 @@ public class OAuth2
 		
 		callOnMainThread() {
 			self.onAuthorize?(parameters: parameters)
+			self.internalAfterAuthorizeOrFailure?(wasFailure: false, error: nil)
 			self.afterAuthorizeOrFailure?(wasFailure: false, error: nil)
 		}
 	}
@@ -378,8 +446,12 @@ public class OAuth2
 		Internally used on error. Calls the `onFailure` and `afterAuthorizeOrFailure` callbacks on the main thread.
 	 */
 	func didFail(error: NSError?) {
+		if let err = error {
+			logIfVerbose("\(err.localizedDescription)")
+		}
 		callOnMainThread() {
 			self.onFailure?(error: error)
+			self.internalAfterAuthorizeOrFailure?(wasFailure: true, error: error)
 			self.afterAuthorizeOrFailure?(wasFailure: true, error: error)
 		}
 	}

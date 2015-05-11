@@ -78,8 +78,6 @@ public class OAuth2ImplicitGrant: OAuth2
 			error = genOAuth2Error("Invalid redirect URL: \(redirect)", .PrerequisiteFailed)
 		}
 		
-		// log, if needed, then report back
-		logIfVerbose("Error handling redirect URL: \(error!.localizedDescription)")
 		didFail(error)
 	}
 }

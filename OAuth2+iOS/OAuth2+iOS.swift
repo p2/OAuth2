@@ -31,11 +31,27 @@ extension OAuth2
 	 */
 	public final func openAuthorizeURLInBrowser(params: [String: String]? = nil) -> Bool {
 		let url = authorizeURL(params: params)
-		UIApplication.sharedApplication().openURL(url)
+		return UIApplication.sharedApplication().openURL(url)
 	}
 	
 	
 	// MARK: - Built-In Web View
+	
+	/**
+		Tries to use the given context, which on iOS should be a UIViewController, to present the authorization screen.
+		
+		:returns: A bool indicating whether the method was able to show the authorize screen
+	 */
+	public func authorizeEmbeddedWith(context: AnyObject?, params: [String: String]? = nil) -> Bool {
+		if let controller = context as? UIViewController {
+			let web = authorizeEmbeddedFrom(controller, params: params)
+			internalAfterAuthorizeOrFailure = { wasFailure, error in
+				web.dismissViewControllerAnimated(true, completion: nil)
+			}
+			return true
+		}
+		return false
+	}
 	
 	/**
 		Presents a web view controller, contained in a UINavigationController, on the supplied view controller and loads
@@ -52,7 +68,7 @@ extension OAuth2
 		:param: params     Optional additional URL parameters
 		:returns: OAuth2WebViewController, embedded in a UINavigationController being presented automatically
 	*/
-	public func authorizeEmbeddedFrom(controller: UIViewController, params: [String: String]?) -> OAuth2WebViewController {
+	public func authorizeEmbeddedFrom(controller: UIViewController, params: [String: String]? = nil) -> OAuth2WebViewController {
 		let url = authorizeURL()
 		return presentAuthorizeViewFor(url, intercept: redirect!, from: controller)
 	}
@@ -75,7 +91,7 @@ extension OAuth2
 	public func authorizeEmbeddedFrom(controller: UIViewController,
 	                                    redirect: String,
 	                                       scope: String,
-	                                      params: [String: String]?) -> OAuth2WebViewController {
+	                                      params: [String: String]? = nil) -> OAuth2WebViewController {
 		let url = authorizeURLWithRedirect(redirect, scope: scope, params: params)
 		return presentAuthorizeViewFor(url, intercept: redirect, from: controller)
 	}
