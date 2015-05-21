@@ -173,7 +173,7 @@ The framework deals with those deviations by creating site-specific subclasses.
         Authorization: Basic {base64: "client_id:client_secret"}
   
     Note that you **must** specify your client_secret; if there is none (like for [Reddit](https://github.com/reddit/reddit/wiki/OAuth2#token-retrieval-code-flow)) specify the empty string.
-    There is a [RedditLoader](https://github.com/p2/OAuth2App/blob/master/OAuth2App/RedditLoader.swift) example in the OAuth2App sample app for a basic usage example.
+    There is a [RedditLoader](https://github.com/p2/OAuth2App/blob/master/OAuth2App/RedditLoader.swift) example in the [OAuth2App sample app][sample] for a basic usage example.
 - **Google**: If you authorize against Google with a `OAuth2CodeGrant`, the built-in iOS web view will intercept the `http://localhost` as well as the `urn:ietf:wg:oauth:2.0:oob` (with or without `:auto`) callbacks.
 
 
@@ -209,7 +209,7 @@ use_frameworks!
 Using Terminal.app, clone the OAuth2 repository, best into a subdirectory of your app project:  
 
     $ cd path/to/your/app
-    $ git clone https://github.com/p2/OAuth2.git
+    $ git clone --recursive https://github.com/p2/OAuth2.git
 
 If you're using git you'll want to add it as a submodule.
 Once cloning completes, open your app project in Xcode and add `OAuth2.xcodeproj` to your app:
@@ -230,18 +230,6 @@ These three steps are needed to:
 > You may want to perform step 2 and 3 from the "General" tab.
 > Also make sure you select the framework for the platform (OS X vs. iOS).
 > This is currently a bit tricky since Xcode shows both as _OAuth2.framework_; I've filed a bug report with Apple so that it also shows the target name, fingers crossed.
-
-
-Playground
-----------
-
-The idea is to add a Playground to see OAuth2 in use.
-However, it's not currently possible to interact view WebViews inside a playground, which would be needed to login to a demo server.
-Hence I made a [sample OS X App][sample] that uses the GitHub API do demonstrate how you could use this framework.
-
-There is some stub code in `OSX.playground` if you'd like to tinker.
-It's not working as one needs to open the authorize URL in a browser, then copy-paste the redirect URL from OS X's warning window into the Playground – which makes OAuth2 regenerate its state, making your redirect URL invalid.
-Fun times.
 
 
 License
