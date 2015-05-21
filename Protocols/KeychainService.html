@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>NSHTTPURLResponse Extension Reference</title>
+    <title>KeychainService Protocol Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -9,8 +9,8 @@
     <script src="../js/jazzy.js" defer></script>
   </head>
   <body>
-    <a name="//apple_ref/swift/Extension/NSHTTPURLResponse" class="dashAnchor"></a>
-    <a title="NSHTTPURLResponse Extension Reference"></a>
+    <a name="//apple_ref/swift/Protocol/KeychainService" class="dashAnchor"></a>
+    <a title="KeychainService Protocol Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">OAuth2 Docs</a> (60% documented)</p>
@@ -22,7 +22,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">OAuth2 Reference</a>
         <img id="carat" src="../img/carat.png" />
-        NSHTTPURLResponse Extension Reference
+        KeychainService Protocol Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -131,20 +131,8 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>NSHTTPURLResponse</h1>
-            <p>Return the character set that does NOT need percent-encoding for x-www-form-urlencoded requests INCLUDING SPACE.
-YOU are responsible for replacing spaces &ldquo; <q>with the plus sign</q>+&rdquo;.</p>
-
-<p>RFC3986 and the W3C spec are not entirely consistent, we&rsquo;re using W3C&rsquo;s spec which says:
-<a href="http://www.w3.org/TR/html5/forms.html#application/x-www-form-urlencoded-encoding-algorithm">http://www.w3.org/TR/html5/forms.html#application/x-www-form-urlencoded-encoding-algorithm</a></p>
-
-<blockquote>
-<p>If the byte is 0x20 (U+0020 SPACE if interpreted as ASCII):
-- Replace the byte with a single 0x2B byte (<q>+</q> (U+002B) character if interpreted as ASCII).
-If the byte is in the range 0x2A (*), 0x2D (-), 0x2E (.), 0x30 to 0x39 (0-9), 0x41 to 0x5A (A-Z), 0x5F (_),
-0x61 to 0x7A (a-z)
-- Leave byte as-is</p>
-</blockquote>
+            <h1>KeychainService</h1>
+            <p>Undocumented</p>
 
           </section>
           <section class="section task-group-section">
@@ -153,9 +141,9 @@ If the byte is in the range 0x2A (*), 0x2D (-), 0x2E (.), 0x30 to 0x39 (0-9), 0x
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vE6OAuth2CSo17NSHTTPURLResponse12statusStringSS"></a>
-                    <a name="//apple_ref/swift/Property/statusString" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vE6OAuth2CSo17NSHTTPURLResponse12statusStringSS">statusString</a>
+                    <a name="/s:vP6OAuth215KeychainService10accessModeCSo8NSString"></a>
+                    <a name="//apple_ref/swift/Property/accessMode" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vP6OAuth215KeychainService10accessModeCSo8NSString">accessMode</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -163,16 +151,122 @@ If the byte is in the range 0x2A (*), 0x2D (-), 0x2E (.), 0x30 to 0x39 (0-9), 0x
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>A localized string explaining the current <code>statusCode</code>.</p>
+                        <p>Undocumented</p>
 
                       </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="Swift">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">statusString</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vP6OAuth215KeychainService11serviceNameSS"></a>
+                    <a name="//apple_ref/swift/Property/serviceName" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vP6OAuth215KeychainService11serviceNameSS">serviceName</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
 
-                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vP6OAuth215KeychainService11accessGroupGSqSS_"></a>
+                    <a name="//apple_ref/swift/Property/accessGroup" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vP6OAuth215KeychainService11accessGroupGSqSS_">accessGroup</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP6OAuth215KeychainService3addUS0___FQPS0_FPS_12KeychainItem_GSqCSo7NSError_"></a>
+                    <a name="//apple_ref/swift/Method/add(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP6OAuth215KeychainService3addUS0___FQPS0_FPS_12KeychainItem_GSqCSo7NSError_">add(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP6OAuth215KeychainService6updateUS0___FQPS0_FPS_12KeychainItem_GSqCSo7NSError_"></a>
+                    <a name="//apple_ref/swift/Method/update(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP6OAuth215KeychainService6updateUS0___FQPS0_FPS_12KeychainItem_GSqCSo7NSError_">update(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP6OAuth215KeychainService6removeUS0___FQPS0_FPS_12KeychainItem_GSqCSo7NSError_"></a>
+                    <a name="//apple_ref/swift/Method/remove(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP6OAuth215KeychainService6removeUS0___FQPS0_FPS_12KeychainItem_GSqCSo7NSError_">remove(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP6OAuth215KeychainService3getUS0___FQPS0_U__FQ_T4itemGSqQ__5errorGSqCSo7NSError__"></a>
+                    <a name="//apple_ref/swift/Method/get(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP6OAuth215KeychainService3getUS0___FQPS0_U__FQ_T4itemGSqQ__5errorGSqCSo7NSError__">get(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
                       </div>
                     </section>
                   </div>
