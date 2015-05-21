@@ -4,7 +4,7 @@ OAuth2
 OAuth2 frameworks for **OS X** and **iOS** written in Swift.
 
 Technical documentation is available at [p2.github.io/OAuth2](https://p2.github.io/OAuth2).
-Take a look at the [OS X sample app](https://github.com/p2/OAuth2App) for basic usage of this framework.
+Take a look at the [OS X sample app][sample] for basic usage of this framework.
 
 The code in this repo requires Xcode 6, the built framework can be used on **OS X 10.9** or **iOS 8** and later.
 To use on **iOS 7** you'll have to include the source files in your main project.
@@ -13,50 +13,6 @@ Supported OAuth2 [flows](#flows) are the _code grant_ (`response_type=code`) and
 
 Since the Swift language is constantly evolving I am [adding tags](https://github.com/p2/OAuth2/releases) that mark which revision should work with which Swift version.
 Brand new Swift releases are likely to be found on the `develop` branch.
-
-
-Installation
-------------
-
-You can use use git or CocoaPods to install the framework.
-
-#### CocoaPods
-
-Add a `Podfile` that contains at least the following information to the root of your app project, then do `pod install`.
-If you're unfamiliar with CocoaPods, read [using CocoaPods](http://guides.cocoapods.org/using/using-cocoapods.html).
-
-```ruby
-platform :ios, '8.0'      # or platform :osx, '10.9'
-pod 'p2.OAuth2'
-use_frameworks!
-```
-
-#### git
-
-Using Terminal.app, clone the OAuth2 repository, best into a subdirectory of your app project:  
-
-    $ cd path/to/your/app
-    $ git clone https://github.com/p2/OAuth2.git
-
-If you're using git you'll want to add it as a submodule.
-Once cloning completes, open your app project in Xcode and add `OAuth2.xcodeproj` to your app:
-
-![Adding to Xcode](assets/step-adding.png)
-
-Now link the framework to your app:
-
-![Linking](assets/step-linking.png)
-
-These three steps are needed to:
-
-1. Make your App also build the framework
-2. Link the framework into your app
-3. Embed the framework in your app when distributing
-
-> NOTE that as of Xcode 6.2, the "embed" step happens in the "General" tab.
-> You may want to perform step 2 and 3 from the "General" tab.
-> Also make sure you select the framework for the platform (OS X vs. iOS).
-> This is currently a bit tricky since Xcode shows both as _OAuth2.framework_; I've filed a bug report with Apple so that it also shows the target name, fingers crossed.
 
 
 Usage
@@ -78,45 +34,75 @@ If you need to provide additional parameters to the authorize URL take a look at
         "token_uri": "https://authorize.smartplatforms.org/token",
         "scope": "profile email",
         "redirect_uris": ["myapp://oauth/callback"],   // don't forget to register this scheme
-    ] as OAuth2JSON      // the "as" part may or may not be needed
+        "keychain": false,  // if you DON'T want keychain integration
+    ] as OAuth2JSON         // the "as" part may or may not be needed
     ```
 
-2. Create an `OAuth2CodeGrant` instance, optionally setting the `onAuthorize` and `onFailure` closures to keep informed about the status.
+2. Create an `OAuth2CodeGrant` instance, **optionally** setting the `onAuthorize` and `onFailure` closures or just the `afterAuthorizeOrFailure` closure to keep informed about the status.
     
     ```swift
-    let oauth = OAuth2CodeGrant(settings: settings)
-    oauth.viewTitle = "My Service"      // optional
-    oauth.onAuthorize = { parameters in
+    let oauth2 = OAuth2CodeGrant(settings: settings)
+    oauth2.viewTitle = "My Service"      // optional
+    oauth2.onAuthorize = { parameters in
         println("Did authorize with parameters: \(parameters)")
     }
-    oauth.onFailure = { error in        // `error` is nil on cancel
+    oauth2.onFailure = { error in        // `error` is nil on cancel
         if nil != error {
             println("Authorization went wrong: \(error!.localizedDescription)")
         }
     }
     ```
 
-3. Now either use the built-in web view controller or manually open the _authorize URL_ in the browser:
+3. There are three ways to have the user authorize:
     
-    **Embedded (iOS)**:
+    - An access token is still in the user's keychain
+    - User logs in via OS browser
+    - User uses a built-in web view (iOS only)
+    
+    By default the OS browser will be used if there is no access token present in the keychain.
+    If you want to use the embedded web-view, change `oauth2.authConfig.authorizeEmbedded` to `true` (remember, currently iOS only) and set a root view controller, from which to present the login screen if needed, as the authorize context.
+    Then call `authorize()`:
+    
+    ```swift
+    oauth2.authConfig.authorizeEmbedded = true
+    oauth2.authConfig.authorizeContext = <# presenting view controller #>
+    oauth2.afterAuthorizeOrFailure = { wasFailure, error in
+        // all done, now check `wasFailure` and `error`
+    }
+    oauth2.authorize()
+    ```
+    
+    The `authorize()` method will:
+    
+    1. Check if an access token that has not yet expired is in the keychain, if not
+    2. Check if a refresh token is in the keychain, if found
+    3. Try to use the refresh token to get a new access token, if it fails
+    4. Start the OAuth2 dance by using the `authConfig` settings to determine how to display an authorize screen to the user
+    
+    If you do not wish this kind of automation, the manual steps to show the authorize screens are:
+    
+    **Embedded (iOS only)**:
     
     ```swift
     let vc = <# presenting view controller #>
-    let web = oauth.authorizeEmbeddedFrom(vc, params: nil)
-    oauth.afterAuthorizeOrFailure = { wasFailure, error in
+    let web = oauth2.authorizeEmbeddedFrom(vc, params: nil)
+    oauth2.afterAuthorizeOrFailure = { wasFailure, error in
         web.dismissViewControllerAnimated(true, completion: nil)
     }
     ```
     
-    **iOS browser**:
+    **iOS/OS X browser**:
     
     ```swift
-    let url = oauth.authorizeURL()
-    UIApplication.sharedApplication().openURL(url)
+    if !oauth2.openAuthorizeURLInBrowser() {
+        fatalError("Cannot open authorize URL")
+    }
     ```
     
     Since you opened the authorize URL in the browser you will need to intercept the callback in your app delegate.
     Let the OAuth2 instance handle the full URL:
+    
+    **iOS**
     
     ```swift
     func application(application: UIApplication!,
@@ -124,13 +110,18 @@ If you need to provide additional parameters to the authorize URL take a look at
                sourceApplication: String!,
                       annotation: AnyObject!) -> Bool {
         // you should probably first check if this is your URL being opened
-        if <# check #> { 
-            oauth.handleRedirectURL(url)
+        if <# check #> {
+            oauth2.handleRedirectURL(url)
         }
     }
     ```
+    
+    **OS X**
+    
+    See the [OAuth2 Sample App][sample]'s AppDelegate class on how to receive the callback URL in your Mac app.
 
 4. After everything completes either the `onAuthorize` or the `onFailure` closure will be called, and after that the `afterAuthorizeOrFailure` closure if it has been set.
+You can use any of those.
 
 5. You can now obtain an `OAuth2Request`, which is an already signed `NSMutableURLRequest`, to retrieve data from your server.
     
@@ -186,12 +177,67 @@ The framework deals with those deviations by creating site-specific subclasses.
 - **Google**: If you authorize against Google with a `OAuth2CodeGrant`, the built-in iOS web view will intercept the `http://localhost` as well as the `urn:ietf:wg:oauth:2.0:oob` (with or without `:auto`) callbacks.
 
 
+Keychain
+--------
+
+This framework can transparently use the iOS and OS X keychain.
+It is controlled by the `useKeychain` property, which can be disabled during initialization with the "keychain" setting.
+Since this is **enabled by default**, if you do _not_ turn it off during initialization, the keychain will be queried for tokens related to the authorization URL.
+If you turn it off _after_ initialization, the keychain will be queried for existing tokens, but new tokens will not be written to the keychain.
+
+If you want to delete the tokens from keychain, i.e. **log the user out** completely, call `forgetTokens()`.
+
+
+Installation
+------------
+
+You can use git or CocoaPods to install the framework.
+
+#### CocoaPods
+
+Add a `Podfile` that contains at least the following information to the root of your app project, then do `pod install`.
+If you're unfamiliar with CocoaPods, read [using CocoaPods](http://guides.cocoapods.org/using/using-cocoapods.html).
+
+```ruby
+platform :ios, '8.0'      # or platform :osx, '10.9'
+pod 'p2.OAuth2'
+use_frameworks!
+```
+
+#### git
+
+Using Terminal.app, clone the OAuth2 repository, best into a subdirectory of your app project:  
+
+    $ cd path/to/your/app
+    $ git clone https://github.com/p2/OAuth2.git
+
+If you're using git you'll want to add it as a submodule.
+Once cloning completes, open your app project in Xcode and add `OAuth2.xcodeproj` to your app:
+
+![Adding to Xcode](assets/step-adding.png)
+
+Now link the framework to your app:
+
+![Linking](assets/step-linking.png)
+
+These three steps are needed to:
+
+1. Make your App also build the framework
+2. Link the framework into your app
+3. Embed the framework in your app when distributing
+
+> NOTE that as of Xcode 6.2, the "embed" step happens in the "General" tab.
+> You may want to perform step 2 and 3 from the "General" tab.
+> Also make sure you select the framework for the platform (OS X vs. iOS).
+> This is currently a bit tricky since Xcode shows both as _OAuth2.framework_; I've filed a bug report with Apple so that it also shows the target name, fingers crossed.
+
+
 Playground
 ----------
 
 The idea is to add a Playground to see OAuth2 in use.
 However, it's not currently possible to interact view WebViews inside a playground, which would be needed to login to a demo server.
-Hence I made a [sample OS X App](https://github.com/p2/OAuth2App) that uses the GitHub API do demonstrate how you could use this framework.
+Hence I made a [sample OS X App][sample] that uses the GitHub API do demonstrate how you could use this framework.
 
 There is some stub code in `OSX.playground` if you'd like to tinker.
 It's not working as one needs to open the authorize URL in a browser, then copy-paste the redirect URL from OS X's warning window into the Playground – which makes OAuth2 regenerate its state, making your redirect URL invalid.
@@ -203,3 +249,7 @@ License
 
 This code is released under the [_Apache 2.0 license_](LICENSE.txt), which means that you can use it in open as well as closed source projects.
 Since there is no `NOTICE` file there is nothing that you have to include in your product.
+
+
+[sample]: https://github.com/p2/OAuth2App
+

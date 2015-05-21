@@ -41,14 +41,14 @@ class OAuth2Tests: XCTestCase {
 		XCTAssertEqual(oauth.clientId, "def", "Must init `client_id`")
 		
 		let oa = self.genericOAuth2()
-		XCTAssertEqual(oa.authURL!, NSURL(string: "https://auth.ful.io")!, "Must init `authorize_uri`")
+		XCTAssertEqual(oa.authURL, NSURL(string: "https://auth.ful.io")!, "Must init `authorize_uri`")
 		XCTAssertEqual(oa.scope!, "login", "Must init `scope`")
 		XCTAssertTrue(oa.verbose, "Must init `verbose`")
 	}
 	
 	func testAuthorizeURL() {
 		let oa = genericOAuth2()
-		let auth = oa.authorizeURL(oa.authURL!, redirect: "oauth2app://callback", scope: "launch", responseType: "code", params: nil)
+		let auth = oa.authorizeURLWithBase(oa.authURL, redirect: "oauth2app://callback", scope: "launch", responseType: "code", params: nil)
 		
 		let comp = NSURLComponents(URL: auth, resolvingAgainstBaseURL: true)!
 		XCTAssertEqual("https", comp.scheme!, "Need correct scheme")

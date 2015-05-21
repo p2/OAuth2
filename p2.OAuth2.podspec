@@ -22,12 +22,13 @@ Pod::Spec.new do |s|
   s.homepage     = "https://github.com/p2/OAuth2"
   s.license      = "Apache 2"
   s.author       = { "Pascal Pfiffner" => "phase.of.matter@gmail.com" }
-  s.source       = { :git => "https://github.com/p2/OAuth2.git", :tag => "1.2.2" }
+  s.source       = { :git => "https://github.com/p2/OAuth2.git", :tag => "1.2.2", :submodules => true  }
 
   s.ios.deployment_target = "8.0"
   s.osx.deployment_target = "10.9"
   s.requires_arc = true
   
   s.source_files = "OAuth2/*"
-  s.ios.source_files = "OAuth2-iOS/*"
+  s.ios.source_files = "OAuth2+iOS/*"
+  s.osx.source_files = "OAuth2+OSX/*"
 end

@@ -37,13 +37,15 @@ public class OAuth2Request: NSMutableURLRequest
 	/**
 		Signs the receiver by setting its "Authorization" header to "Bearer {token}".
 	
-		Will raise if the OAuth2 instance does not have an access token!
+		Will log an error if the OAuth2 instance does not have an access token!
 	 */
 	func sign(oauth: OAuth2) {
-		if oauth.accessToken.isEmpty {
-			fatalError("Cannot sign the request with an empty access token")
+		if let access = oauth.accessToken where !access.isEmpty {
+			self.setValue("Bearer \(access)", forHTTPHeaderField: "Authorization")
 		}
-		self.setValue("Bearer \(oauth.accessToken)", forHTTPHeaderField: "Authorization")
+		else {
+			NSLog("Cannot sign request, access token is empty")
+		}
 	}
 }
 
