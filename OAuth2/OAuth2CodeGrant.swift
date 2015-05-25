@@ -36,6 +36,9 @@ public class OAuth2CodeGrant: OAuth2
 	/// The receiver's long-time refresh token.
 	public var refreshToken: String?
 	
+	/// Whether the receiver should use the request body instead of the Authorization header for the client secret.
+	public var secretInBody: Bool = false
+	
 	
 	/**
 	    Adds support for the "token_uri" setting.
@@ -69,6 +72,18 @@ public class OAuth2CodeGrant: OAuth2
 		req.setValue("application/x-www-form-urlencoded; charset=utf-8", forHTTPHeaderField: "Content-Type")
 		req.setValue("application/json", forHTTPHeaderField: "Accept")
 		req.HTTPBody = body?.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+		
+		// add Authorization header if we have a client secret (even if it's empty)
+		if let secret = clientSecret where !secretInBody {
+			logIfVerbose("Adding “Authorization” header as “Basic client-key:client-secret”")
+			let pw = "\(clientId.wwwFormURLEncodedString):\(secret.wwwFormURLEncodedString)"
+			if let utf8 = pw.dataUsingEncoding(NSUTF8StringEncoding) {
+				req.setValue("Basic \(utf8.base64EncodedStringWithOptions(nil))", forHTTPHeaderField: "Authorization")
+			}
+			else {
+				logIfVerbose("ERROR: for some reason failed to base-64 encode the client-key:client-secret combo")
+			}
+		}
 		
 		return req
 	}
@@ -136,8 +151,8 @@ public class OAuth2CodeGrant: OAuth2
 		var urlParams = params ?? [String: String]()
 		urlParams["code"] = code
 		urlParams["grant_type"] = "authorization_code"
-		if nil != clientSecret {
-			urlParams["client_secret"] = clientSecret!
+		if let secret = clientSecret where secretInBody {
+			urlParams["client_secret"] = secret
 		}
 		
 		return authorizeURLWithBase(tokenURL ?? authURL, redirect: redirect, scope: nil, responseType: nil, params: urlParams)
@@ -252,8 +267,8 @@ public class OAuth2CodeGrant: OAuth2
 		var urlParams = params ?? [String: String]()
 		urlParams["grant_type"] = "refresh_token"
 		urlParams["refresh_token"] = refreshToken
-		if nil != clientSecret {
-			urlParams["client_secret"] = clientSecret!
+		if let secret = clientSecret where secretInBody {
+			urlParams["client_secret"] = secret
 		}
 		
 		return authorizeURLWithBase(tokenURL ?? authURL, redirect: redirect, scope: nil, responseType: nil, params: urlParams)

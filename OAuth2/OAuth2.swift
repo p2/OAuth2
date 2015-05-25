@@ -268,12 +268,12 @@ public class OAuth2
 	/**
 	    Use this method, together with `authConfig`, to obtain an access token.
  
-	    This method will first check if the client already has an unexpired access token (possibly from the keychain),
-	    if not and it's able to use a refresh token (code grant flow) it will try to use the refresh token, then if this
-	    fails it will show the authorize screen IF you have `authConfig` set up sufficiently. If `authConfig` is not set
-	    up sufficiently this method will end up calling the `onFailure` callback.
+	    This method will first check if the client already has an unexpired access token (possibly from the keychain), if not and it's able
+	    to use a refresh token (code grant flow) it will try to use the refresh token, then if this fails it will show the authorize screen
+	    IF you have `authConfig` set up sufficiently. If `authConfig` is not set up sufficiently this method will end up calling the
+	    `onFailure` callback.
 	 */
-	public func authorize(params: [String: String]? = nil) {
+	public func authorize(params: [String: String]? = nil, autoDismiss: Bool = true) {
 		obtainAccessToken() { success in
 			if success {
 				self.didAuthorize(OAuth2JSON())
@@ -281,7 +281,7 @@ public class OAuth2
 			else {
 				if let embed = self.authConfig.authorizeEmbedded {
 					if embed {
-						if !self.authorizeEmbeddedWith(self.authConfig.authorizeContext, params: params) {
+						if !self.authorizeEmbeddedWith(self.authConfig.authorizeContext, params: params, autoDismiss: autoDismiss) {
 							self.didFail(genOAuth2Error("Client settings insufficient to show an authorization screen (no or invalid context given)", .PrerequisiteFailed))
 						}
 					}

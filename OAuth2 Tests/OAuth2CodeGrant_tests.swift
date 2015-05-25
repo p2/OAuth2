@@ -80,7 +80,7 @@ class OAuth2CodeGrantTests: XCTestCase
 		let body = NSString(data: req.HTTPBody!, encoding: NSUTF8StringEncoding) as? String
 		let query = OAuth2CodeGrant.paramsFromQuery(body!)
 		XCTAssertEqual(query["client_id"]!, "abc", "Expecting correct `client_id`")
-		XCTAssertEqual(query["client_secret"]!, "xyz", "Expecting correct `client_secret`")
+		XCTAssertNil(query["client_secret"], "Must not have `client_secret`")
 		XCTAssertEqual(query["code"]!, "pp", "Expecting correct `code`")
 		XCTAssertEqual(query["grant_type"]!, "authorization_code", "Expecting correct `grant_type`")
 		XCTAssertEqual(query["redirect_uri"]!, "oauth2://callback", "Expecting correct `redirect_uri`")

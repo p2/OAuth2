@@ -41,12 +41,14 @@ extension OAuth2
 	    Tries to use the given context, which on OS X should be a NSViewController, to present the authorization screen.
 	
 	    :returns: A bool indicating whether the method was able to show the authorize screen
-	*/
-	public func authorizeEmbeddedWith(context: AnyObject?, params: [String: String]?) -> Bool {
+	 */
+	public func authorizeEmbeddedWith(context: AnyObject?, params: [String: String]? = nil, autoDismiss: Bool = true) -> Bool {
 		if let controller = context as? NSViewController {
 			let web: AnyObject = authorizeEmbeddedFrom(controller, params: params)
-			internalAfterAuthorizeOrFailure = { wasFailure, error in
-				self.logIfVerbose("Should now dismiss \(web)")
+			if autoDismiss {
+				internalAfterAuthorizeOrFailure = { wasFailure, error in
+					self.logIfVerbose("Should now dismiss \(web)")
+				}
 			}
 			return true
 		}
