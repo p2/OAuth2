@@ -50,6 +50,9 @@ public class OAuth2CodeGrant: OAuth2
 		else {
 			tokenURL = nil
 		}
+		if let inBody = settings["secret_in_body"] as? Bool {
+			secretInBody = inBody
+		}
 		
 		super.init(settings: settings)
 	}
@@ -207,7 +210,7 @@ public class OAuth2CodeGrant: OAuth2
 			}
 			else if let data = sessData, let http = sessResponse as? NSHTTPURLResponse {
 				if let json = self.parseTokenExchangeResponse(data, error: &finalError) {
-					if 200 == http.statusCode {
+					if http.statusCode < 400 && nil == json["error"] {			// we might get a 200 with an error message from some servers
 						#if DEBUG
 						self.logIfVerbose("Did receive access token: \(self.accessToken), refresh token: \(self.refreshToken)")
 						#else

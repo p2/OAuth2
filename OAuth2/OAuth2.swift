@@ -137,8 +137,9 @@ public class OAuth2
 	    - redirect_uris (list of strings)
 	    - scope (string)
 	
-	    - keychain (bool, applies to using keychain, unrelated to OAuth)
-	    - verbose (bool, applies to client logging, unrelated to the actual OAuth exchange)
+	    - keychain (bool, true by default, applies to using the system keychain)
+	    - verbose (bool, false by default, applies to client logging)
+	    - secret_in_body (bool, false by default, forces code grant flow to use the request body for the client secret)
 	
 	    NOTE that you **must** supply at least `client_id` and `authorize_uri` upon authorization. If you forget the
 	    former a _fatalError_ will be raised, if you forget the latter `http://localhost` will be used.

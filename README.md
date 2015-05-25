@@ -169,6 +169,8 @@ Some sites might not strictly adhere to the OAuth2 flow.
 The framework deals with those deviations by creating site-specific subclasses.
 
 - **Facebook**: `OAuth2CodeGrantFacebook` to deal with the [URL-query-style response](https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow/v2.2) instead of the expected JSON dictionary.
+- **GitHub**: `OAuth2CodeGrant` automatically puts the client-key/client-secret into an “Authorization: Basic” header.
+    GitHub however needs those two in the POSTed body; you need to set the `secretInBody` setting to true, either directly in code or via the `secret_in_body` key in the settings dictionary.
 - **Reddit**: `OAuth2CodeGrant` automatically adds a _Basic_ authorization header when a client secret is set.
     This means that you **must** specify a client_secret; if there is none (like for [Reddit](https://github.com/reddit/reddit/wiki/OAuth2#token-retrieval-code-flow)) specify the empty string.
     There is a [RedditLoader](https://github.com/p2/OAuth2App/blob/master/OAuth2App/RedditLoader.swift) example in the [OAuth2App sample app][sample] for a basic usage example.
