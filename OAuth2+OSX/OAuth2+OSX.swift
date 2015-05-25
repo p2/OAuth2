@@ -24,10 +24,10 @@ import Cocoa
 extension OAuth2
 {
 	/**
-		Uses `NSWorkspace` to open the authorize URL in the OS browser.
+	    Uses `NSWorkspace` to open the authorize URL in the OS browser.
 	
-		:param: params Additional parameters to pass to the authorize URL
-		:returs: A bool indicating success
+	    :param: params Additional parameters to pass to the authorize URL
+	    :returs: A bool indicating success
 	 */
 	public final func openAuthorizeURLInBrowser(params: [String: String]? = nil) -> Bool {
 		let url = authorizeURL(params: params)
@@ -38,15 +38,17 @@ extension OAuth2
 	// MARK: - Embedded View (NOT IMPLEMENTED)
 	
 	/**
-		Tries to use the given context, which on OS X should be a NSViewController, to present the authorization screen.
+	    Tries to use the given context, which on OS X should be a NSViewController, to present the authorization screen.
 	
-		:returns: A bool indicating whether the method was able to show the authorize screen
-	*/
-	public func authorizeEmbeddedWith(context: AnyObject?, params: [String: String]?) -> Bool {
+	    :returns: A bool indicating whether the method was able to show the authorize screen
+	 */
+	public func authorizeEmbeddedWith(context: AnyObject?, params: [String: String]? = nil, autoDismiss: Bool = true) -> Bool {
 		if let controller = context as? NSViewController {
 			let web: AnyObject = authorizeEmbeddedFrom(controller, params: params)
-			internalAfterAuthorizeOrFailure = { wasFailure, error in
-				self.logIfVerbose("Should now dismiss \(web)")
+			if autoDismiss {
+				internalAfterAuthorizeOrFailure = { wasFailure, error in
+					self.logIfVerbose("Should now dismiss \(web)")
+				}
 			}
 			return true
 		}

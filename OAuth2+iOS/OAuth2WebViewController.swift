@@ -22,14 +22,14 @@ import UIKit
 
 
 /**
- *  A simple iOS web view controller that allows you to display the login/authorization screen.
+    A simple iOS web view controller that allows you to display the login/authorization screen.
  */
 public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 {
 	/// Handle to the OAuth2 instance in play, only used for debug lugging at this time.
 	var oauth: OAuth2?
 	
-	/** The URL to load on first show. */
+	/// The URL to load on first show.
 	public var startURL: NSURL? {
 		didSet(oldURL) {
 			if nil != startURL && nil == oldURL && isViewLoaded() {
@@ -38,7 +38,7 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 		}
 	}
 	
-	/** The URL string to intercept and respond to. */
+	/// The URL string to intercept and respond to.
 	var interceptURLString: String? {
 		didSet(oldURL) {
 			if nil != interceptURLString {
@@ -57,10 +57,10 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 	}
 	var interceptComponents: NSURLComponents?
 	
-	/** Closure called when the web view gets asked to load the redirect URL, specified in `interceptURLString`. */
+	/// Closure called when the web view gets asked to load the redirect URL, specified in `interceptURLString`.
 	var onIntercept: ((url: NSURL) -> Bool)?
 	
-	/** Called when the web view is about to be dismissed. */
+	/// Called when the web view is about to be dismissed.
 	var onWillDismiss: ((didCancel: Bool) -> Void)?
 	
 	var cancelButton: UIBarButtonItem?

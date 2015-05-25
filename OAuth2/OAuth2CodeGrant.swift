@@ -22,21 +22,26 @@ import Foundation
 
 
 /**
- *  A class to handle authorization for confidential clients via the authorization code grant method.
- *
- *  This auth flow is designed for clients that are capable of protecting their client secret, which a distributed Mac/iOS App **is not**!
+    A class to handle authorization for confidential clients via the authorization code grant method.
+
+    This auth flow is designed for clients that are capable of protecting their client secret but can be used from installed apps. During
+    code exchange and token refresh flows, **if** the client has a secret, a "Basic key:secret" Authorization header will be used. If not
+    the client key will be embedded into the request body.
  */
 public class OAuth2CodeGrant: OAuth2
 {
-	/** The URL string where we can exchange a code for a token; if nil `authURL` will be used. */
+	/// The URL string where we can exchange a code for a token; if nil `authURL` will be used.
 	public let tokenURL: NSURL?
 	
-	/** The receiver's long-time refresh token. */
+	/// The receiver's long-time refresh token.
 	public var refreshToken: String?
+	
+	/// Whether the receiver should use the request body instead of the Authorization header for the client secret.
+	public var secretInBody: Bool = false
 	
 	
 	/**
-		Adds support for the "token_uri" setting.
+	    Adds support for the "token_uri" setting.
 	 */
 	public override init(settings: OAuth2JSON) {
 		if let token = settings["token_uri"] as? String {
@@ -44,6 +49,9 @@ public class OAuth2CodeGrant: OAuth2
 		}
 		else {
 			tokenURL = nil
+		}
+		if let inBody = settings["secret_in_body"] as? Bool {
+			secretInBody = inBody
 		}
 		
 		super.init(settings: settings)
@@ -54,7 +62,7 @@ public class OAuth2CodeGrant: OAuth2
 	}
 	
 	/**
-		Creates a POST request with x-www-form-urlencoded body created from the supplied URL's query part.
+	    Creates a POST request with x-www-form-urlencoded body created from the supplied URL's query part.
 	 */
 	func tokenRequestWithURL(url: NSURL) -> NSMutableURLRequest {
 		let comp = NSURLComponents(URL: url, resolvingAgainstBaseURL: true)
@@ -67,6 +75,18 @@ public class OAuth2CodeGrant: OAuth2
 		req.setValue("application/x-www-form-urlencoded; charset=utf-8", forHTTPHeaderField: "Content-Type")
 		req.setValue("application/json", forHTTPHeaderField: "Accept")
 		req.HTTPBody = body?.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+		
+		// add Authorization header if we have a client secret (even if it's empty)
+		if let secret = clientSecret where !secretInBody {
+			logIfVerbose("Adding “Authorization” header as “Basic client-key:client-secret”")
+			let pw = "\(clientId.wwwFormURLEncodedString):\(secret.wwwFormURLEncodedString)"
+			if let utf8 = pw.dataUsingEncoding(NSUTF8StringEncoding) {
+				req.setValue("Basic \(utf8.base64EncodedStringWithOptions(nil))", forHTTPHeaderField: "Authorization")
+			}
+			else {
+				logIfVerbose("ERROR: for some reason failed to base-64 encode the client-key:client-secret combo")
+			}
+		}
 		
 		return req
 	}
@@ -125,26 +145,26 @@ public class OAuth2CodeGrant: OAuth2
 	// MARK: - Token Request
 	
 	/**
-		Generate the URL to be used for the token request from known instance variables and supplied parameters.
+	    Generate the URL to be used for the token request from known instance variables and supplied parameters.
 	
-		This will set "grant_type" to "authorization_code", add the "code" provided and forward to `authorizeURL()` to
-		fill the remaining parameters.
+	    This will set "grant_type" to "authorization_code", add the "code" provided and forward to `authorizeURL()` to fill the remaining
+	    parameters.
 	 */
 	func tokenURLWithRedirect(redirect: String?, code: String, params: [String: String]? = nil) -> NSURL {
 		var urlParams = params ?? [String: String]()
 		urlParams["code"] = code
 		urlParams["grant_type"] = "authorization_code"
-		if nil != clientSecret {
-			urlParams["client_secret"] = clientSecret!
+		if let secret = clientSecret where secretInBody {
+			urlParams["client_secret"] = secret
 		}
 		
 		return authorizeURLWithBase(tokenURL ?? authURL, redirect: redirect, scope: nil, responseType: nil, params: urlParams)
 	}
 	
 	/**
-		Create a request for token exchange.
-		
-		This method is public to enable unit testing.
+	    Create a request for token exchange.
+	
+	    This method is public to enable unit testing.
 	 */
 	public func tokenRequestWithCode(code: String) -> NSMutableURLRequest {
 		let url = tokenURLWithRedirect(redirect, code: code)
@@ -152,7 +172,7 @@ public class OAuth2CodeGrant: OAuth2
 	}
 	
 	/**
-		Extracts the code from the redirect URL and exchanges it for a token.
+	    Extracts the code from the redirect URL and exchanges it for a token.
 	 */
 	public override func handleRedirectURL(redirect: NSURL) {
 		logIfVerbose("Handling redirect URL \(redirect.description)")
@@ -167,7 +187,7 @@ public class OAuth2CodeGrant: OAuth2
 	}
 	
 	/**
-		Takes the received code and exchanges it for a token.
+	    Takes the received code and exchanges it for a token.
 	 */
 	func exchangeCodeForToken(code: String) {
 		
@@ -190,7 +210,7 @@ public class OAuth2CodeGrant: OAuth2
 			}
 			else if let data = sessData, let http = sessResponse as? NSHTTPURLResponse {
 				if let json = self.parseTokenExchangeResponse(data, error: &finalError) {
-					if 200 == http.statusCode {
+					if http.statusCode < 400 && nil == json["error"] {			// we might get a 200 with an error message from some servers
 						#if DEBUG
 						self.logIfVerbose("Did receive access token: \(self.accessToken), refresh token: \(self.refreshToken)")
 						#else
@@ -215,9 +235,9 @@ public class OAuth2CodeGrant: OAuth2
 	}
 	
 	/**
-		Parse the NSData object returned while exchanging the code for a token in `exchangeCodeForToken`.
+	    Parse the NSData object returned while exchanging the code for a token in `exchangeCodeForToken`.
 	
-		:returns: A OAuth2JSON, which is usually returned upon token exchange and may contain additional information
+	    :returns: A OAuth2JSON, which is usually returned upon token exchange and may contain additional information
 	 */
 	func parseTokenExchangeResponse(data: NSData, error: NSErrorPointer) -> OAuth2JSON? {
 		if let json = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: error) as? OAuth2JSON {
@@ -241,26 +261,26 @@ public class OAuth2CodeGrant: OAuth2
 	// MARK: - Refresh Token
 	
 	/**
-		Generate the URL to be used for the token request when we have a refresh token.
+	    Generate the URL to be used for the token request when we have a refresh token.
 	
-		This will set "grant_type" to "refresh_token", add the "code" provided and forward to `authorizeURL()` to
-		fill the remaining parameters.
+	    This will set "grant_type" to "refresh_token", add the refresh token, then forward to `authorizeURLWithBase()` to fill the remaining
+	    parameters.
 	 */
 	func tokenURLWithRefreshToken(redirect: String?, refreshToken: String, params: [String: String]? = nil) -> NSURL {
 		var urlParams = params ?? [String: String]()
 		urlParams["grant_type"] = "refresh_token"
 		urlParams["refresh_token"] = refreshToken
-		if nil != clientSecret {
-			urlParams["client_secret"] = clientSecret!
+		if let secret = clientSecret where secretInBody {
+			urlParams["client_secret"] = secret
 		}
 		
 		return authorizeURLWithBase(tokenURL ?? authURL, redirect: redirect, scope: nil, responseType: nil, params: urlParams)
 	}
 	
 	/**
-		Create a request for token refresh.
+	    Create a request for token refresh.
 	
-		This method is public to enable unit testing.
+	    This method is public to enable unit testing.
 	 */
 	func tokenRequestWithRefreshToken(refreshToken: String) -> NSMutableURLRequest {
 		let url = tokenURLWithRefreshToken(redirect, refreshToken: refreshToken)
@@ -268,9 +288,9 @@ public class OAuth2CodeGrant: OAuth2
 	}
 	
 	/**
-		If there is a refresh token, use it to receive a fresh access token.
-		
-		:param: callback The callback to call after the refresh token exchange has finished
+	    If there is a refresh token, use it to receive a fresh access token.
+	
+	    :param: callback The callback to call after the refresh token exchange has finished
 	 */
 	func doRefreshToken(callback: ((successParams: OAuth2JSON?, error: NSError?) -> Void)) {
 		if nil == refreshToken || refreshToken!.isEmpty {
@@ -315,9 +335,9 @@ public class OAuth2CodeGrant: OAuth2
 	}
 	
 	/**
-		Parse the NSData object returned when using our refresh token.
+	    Parse the NSData object returned when using our refresh token.
 	
-		:returns: A OAuth2JSON, which is usually returned upon token exchange and may contain additional information
+	    :returns: A OAuth2JSON, which is usually returned upon token exchange and may contain additional information
 	 */
 	func parseRefreshTokenResponse(data: NSData, error: NSErrorPointer) -> OAuth2JSON? {
 		if let json = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: error) as? OAuth2JSON {
@@ -340,7 +360,7 @@ public class OAuth2CodeGrant: OAuth2
 	// MARK: - Utilities
 	
 	/**
-		Validates the redirect URI: returns a tuple with the code and nil on success, nil and an error on failure.
+	    Validates the redirect URI: returns a tuple with the code and nil on success, nil and an error on failure.
 	 */
 	func validateRedirectURL(redirect: NSURL) -> (code: String?, error: NSError?) {
 		var code: String?

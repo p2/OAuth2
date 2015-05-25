@@ -22,14 +22,11 @@ import Foundation
 
 
 /**
-	Enhancing the code grant flow by allowing to specify an additional "Basic xx" authorization header.
+    Enhancing the code grant flow by allowing to specify a specific "Basic xx" authorization header.
 
-	This class will send an additional "Authorization" header when exchanging a token. Sites like Reddit require this
-	additional header. Instances will use your client_id and client_secret, which will be concatenated into
-	"client_id:client_secret" and then base-64 encoded, or you can specify a string for the "basic" settings key, which
-	will be used like so:
-	
-		Authorization: Basic {basic}
+    This class allows you to manually set the "Authorization" header to a given string, as accepted in its `basicToken` property. It will
+    override the superclasses automatic generation of an Authorization header if the client has a clientSecret, so you only need to use
+    this subclass if you need a different header (this is different to version 1.2.3 and earlier of this framework).
  */
 public class OAuth2CodeGrantBasicAuth: OAuth2CodeGrant
 {
@@ -37,9 +34,9 @@ public class OAuth2CodeGrantBasicAuth: OAuth2CodeGrant
 	var basicToken: String?
 	
 	/**
-		Adds support to override the basic Authorization header value by specifying:
+	    Adds support to override the basic Authorization header value by specifying:
 	
-		- basic: takes precedence over client_id and client_secret for the token request Authorization header
+	    - basic: takes precedence over client_id and client_secret for the token request Authorization header
 	 */
 	public override init(settings: OAuth2JSON) {
 		if let basic = settings["basic"] as? String {
@@ -50,23 +47,16 @@ public class OAuth2CodeGrantBasicAuth: OAuth2CodeGrant
 	}
 	
 	/**
-		Calls super's implementation to obtain a token request, then adds a "Basic" authorization header.
+	    Calls super's implementation to obtain a token request, then adds the custom "Basic" authorization header.
 	 */
 	override func tokenRequestWithURL(url: NSURL) -> NSMutableURLRequest {
 		let req = super.tokenRequestWithURL(url)
 		if let basic = basicToken {
-			logIfVerbose("Adding \"Basic\" authorization header, as specified during client initialization")
+			logIfVerbose("Overriding “Basic” authorization header, as specified during client initialization")
 			req.setValue("Basic \(basic)", forHTTPHeaderField: "Authorization")
 		}
-		else if !clientId.isEmpty && nil != clientSecret {
-			if let utf8 = NSString(string: "\(clientId):\(clientSecret!)").dataUsingEncoding(NSUTF8StringEncoding) {
-				logIfVerbose("Adding \"Basic\" authorization header from base64-encoded client_id:client_secret string")
-				let token = utf8.base64EncodedStringWithOptions(nil)
-				req.setValue("Basic \(token)", forHTTPHeaderField: "Authorization")
-			}
-		}
 		else {
-			logIfVerbose("Using extended code grant, but neither client_id & client_secret nor \"basic\" is specified. Using standard code grant.")
+			logIfVerbose("Using extended code grant, but \"basicToken\" is not actually specified. Using standard code grant.")
 		}
 		
 		return req

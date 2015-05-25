@@ -152,6 +152,8 @@ For a very nice explanation of OAuth's basics: [The OAuth Bible](http://oauthbib
 For a full OAuth 2 code grant flow you want to use the `OAuth2CodeGrant` class.
 This flow is typically used by applications that can guard their secrets, like server-side apps, and not in distributed binaries.
 In case an application cannot guard its secret, such as a distributed iOS app, you would use the _implicit grant_ or, in some cases, still a _code grant_ but omitting the client secret.
+It has however become common practice to still use code grants from mobile devices, including a client secret.
+This class fully supports those flows, it automatically creates a “Basic” Authorization header if the client has a client secret.
 
 #### Implicit Grant
 
@@ -167,12 +169,10 @@ Some sites might not strictly adhere to the OAuth2 flow.
 The framework deals with those deviations by creating site-specific subclasses.
 
 - **Facebook**: `OAuth2CodeGrantFacebook` to deal with the [URL-query-style response](https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow/v2.2) instead of the expected JSON dictionary.
-- **Reddit**: `OAuth2CodeGrantBasicAuth` adds a _Basic_ authorization header when requesting the token.
-    It automatically creates the header from _client\_id_ and _client\_secret_:  
-  
-        Authorization: Basic {base64: "client_id:client_secret"}
-  
-    Note that you **must** specify your client_secret; if there is none (like for [Reddit](https://github.com/reddit/reddit/wiki/OAuth2#token-retrieval-code-flow)) specify the empty string.
+- **GitHub**: `OAuth2CodeGrant` automatically puts the client-key/client-secret into an “Authorization: Basic” header.
+    GitHub however needs those two in the POSTed body; you need to set the `secretInBody` setting to true, either directly in code or via the `secret_in_body` key in the settings dictionary.
+- **Reddit**: `OAuth2CodeGrant` automatically adds a _Basic_ authorization header when a client secret is set.
+    This means that you **must** specify a client_secret; if there is none (like for [Reddit](https://github.com/reddit/reddit/wiki/OAuth2#token-retrieval-code-flow)) specify the empty string.
     There is a [RedditLoader](https://github.com/p2/OAuth2App/blob/master/OAuth2App/RedditLoader.swift) example in the [OAuth2App sample app][sample] for a basic usage example.
 - **Google**: If you authorize against Google with a `OAuth2CodeGrant`, the built-in iOS web view will intercept the `http://localhost` as well as the `urn:ietf:wg:oauth:2.0:oob` (with or without `:auto`) callbacks.
 

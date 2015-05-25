@@ -22,7 +22,7 @@ import Foundation
 
 
 /**
- *  Class to handle OAuth2 requests for public clients, such as distributed Mac/iOS Apps.
+    Class to handle OAuth2 requests for public clients, such as distributed Mac/iOS Apps.
  */
 public class OAuth2ImplicitGrant: OAuth2
 {

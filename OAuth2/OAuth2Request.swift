@@ -22,12 +22,12 @@ import Foundation
 
 
 /**
- *  A request that can be signed by an OAuth2 instance.
+    A request that can be signed by an OAuth2 instance.
  */
 public class OAuth2Request: NSMutableURLRequest
 {
 	/**
-		Convenience initalizer to instantiate and sign a mutable URL request in one go.
+	    Convenience initalizer to instantiate and sign a mutable URL request in one go.
 	 */
 	convenience init(URL: NSURL!, oauth: OAuth2, cachePolicy: NSURLRequestCachePolicy, timeoutInterval: NSTimeInterval) {
 		self.init(URL: URL, cachePolicy: cachePolicy, timeoutInterval: timeoutInterval)
@@ -35,9 +35,9 @@ public class OAuth2Request: NSMutableURLRequest
 	}
 	
 	/**
-		Signs the receiver by setting its "Authorization" header to "Bearer {token}".
+	    Signs the receiver by setting its "Authorization" header to "Bearer {token}".
 	
-		Will log an error if the OAuth2 instance does not have an access token!
+	    Will log an error if the OAuth2 instance does not have an access token!
 	 */
 	func sign(oauth: OAuth2) {
 		if let access = oauth.accessToken where !access.isEmpty {

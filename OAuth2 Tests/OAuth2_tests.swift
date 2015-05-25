@@ -18,6 +18,9 @@
 //  limitations under the License.
 //
 
+#if os(OSX)
+import Cocoa
+#endif
 import XCTest
 import OAuth2
 
