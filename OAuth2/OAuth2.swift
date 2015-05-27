@@ -128,7 +128,7 @@ public class OAuth2
 	/**
 	    Designated initializer.
 	
-	    Key support is experimental and currently informed by MITREid's reference implementation, with these keys:
+	    The following settings keys are currently supported:
 	
 	    - client_id (string)
 	    - client_secret (string), usually only needed for code grant
@@ -143,8 +143,6 @@ public class OAuth2
 	
 	    NOTE that you **must** supply at least `client_id` and `authorize_uri` upon authorization. If you forget the
 	    former a _fatalError_ will be raised, if you forget the latter `http://localhost` will be used.
-	
-	    MITREid: https://github.com/mitreid-connect/
 	 */
 	public init(settings: OAuth2JSON) {
 		self.settings = settings
@@ -275,7 +273,7 @@ public class OAuth2
 	    `onFailure` callback.
 	 */
 	public func authorize(params: [String: String]? = nil, autoDismiss: Bool = true) {
-		obtainAccessToken() { success in
+		tryToObtainAccessToken() { success in
 			if success {
 				self.didAuthorize(OAuth2JSON())
 			}
@@ -323,7 +321,7 @@ public class OAuth2
 	    
 	    :param: callback The callback to call once the client knows whether it has an access token or not
 	 */
-	func obtainAccessToken(callback: ((success: Bool) -> Void)) {
+	func tryToObtainAccessToken(callback: ((success: Bool) -> Void)) {
 		callback(success: hasUnexpiredAccessToken())
 	}
 	
@@ -471,8 +469,55 @@ public class OAuth2
 		return OAuth2Request(URL: url, oauth: self, cachePolicy: .ReturnCacheDataElseLoad, timeoutInterval: 20)
 	}
 	
+	/**
+	    Perform the supplied request and call the callback with the response JSON dict or an error.
+	
+	    This implementation uses the shared `NSURLSession` and executes a data task. If the server responds with an error, this will be
+	    converted into an NSError instance with information supplied in the response JSON (if availale), using `errorForErrorResponse`.
+	
+	    :param: request The request to execute
+	    :param: callback The callback to call when the request completes/fails; data and error are mutually exclusive
+	 */
+	public func performRequest(request: NSURLRequest, callback: ((data: NSData?, status: Int?, error: NSError?) -> Void)) {
+		let session = NSURLSession.sharedSession()
+		let task = session.dataTaskWithRequest(request) { sessData, sessResponse, error in
+			if let error = error {
+				callback(data: nil, status: nil, error: error)
+			}
+			else if let data = sessData, let http = sessResponse as? NSHTTPURLResponse {
+				callback(data: data, status: http.statusCode, error: nil)
+			}
+			else {
+				let error = genOAuth2Error("Unknown response \(sessResponse) with data “\(NSString(data: sessData, encoding: NSUTF8StringEncoding))”", .NetworkError)
+				callback(data: nil, status: nil, error: error)
+			}
+		}
+		task.resume()
+	}
+	
 	
 	// MARK: - Utilities
+	
+	/**
+	    Parse the NSData object returned while exchanging the code for a token in `exchangeCodeForToken`, expecting JSON data.
+	
+	    This method extracts token data and fills the receiver's properties accordingly.
+	
+	    :returns: An OAuth2JSON instance with token data; may contain additional information
+	*/
+	func parseAccessTokenJSONResponse(data: NSData, error: NSErrorPointer) -> OAuth2JSON? {
+		if let json = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: error) as? OAuth2JSON {
+			if let access = json["access_token"] as? String {
+				accessToken = access
+			}
+			accessTokenExpiry = nil
+			if let expires = json["expires_in"] as? NSTimeInterval {
+				accessTokenExpiry = NSDate(timeIntervalSinceNow: expires)
+			}
+			return json
+		}
+		return nil
+	}
 	
 	/**
 	    Create a query string from a dictionary of string: string pairs.
@@ -515,7 +560,7 @@ public class OAuth2
 	    :returns: An NSError instance with the "best" localized error key and all parameters in the userInfo dictionary;
 	              domain "OAuth2ErrorDomain", code 600
 	 */
-	func errorForAccessTokenErrorResponse(params: OAuth2JSON, fallback: String? = nil) -> NSError {
+	func errorForErrorResponse(params: OAuth2JSON, fallback: String? = nil) -> NSError {
 		var message = ""
 		
 		// "error_description" is optional, we prefer it if it's present
