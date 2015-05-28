@@ -49,3 +49,35 @@ public class OAuth2Request: NSMutableURLRequest
 	}
 }
 
+
+/**
+    An NSURLSession delegate that allows you to use self-signed SSL certificates.
+
+    Doing so is a REALLY BAD IDEA, even in development environments where you can use real, free certificates that are valid a few months.
+    Still, sometimes you'll have to do this so this class is provided. It will however only work if you have "DEBUG" defined, which
+    hopefully prevents you from submitting your app using self-signed SSL certs to the App Store. You have been warned!
+ */
+public class OAuth2DebugURLSessionDelegate: NSObject, NSURLSessionDelegate
+{
+	/// The host to allow a self-signed SSL certificate for.
+	let host: String
+	
+	public init(host: String) {
+		self.host = host
+	}
+	
+	public func URLSession(session: NSURLSession, didReceiveChallenge challenge: NSURLAuthenticationChallenge,
+		completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential!) -> Void) {
+		#if DEBUG
+		if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust {
+			if challenge.protectionSpace.host == host {
+				let credential = NSURLCredential(forTrust: challenge.protectionSpace.serverTrust)
+				completionHandler(.UseCredential, credential)
+				return
+			}
+		}
+		#endif
+		completionHandler(.CancelAuthenticationChallenge, nil)
+	}
+}
+

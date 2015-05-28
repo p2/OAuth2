@@ -125,6 +125,7 @@ public class OAuth2
 	/// Set to `true` to log all the things. `false` by default. Use `"verbose": bool` in settings.
 	public var verbose = false
 	
+	
 	/**
 	    Designated initializer.
 	
@@ -154,12 +155,7 @@ public class OAuth2
 			fatalError("Must supply `client_id` upon initialization")
 		}
 		
-		if let secret = settings["client_secret"] as? String {
-			clientSecret = secret
-		}
-		else {
-			clientSecret = nil
-		}
+		clientSecret = settings["client_secret"] as? String
 		
 		// authorize URL
 		var aURL: NSURL?
@@ -169,9 +165,7 @@ public class OAuth2
 		authURL = aURL ?? NSURL(string: "http://localhost")!
 		
 		// scope and state (state should only be manually set for testing purposes!)
-		if let scp = settings["scope"] as? String {
-			scope = scp
-		}
+		scope = settings["scope"] as? String
 		if let st = settings["state_for_testing"] as? String {
 			state = st
 		}
@@ -196,8 +190,7 @@ public class OAuth2
 	
 	// MARK: - Keychain Integration
 	
-	/** Queries the keychain for tokens stored for the receiver's authorize URL, and updates the token properties
-		accordingly. */
+	/** Queries the keychain for tokens stored for the receiver's authorize URL, and updates the token properties accordingly. */
 	private func updateFromKeychain() {
 		logIfVerbose("Looking for tokens in keychain")
 		
@@ -364,7 +357,6 @@ public class OAuth2
 			state = state[state.startIndex..<advance(state.startIndex, 8)]		// only use the first 8 chars, should be enough
 		}
 		
-		
 		// compose the URL query component
 		let comp = NSURLComponents(URL: base, resolvingAgainstBaseURL: true)
 		assert(nil != comp && "https" == comp!.scheme, "You MUST use HTTPS")
@@ -459,6 +451,10 @@ public class OAuth2
 	
 	// MARK: - Requests
 	
+	var session: NSURLSession?
+	
+	public var sessionDelegate: NSURLSessionDelegate?
+	
 	/**
 	    Return an OAuth2Request, a NSMutableURLRequest subclass, that has already been signed and can be used against
 	    your OAuth2 endpoint.
@@ -479,8 +475,7 @@ public class OAuth2
 	    :param: callback The callback to call when the request completes/fails; data and error are mutually exclusive
 	 */
 	public func performRequest(request: NSURLRequest, callback: ((data: NSData?, status: Int?, error: NSError?) -> Void)) {
-		let session = NSURLSession.sharedSession()
-		let task = session.dataTaskWithRequest(request) { sessData, sessResponse, error in
+		let task = URLSession().dataTaskWithRequest(request) { sessData, sessResponse, error in
 			if let error = error {
 				callback(data: nil, status: nil, error: error)
 			}
@@ -493,6 +488,19 @@ public class OAuth2
 			}
 		}
 		task.resume()
+	}
+	
+	func URLSession() -> NSURLSession {
+		if nil == session {
+			if let delegate = sessionDelegate {
+				let config = NSURLSessionConfiguration.defaultSessionConfiguration()
+				session = NSURLSession(configuration: config, delegate: delegate, delegateQueue: nil)
+			}
+			else {
+				session = NSURLSession.sharedSession()
+			}
+		}
+		return session!
 	}
 	
 	
@@ -619,9 +627,7 @@ func callOnMainThread(callback: (Void -> Void)) {
 		callback()
 	}
 	else {
-		dispatch_sync(dispatch_get_main_queue(), {
-			callback()
-		})
+		dispatch_sync(dispatch_get_main_queue(), callback)
 	}
 }
 

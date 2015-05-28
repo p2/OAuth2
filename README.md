@@ -38,7 +38,9 @@ If you need to provide additional parameters to the authorize URL take a look at
     ] as OAuth2JSON         // the "as" part may or may not be needed
     ```
 
-2. Create an `OAuth2CodeGrant` instance, **optionally** setting the `onAuthorize` and `onFailure` closures or just the `afterAuthorizeOrFailure` closure to keep informed about the status.
+2. Create an `OAuth2CodeGrant` instance. **Optionally**, set the `onAuthorize` and `onFailure` closures **or** just the `afterAuthorizeOrFailure` closure to keep informed about the status.
+    Note that _afterAuthorizeOrFailure_ gets called immediately after either _onAuthorize_ or _onFailure_.
+    Hence, unless you have a reason to, you don't need to set all three callbacks.
     
     ```swift
     let oauth2 = OAuth2CodeGrant(settings: settings)
@@ -66,9 +68,6 @@ If you need to provide additional parameters to the authorize URL take a look at
     ```swift
     oauth2.authConfig.authorizeEmbedded = true
     oauth2.authConfig.authorizeContext = <# presenting view controller #>
-    oauth2.afterAuthorizeOrFailure = { wasFailure, error in
-        // all done, now check `wasFailure` and `error`
-    }
     oauth2.authorize()
     ```
     
