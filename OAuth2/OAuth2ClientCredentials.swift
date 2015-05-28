@@ -100,8 +100,9 @@ public class OAuth2ClientCredentials: OAuth2
 	
 	override func parseAccessTokenJSONResponse(data: NSData, error: NSErrorPointer) -> OAuth2JSON? {
 		if let json = super.parseAccessTokenJSONResponse(data, error: error) {
-			let type = json["token_type"] as? String
-			println("--- DEBUG: token type: \(type)")
+			if let type = json["token_type"] as? String where "bearer" != type {
+				logIfVerbose("WARNING: expecting “bearer” token type but got “\(type)”")
+			}
 			return json
 		}
 		return nil
