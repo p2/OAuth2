@@ -5,6 +5,12 @@ Version numbering represents the Swift version, plus a running number representi
 You can also refer to commit logs to get details on what was implemented, fixed and improved.
 
 
+### 1.2.5
+
+- Add `OAuth2ClientCredentials` for client_credentials flow.
+- Fix bug where custom authorize parameters would not appear in the embedded iOS view controller (thanks Nate!).
+
+
 ### 1.2.4
 
 - Make `OAuth2CodeGrant` auto-decide whether to use an “Authorization: Basic ...” header (if the client has a _clientSecret_) or omit it. The option `secretInBody` (called `secret_in_body` in the settings dict) allows to force putting the secret into the request body.
