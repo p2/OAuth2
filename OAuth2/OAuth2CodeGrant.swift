@@ -121,7 +121,7 @@ public class OAuth2CodeGrant: OAuth2
 	
 	// MARK: - Authorization
 	
-	override public func obtainAccessToken(callback: (Bool -> Void)) {
+	override public func tryToObtainAccessToken(callback: (Bool -> Void)) {
 		if hasUnexpiredAccessToken() {
 			callback(true)
 		}
@@ -190,8 +190,6 @@ public class OAuth2CodeGrant: OAuth2
 	    Takes the received code and exchanges it for a token.
 	 */
 	func exchangeCodeForToken(code: String) {
-		
-		// do we have a code?
 		if (code.isEmpty) {
 			didFail(genOAuth2Error("I don't have a code to exchange, let the user authorize first", .PrerequisiteFailed))
 			return;
@@ -200,38 +198,21 @@ public class OAuth2CodeGrant: OAuth2
 		let post = tokenRequestWithCode(code)
 		logIfVerbose("Exchanging code \(code) with redirect \(redirect!) for access token from \(post.URL?.description)")
 		
-		// perform the exchange
-		let session = NSURLSession.sharedSession()
-		let task = session.dataTaskWithRequest(post) { sessData, sessResponse, error in
-			var finalError: NSError?
-			
-			if nil != error {
-				finalError = error
-			}
-			else if let data = sessData, let http = sessResponse as? NSHTTPURLResponse {
-				if let json = self.parseTokenExchangeResponse(data, error: &finalError) {
-					if http.statusCode < 400 && nil == json["error"] {			// we might get a 200 with an error message from some servers
-						#if DEBUG
-						self.logIfVerbose("Did receive access token: \(self.accessToken), refresh token: \(self.refreshToken)")
-						#else
-						self.logIfVerbose("Did exchange code for access [\(nil != self.accessToken)] and refresh [\(nil != self.refreshToken)] tokens")
-						#endif
-						self.didAuthorize(json)
-						return
-					}
-					
-					let desc = (json["error_description"] ?? json["error"]) as? String
-					finalError = genOAuth2Error(desc ?? http.statusString, .AuthorizationError)
+		performRequest(post) { (data, status, error) -> Void in
+			var myError = error
+			if let data = data, let json = self.parseAccessTokenResponse(data, error: &myError) {
+				if status < 400 && nil == json["error"] {
+					self.logIfVerbose("Did exchange code for access [\(nil != self.accessToken)] and refresh [\(nil != self.refreshToken)] tokens")
+					self.didAuthorize(json)
+				}
+				else {
+					self.didFail(self.errorForErrorResponse(json))
 				}
 			}
-			
-			// if we're still here an error must have happened
-			if nil == finalError {
-				finalError = genOAuth2Error("Unknown connection error for response \(sessResponse) with data \(sessData)", .NetworkError)
+			else {
+				self.didFail(myError ?? genOAuth2Error("Unknown error during code exchange"))
 			}
-			self.didFail(finalError)
 		}
-		task.resume()
 	}
 	
 	/**
@@ -239,19 +220,11 @@ public class OAuth2CodeGrant: OAuth2
 	
 	    :returns: A OAuth2JSON, which is usually returned upon token exchange and may contain additional information
 	 */
-	func parseTokenExchangeResponse(data: NSData, error: NSErrorPointer) -> OAuth2JSON? {
-		if let json = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: error) as? OAuth2JSON {
-			if let access = json["access_token"] as? String {
-				accessToken = access
-			}
-			accessTokenExpiry = nil
-			if let expires = json["expires_in"] as? NSTimeInterval {
-				accessTokenExpiry = NSDate(timeIntervalSinceNow: expires)
-			}
+	override func parseAccessTokenResponse(data: NSData, error: NSErrorPointer) -> OAuth2JSON? {
+		if let json = super.parseAccessTokenResponse(data, error: error) {
 			if let refresh = json["refresh_token"] as? String {
 				refreshToken = refresh
 			}
-			
 			return json
 		}
 		return nil
@@ -301,60 +274,22 @@ public class OAuth2CodeGrant: OAuth2
 		let post = tokenRequestWithRefreshToken(refreshToken!)
 		logIfVerbose("Using refresh token to receive access token from \(post.URL?.description)")
 		
-		// perform the request
-		let session = NSURLSession.sharedSession()
-		let task = session.dataTaskWithRequest(post) { sessData, sessResponse, error in
-			var finalError: NSError?
-			
-			if nil != error {
-				finalError = error
-			}
-			else if let data = sessData, let http = sessResponse as? NSHTTPURLResponse {
-				if let json = self.parseRefreshTokenResponse(data, error: &finalError) {
-					if http.statusCode < 400 {
-						#if DEBUG
-						self.logIfVerbose("Did use refresh token for access token: \(self.accessToken)")
-						#else
-						self.logIfVerbose("Did use refresh token for access token [\(nil != self.accessToken)]")
-						#endif
-						callback(successParams: json, error: nil)
-						return
-					}
-					
-					finalError = self.errorForAccessTokenErrorResponse(json, fallback: http.statusString)
+		performRequest(post) { (data, status, error) -> Void in
+			var myError = error
+			if let data = data, let json = self.parseAccessTokenResponse(data, error: &myError) {
+				if status < 400 && nil == json["error"] {			// we might get a 200 with an error message from some servers
+					self.logIfVerbose("Did use refresh token for access token [\(nil != self.accessToken)]")
+					callback(successParams: json, error: nil)
+				}
+				else {
+					callback(successParams: nil, error: self.errorForErrorResponse(json))
 				}
 			}
-			
-			// if we're still here an error must have happened
-			if nil == finalError {
-				finalError = genOAuth2Error("Unknown refresh token error for response \(sessResponse) with data \(sessData)", .NetworkError)
+			else {
+				callback(successParams: nil, error: myError ?? genOAuth2Error("Unknown error during token refresh"))
 			}
-			callback(successParams: nil, error: finalError)
 		}
-		task.resume()
 	}
-	
-	/**
-	    Parse the NSData object returned when using our refresh token.
-	
-	    :returns: A OAuth2JSON, which is usually returned upon token exchange and may contain additional information
-	 */
-	func parseRefreshTokenResponse(data: NSData, error: NSErrorPointer) -> OAuth2JSON? {
-		if let json = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: error) as? OAuth2JSON {
-			if let access = json["access_token"] as? String {
-				accessToken = access
-			}
-			accessTokenExpiry = nil
-			if let expires = json["expires_in"] as? NSTimeInterval {
-				accessTokenExpiry = NSDate(timeIntervalSinceNow: expires)
-			}
-			
-			return json
-		}
-		return nil
-	}
-	
-	
 	
 	
 	// MARK: - Utilities
@@ -381,7 +316,7 @@ public class OAuth2CodeGrant: OAuth2
 				}
 			}
 			else {
-				error = errorForAccessTokenErrorResponse(query)
+				error = errorForErrorResponse(query)
 			}
 		}
 		else {

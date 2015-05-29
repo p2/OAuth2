@@ -69,7 +69,7 @@ extension OAuth2
 	    :returns: OAuth2WebViewController, embedded in a UINavigationController being presented automatically
 	*/
 	public func authorizeEmbeddedFrom(controller: UIViewController, params: [String: String]? = nil) -> OAuth2WebViewController {
-		let url = authorizeURL()
+		let url = authorizeURL(params: params)
 		return presentAuthorizeViewFor(url, intercept: redirect!, from: controller)
 	}
 	

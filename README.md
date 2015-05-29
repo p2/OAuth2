@@ -38,7 +38,9 @@ If you need to provide additional parameters to the authorize URL take a look at
     ] as OAuth2JSON         // the "as" part may or may not be needed
     ```
 
-2. Create an `OAuth2CodeGrant` instance, **optionally** setting the `onAuthorize` and `onFailure` closures or just the `afterAuthorizeOrFailure` closure to keep informed about the status.
+2. Create an `OAuth2CodeGrant` instance. **Optionally**, set the `onAuthorize` and `onFailure` closures **or** just the `afterAuthorizeOrFailure` closure to keep informed about the status.
+    Note that _afterAuthorizeOrFailure_ gets called immediately after either _onAuthorize_ or _onFailure_.
+    Hence, unless you have a reason to, you don't need to set all three callbacks.
     
     ```swift
     let oauth2 = OAuth2CodeGrant(settings: settings)
@@ -66,9 +68,6 @@ If you need to provide additional parameters to the authorize URL take a look at
     ```swift
     oauth2.authConfig.authorizeEmbedded = true
     oauth2.authConfig.authorizeContext = <# presenting view controller #>
-    oauth2.afterAuthorizeOrFailure = { wasFailure, error in
-        // all done, now check `wasFailure` and `error`
-    }
     oauth2.authorize()
     ```
     
@@ -161,6 +160,11 @@ An implicit grant is suitable for apps that are not capable of guarding their se
 Use the `OAuth2ImplicitGrant` class to receive a token and perform requests.
 
 Would be nice to add another code example here, but it's pretty much the same as for the _code grant_.
+
+#### Client Credentials
+
+A 2-legged flow that lets an app authenticate itself via its client id and secret.
+Instantiate `OAuth2ClientCredentials`, as usual supplying `client_id` but also a `client_secret` – plus your other configurations – in the settings dict, and you should be good to go.
 
 
 ### Site-Specific Peculiarities
