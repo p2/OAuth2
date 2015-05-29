@@ -27,7 +27,7 @@ class OAuth2CodeGrantTests: XCTestCase
 	func testInit() {
 		//var oauth = OAuth2(settings: NSDictionary())		// TODO: how to test that this raises?
 		
-		var oauth = OAuth2CodeGrant(settings: [
+		let oauth = OAuth2CodeGrant(settings: [
 			"client_id": "abc",
 			"client_secret": "xyz",
 			"verbose": 1,
@@ -44,7 +44,7 @@ class OAuth2CodeGrantTests: XCTestCase
 	}
 	
 	func testAuthorizeURI() {
-		var oauth = OAuth2CodeGrant(settings: [
+		let oauth = OAuth2CodeGrant(settings: [
 			"client_id": "abc",
 			"client_secret": "xyz",
 			"authorize_uri": "https://auth.ful.io",

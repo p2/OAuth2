@@ -27,7 +27,7 @@ class OAuth2ImplicitGrantTests: XCTestCase
 	func testInit() {
 		//var oauth = OAuth2(settings: NSDictionary())		// TODO: how to test that this raises?
 		
-		var oauth = OAuth2ImplicitGrant(settings: [
+		let oauth = OAuth2ImplicitGrant(settings: [
 			"client_id": "abc",
 			"verbose": true,
 			"keychain": false,
@@ -41,7 +41,7 @@ class OAuth2ImplicitGrantTests: XCTestCase
 	}
 	
 	func testReturnURLHandling() {
-		var oauth = OAuth2ImplicitGrant(settings: [
+		let oauth = OAuth2ImplicitGrant(settings: [
 			"client_id": "abc",
 			"authorize_uri": "https://auth.ful.io",
 			"state_for_testing": "ONSTUH",

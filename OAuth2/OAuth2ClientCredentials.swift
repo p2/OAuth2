@@ -66,8 +66,10 @@ public class OAuth2ClientCredentials: OAuth2
 	
 	/**
 	    Creates a POST request with x-www-form-urlencoded body created from the supplied URL's query part.
+	
+	    Made public to enable unit testing.
 	 */
-	func tokenRequest() -> NSMutableURLRequest {
+	public func tokenRequest() -> NSMutableURLRequest {
 		if clientId.isEmpty {
 			NSException(name: "OAuth2IncompleteSetup", reason: "I do not yet have a client id, cannot request a token", userInfo: nil).raise()
 		}
