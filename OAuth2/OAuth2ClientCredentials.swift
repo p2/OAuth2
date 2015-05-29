@@ -22,14 +22,10 @@ import Foundation
 
 
 /**
-    Class to handle two-legged OAuth2 requests.
+    Class to handle two-legged OAuth2 requests of the "client_credentials" type.
  */
 public class OAuth2ClientCredentials: OAuth2
 {
-	
-	
-	// MARK: - Authorization
-	
 	public override func authorize(# params: [String : String]?, autoDismiss: Bool) {
 		if hasUnexpiredAccessToken() {
 			self.didAuthorize([String: String]())
@@ -58,7 +54,7 @@ public class OAuth2ClientCredentials: OAuth2
 		
 		performRequest(post) { (data, status, error) -> Void in
 			var myError = error
-			if let data = data, let json = self.parseAccessTokenJSONResponse(data, error: &myError) {
+			if let data = data, let json = self.parseAccessTokenResponse(data, error: &myError) {
 				self.logIfVerbose("Did get access token [\(nil != self.accessToken)]")
 				callback(error: nil)
 			}
@@ -98,8 +94,8 @@ public class OAuth2ClientCredentials: OAuth2
 		return req
 	}
 	
-	override func parseAccessTokenJSONResponse(data: NSData, error: NSErrorPointer) -> OAuth2JSON? {
-		if let json = super.parseAccessTokenJSONResponse(data, error: error) {
+	override func parseAccessTokenResponse(data: NSData, error: NSErrorPointer) -> OAuth2JSON? {
+		if let json = super.parseAccessTokenResponse(data, error: error) {
 			if let type = json["token_type"] as? String where "bearer" != type {
 				logIfVerbose("WARNING: expecting “bearer” token type but got “\(type)”")
 			}

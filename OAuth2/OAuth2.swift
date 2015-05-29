@@ -507,13 +507,13 @@ public class OAuth2
 	// MARK: - Utilities
 	
 	/**
-	    Parse the NSData object returned while exchanging the code for a token in `exchangeCodeForToken`, expecting JSON data.
+	    Parse the NSData object returned while exchanging the code for a token in `exchangeCodeForToken`, usually JSON data.
 	
 	    This method extracts token data and fills the receiver's properties accordingly.
 	
 	    :returns: An OAuth2JSON instance with token data; may contain additional information
 	*/
-	func parseAccessTokenJSONResponse(data: NSData, error: NSErrorPointer) -> OAuth2JSON? {
+	func parseAccessTokenResponse(data: NSData, error: NSErrorPointer) -> OAuth2JSON? {
 		if let json = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: error) as? OAuth2JSON {
 			if let access = json["access_token"] as? String {
 				accessToken = access

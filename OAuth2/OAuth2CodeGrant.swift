@@ -200,7 +200,7 @@ public class OAuth2CodeGrant: OAuth2
 		
 		performRequest(post) { (data, status, error) -> Void in
 			var myError = error
-			if let data = data, let json = self.parseAccessTokenJSONResponse(data, error: &myError) {
+			if let data = data, let json = self.parseAccessTokenResponse(data, error: &myError) {
 				if status < 400 && nil == json["error"] {
 					self.logIfVerbose("Did exchange code for access [\(nil != self.accessToken)] and refresh [\(nil != self.refreshToken)] tokens")
 					self.didAuthorize(json)
@@ -220,8 +220,8 @@ public class OAuth2CodeGrant: OAuth2
 	
 	    :returns: A OAuth2JSON, which is usually returned upon token exchange and may contain additional information
 	 */
-	override func parseAccessTokenJSONResponse(data: NSData, error: NSErrorPointer) -> OAuth2JSON? {
-		if let json = super.parseAccessTokenJSONResponse(data, error: error) {
+	override func parseAccessTokenResponse(data: NSData, error: NSErrorPointer) -> OAuth2JSON? {
+		if let json = super.parseAccessTokenResponse(data, error: error) {
 			if let refresh = json["refresh_token"] as? String {
 				refreshToken = refresh
 			}
@@ -276,7 +276,7 @@ public class OAuth2CodeGrant: OAuth2
 		
 		performRequest(post) { (data, status, error) -> Void in
 			var myError = error
-			if let data = data, let json = self.parseAccessTokenJSONResponse(data, error: &myError) {
+			if let data = data, let json = self.parseAccessTokenResponse(data, error: &myError) {
 				if status < 400 && nil == json["error"] {			// we might get a 200 with an error message from some servers
 					self.logIfVerbose("Did use refresh token for access token [\(nil != self.accessToken)]")
 					callback(successParams: json, error: nil)
