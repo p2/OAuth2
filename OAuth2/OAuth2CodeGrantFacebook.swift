@@ -27,6 +27,11 @@ import Foundation
  */
 public class OAuth2CodeGrantFacebook: OAuth2CodeGrant
 {
+	public required init(settings: OAuth2JSON) {
+		super.init(settings: settings)
+	}
+	
+	
 	/**
 	    Facebook doesn't return JSON but a plain URL-query-like string. This override takes care of the situation and
 	    extracts the token from the response.

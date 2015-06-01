@@ -26,6 +26,11 @@ import Foundation
  */
 public class OAuth2ClientCredentials: OAuth2
 {
+	public required init(settings: OAuth2JSON) {
+		super.init(settings: settings)
+	}
+	
+	
 	public override func authorize(# params: [String : String]?, autoDismiss: Bool) {
 		if hasUnexpiredAccessToken() {
 			self.didAuthorize([String: String]())

@@ -145,7 +145,7 @@ public class OAuth2
 	    NOTE that you **must** supply at least `client_id` and `authorize_uri` upon authorization. If you forget the
 	    former a _fatalError_ will be raised, if you forget the latter `http://localhost` will be used.
 	 */
-	public init(settings: OAuth2JSON) {
+	public required init(settings: OAuth2JSON) {
 		self.settings = settings
 		
 		if let cid = settings["client_id"] as? String {
