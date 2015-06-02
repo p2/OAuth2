@@ -58,11 +58,8 @@ public struct OAuth2AuthConfig
 /**
     Base class for specific OAuth2 authentication flow implementations.
  */
-public class OAuth2
+public class OAuth2: OAuth2Base
 {
-	/// Server-side settings, as set upon initialization.
-	final let settings: OAuth2JSON
-	
 	/// Client-side configurations.
 	public var authConfig: OAuth2AuthConfig
 	
@@ -110,20 +107,9 @@ public class OAuth2
 	/// Same as `afterAuthorizeOrFailure`, but only for internal use and called right BEFORE the public variant.
 	final var internalAfterAuthorizeOrFailure: ((wasFailure: Bool, error: NSError?) -> Void)?
 	
-	/// An optional title that will propagate to views handled by OAuth2, such as OAuth2WebViewController.
-	public var viewTitle: String?
-	
-	/// If set to `true` (the default) will use system keychain to store tokens. Use `"keychain": bool` in settings.
-	public var useKeychain = true {
-		didSet {
-			if useKeychain {
-				updateFromKeychain()
-			}
-		}
+	public override func keychainServiceKey() -> String? {
+		return authURL.description
 	}
-	
-	/// Set to `true` to log all the things. `false` by default. Use `"verbose": bool` in settings.
-	public var verbose = false
 	
 	
 	/**
@@ -145,16 +131,8 @@ public class OAuth2
 	    NOTE that you **must** supply at least `client_id` and `authorize_uri` upon authorization. If you forget the
 	    former a _fatalError_ will be raised, if you forget the latter `http://localhost` will be used.
 	 */
-	public init(settings: OAuth2JSON) {
-		self.settings = settings
-		
-		if let cid = settings["client_id"] as? String {
-			clientId = cid
-		}
-		else {
-			fatalError("Must supply `client_id` upon initialization")
-		}
-		
+	public override init(settings: OAuth2JSON) {
+		clientId = settings["client_id"] as? String ?? ""
 		clientSecret = settings["client_secret"] as? String
 		
 		// authorize URL
@@ -163,46 +141,21 @@ public class OAuth2
 			aURL = NSURL(string: auth)
 		}
 		authURL = aURL ?? NSURL(string: "http://localhost")!
+		authConfig = OAuth2AuthConfig()
 		
 		// scope and state (state should only be manually set for testing purposes!)
 		scope = settings["scope"] as? String
 		if let st = settings["state_for_testing"] as? String {
 			state = st
 		}
-		
-		// client settings
-		if let keychain = settings["keychain"] as? Bool {
-			useKeychain = keychain
-		}
-		if let verb = settings["verbose"] as? Bool {
-			verbose = verb
-		}
-		authConfig = OAuth2AuthConfig()
-		
-		// init from keychain
-		if useKeychain {
-			updateFromKeychain()
-		}
-		
-		logIfVerbose("Initialized with client id \(clientId)")
+		super.init(settings: settings)
 	}
 	
 	
 	// MARK: - Keychain Integration
 	
-	/** Queries the keychain for tokens stored for the receiver's authorize URL, and updates the token properties accordingly. */
-	private func updateFromKeychain() {
-		logIfVerbose("Looking for tokens in keychain")
-		
-		let keychain = Keychain(serviceName: authURL.description)
-		let key = ArchiveKey(keyName: OAuth2KeychainTokenKey)
-		if let items = keychain.get(key).item?.object as? [String: NSCoding] {
-			updateFromKeychainItems(items)
-		}
-	}
-	
 	/** Updates the token properties according to the items found in the passed dictionary. */
-	func updateFromKeychainItems(items: [String: NSCoding]) {
+	override func updateFromKeychainItems(items: [String: NSCoding]) {
 		if let token = items["accessToken"] as? String where !token.isEmpty {
 			if let date = items["accessTokenDate"] as? NSDate where date == date.laterDate(NSDate()) {
 				logIfVerbose("Found access token, valid until \(date)")
@@ -215,27 +168,15 @@ public class OAuth2
 		}
 	}
 	
-	/** Stores our current token(s) in the keychain. */
-	private func storeToKeychain() {
-		if let items = storableKeychainItems() {
-			logIfVerbose("Storing tokens to keychain")
-			
-			let keychain = Keychain(serviceName: authURL.description)
-			let key = ArchiveKey(keyName: OAuth2KeychainTokenKey, object: items)
-			if let error = keychain.update(key) {
-				NSLog("Failed to store tokens to keychain: \(error.localizedDescription)")
-			}
-		}
-	}
-	
 	/** Returns a dictionary of our tokens and expiration date, ready to be stored to the keychain. */
-	func storableKeychainItems() -> [String: NSCoding]? {
+	override func storableKeychainItems() -> [String: NSCoding]? {
 		if let access = accessToken where !access.isEmpty {
 			var items: [String: NSCoding] = ["accessToken": access]
 			
 			if let date = accessTokenExpiry where date == date.laterDate(NSDate()) {
 				items["accessTokenDate"] = date
 			}
+			logIfVerbose("Storing tokens to keychain")
 			return items
 		}
 		return nil
@@ -424,7 +365,7 @@ public class OAuth2
 	 */
 	func didAuthorize(parameters: OAuth2JSON) {
 		if useKeychain {
-			storeToKeychain()
+			storeToKeychain(authURL.description)
 		}
 		
 		callOnMainThread() {
@@ -451,10 +392,6 @@ public class OAuth2
 	
 	// MARK: - Requests
 	
-	var session: NSURLSession?
-	
-	public var sessionDelegate: NSURLSessionDelegate?
-	
 	/**
 	    Return an OAuth2Request, a NSMutableURLRequest subclass, that has already been signed and can be used against
 	    your OAuth2 endpoint.
@@ -464,6 +401,120 @@ public class OAuth2
 	public func request(forURL url: NSURL) -> OAuth2Request {
 		return OAuth2Request(URL: url, oauth: self, cachePolicy: .ReturnCacheDataElseLoad, timeoutInterval: 20)
 	}
+	
+	
+	// MARK: - Utilities
+	
+	/**
+	    Parse the NSData object returned while exchanging the code for a token in `exchangeCodeForToken`, usually JSON data.
+	
+	    This method extracts token data and fills the receiver's properties accordingly.
+	
+	    :returns: An OAuth2JSON instance with token data; may contain additional information
+	 */
+	func parseAccessTokenResponse(data: NSData, error: NSErrorPointer) -> OAuth2JSON? {
+		if let json = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: error) as? OAuth2JSON {
+			if let access = json["access_token"] as? String {
+				accessToken = access
+			}
+			accessTokenExpiry = nil
+			if let expires = json["expires_in"] as? NSTimeInterval {
+				accessTokenExpiry = NSDate(timeIntervalSinceNow: expires)
+			}
+			return json
+		}
+		return nil
+	}
+}
+
+
+public class OAuth2Base
+{
+	/// Server-side settings, as set upon initialization.
+	final let settings: OAuth2JSON
+	
+	/// Set to `true` to log all the things. `false` by default. Use `"verbose": bool` in settings.
+	public var verbose = false
+	
+	/// An optional title that will propagate to views handled by OAuth2, such as OAuth2WebViewController.
+	public var viewTitle: String?
+	
+	/// If set to `true` (the default) will use system keychain to store tokens. Use `"keychain": bool` in settings.
+	public var useKeychain = true {
+		didSet {
+			if useKeychain, let service = keychainServiceKey() {
+				updateFromKeychain(service)
+			}
+		}
+	}
+	
+	/** The service key under which to store keychain items. Returns nil, to be overridden by subclasses. */
+	public func keychainServiceKey() -> String? {
+		return nil
+	}
+	
+	
+	public init(settings: OAuth2JSON) {
+		self.settings = settings
+		
+		// client settings
+		if let keychain = settings["keychain"] as? Bool {
+			useKeychain = keychain
+		}
+		if let verb = settings["verbose"] as? Bool {
+			verbose = verb
+		}
+		
+		// init from keychain
+		if useKeychain, let service = keychainServiceKey() {
+			updateFromKeychain(service)
+		}
+		
+		logIfVerbose("Initialization finished")
+	}
+	
+	
+	// MARK: - Keychain Integration
+	
+	/** Queries the keychain for tokens stored for the receiver's authorize URL, and updates the token properties accordingly. */
+	private func updateFromKeychain(serviceName: String) {
+		logIfVerbose("Looking for items in keychain")
+		
+		let keychain = Keychain(serviceName: serviceName)
+		let key = ArchiveKey(keyName: OAuth2KeychainTokenKey)
+		if let items = keychain.get(key).item?.object as? [String: NSCoding] {
+			updateFromKeychainItems(items)
+		}
+	}
+	
+	/** Updates instance properties according to the items found in the passed dictionary found in the keychain. */
+	func updateFromKeychainItems(items: [String: NSCoding]) {
+	}
+	
+	/** Stores our current token(s) in the keychain. */
+	private func storeToKeychain(serviceName: String) {
+		if let items = storableKeychainItems() {
+			logIfVerbose("Storing to keychain")
+			
+			let keychain = Keychain(serviceName: serviceName)
+			let key = ArchiveKey(keyName: OAuth2KeychainTokenKey, object: items)
+			if let error = keychain.update(key) {
+				NSLog("Failed to store to keychain: \(error.localizedDescription)")
+			}
+		}
+	}
+	
+	/** Returns a dictionary of whatever you want to store to the keychain. */
+	func storableKeychainItems() -> [String: NSCoding]? {
+		return nil
+	}
+	
+	
+	// MARK: - Requests
+	
+	var session: NSURLSession?
+	
+	public var sessionDelegate: NSURLSessionDelegate?
 	
 	/**
 	    Perform the supplied request and call the callback with the response JSON dict or an error.
@@ -507,27 +558,6 @@ public class OAuth2
 	// MARK: - Utilities
 	
 	/**
-	    Parse the NSData object returned while exchanging the code for a token in `exchangeCodeForToken`, usually JSON data.
-	
-	    This method extracts token data and fills the receiver's properties accordingly.
-	
-	    :returns: An OAuth2JSON instance with token data; may contain additional information
-	*/
-	func parseAccessTokenResponse(data: NSData, error: NSErrorPointer) -> OAuth2JSON? {
-		if let json = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: error) as? OAuth2JSON {
-			if let access = json["access_token"] as? String {
-				accessToken = access
-			}
-			accessTokenExpiry = nil
-			if let expires = json["expires_in"] as? NSTimeInterval {
-				accessTokenExpiry = NSDate(timeIntervalSinceNow: expires)
-			}
-			return json
-		}
-		return nil
-	}
-	
-	/**
 	    Create a query string from a dictionary of string: string pairs.
 	
 	    This method does **form encode** the value part. If you're using NSURLComponents you want to assign the return
@@ -566,9 +596,9 @@ public class OAuth2
 	    :param: params The URL parameters passed into the redirect URL upon error
 	    :param: fallback The message string to use in case no error description is found in the parameters
 	    :returns: An NSError instance with the "best" localized error key and all parameters in the userInfo dictionary;
-	              domain "OAuth2ErrorDomain", code 600
+	    domain "OAuth2ErrorDomain", code 600
 	 */
-	func errorForErrorResponse(params: OAuth2JSON, fallback: String? = nil) -> NSError {
+	public func errorForErrorResponse(params: OAuth2JSON, fallback: String? = nil) -> NSError {
 		var message = ""
 		
 		// "error_description" is optional, we prefer it if it's present

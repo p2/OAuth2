@@ -198,7 +198,7 @@ public class OAuth2CodeGrant: OAuth2
 		let post = tokenRequestWithCode(code)
 		logIfVerbose("Exchanging code \(code) with redirect \(redirect!) for access token from \(post.URL?.description)")
 		
-		performRequest(post) { (data, status, error) -> Void in
+		performRequest(post) { data, status, error in
 			var myError = error
 			if let data = data, let json = self.parseAccessTokenResponse(data, error: &myError) {
 				if status < 400 && nil == json["error"] {
