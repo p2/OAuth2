@@ -67,10 +67,10 @@ public class OAuth2
 	public var authConfig: OAuth2AuthConfig
 	
 	/// The client id.
-	public final let clientId: String
+	public final var clientId: String
 	
 	/// The client secret, usually only needed for code grant.
-	public final let clientSecret: String?
+	public final var clientSecret: String?
 	
 	/// The URL to authorize against.
 	public final let authURL: NSURL
@@ -611,7 +611,7 @@ public class OAuth2
 	/**
 	    Debug logging, will only log if `verbose` is YES.
 	 */
-	func logIfVerbose(log: String) {
+	public func logIfVerbose(log: String) {
 		if verbose {
 			println("OAuth2: \(log)")
 		}
