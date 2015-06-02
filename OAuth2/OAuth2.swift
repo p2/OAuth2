@@ -532,6 +532,9 @@ public class OAuth2
 			}
 			return json
 		}
+		if let str = NSString(data: data, encoding: NSUTF8StringEncoding) {
+			logIfVerbose("Unparsable JSON was: \(str)")
+		}
 		return nil
 	}
 	
