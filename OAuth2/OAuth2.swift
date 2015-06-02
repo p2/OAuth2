@@ -143,13 +143,18 @@ public class OAuth2: OAuth2Base
 	/** Updates the token properties according to the items found in the passed dictionary. */
 	override func updateFromKeychainItems(items: [String: NSCoding]) {
 		if let token = items["accessToken"] as? String where !token.isEmpty {
-			if let date = items["accessTokenDate"] as? NSDate where date == date.laterDate(NSDate()) {
-				logIfVerbose("Found access token, valid until \(date)")
-				accessTokenExpiry = date
-				accessToken = token
+			if let date = items["accessTokenDate"] as? NSDate {
+				if date == date.laterDate(NSDate()) {
+					logIfVerbose("Found access token, valid until \(date)")
+					accessTokenExpiry = date
+					accessToken = token
+				}
+				else {
+					logIfVerbose("Found access token but it seems to have expired")
+				}
 			}
 			else {
-				logIfVerbose("Found access token but it seems to have expired")
+				logIfVerbose("Found access token but not how long it's valid, discarding")
 			}
 		}
 	}
@@ -407,7 +412,13 @@ public class OAuth2: OAuth2Base
 			if let expires = json["expires_in"] as? NSTimeInterval {
 				accessTokenExpiry = NSDate(timeIntervalSinceNow: expires)
 			}
+			else {
+				self.logIfVerbose("Did not get access token expiration interval")
+			}
 			return json
+		}
+		if let str = NSString(data: data, encoding: NSUTF8StringEncoding) {
+			logIfVerbose("Unparsable JSON was: \(str)")
 		}
 		return nil
 	}

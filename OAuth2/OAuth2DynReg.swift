@@ -141,7 +141,7 @@ public class OAuth2DynReg: OAuth2Base
 	 */
 	public func register(callback: ((json: OAuth2JSON?, error: NSError?) -> Void)) {
 		let req = registrationRequest()
-		logIfVerbose("Registering client at \(req.URL!.description)")
+		logIfVerbose("Registering client at \(req.URL!)")
 		
 		performRequest(req) { data, status, error in
 			var myError = error

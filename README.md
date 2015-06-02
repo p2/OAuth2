@@ -161,6 +161,11 @@ Use the `OAuth2ImplicitGrant` class to receive a token and perform requests.
 
 Would be nice to add another code example here, but it's pretty much the same as for the _code grant_.
 
+#### Client Credentials
+
+A 2-legged flow that lets an app authenticate itself via its client id and secret.
+Instantiate `OAuth2ClientCredentials`, as usual supplying `client_id` but also a `client_secret` – plus your other configurations – in the settings dict, and you should be good to go.
+
 
 ### Site-Specific Peculiarities
 
