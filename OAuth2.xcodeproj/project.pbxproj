@@ -12,6 +12,8 @@
 		EE1391DB1AC5B41A002C7B18 /* OAuth2CodeGrantBasicAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE1391D91AC5B41A002C7B18 /* OAuth2CodeGrantBasicAuth.swift */; };
 		EE24862A1AC85DD4002B31AF /* OAuth2WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2486291AC85DD4002B31AF /* OAuth2WebViewController.swift */; };
 		EE43B15F1952E4700017679A /* OAuth2CodeGrant_tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE43B1591951FAC70017679A /* OAuth2CodeGrant_tests.swift */; };
+		EE507A381B1E15E000AE02E9 /* OAuth2DynReg.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE507A371B1E15E000AE02E9 /* OAuth2DynReg.swift */; };
+		EE507A391B1E15E000AE02E9 /* OAuth2DynReg.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE507A371B1E15E000AE02E9 /* OAuth2DynReg.swift */; };
 		EE5F4F861B19114D00DB38B3 /* OAuth2ClientCredentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5F4F851B19114D00DB38B3 /* OAuth2ClientCredentials.swift */; };
 		EE5F4F871B19114D00DB38B3 /* OAuth2ClientCredentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5F4F851B19114D00DB38B3 /* OAuth2ClientCredentials.swift */; };
 		EE5F4F891B1913D400DB38B3 /* OAuth2ClientCredentials_tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5F4F881B1913D400DB38B3 /* OAuth2ClientCredentials_tests.swift */; };
@@ -101,6 +103,7 @@
 		EE43B1591951FAC70017679A /* OAuth2CodeGrant_tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2CodeGrant_tests.swift; sourceTree = "<group>"; };
 		EE44F691194F2C7D0094AB8B /* OAuth2CodeGrant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2CodeGrant.swift; sourceTree = "<group>"; };
 		EE450CD31AD57578008AB6FC /* p2.OAuth2.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = p2.OAuth2.podspec; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		EE507A371B1E15E000AE02E9 /* OAuth2DynReg.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2DynReg.swift; sourceTree = "<group>"; };
 		EE5F4F851B19114D00DB38B3 /* OAuth2ClientCredentials.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2ClientCredentials.swift; sourceTree = "<group>"; };
 		EE5F4F881B1913D400DB38B3 /* OAuth2ClientCredentials_tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2ClientCredentials_tests.swift; sourceTree = "<group>"; };
 		EE8EE6DA1B12AB35005B90C5 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
@@ -219,6 +222,7 @@
 				EEACE1DE1A7E8FC1009BF3A7 /* OAuth2CodeGrantFacebook.swift */,
 				EE1391D91AC5B41A002C7B18 /* OAuth2CodeGrantBasicAuth.swift */,
 				EE5F4F851B19114D00DB38B3 /* OAuth2ClientCredentials.swift */,
+				EE507A371B1E15E000AE02E9 /* OAuth2DynReg.swift */,
 				EE29EABB195A0DB2008882C8 /* OAuth2Request.swift */,
 				EEDB864B19421DAD00C4EEA1 /* extensions.swift */,
 				EEDB8627193FAAE500C4EEA1 /* Supporting Files */,
@@ -414,6 +418,7 @@
 				EEC7A8D91AE4851E008C30E7 /* Keychain.swift in Sources */,
 				EE5F4F871B19114D00DB38B3 /* OAuth2ClientCredentials.swift in Sources */,
 				EEC7A8DF1AE4851E008C30E7 /* KeychainService.swift in Sources */,
+				EE507A391B1E15E000AE02E9 /* OAuth2DynReg.swift in Sources */,
 				EEACE1DB1A7E8DF1009BF3A7 /* OAuth2Request.swift in Sources */,
 				EEACE1D71A7E8DEB009BF3A7 /* OAuth2ImplicitGrant.swift in Sources */,
 				EEACE1D91A7E8DEE009BF3A7 /* OAuth2CodeGrant.swift in Sources */,
@@ -436,6 +441,7 @@
 				EEACE1DA1A7E8DF1009BF3A7 /* OAuth2Request.swift in Sources */,
 				EEC7A8D81AE4851E008C30E7 /* Keychain.swift in Sources */,
 				EEACE1D61A7E8DEB009BF3A7 /* OAuth2ImplicitGrant.swift in Sources */,
+				EE507A381B1E15E000AE02E9 /* OAuth2DynReg.swift in Sources */,
 				EEC7A8D41AE4851E008C30E7 /* ArchiveKey.swift in Sources */,
 				EEC7A8DA1AE4851E008C30E7 /* KeychainItem.swift in Sources */,
 				EEACE1D81A7E8DEE009BF3A7 /* OAuth2CodeGrant.swift in Sources */,

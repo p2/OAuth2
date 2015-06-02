@@ -196,7 +196,7 @@ public class OAuth2CodeGrant: OAuth2
 		}
 		
 		let post = tokenRequestWithCode(code)
-		logIfVerbose("Exchanging code \(code) with redirect \(redirect!) for access token from \(post.URL?.description)")
+		logIfVerbose("Exchanging code \(code) with redirect \(redirect!) for access token from \(post.URL!.description)")
 		
 		performRequest(post) { data, status, error in
 			var myError = error
@@ -272,7 +272,7 @@ public class OAuth2CodeGrant: OAuth2
 		}
 		
 		let post = tokenRequestWithRefreshToken(refreshToken!)
-		logIfVerbose("Using refresh token to receive access token from \(post.URL?.description)")
+		logIfVerbose("Using refresh token to receive access token from \(post.URL!.description)")
 		
 		performRequest(post) { (data, status, error) -> Void in
 			var myError = error

@@ -107,10 +107,6 @@ public class OAuth2: OAuth2Base
 	/// Same as `afterAuthorizeOrFailure`, but only for internal use and called right BEFORE the public variant.
 	final var internalAfterAuthorizeOrFailure: ((wasFailure: Bool, error: NSError?) -> Void)?
 	
-	public override func keychainServiceKey() -> String? {
-		return authURL.description
-	}
-	
 	
 	/**
 	    Designated initializer.
@@ -119,17 +115,17 @@ public class OAuth2: OAuth2Base
 	
 	    - client_id (string)
 	    - client_secret (string), usually only needed for code grant
-	    - authorize_uri (string)
-	    - token_uri (string), only for code grant
-	    - redirect_uris (list of strings)
+	    - authorize_uri (URL-string)
+	    - token_uri (URL-string), only for code grant
+	    - redirect_uris (list of URL-strings)
 	    - scope (string)
 	
 	    - keychain (bool, true by default, applies to using the system keychain)
 	    - verbose (bool, false by default, applies to client logging)
 	    - secret_in_body (bool, false by default, forces code grant flow to use the request body for the client secret)
 	
-	    NOTE that you **must** supply at least `client_id` and `authorize_uri` upon authorization. If you forget the
-	    former a _fatalError_ will be raised, if you forget the latter `http://localhost` will be used.
+	    NOTE that you **must** supply at least `client_id` and `authorize_uri` upon initialization. If you forget the former a _fatalError_
+	    will be raised, if you forget the latter `http://localhost` will be used.
 	 */
 	public override init(settings: OAuth2JSON) {
 		clientId = settings["client_id"] as? String ?? ""
@@ -153,6 +149,14 @@ public class OAuth2: OAuth2Base
 	
 	
 	// MARK: - Keychain Integration
+	
+	public override func keychainServiceName() -> String {
+		return authURL.description
+	}
+	
+	public override func keychainKeyName() -> String {
+		return OAuth2KeychainTokenKey
+	}
 	
 	/** Updates the token properties according to the items found in the passed dictionary. */
 	override func updateFromKeychainItems(items: [String: NSCoding]) {
@@ -184,9 +188,9 @@ public class OAuth2: OAuth2Base
 	
 	/** Unsets the tokens and deletes them from the keychain. */
 	public func forgetTokens() {
-		logIfVerbose("Deleting tokens and removing them from keychain")
-		let keychain = Keychain(serviceName: authURL.description)
-		let key = ArchiveKey(keyName: OAuth2KeychainTokenKey)
+		logIfVerbose("Forgetting tokens and removing them from keychain")
+		let keychain = Keychain(serviceName: keychainServiceName())
+		let key = ArchiveKey(keyName: keychainKeyName())
 		if let error = keychain.remove(key) {
 			NSLog("Failed to delete tokens from keychain: \(error.localizedDescription)")
 		}
@@ -365,7 +369,7 @@ public class OAuth2: OAuth2Base
 	 */
 	func didAuthorize(parameters: OAuth2JSON) {
 		if useKeychain {
-			storeToKeychain(authURL.description)
+			storeToKeychain()
 		}
 		
 		callOnMainThread() {
@@ -428,6 +432,9 @@ public class OAuth2: OAuth2Base
 }
 
 
+// MARK: -
+
+
 public class OAuth2Base
 {
 	/// Server-side settings, as set upon initialization.
@@ -442,15 +449,19 @@ public class OAuth2Base
 	/// If set to `true` (the default) will use system keychain to store tokens. Use `"keychain": bool` in settings.
 	public var useKeychain = true {
 		didSet {
-			if useKeychain, let service = keychainServiceKey() {
-				updateFromKeychain(service)
+			if useKeychain {
+				updateFromKeychain()
 			}
 		}
 	}
 	
 	/** The service key under which to store keychain items. Returns nil, to be overridden by subclasses. */
-	public func keychainServiceKey() -> String? {
-		return nil
+	public func keychainServiceName() -> String {
+		return "http://localhost"
+	}
+	
+	public func keychainKeyName() -> String {
+		return "currentTokens"
 	}
 	
 	
@@ -466,8 +477,8 @@ public class OAuth2Base
 		}
 		
 		// init from keychain
-		if useKeychain, let service = keychainServiceKey() {
-			updateFromKeychain(service)
+		if useKeychain {
+			updateFromKeychain()
 		}
 		
 		logIfVerbose("Initialization finished")
@@ -477,11 +488,11 @@ public class OAuth2Base
 	// MARK: - Keychain Integration
 	
 	/** Queries the keychain for tokens stored for the receiver's authorize URL, and updates the token properties accordingly. */
-	private func updateFromKeychain(serviceName: String) {
+	private func updateFromKeychain() {
 		logIfVerbose("Looking for items in keychain")
 		
-		let keychain = Keychain(serviceName: serviceName)
-		let key = ArchiveKey(keyName: OAuth2KeychainTokenKey)
+		let keychain = Keychain(serviceName: keychainServiceName())
+		let key = ArchiveKey(keyName: keychainKeyName())
 		if let items = keychain.get(key).item?.object as? [String: NSCoding] {
 			updateFromKeychainItems(items)
 		}
@@ -492,12 +503,12 @@ public class OAuth2Base
 	}
 	
 	/** Stores our current token(s) in the keychain. */
-	private func storeToKeychain(serviceName: String) {
-		if let items = storableKeychainItems() {
+	internal func storeToKeychain() {
+		if let items = storableKeychainItems() where !items.isEmpty {
 			logIfVerbose("Storing to keychain")
 			
-			let keychain = Keychain(serviceName: serviceName)
-			let key = ArchiveKey(keyName: OAuth2KeychainTokenKey, object: items)
+			let keychain = Keychain(serviceName: keychainServiceName())
+			let key = ArchiveKey(keyName: keychainKeyName(), object: items)
 			if let error = keychain.update(key) {
 				NSLog("Failed to store to keychain: \(error.localizedDescription)")
 			}

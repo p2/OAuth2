@@ -50,7 +50,7 @@ public class OAuth2ClientCredentials: OAuth2
 	 */
 	func obtainAccessToken(callback: ((error: NSError?) -> Void)) {
 		let post = tokenRequest()
-		logIfVerbose("Requesting new access token from \(post.URL?.description)")
+		logIfVerbose("Requesting new access token from \(post.URL!.description)")
 		
 		performRequest(post) { (data, status, error) -> Void in
 			var myError = error
