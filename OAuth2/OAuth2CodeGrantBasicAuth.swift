@@ -38,7 +38,7 @@ public class OAuth2CodeGrantBasicAuth: OAuth2CodeGrant
 	
 	    - basic: takes precedence over client_id and client_secret for the token request Authorization header
 	 */
-	public required init(settings: OAuth2JSON) {
+	public override init(settings: OAuth2JSON) {
 		if let basic = settings["basic"] as? String {
 			basicToken = basic
 		}

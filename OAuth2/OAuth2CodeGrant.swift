@@ -43,7 +43,7 @@ public class OAuth2CodeGrant: OAuth2
 	/**
 	    Adds support for the "token_uri" setting.
 	 */
-	public required init(settings: OAuth2JSON) {
+	public override init(settings: OAuth2JSON) {
 		if let token = settings["token_uri"] as? String {
 			tokenURL = NSURL(string: token)
 		}
