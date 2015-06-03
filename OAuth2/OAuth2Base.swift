@@ -120,7 +120,11 @@ public class OAuth2Base
 	
 	var session: NSURLSession?
 	
-	public var sessionDelegate: NSURLSessionDelegate?
+	public var sessionDelegate: NSURLSessionDelegate? {
+		didSet {
+			session = nil
+		}
+	}
 	
 	/**
 	    Perform the supplied request and call the callback with the response JSON dict or an error.
