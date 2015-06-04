@@ -21,6 +21,7 @@ public enum OAuth2Error: Int {
 	case PrerequisiteFailed
 	case InvalidState
 	case AuthorizationError
+	case JSONParserError
 }
 
 /// Typealias to ease working with JSON dictionaries.

@@ -52,7 +52,7 @@ public class OAuth2ClientCredentials: OAuth2
 		let post = tokenRequest()
 		logIfVerbose("Requesting new access token from \(post.URL!)")
 		
-		performRequest(post) { (data, status, error) -> Void in
+		performRequest(post) { data, status, error in
 			var myError = error
 			if let data = data, let json = self.parseAccessTokenResponse(data, error: &myError) {
 				self.logIfVerbose("Did get access token [\(nil != self.accessToken)]")

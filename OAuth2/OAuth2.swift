@@ -417,6 +417,11 @@ public class OAuth2: OAuth2Base
 			}
 			return json
 		}
+		if let err = error.memory where err.domain == NSCocoaErrorDomain && 3840 == err.code {		// JSON parse error
+			var msg = err.localizedFailureReason
+			msg = msg ?? err.userInfo?["NSDebugDescription"] as? String
+			error.memory = genOAuth2Error(msg ?? err.localizedDescription, .JSONParserError)
+		}
 		if let str = NSString(data: data, encoding: NSUTF8StringEncoding) {
 			logIfVerbose("Unparsable JSON was: \(str)")
 		}
