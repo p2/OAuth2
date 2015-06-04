@@ -84,7 +84,7 @@ public class OAuth2ClientCredentials: OAuth2
         
         //check if scope is set
         if nil != scope{
-            req.HTTPBody = "grant_type=client_credentials&scope=\(scope)".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+            req.HTTPBody = "grant_type=client_credentials&scope=\(scope!)".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         }
         //default
         else{

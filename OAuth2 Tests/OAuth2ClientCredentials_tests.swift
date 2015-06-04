@@ -33,6 +33,15 @@ class OAuth2ClientCredentialsTests: XCTestCase
 			"verbose": true
 		])
 	}
+    
+    func genericOAuth2NoScope() -> OAuth2ClientCredentials {
+        return OAuth2ClientCredentials(settings: [
+            "client_id": "abc",
+            "client_secret": "def",
+            "authorize_uri": "https://auth.ful.io",
+            "verbose": true
+            ])
+    }
 	
 	func testInit() {
 		let oauth = genericOAuth2()
@@ -54,7 +63,7 @@ class OAuth2ClientCredentialsTests: XCTestCase
 		
 		let body = NSString(data: request.HTTPBody!, encoding: NSUTF8StringEncoding)
 		XCTAssertNotNil(body, "Body data must be present")
-		XCTAssertEqual(body!, "grant_type=client_credentials", "Must create correct request body")
+		XCTAssertEqual(body!, "grant_type=client_credentials&scope=login", "Must create correct request body")
 	}
 	
 	func testFailedTokenRequest() {
@@ -67,5 +76,15 @@ class OAuth2ClientCredentialsTests: XCTestCase
 		// TODO: this must (and does) raise, but XCTAssertThrows() is not yet available in Swift
 //		oauth.tokenRequest()
 	}
+    
+    func testTokenRequestNoScope(){
+        let oauth = genericOAuth2NoScope()
+        let request = oauth.tokenRequest()
+        XCTAssertEqual("POST", request.HTTPMethod, "Must be a POST request")
+        
+        let body = NSString(data: request.HTTPBody!, encoding: NSUTF8StringEncoding)
+        XCTAssertNotNil(body, "Body data must be present")
+        XCTAssertEqual(body!, "grant_type=client_credentials", "Must create correct request body")
+    }
 }
 
