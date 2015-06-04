@@ -83,8 +83,8 @@ public class OAuth2ClientCredentials: OAuth2
 		req.setValue("application/json", forHTTPHeaderField: "Accept")
         
         //check if scope is set
-		if nil != scope{
-			req.HTTPBody = "grant_type=client_credentials&scope=\(scope!)".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+		if let scope = scope{
+			req.HTTPBody = "grant_type=client_credentials&scope=\(scope.wwwFormURLEncodedString)".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
 		}
 		//default
 		else{
