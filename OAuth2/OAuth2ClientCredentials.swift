@@ -83,13 +83,13 @@ public class OAuth2ClientCredentials: OAuth2
 		req.setValue("application/json", forHTTPHeaderField: "Accept")
         
         //check if scope is set
-        if nil != scope{
-            req.HTTPBody = "grant_type=client_credentials&scope=\(scope!)".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
-        }
-        //default
-        else{
-            req.HTTPBody = "grant_type=client_credentials".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
-        }
+		if nil != scope{
+			req.HTTPBody = "grant_type=client_credentials&scope=\(scope!)".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+		}
+		//default
+		else{
+			req.HTTPBody = "grant_type=client_credentials".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+		}
 		// add Authorization header
 		logIfVerbose("Adding “Authorization” header as “Basic client-key:client-secret”")
 		let pw = "\(clientId.wwwFormURLEncodedString):\(clientSecret!.wwwFormURLEncodedString)"
