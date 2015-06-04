@@ -29,7 +29,7 @@ class OAuth2ClientCredentialsTests: XCTestCase
 			"client_id": "abc",
 			"client_secret": "def",
 			"authorize_uri": "https://auth.ful.io",
-			"scope": "login",
+			"scope": "login and more",
 			"verbose": true
 		])
 	}
@@ -47,7 +47,7 @@ class OAuth2ClientCredentialsTests: XCTestCase
 		let oauth = genericOAuth2()
 		XCTAssertEqual(oauth.clientId, "abc", "Must init `client_id`")
 		XCTAssertEqual(oauth.clientSecret!, "def", "Must init `client_secret`")
-		XCTAssertEqual(oauth.scope!, "login", "Must init correct scope")
+		XCTAssertEqual(oauth.scope!, "login and more", "Must init correct scope")
 		XCTAssertEqual(oauth.authURL, NSURL(string: "https://auth.ful.io")!, "Must init `authorize_uri`")
 		XCTAssertTrue(oauth.verbose, "Set to verbose")
 	}
@@ -63,7 +63,7 @@ class OAuth2ClientCredentialsTests: XCTestCase
 		
 		let body = NSString(data: request.HTTPBody!, encoding: NSUTF8StringEncoding)
 		XCTAssertNotNil(body, "Body data must be present")
-		XCTAssertEqual(body!, "grant_type=client_credentials&scope=login", "Must create correct request body")
+		XCTAssertEqual(body!, "grant_type=client_credentials&scope=login+and+more", "Must create correct request body")
 	}
 	
 	func testFailedTokenRequest() {

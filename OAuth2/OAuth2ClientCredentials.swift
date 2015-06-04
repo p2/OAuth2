@@ -82,12 +82,11 @@ public class OAuth2ClientCredentials: OAuth2
 		req.setValue("application/x-www-form-urlencoded; charset=utf-8", forHTTPHeaderField: "Content-Type")
 		req.setValue("application/json", forHTTPHeaderField: "Accept")
         
-        //check if scope is set
-		if let scope = scope{
+		// check if scope is set
+		if let scope = scope {
 			req.HTTPBody = "grant_type=client_credentials&scope=\(scope.wwwFormURLEncodedString)".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
 		}
-		//default
-		else{
+		else {
 			req.HTTPBody = "grant_type=client_credentials".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
 		}
 		// add Authorization header
