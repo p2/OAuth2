@@ -58,4 +58,20 @@ class OAuth2PasswordGrantTests: XCTestCase{
 		XCTAssertNotNil(body, "Body data must be present")
 		XCTAssertEqual(body!, "grant_type=password&scope=login+and+more&username=My+User&password=Here+is+my+password", "Must create correct request body")
 	}
+	
+	func testTokenRequestNoScope() {
+		let oauth = OAuth2Password(settings: [
+			"client_id": "abc",
+			"client_secret": "def",
+			"authorize_uri": "https://auth.ful.io",
+			"username":"My User",
+			"password":"Here is my password",
+			"verbose": true
+			])
+		let request = oauth.tokenRequest()
+		
+		let body = NSString(data: request.HTTPBody!, encoding: NSUTF8StringEncoding)
+		XCTAssertNotNil(body, "Body data must be present")
+		XCTAssertEqual(body!, "grant_type=password&username=My+User&password=Here+is+my+password", "Must create correct request body")
+	}
 }
