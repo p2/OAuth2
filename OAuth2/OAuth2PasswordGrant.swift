@@ -20,7 +20,7 @@
 
 import Foundation
 
-public class OAuth2Password: OAuth2
+public class OAuth2PasswordGrant: OAuth2
 {
 	public var username: String
 	

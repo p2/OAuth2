@@ -22,8 +22,8 @@ import OAuth2
 
 class OAuth2PasswordGrantTests: XCTestCase{
 	
-	func genericOAuth2Password() -> OAuth2Password {
-		return OAuth2Password(settings: [
+	func genericOAuth2Password() -> OAuth2PasswordGrant {
+		return OAuth2PasswordGrant(settings: [
 			"client_id": "abc",
 			"client_secret": "def",
 			"authorize_uri": "https://auth.ful.io",
@@ -60,7 +60,7 @@ class OAuth2PasswordGrantTests: XCTestCase{
 	}
 	
 	func testTokenRequestNoScope() {
-		let oauth = OAuth2Password(settings: [
+		let oauth = OAuth2PasswordGrant(settings: [
 			"client_id": "abc",
 			"client_secret": "def",
 			"authorize_uri": "https://auth.ful.io",
