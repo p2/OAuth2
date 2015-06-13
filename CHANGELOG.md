@@ -5,6 +5,11 @@ Version numbering represents the Swift version, plus a running number representi
 You can also refer to commit logs to get details on what was implemented, fixed and improved.
 
 
+### 1.2.6
+
+- Add `OAuth2PasswordGrant` for password grant flow, courtesy of Tim Sneed.
+
+
 ### 1.2.5
 
 - Add `OAuth2ClientCredentials` for client_credentials flow.

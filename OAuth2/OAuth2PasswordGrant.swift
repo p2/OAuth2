@@ -20,6 +20,10 @@
 
 import Foundation
 
+
+/**
+    A class to handle authorization for clients via password grant.
+ */
 public class OAuth2PasswordGrant: OAuth2
 {
 	public var username: String

@@ -215,7 +215,7 @@ public class OAuth2
 				}
 			}
 			else {
-				logIfVerbose("Found access token but not how long it's valid, discarding")
+				logIfVerbose("Found access token but no expiration date, discarding")
 			}
 		}
 	}
