@@ -11,6 +11,8 @@ To use on **iOS 7** you'll have to include the source files in your main project
 _Note_ that it's possible to run embedded frameworks in iOS 7 with some tricks, however you will not be able to submit such an App to the App Store.
 Supported OAuth2 [flows](#flows) are the _code grant_ (`response_type=code`) and the _implicit grant_ (`response_type=token`).
 
+#### Swift Versions
+
 Since the Swift language is constantly evolving I am [adding tags](https://github.com/p2/OAuth2/releases) that mark which revision should work with which Swift version.
 Brand new Swift releases are likely to be found on the `develop` branch.
 
