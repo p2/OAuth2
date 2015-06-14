@@ -94,14 +94,14 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 		
 		// create a web view
 		webView = UIWebView()
-		webView.setTranslatesAutoresizingMaskIntoConstraints(false)
+		webView.translatesAutoresizingMaskIntoConstraints = false
 		webView.scrollView.decelerationRate = UIScrollViewDecelerationRateNormal
 		webView.delegate = self
 		
 		view.addSubview(webView)
 		let views = ["web": webView]
-		view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[web]|", options: nil, metrics: nil, views: views))
-		view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[web]|", options: nil, metrics: nil, views: views))
+		view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[web]|", options: [], metrics: nil, views: views))
+		view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[web]|", options: [], metrics: nil, views: views))
 	}
 	
 	override public func viewWillAppear(animated: Bool) {
@@ -154,11 +154,11 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 		dismiss(asCancel: true, animated: nil != sender ? true : false)
 	}
 	
-	func dismiss(# animated: Bool) {
+	func dismiss(animated animated: Bool) {
 		dismiss(asCancel: false, animated: animated)
 	}
 	
-	func dismiss(# asCancel: Bool, animated: Bool) {
+	func dismiss(asCancel asCancel: Bool, animated: Bool) {
 		webView.stopLoading()
 		
 		if nil != self.onWillDismiss {
@@ -215,14 +215,14 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 		showHideBackButton(webView.canGoBack)
 	}
 	
-	public func webView(webView: UIWebView, didFailLoadWithError error: NSError) {
-		if NSURLErrorDomain == error.domain && NSURLErrorCancelled == error.code {
+	public func webView(webView: UIWebView, didFailLoadWithError error: NSError?) {
+		if NSURLErrorDomain == error?.domain && NSURLErrorCancelled == error?.code {
 			return
 		}
 		// do we still need to intercept "WebKitErrorDomain" error 102?
 		
 		if nil != loadingView {
-			showErrorMessage(error.localizedDescription, animated: true)
+			showErrorMessage(error?.localizedDescription ?? "Unknown web view load error", animated: true)
 		}
 	}
 }

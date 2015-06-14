@@ -34,10 +34,10 @@ public class OAuth2ImplicitGrant: OAuth2
 		logIfVerbose("Handling redirect URL \(redirect.description)")
 		
 		var error: NSError?
-		var comp = NSURLComponents(URL: redirect, resolvingAgainstBaseURL: true)
+		let comp = NSURLComponents(URL: redirect, resolvingAgainstBaseURL: true)
 		
 		// token should be in the URL fragment
-		if let fragment = comp?.percentEncodedFragment where count(fragment) > 0 {
+		if let fragment = comp?.percentEncodedFragment where fragment.characters.count > 0 {
 			let params = OAuth2ImplicitGrant.paramsFromQuery(fragment)
 			if let token = params["access_token"] where !token.isEmpty {
 				if let tokType = params["token_type"] {
@@ -48,8 +48,8 @@ public class OAuth2ImplicitGrant: OAuth2
 							if tokState == state {
 								accessToken = token
 								accessTokenExpiry = nil
-								if let expires = params["expires_in"]?.toInt() {
-									accessTokenExpiry = NSDate(timeIntervalSinceNow: NSTimeInterval(expires))
+								if let expiresStr = params["expires_in"], let expires = NSTimeInterval(expiresStr) {
+									accessTokenExpiry = NSDate(timeIntervalSinceNow: expires)
 								}
 								logIfVerbose("Successfully extracted access token")
 								didAuthorize(params)
