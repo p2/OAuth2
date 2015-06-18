@@ -57,7 +57,8 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 	}
 	var interceptComponents: NSURLComponents?
 	
-	/// Closure called when the web view gets asked to load the redirect URL, specified in `interceptURLString`.
+	/// Closure called when the web view gets asked to load the redirect URL, specified in `interceptURLString`. Return a Bool indicating
+	/// that you've intercepted the URL.
 	var onIntercept: ((url: NSURL) -> Bool)?
 	
 	/// Called when the web view is about to be dismissed.

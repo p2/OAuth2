@@ -30,8 +30,14 @@ extension OAuth2
 	    :returs: A bool indicating success
 	 */
 	public final func openAuthorizeURLInBrowser(params: [String: String]? = nil) -> Bool {
-		let url = authorizeURL(params)
-		return UIApplication.sharedApplication().openURL(url)
+		do {
+			let url = try authorizeURL(params)
+			return UIApplication.sharedApplication().openURL(url)
+		}
+		catch let err {
+			logIfVerbose("Cannot open authorize URL: \((err as NSError).localizedDescription)")
+		}
+		return false
 	}
 	
 	
@@ -44,13 +50,14 @@ extension OAuth2
 	 */
 	public func authorizeEmbeddedWith(context: AnyObject?, params: [String: String]? = nil, autoDismiss: Bool = true) -> Bool {
 		if let controller = context as? UIViewController {
-			let web = authorizeEmbeddedFrom(controller, params: params)
-			if autoDismiss {
-				internalAfterAuthorizeOrFailure = { wasFailure, error in
-					web.dismissViewControllerAnimated(true, completion: nil)
+			if let web = authorizeEmbeddedFrom(controller, params: params) {
+				if autoDismiss {
+					internalAfterAuthorizeOrFailure = { wasFailure, error in
+						web.dismissViewControllerAnimated(true, completion: nil)
+					}
 				}
+				return true
 			}
-			return true
 		}
 		return false
 	}
@@ -68,9 +75,15 @@ extension OAuth2
 	    :param: params     Optional additional URL parameters
 	    :returns: OAuth2WebViewController, embedded in a UINavigationController being presented automatically
 	*/
-	public func authorizeEmbeddedFrom(controller: UIViewController, params: [String: String]? = nil) -> OAuth2WebViewController {
-		let url = authorizeURL(params)
-		return presentAuthorizeViewFor(url, intercept: redirect!, from: controller)
+	public func authorizeEmbeddedFrom(controller: UIViewController, params: [String: String]? = nil) -> OAuth2WebViewController? {
+		do {
+			let url = try authorizeURL(params)
+			return presentAuthorizeViewFor(url, intercept: redirect!, from: controller)
+		}
+		catch let err {
+			logIfVerbose("Cannot present authorize URL: \((err as NSError).localizedDescription)")
+		}
+		return nil
 	}
 	
 	/**
@@ -89,9 +102,15 @@ extension OAuth2
 	public func authorizeEmbeddedFrom(controller: UIViewController,
 	                                    redirect: String,
 	                                       scope: String,
-	                                      params: [String: String]? = nil) -> OAuth2WebViewController {
-		let url = authorizeURLWithRedirect(redirect, scope: scope, params: params)
-		return presentAuthorizeViewFor(url, intercept: redirect, from: controller)
+		                                  params: [String: String]? = nil) -> OAuth2WebViewController? {
+		do {
+			let url = try authorizeURLWithRedirect(redirect, scope: scope, params: params)
+			return presentAuthorizeViewFor(url, intercept: redirect, from: controller)
+		}
+		catch let err {
+			logIfVerbose("Cannot present authorize URL: \((err as NSError).localizedDescription)")
+		}
+		return nil
 	}
 	
 	/**
@@ -105,8 +124,14 @@ extension OAuth2
 		web.startURL = url
 		web.interceptURLString = intercept
 		web.onIntercept = { url in
-			self.handleRedirectURL(url)
-			return true
+			do {
+				try self.handleRedirectURL(url)
+				return true
+			}
+			catch let err {
+				self.logIfVerbose("Cannot intercept redirect URL: \((err as NSError).localizedDescription)")
+			}
+			return false
 		}
 		web.onWillDismiss = { didCancel in
 			if didCancel {
