@@ -3,6 +3,7 @@
 # Xcode
 *.xcuserdatad
 *.xccheckout
+*.xcscmblueprint
 build
 
 # Documentation
