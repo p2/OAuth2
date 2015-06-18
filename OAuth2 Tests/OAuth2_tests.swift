@@ -22,6 +22,8 @@
 import Cocoa
 #endif
 import XCTest
+
+@testable
 import OAuth2
 
 
@@ -37,21 +39,19 @@ class OAuth2Tests: XCTestCase
 	}
 	
 	func testInit() {
-		//var oauth = OAuth2(settings: NSDictionary())		// TODO: how to test that this raises?
-		
 		var oauth = OAuth2(settings: ["client_id": "def"])
 		XCTAssertFalse(oauth.verbose, "Non-verbose by default")
 		XCTAssertEqual(oauth.clientId, "def", "Must init `client_id`")
 		
-		oauth = self.genericOAuth2()
+		oauth = genericOAuth2()
 		XCTAssertEqual(oauth.authURL, NSURL(string: "https://auth.ful.io")!, "Must init `authorize_uri`")
 		XCTAssertEqual(oauth.scope!, "login", "Must init `scope`")
 		XCTAssertTrue(oauth.verbose, "Must init `verbose`")
 	}
 	
-	func testAuthorizeURL() {
+	func testAuthorizeURL() throws {
 		let oa = genericOAuth2()
-		let auth = oa.authorizeURLWithBase(oa.authURL, redirect: "oauth2app://callback", scope: "launch", responseType: "code", params: nil)
+		let auth = try oa.authorizeURLWithBase(oa.authURL, redirect: "oauth2app://callback", scope: "launch", responseType: "code", params: nil)
 		
 		let comp = NSURLComponents(URL: auth, resolvingAgainstBaseURL: true)!
 		XCTAssertEqual("https", comp.scheme!, "Need correct scheme")

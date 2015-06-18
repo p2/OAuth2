@@ -57,14 +57,18 @@ public class OAuth2CodeGrant: OAuth2
 		super.init(settings: settings)
 	}
 	
-	public override func authorizeURLWithRedirect(redirect: String?, scope: String?, params: [String: String]?) -> NSURL {
-		return authorizeURLWithBase(authURL, redirect: redirect, scope: scope, responseType: "code", params: params)
+	public override func authorizeURLWithRedirect(redirect: String?, scope: String?, params: [String: String]?) throws -> NSURL {
+		return try authorizeURLWithBase(authURL, redirect: redirect, scope: scope, responseType: "code", params: params)
 	}
 	
 	/**
 	    Creates a POST request with x-www-form-urlencoded body created from the supplied URL's query part.
 	 */
-	func tokenRequestWithURL(url: NSURL) -> NSMutableURLRequest {
+	func tokenRequestWithURL(url: NSURL) throws -> NSMutableURLRequest {
+		if clientId.isEmpty {
+			throw OAuth2IncompleteSetup.NoClientId
+		}
+		
 		let comp = NSURLComponents(URL: url, resolvingAgainstBaseURL: true)
 		assert(comp != nil, "It seems NSURLComponents cannot parse \(url)");
 		let body = comp!.percentEncodedQuery
@@ -150,7 +154,7 @@ public class OAuth2CodeGrant: OAuth2
 	    This will set "grant_type" to "authorization_code", add the "code" provided and forward to `authorizeURLWithBase()` to fill the
 	    remaining parameters.
 	 */
-	func tokenURLWithRedirect(redirect: String?, code: String, params: [String: String]? = nil) -> NSURL {
+	func tokenURLWithRedirect(redirect: String?, code: String, params: [String: String]? = nil) throws -> NSURL {
 		var urlParams = params ?? [String: String]()
 		urlParams["code"] = code
 		urlParams["grant_type"] = "authorization_code"
@@ -158,17 +162,15 @@ public class OAuth2CodeGrant: OAuth2
 			urlParams["client_secret"] = secret
 		}
 		
-		return authorizeURLWithBase(tokenURL ?? authURL, redirect: redirect, scope: nil, responseType: nil, params: urlParams)
+		return try authorizeURLWithBase(tokenURL ?? authURL, redirect: redirect, scope: nil, responseType: nil, params: urlParams)
 	}
 	
 	/**
 	    Create a request for token exchange.
-	
-	    This method is public to enable unit testing.
 	 */
-	public func tokenRequestWithCode(code: String) -> NSMutableURLRequest {
-		let url = tokenURLWithRedirect(redirect, code: code)
-		return tokenRequestWithURL(url)
+	func tokenRequestWithCode(code: String) throws -> NSMutableURLRequest {
+		let url = try tokenURLWithRedirect(redirect, code: code)
+		return try tokenRequestWithURL(url)
 	}
 	
 	/**
@@ -195,23 +197,28 @@ public class OAuth2CodeGrant: OAuth2
 			return;
 		}
 		
-		let post = tokenRequestWithCode(code)
-		logIfVerbose("Exchanging code \(code) with redirect \(redirect!) for access token at \(post.URL!)")
-		
-		performRequest(post) { data, status, error in
-			if let data = data {
-				do {
-					let json = try self.parseAccessTokenResponse(data)
-					self.logIfVerbose("Did exchange code for access [\(nil != self.accessToken)] and refresh [\(nil != self.refreshToken)] tokens")
-					self.didAuthorize(json)
+		do {
+			let post = try tokenRequestWithCode(code)
+			logIfVerbose("Exchanging code \(code) with redirect \(redirect!) for access token at \(post.URL!)")
+			
+			performRequest(post) { data, status, error in
+				if let data = data {
+					do {
+						let json = try self.parseAccessTokenResponse(data)
+						self.logIfVerbose("Did exchange code for access [\(nil != self.accessToken)] and refresh [\(nil != self.refreshToken)] tokens")
+						self.didAuthorize(json)
+					}
+					catch let err {
+						self.didFail(err as NSError)
+					}
 				}
-				catch let err {
-					self.didFail(err as NSError)
+				else {
+					self.didFail(error ?? genOAuth2Error("Error when requesting access token: no data received"))
 				}
 			}
-			else {
-				self.didFail(error ?? genOAuth2Error("Error when requesting access token: no data received"))
-			}
+		}
+		catch let err {
+			didFail(err as NSError)
 		}
 	}
 	
@@ -237,7 +244,7 @@ public class OAuth2CodeGrant: OAuth2
 	    This will set "grant_type" to "refresh_token", add the refresh token, then forward to `authorizeURLWithBase()` to fill the remaining
 	    parameters.
 	 */
-	func tokenURLWithRefreshToken(redirect: String?, refreshToken: String, params: [String: String]? = nil) -> NSURL {
+	func tokenURLWithRefreshToken(redirect: String?, refreshToken: String, params: [String: String]? = nil) throws -> NSURL {
 		var urlParams = params ?? [String: String]()
 		urlParams["grant_type"] = "refresh_token"
 		urlParams["refresh_token"] = refreshToken
@@ -245,17 +252,15 @@ public class OAuth2CodeGrant: OAuth2
 			urlParams["client_secret"] = secret
 		}
 		
-		return authorizeURLWithBase(tokenURL ?? authURL, redirect: redirect, scope: nil, responseType: nil, params: urlParams)
+		return try authorizeURLWithBase(tokenURL ?? authURL, redirect: redirect, scope: nil, responseType: nil, params: urlParams)
 	}
 	
 	/**
 	    Create a request for token refresh.
-	
-	    This method is public to enable unit testing.
 	 */
-	func tokenRequestWithRefreshToken(refreshToken: String) -> NSMutableURLRequest {
-		let url = tokenURLWithRefreshToken(redirect, refreshToken: refreshToken)
-		return tokenRequestWithURL(url)
+	func tokenRequestWithRefreshToken(refreshToken: String) throws -> NSMutableURLRequest {
+		let url = try tokenURLWithRefreshToken(redirect, refreshToken: refreshToken)
+		return try tokenRequestWithURL(url)
 	}
 	
 	/**
@@ -264,29 +269,34 @@ public class OAuth2CodeGrant: OAuth2
 	    - parameter callback: The callback to call after the refresh token exchange has finished
 	 */
 	func doRefreshToken(callback: ((successParams: OAuth2JSON?, error: NSError?) -> Void)) {
-		if nil == refreshToken || refreshToken!.isEmpty {
+		guard let refresh = refreshToken where !refresh.isEmpty else {
 			callback(successParams: nil, error: genOAuth2Error("I don't have a refresh token, not trying to refresh", .PrerequisiteFailed))
 			return
 		}
 		
-		let post = tokenRequestWithRefreshToken(refreshToken!)
-		logIfVerbose("Using refresh token to receive access token from \(post.URL?.description)")
-		
-		performRequest(post) { data, status, error in
-			if let data = data {
-				do {
-					let json = try self.parseAccessTokenResponse(data)
-					self.logIfVerbose("Did use refresh token for access token [\(nil != self.accessToken)]")
-					callback(successParams: json, error: nil)
+		do {
+			let post = try tokenRequestWithRefreshToken(refresh)
+			logIfVerbose("Using refresh token to receive access token from \(post.URL?.description)")
+			
+			performRequest(post) { data, status, error in
+				if let data = data {
+					do {
+						let json = try self.parseAccessTokenResponse(data)
+						self.logIfVerbose("Did use refresh token for access token [\(nil != self.accessToken)]")
+						callback(successParams: json, error: nil)
+					}
+					catch let err {
+						self.logIfVerbose("Error parsing refreshed access token: \((err as NSError).localizedDescription)")
+						callback(successParams: nil, error: err as NSError)
+					}
 				}
-				catch let err {
-					self.logIfVerbose("Error parsing refreshed access token: \((err as NSError).localizedDescription)")
-					callback(successParams: nil, error: err as NSError)
+				else {
+					callback(successParams: nil, error: error ?? genOAuth2Error("Unknown error during token refresh"))
 				}
 			}
-			else {
-				callback(successParams: nil, error: error ?? genOAuth2Error("Unknown error during token refresh"))
-			}
+		}
+		catch let err {
+			callback(successParams: nil, error: err as NSError)
 		}
 	}
 	

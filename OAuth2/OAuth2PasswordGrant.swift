@@ -49,7 +49,7 @@ public class OAuth2PasswordGrant: OAuth2
 		super.init(settings: settings)
 	}
 	
-	public override func authorize(params: [String : String]?, autoDismiss: Bool) {
+	public override func authorize(params params: [String : String]?, autoDismiss: Bool) {
 		if hasUnexpiredAccessToken() {
 			self.didAuthorize([String: String]())
 		}
@@ -72,44 +72,47 @@ public class OAuth2PasswordGrant: OAuth2
 	- parameter callback: The callback to call after the refresh token exchange has finished
 	*/
 	func obtainAccessToken(callback: ((error: NSError?) -> Void)) {
-		let post = tokenRequest()
-		logIfVerbose("Requesting new access token from \(post.URL?.description)")
-		
-		performRequest(post) { data, status, error in
-			if let data = data {
-				do {
-					try self.parseAccessTokenResponse(data)
-					self.logIfVerbose("Did get access token [\(nil != self.accessToken)]")
-					callback(error: nil)
+		do {
+			let post = try tokenRequest()
+			logIfVerbose("Requesting new access token from \(post.URL?.description)")
+			
+			performRequest(post) { data, status, error in
+				if let data = data {
+					do {
+						try self.parseAccessTokenResponse(data)
+						self.logIfVerbose("Did get access token [\(nil != self.accessToken)]")
+						callback(error: nil)
+					}
+					catch let err {
+						self.logIfVerbose("Error parsing access token: \((err as NSError).localizedDescription)")
+						callback(error: err as NSError)
+					}
 				}
-				catch let err {
-					self.logIfVerbose("Error parsing access token: \((err as NSError).localizedDescription)")
-					callback(error: err as NSError)
+				else {
+					callback(error: error ?? genOAuth2Error("Error when requesting access token: no data received"))
 				}
 			}
-			else {
-				callback(error: error ?? genOAuth2Error("Error when requesting access token: no data received"))
-			}
+		}
+		catch let err {
+			callback(error: err as NSError)
 		}
 	}
 	
 	/**
 	Creates a POST request with x-www-form-urlencoded body created from the supplied URL's query part.
-	
-	Made public to enable unit testing.
 	*/
-	public func tokenRequest() -> NSMutableURLRequest {
+	func tokenRequest() throws -> NSMutableURLRequest {
 		if username.isEmpty{
-			NSException(name: "OAuth2IncompleteSetup", reason: "I do not yet have a username, cannot request a token", userInfo: nil).raise()
+			throw OAuth2IncompleteSetup.NoUsername
 		}
 		if password.isEmpty{
-			NSException(name: "OAuth2IncompleteSetup", reason: "I do not yet have a password, cannot request a token", userInfo: nil).raise()
+			throw OAuth2IncompleteSetup.NoPassword
 		}
 		if clientId.isEmpty {
-			NSException(name: "OAuth2IncompleteSetup", reason: "I do not yet have a client id, cannot request a token", userInfo: nil).raise()
+			throw OAuth2IncompleteSetup.NoClientId
 		}
 		if nil == clientSecret {
-			NSException(name: "OAuth2IncompleteSetup", reason: "I do not yet have a client secret, cannot request a token", userInfo: nil).raise()
+			throw OAuth2IncompleteSetup.NoClientSecret
 		}
 		
 		let req = NSMutableURLRequest(URL: authURL)

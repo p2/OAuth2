@@ -18,6 +18,8 @@
 //  limitations under the License.
 //
 import XCTest
+
+@testable
 import OAuth2
 
 class OAuth2PasswordGrantTests: XCTestCase{
@@ -45,9 +47,9 @@ class OAuth2PasswordGrantTests: XCTestCase{
 		XCTAssertTrue(oauth.verbose, "Set to verbose")
 	}
 	
-	func testTokenRequest() {
+	func testTokenRequest() throws {
 		let oauth = genericOAuth2Password()
-		let request = oauth.tokenRequest()
+		let request = try oauth.tokenRequest()
 		XCTAssertEqual("POST", request.HTTPMethod, "Must be a POST request")
 		
 		let authHeader = request.allHTTPHeaderFields?["Authorization"]
@@ -59,7 +61,7 @@ class OAuth2PasswordGrantTests: XCTestCase{
 		XCTAssertEqual(body!, "grant_type=password&scope=login+and+more&username=My+User&password=Here+is+my+password", "Must create correct request body")
 	}
 	
-	func testTokenRequestNoScope() {
+	func testTokenRequestNoScope() throws {
 		let oauth = OAuth2PasswordGrant(settings: [
 			"client_id": "abc",
 			"client_secret": "def",
@@ -68,7 +70,7 @@ class OAuth2PasswordGrantTests: XCTestCase{
 			"password":"Here is my password",
 			"verbose": true
 			])
-		let request = oauth.tokenRequest()
+		let request = try oauth.tokenRequest()
 		
 		let body = NSString(data: request.HTTPBody!, encoding: NSUTF8StringEncoding)
 		XCTAssertNotNil(body, "Body data must be present")

@@ -54,6 +54,17 @@ public struct OAuth2AuthConfig
 	public var authorizeContext: AnyObject? = nil
 }
 
+/**
+    Incomplete client setup errors.
+ */
+public enum OAuth2IncompleteSetup: ErrorType {
+	case NoClientId
+	case NoClientSecret
+	case NoRedirectURL
+	case NoUsername
+	case NoPassword
+}
+
 
 /**
     Base class for specific OAuth2 authentication flow implementations.
@@ -142,19 +153,13 @@ public class OAuth2
 	    - verbose (bool, false by default, applies to client logging)
 	    - secret_in_body (bool, false by default, forces code grant flow to use the request body for the client secret)
 	
-	NOTE that you **must** supply at least `client_id` and `authorize_uri` upon authorization. If you forget the
-	former a _fatalError_ will be raised, if you forget the latter `http://localhost` will be used.
+	NOTE that you **should** supply at least `client_id` and `authorize_uri` upon authorization. If you forget the former an empty string
+	will be used, throwing errors later on, if you forget the latter `http://localhost` will be used.
 	*/
 	public init(settings: OAuth2JSON) {
 		self.settings = settings
 		
-		if let cid = settings["client_id"] as? String {
-			clientId = cid
-		}
-		else {
-			fatalError("Must supply `client_id` upon initialization")
-		}
-		
+		clientId = settings["client_id"] as? String ?? ""
 		clientSecret = settings["client_secret"] as? String
 		
 		// authorize URL
@@ -266,7 +271,7 @@ public class OAuth2
 	    IF you have `authConfig` set up sufficiently. If `authConfig` is not set up sufficiently this method will end up calling the
 	    `onFailure` callback.
 	 */
-	public func authorize(params: [String: String]? = nil, autoDismiss: Bool = true) {
+	public func authorize(params params: [String: String]? = nil, autoDismiss: Bool = true) {
 		tryToObtainAccessToken() { success in
 			if success {
 				self.didAuthorize(OAuth2JSON())
@@ -334,11 +339,11 @@ public class OAuth2
 	the query part
 	- returns: NSURL to be used to start the OAuth dance
 	*/
-	public func authorizeURLWithBase(base: NSURL, redirect: String?, scope: String?, responseType: String?, params: [String: String]?) -> NSURL {
+	public func authorizeURLWithBase(base: NSURL, redirect: String?, scope: String?, responseType: String?, params: [String: String]?) throws -> NSURL {
 		
 		// verify that we have all parts
 		if clientId.isEmpty {
-			NSException(name: "OAuth2IncompleteSetup", reason: "I do not yet have a client id, cannot construct an authorize URL", userInfo: nil).raise()
+			throw OAuth2IncompleteSetup.NoClientId
 		}
 		
 		if nil != redirect {
@@ -350,7 +355,7 @@ public class OAuth2
 			}
 		}
 		if nil == self.redirect {
-			NSException(name: "OAuth2IncompleteSetup", reason: "I need a redirect URI, cannot construct an authorize URL", userInfo: nil).raise()
+			throw OAuth2IncompleteSetup.NoRedirectURL
 		}
 		
 		if state.isEmpty {
@@ -394,8 +399,8 @@ public class OAuth2
 	- parameter params: Optional, additional URL params to supply to the request
 	- returns: NSURL to be used to start the OAuth dance
 	*/
-	public func authorizeURL(params: [String: String]? = nil) -> NSURL {
-		return authorizeURLWithRedirect(nil, scope: nil, params: params)
+	public func authorizeURL(params: [String: String]? = nil) throws -> NSURL {
+		return try authorizeURLWithRedirect(nil, scope: nil, params: params)
 	}
 	
 	/**
@@ -408,16 +413,15 @@ public class OAuth2
 	query part
 	- returns: NSURL to be used to start the OAuth dance
 	*/
-	public func authorizeURLWithRedirect(redirect: String?, scope: String?, params: [String: String]?) -> NSURL {
-		NSException(name: "OAuth2AbstractClassUse", reason: "Abstract class use", userInfo: nil).raise()
-		return NSURL()
+	public func authorizeURLWithRedirect(redirect: String?, scope: String?, params: [String: String]?) throws -> NSURL {
+		throw NSError(domain: OAuth2ErrorDomain, code: -99, userInfo: [NSLocalizedDescriptionKey: "Abstract class use"])
 	}
 	
 	/**
 	    Subclasses override this method to extract information from the supplied redirect URL.
 	 */
-	public func handleRedirectURL(redirect: NSURL) {
-		NSException(name: "OAuth2AbstractClassUse", reason: "Abstract class use", userInfo: nil).raise()
+	public func handleRedirectURL(redirect: NSURL) throws {
+		throw NSError(domain: OAuth2ErrorDomain, code: -99, userInfo: [NSLocalizedDescriptionKey: "Abstract class use"])
 	}
 	
 	/**

@@ -30,8 +30,14 @@ extension OAuth2
 	    :returs: A bool indicating success
 	 */
 	public final func openAuthorizeURLInBrowser(params: [String: String]? = nil) -> Bool {
-		let url = authorizeURL(params)
-		return NSWorkspace.sharedWorkspace().openURL(url)
+		do {
+			let url = try authorizeURL(params)
+			return NSWorkspace.sharedWorkspace().openURL(url)
+		}
+		catch let err {
+			logIfVerbose("Cannot open authorize URL: \((err as NSError).localizedDescription)")
+		}
+		return false
 	}
 	
 	

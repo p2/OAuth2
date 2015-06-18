@@ -19,6 +19,8 @@
 //
 
 import XCTest
+
+@testable
 import OAuth2
 
 
@@ -40,7 +42,7 @@ class OAuth2ClientCredentialsTests: XCTestCase
 			"client_secret": "def",
 			"authorize_uri": "https://auth.ful.io",
 			"verbose": true
-			])
+		])
 	}
 	
 	func testInit() {
@@ -52,9 +54,9 @@ class OAuth2ClientCredentialsTests: XCTestCase
 		XCTAssertTrue(oauth.verbose, "Set to verbose")
 	}
 	
-	func testTokenRequest() {
+	func testTokenRequest() throws {
 		let oauth = genericOAuth2()
-		let request = oauth.tokenRequest()
+		let request = try oauth.tokenRequest()
 		XCTAssertEqual("POST", request.HTTPMethod, "Must be a POST request")
 		
 		let authHeader = request.allHTTPHeaderFields?["Authorization"]
@@ -73,13 +75,21 @@ class OAuth2ClientCredentialsTests: XCTestCase
 			"scope": "login",
 			"verbose": true
 		])
-		// TODO: this must (and does) raise, but XCTAssertThrows() is not yet available in Swift
-//		oauth.tokenRequest()
+		
+		do {
+			try oauth.tokenRequest()
+			XCTAssertFalse(true, "`tokenRequest()` without client secret must throw .NoClientSecret")
+		}
+		catch OAuth2IncompleteSetup.NoClientSecret {
+		}
+		catch let err {
+			XCTAssertFalse(true, "`tokenRequest()` without client secret must throw .NoClientSecret, but threw \(err)")
+		}
 	}
     
-	func testTokenRequestNoScope(){
+	func testTokenRequestNoScope() throws {
 		let oauth = genericOAuth2NoScope()
-		let request = oauth.tokenRequest()
+		let request = try oauth.tokenRequest()
 		XCTAssertEqual("POST", request.HTTPMethod, "Must be a POST request")
 		
 		let body = NSString(data: request.HTTPBody!, encoding: NSUTF8StringEncoding)

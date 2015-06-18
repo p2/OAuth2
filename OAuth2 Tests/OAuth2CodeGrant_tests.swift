@@ -19,14 +19,14 @@
 //
 
 import XCTest
+
+@testable
 import OAuth2
 
 
 class OAuth2CodeGrantTests: XCTestCase
 {
 	func testInit() {
-		//var oauth = OAuth2(settings: NSDictionary())		// TODO: how to test that this raises?
-		
 		let oauth = OAuth2CodeGrant(settings: [
 			"client_id": "abc",
 			"client_secret": "xyz",
@@ -43,7 +43,7 @@ class OAuth2CodeGrantTests: XCTestCase
 		XCTAssertEqual(oauth.tokenURL!, NSURL(string: "https://token.ful.io")!, "Must init `token_uri`")
 	}
 	
-	func testAuthorizeURI() {
+	func testAuthorizeURI() throws {
 		let oauth = OAuth2CodeGrant(settings: [
 			"client_id": "abc",
 			"client_secret": "xyz",
@@ -52,7 +52,7 @@ class OAuth2CodeGrantTests: XCTestCase
 		])
 		
 		XCTAssertNotNil(oauth.authURL, "Must init `authorize_uri`")
-		let comp = NSURLComponents(URL: oauth.authorizeURLWithRedirect("oauth2://callback", scope: nil, params: nil), resolvingAgainstBaseURL: true)!
+		let comp = NSURLComponents(URL: try oauth.authorizeURLWithRedirect("oauth2://callback", scope: nil, params: nil), resolvingAgainstBaseURL: true)!
 		XCTAssertEqual(comp.host!, "auth.ful.io", "Correct host")
 		let query = OAuth2CodeGrant.paramsFromQuery(comp.percentEncodedQuery!)
 		XCTAssertEqual(query["client_id"]!, "abc", "Expecting correct `client_id`")
@@ -64,7 +64,7 @@ class OAuth2CodeGrantTests: XCTestCase
 		// TODO: test for non-https URLs (must raise)
 	}
 	
-	func testTokenRequest() {
+	func testTokenRequest() throws {
 		var oauth = OAuth2CodeGrant(settings: [
 			"client_id": "abc",
 			"client_secret": "xyz",
@@ -73,7 +73,7 @@ class OAuth2CodeGrantTests: XCTestCase
 		])
 		oauth.redirect = "oauth2://callback"
 		
-		let req = oauth.tokenRequestWithCode("pp")
+		let req = try oauth.tokenRequestWithCode("pp")
 		let comp = NSURLComponents(URL: req.URL!, resolvingAgainstBaseURL: true)!
 		XCTAssertEqual(comp.host!, "token.ful.io", "Correct host")
 		
@@ -93,15 +93,9 @@ class OAuth2CodeGrantTests: XCTestCase
 			"authorize_uri": "https://auth.ful.io",
 		])
 		oauth.redirect = "oauth2://callback"
-		let req2 = oauth.tokenRequestWithCode("pp")
+		let req2 = try oauth.tokenRequestWithCode("pp")
 		let comp2 = NSURLComponents(URL: req2.URL!, resolvingAgainstBaseURL: true)!
 		XCTAssertEqual(comp2.host!, "auth.ful.io", "Correct host")
 	}
-
-    /*func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measureBlock() {
-            // Put the code you want to measure the time of here.
-        }
-    }*/
 }
+

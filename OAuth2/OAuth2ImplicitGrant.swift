@@ -26,8 +26,8 @@ import Foundation
  */
 public class OAuth2ImplicitGrant: OAuth2
 {
-	public override func authorizeURLWithRedirect(redirect: String?, scope: String?, params: [String: String]?) -> NSURL {
-		return authorizeURLWithBase(authURL, redirect: redirect, scope: scope, responseType: "token", params: params)
+	public override func authorizeURLWithRedirect(redirect: String?, scope: String?, params: [String: String]?) throws -> NSURL {
+		return try authorizeURLWithBase(authURL, redirect: redirect, scope: scope, responseType: "token", params: params)
 	}
 	
 	public override func handleRedirectURL(redirect: NSURL) {

@@ -19,14 +19,14 @@
 //
 
 import XCTest
+
+@testable
 import OAuth2
 
 
 class OAuth2ImplicitGrantTests: XCTestCase
 {
 	func testInit() {
-		//var oauth = OAuth2(settings: NSDictionary())		// TODO: how to test that this raises?
-		
 		let oauth = OAuth2ImplicitGrant(settings: [
 			"client_id": "abc",
 			"verbose": true,
@@ -135,3 +135,4 @@ class OAuth2ImplicitGrantTests: XCTestCase
 		XCTAssertTrue(oauth.hasUnexpiredAccessToken())
 	}
 }
+
