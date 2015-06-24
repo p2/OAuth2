@@ -71,6 +71,9 @@ public class OAuth2: OAuth2Base
 	/// The access token's expiry date.
 	public var accessTokenExpiry: NSDate?
 	
+	/// If set to true (the default), uses a keychain-supplied access token even if no "expires_in" parameter was supplied.
+	public var accessTokenAssumeUnexpired = true
+	
 	/// Closure called on successful authentication on the main thread.
 	public final var onAuthorize: ((parameters: OAuth2JSON) -> Void)?
 	
@@ -105,6 +108,7 @@ public class OAuth2: OAuth2Base
 	    - keychain (bool, true by default, applies to using the system keychain)
 	    - verbose (bool, false by default, applies to client logging)
 	    - secret_in_body (bool, false by default, forces code grant flow to use the request body for the client secret)
+	    - token_assume_unexpired (bool, true by default, uses access token that do not come with an "expires_in" parameter)
 	
 	    NOTE that you **must** supply at least `client_id` and `authorize_uri` upon initialization. If you forget the former a _fatalError_
 	    will be raised, if you forget the latter `http://localhost` will be used.
@@ -120,6 +124,11 @@ public class OAuth2: OAuth2Base
 		}
 		authURL = aURL ?? NSURL(string: "http://localhost")!
 		authConfig = OAuth2AuthConfig()
+		
+		// access token options
+		if let assume = settings["token_assume_unexpired"] as? Bool {
+			accessTokenAssumeUnexpired = assume
+		}
 		
 		// scope and state (state should only be manually set for testing purposes!)
 		scope = settings["scope"] as? String
@@ -153,8 +162,12 @@ public class OAuth2: OAuth2Base
 					logIfVerbose("Found access token but it seems to have expired")
 				}
 			}
+			else if accessTokenAssumeUnexpired {
+				logIfVerbose("Found access token but not how long it's valid, assuming unexpired")
+				accessToken = token
+			}
 			else {
-				logIfVerbose("Found access token but not how long it's valid, discarding")
+				logIfVerbose("Found access token but not how long it's valid, discarding (set `accessTokenAssumeUnexpired` to true to still use it)")
 			}
 		}
 	}

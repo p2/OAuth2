@@ -193,6 +193,11 @@ If you turn it off _after_ initialization, the keychain will be queried for exis
 
 If you want to delete the tokens from keychain, i.e. **log the user out** completely, call `forgetTokens()`.
 
+Ideally, access tokens get delivered with an "expires_in" parameter that tells you how long the token is valid.
+If it is missing the framework will still use those tokens if one is found in the keychain and not re-perform the OAuth dance.
+You will need to intercept 401s and re-authenticate if an access token has expired but the framework has still pulled it from the keychain.
+This behavior can be turned off by supplying "token_assume_unexpired": false in settings or setting `accessTokenAssumeUnexpired` to false.
+
 
 Installation
 ------------
