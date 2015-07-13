@@ -20,27 +20,9 @@
 
 import Foundation
 
-/// The error domain used for errors during the OAuth2 flow.
-let OAuth2ErrorDomain = "OAuth2ErrorDomain"
-
 /// We store the current tokens under this keychain key name.
 let OAuth2KeychainTokenKey = "currentTokens"
 
-
-/**
-    Errors supplanting NSError codes if no HTTP status code is available (hence >= 600).
- */
-public enum OAuth2Error: Int {
-	case Generic = 600
-	case Unsupported
-	case NetworkError
-	case PrerequisiteFailed
-	case InvalidState
-	case AuthorizationError
-}
-
-/// Typealias to ease working with JSON dictionaries.
-public typealias OAuth2JSON = [String: AnyObject]
 
 /**
     Simple struct to hold client-side authorization configuration variables.
@@ -58,19 +40,16 @@ public struct OAuth2AuthConfig
 /**
     Base class for specific OAuth2 authentication flow implementations.
  */
-public class OAuth2
+public class OAuth2: OAuth2Base
 {
-	/// Server-side settings, as set upon initialization.
-	final let settings: OAuth2JSON
-	
 	/// Client-side configurations.
 	public var authConfig: OAuth2AuthConfig
 	
 	/// The client id.
-	public final let clientId: String
+	public final var clientId: String
 	
 	/// The client secret, usually only needed for code grant.
-	public final let clientSecret: String?
+	public final var clientSecret: String?
 	
 	/// The URL to authorize against.
 	public final let authURL: NSURL
@@ -92,6 +71,9 @@ public class OAuth2
 	/// The access token's expiry date.
 	public var accessTokenExpiry: NSDate?
 	
+	/// If set to true (the default), uses a keychain-supplied access token even if no "expires_in" parameter was supplied.
+	public var accessTokenAssumeUnexpired = true
+	
 	/// Closure called on successful authentication on the main thread.
 	public final var onAuthorize: ((parameters: OAuth2JSON) -> Void)?
 	
@@ -110,21 +92,6 @@ public class OAuth2
 	/// Same as `afterAuthorizeOrFailure`, but only for internal use and called right BEFORE the public variant.
 	final var internalAfterAuthorizeOrFailure: ((wasFailure: Bool, error: NSError?) -> Void)?
 	
-	/// An optional title that will propagate to views handled by OAuth2, such as OAuth2WebViewController.
-	public var viewTitle: String?
-	
-	/// If set to `true` (the default) will use system keychain to store tokens. Use `"keychain": bool` in settings.
-	public var useKeychain = true {
-		didSet {
-			if useKeychain {
-				updateFromKeychain()
-			}
-		}
-	}
-	
-	/// Set to `true` to log all the things. `false` by default. Use `"verbose": bool` in settings.
-	public var verbose = false
-	
 	
 	/**
 	    Designated initializer.
@@ -133,28 +100,21 @@ public class OAuth2
 	
 	    - client_id (string)
 	    - client_secret (string), usually only needed for code grant
-	    - authorize_uri (string)
-	    - token_uri (string), only for code grant
-	    - redirect_uris (list of strings)
+	    - authorize_uri (URL-string)
+	    - token_uri (URL-string), only for code grant
+	    - redirect_uris (list of URL-strings)
 	    - scope (string)
 	
 	    - keychain (bool, true by default, applies to using the system keychain)
 	    - verbose (bool, false by default, applies to client logging)
 	    - secret_in_body (bool, false by default, forces code grant flow to use the request body for the client secret)
+	    - token_assume_unexpired (bool, true by default, uses access token that do not come with an "expires_in" parameter)
 	
-	    NOTE that you **must** supply at least `client_id` and `authorize_uri` upon authorization. If you forget the
-	    former a _fatalError_ will be raised, if you forget the latter `http://localhost` will be used.
+	    NOTE that you **must** supply at least `client_id` and `authorize_uri` upon initialization. If you forget the former a _fatalError_
+	    will be raised, if you forget the latter `http://localhost` will be used.
 	 */
-	public init(settings: OAuth2JSON) {
-		self.settings = settings
-		
-		if let cid = settings["client_id"] as? String {
-			clientId = cid
-		}
-		else {
-			fatalError("Must supply `client_id` upon initialization")
-		}
-		
+	public override init(settings: OAuth2JSON) {
+		clientId = settings["client_id"] as? String ?? ""
 		clientSecret = settings["client_secret"] as? String
 		
 		// authorize URL
@@ -163,46 +123,34 @@ public class OAuth2
 			aURL = NSURL(string: auth)
 		}
 		authURL = aURL ?? NSURL(string: "http://localhost")!
+		authConfig = OAuth2AuthConfig()
+		
+		// access token options
+		if let assume = settings["token_assume_unexpired"] as? Bool {
+			accessTokenAssumeUnexpired = assume
+		}
 		
 		// scope and state (state should only be manually set for testing purposes!)
 		scope = settings["scope"] as? String
 		if let st = settings["state_for_testing"] as? String {
 			state = st
 		}
-		
-		// client settings
-		if let keychain = settings["keychain"] as? Bool {
-			useKeychain = keychain
-		}
-		if let verb = settings["verbose"] as? Bool {
-			verbose = verb
-		}
-		authConfig = OAuth2AuthConfig()
-		
-		// init from keychain
-		if useKeychain {
-			updateFromKeychain()
-		}
-		
-		logIfVerbose("Initialized with client id \(clientId)")
+		super.init(settings: settings)
 	}
 	
 	
 	// MARK: - Keychain Integration
 	
-	/** Queries the keychain for tokens stored for the receiver's authorize URL, and updates the token properties accordingly. */
-	private func updateFromKeychain() {
-		logIfVerbose("Looking for tokens in keychain")
-		
-		let keychain = Keychain(serviceName: authURL.description)
-		let key = ArchiveKey(keyName: OAuth2KeychainTokenKey)
-		if let items = keychain.get(key).item?.object as? [String: NSCoding] {
-			updateFromKeychainItems(items)
-		}
+	public override func keychainServiceName() -> String {
+		return authURL.description
+	}
+	
+	public override func keychainKeyName() -> String {
+		return OAuth2KeychainTokenKey
 	}
 	
 	/** Updates the token properties according to the items found in the passed dictionary. */
-	func updateFromKeychainItems(items: [String: NSCoding]) {
+	override func updateFromKeychainItems(items: [String: NSCoding]) {
 		if let token = items["accessToken"] as? String where !token.isEmpty {
 			if let date = items["accessTokenDate"] as? NSDate {
 				if date == date.laterDate(NSDate()) {
@@ -214,27 +162,18 @@ public class OAuth2
 					logIfVerbose("Found access token but it seems to have expired")
 				}
 			}
-			else {
-				logIfVerbose("Found access token but no expiration date, discarding")
+			else if accessTokenAssumeUnexpired {
+				logIfVerbose("Found access token but not how long it's valid, assuming unexpired")
+				accessToken = token
 			}
-		}
-	}
-	
-	/** Stores our current token(s) in the keychain. */
-	private func storeToKeychain() {
-		if let items = storableKeychainItems() {
-			logIfVerbose("Storing tokens to keychain")
-			
-			let keychain = Keychain(serviceName: authURL.description)
-			let key = ArchiveKey(keyName: OAuth2KeychainTokenKey, object: items)
-			if let error = keychain.update(key) {
-				NSLog("Failed to store tokens to keychain: \(error.localizedDescription)")
+			else {
+				logIfVerbose("Found access token but no expiration date, discarding (set `accessTokenAssumeUnexpired` to true to still use it)")
 			}
 		}
 	}
 	
 	/** Returns a dictionary of our tokens and expiration date, ready to be stored to the keychain. */
-	func storableKeychainItems() -> [String: NSCoding]? {
+	override func storableKeychainItems() -> [String: NSCoding]? {
 		if let access = accessToken where !access.isEmpty {
 			var items: [String: NSCoding] = ["accessToken": access]
 			
@@ -248,9 +187,9 @@ public class OAuth2
 	
 	/** Unsets the tokens and deletes them from the keychain. */
 	public func forgetTokens() {
-		logIfVerbose("Deleting tokens and removing them from keychain")
-		let keychain = Keychain(serviceName: authURL.description)
-		let key = ArchiveKey(keyName: OAuth2KeychainTokenKey)
+		logIfVerbose("Forgetting tokens and removing them from keychain")
+		let keychain = Keychain(serviceName: keychainServiceName())
+		let key = ArchiveKey(keyName: keychainKeyName())
 		if let error = keychain.remove(key) {
 			NSLog("Failed to delete tokens from keychain: \(error.localizedDescription)")
 		}
@@ -271,7 +210,7 @@ public class OAuth2
 	    `onFailure` callback.
 	 */
 	public func authorize(params: [String: String]? = nil, autoDismiss: Bool = true) {
-		tryToObtainAccessToken() { success in
+		tryToObtainAccessTokenIfNeeded() { success in
 			if success {
 				self.didAuthorize(OAuth2JSON())
 			}
@@ -319,7 +258,7 @@ public class OAuth2
 	    
 	    :param: callback The callback to call once the client knows whether it has an access token or not
 	 */
-	func tryToObtainAccessToken(callback: ((success: Bool) -> Void)) {
+	func tryToObtainAccessTokenIfNeeded(callback: ((success: Bool) -> Void)) {
 		callback(success: hasUnexpiredAccessToken())
 	}
 	
@@ -456,10 +395,6 @@ public class OAuth2
 	
 	// MARK: - Requests
 	
-	var session: NSURLSession?
-	
-	public var sessionDelegate: NSURLSessionDelegate?
-	
 	/**
 	    Return an OAuth2Request, a NSMutableURLRequest subclass, that has already been signed and can be used against
 	    your OAuth2 endpoint.
@@ -468,44 +403,6 @@ public class OAuth2
 	 */
 	public func request(forURL url: NSURL) -> OAuth2Request {
 		return OAuth2Request(URL: url, oauth: self, cachePolicy: .ReturnCacheDataElseLoad, timeoutInterval: 20)
-	}
-	
-	/**
-	    Perform the supplied request and call the callback with the response JSON dict or an error.
-	
-	    This implementation uses the shared `NSURLSession` and executes a data task. If the server responds with an error, this will be
-	    converted into an NSError instance with information supplied in the response JSON (if availale), using `errorForErrorResponse`.
-	
-	    :param: request The request to execute
-	    :param: callback The callback to call when the request completes/fails; data and error are mutually exclusive
-	 */
-	public func performRequest(request: NSURLRequest, callback: ((data: NSData?, status: Int?, error: NSError?) -> Void)) {
-		let task = URLSession().dataTaskWithRequest(request) { sessData, sessResponse, error in
-			if let error = error {
-				callback(data: nil, status: nil, error: error)
-			}
-			else if let data = sessData, let http = sessResponse as? NSHTTPURLResponse {
-				callback(data: data, status: http.statusCode, error: nil)
-			}
-			else {
-				let error = genOAuth2Error("Unknown response \(sessResponse) with data “\(NSString(data: sessData, encoding: NSUTF8StringEncoding))”", .NetworkError)
-				callback(data: nil, status: nil, error: error)
-			}
-		}
-		task.resume()
-	}
-	
-	func URLSession() -> NSURLSession {
-		if nil == session {
-			if let delegate = sessionDelegate {
-				let config = NSURLSessionConfiguration.defaultSessionConfiguration()
-				session = NSURLSession(configuration: config, delegate: delegate, delegateQueue: nil)
-			}
-			else {
-				session = NSURLSession.sharedSession()
-			}
-		}
-		return session!
 	}
 	
 	
@@ -517,7 +414,7 @@ public class OAuth2
 	    This method extracts token data and fills the receiver's properties accordingly.
 	
 	    :returns: An OAuth2JSON instance with token data; may contain additional information
-	*/
+	 */
 	func parseAccessTokenResponse(data: NSData, error: NSErrorPointer) -> OAuth2JSON? {
 		if let json = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: error) as? OAuth2JSON {
 			if let access = json["access_token"] as? String {
@@ -532,120 +429,15 @@ public class OAuth2
 			}
 			return json
 		}
+		if let err = error.memory where err.domain == NSCocoaErrorDomain && 3840 == err.code {		// JSON parse error
+			var msg = err.localizedFailureReason
+			msg = msg ?? err.userInfo?["NSDebugDescription"] as? String
+			error.memory = genOAuth2Error(msg ?? err.localizedDescription, .JSONParserError)
+		}
 		if let str = NSString(data: data, encoding: NSUTF8StringEncoding) {
 			logIfVerbose("Unparsable JSON was: \(str)")
 		}
 		return nil
 	}
-	
-	/**
-	    Create a query string from a dictionary of string: string pairs.
-	
-	    This method does **form encode** the value part. If you're using NSURLComponents you want to assign the return
-	    value to `percentEncodedQuery`, NOT `query` as this would double-encode the value.
-	 */
-	public final class func queryStringFor(params: [String: String]) -> String {
-		var arr: [String] = []
-		for (key, val) in params {
-			arr.append("\(key)=\(val.wwwFormURLEncodedString)")
-		}
-		return "&".join(arr)
-	}
-	
-	/**
-	    Parse a query string into a dictionary of String: String pairs.
-	
-	    If you're retrieving a query or fragment from NSURLComponents, use the `percentEncoded##` variant as the others
-	    automatically perform percent decoding, potentially messing with your query string.
-	 */
-	public final class func paramsFromQuery(query: String) -> [String: String] {
-		let parts = split(query, maxSplit: .max, allowEmptySlices: false) { $0 == "&" }
-		var params = [String: String](minimumCapacity: parts.count)
-		for part in parts {
-			let subparts = split(part, maxSplit: .max, allowEmptySlices: false) { $0 == "=" }
-			if 2 == subparts.count {
-				params[subparts[0]] = subparts[1].wwwFormURLDecodedString
-			}
-		}
-		
-		return params
-	}
-	
-	/**
-	    Handles access token error response.
-	
-	    :param: params The URL parameters passed into the redirect URL upon error
-	    :param: fallback The message string to use in case no error description is found in the parameters
-	    :returns: An NSError instance with the "best" localized error key and all parameters in the userInfo dictionary;
-	              domain "OAuth2ErrorDomain", code 600
-	 */
-	func errorForErrorResponse(params: OAuth2JSON, fallback: String? = nil) -> NSError {
-		var message = ""
-		
-		// "error_description" is optional, we prefer it if it's present
-		if let err_msg = params["error_description"] as? String {
-			message = err_msg
-		}
-		
-		// the "error" response is required for error responses
-		if message.isEmpty {
-			if let err_code = params["error"] as? String {
-				switch err_code {
-				case "invalid_request":
-					message = "The request is missing a required parameter, includes an invalid parameter value, includes a parameter more than once, or is otherwise malformed."
-				case "unauthorized_client":
-					message = "The client is not authorized to request an access token using this method."
-				case "access_denied":
-					message = "The resource owner or authorization server denied the request."
-				case "unsupported_response_type":
-					message = "The authorization server does not support obtaining an access token using this method."
-				case "invalid_scope":
-					message = "The requested scope is invalid, unknown, or malformed."
-				case "server_error":
-					message = "The authorization server encountered an unexpected condition that prevented it from fulfilling the request."
-				case "temporarily_unavailable":
-					message = "The authorization server is currently unable to handle the request due to a temporary overloading or maintenance of the server."
-				default:
-					message = "Authorization error: \(err_code)."
-				}
-			}
-		}
-		
-		// still unknown, oh well
-		if message.isEmpty {
-			message = fallback ?? "Unknown error."
-		}
-		
-		return genOAuth2Error(message, .AuthorizationError)
-	}
-	
-	/**
-	    Debug logging, will only log if `verbose` is YES.
-	 */
-	func logIfVerbose(log: String) {
-		if verbose {
-			println("OAuth2: \(log)")
-		}
-	}
-}
-
-
-/**
-    Helper function to ensure that the callback is executed on the main thread.
- */
-func callOnMainThread(callback: (Void -> Void)) {
-	if NSThread.isMainThread() {
-		callback()
-	}
-	else {
-		dispatch_sync(dispatch_get_main_queue(), callback)
-	}
-}
-
-/**
-    Convenience function to create an error in the "OAuth2ErrorDomain" error domain.
- */
-public func genOAuth2Error(message: String, _ code: OAuth2Error = .Generic) -> NSError {
-	return NSError(domain: OAuth2ErrorDomain, code: code.rawValue, userInfo: [NSLocalizedDescriptionKey: message])
 }
 

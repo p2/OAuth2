@@ -26,26 +26,18 @@ import Foundation
  */
 public class OAuth2PasswordGrant: OAuth2
 {
+	/// Username to use during authentication.
 	public var username: String
 	
+	/// The user's password.
 	public var password: String
 	
 	/**
 	Adds support for the "password" & "username" setting.
 	*/
 	public override init(settings: OAuth2JSON) {
-		if let user = settings["username"] as? String {
-			username = user
-		}
-		else {
-			username = ""
-		}
-		if let userPassword = settings["password"] as? String {
-			password = userPassword
-		}
-		else {
-			password = ""
-		}
+		username = settings["username"] as? String ?? ""
+		password = settings["password"] as? String ?? ""
 		super.init(settings: settings)
 	}
 	
@@ -111,14 +103,13 @@ public class OAuth2PasswordGrant: OAuth2
 		req.setValue("application/x-www-form-urlencoded; charset=utf-8", forHTTPHeaderField: "Content-Type")
 		req.setValue("application/json", forHTTPHeaderField: "Accept")
 		
-		// check if scope is set
+		// create body string
+		var body = "grant_type=password&username=\(username.wwwFormURLEncodedString)&password=\(password.wwwFormURLEncodedString)"
 		if let scope = scope {
-			req.HTTPBody = "grant_type=password&scope=\(scope.wwwFormURLEncodedString)&username=\(username.wwwFormURLEncodedString)&password=\(password.wwwFormURLEncodedString)".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+			body += "&scope=\(scope.wwwFormURLEncodedString)"
 		}
-		else {
-			req.HTTPBody = "grant_type=password&username=\(username.wwwFormURLEncodedString)&password=\(password.wwwFormURLEncodedString)".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
-
-		}
+		req.HTTPBody = body.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+		
 		// add Authorization header
 		logIfVerbose("Adding “Authorization” header as “Basic client-key:client-secret”")
 		let pw = "\(clientId.wwwFormURLEncodedString):\(clientSecret!.wwwFormURLEncodedString)"
@@ -141,5 +132,5 @@ public class OAuth2PasswordGrant: OAuth2
 		}
 		return nil
 	}
-
 }
+
