@@ -121,7 +121,7 @@ public class OAuth2CodeGrant: OAuth2
 	
 	// MARK: - Authorization
 	
-	override public func tryToObtainAccessToken(callback: (Bool -> Void)) {
+	override public func tryToObtainAccessTokenIfNeeded(callback: (Bool -> Void)) {
 		if hasUnexpiredAccessToken() {
 			callback(true)
 		}
@@ -265,7 +265,7 @@ public class OAuth2CodeGrant: OAuth2
 	
 	    :param: callback The callback to call after the refresh token exchange has finished
 	 */
-	func doRefreshToken(callback: ((successParams: OAuth2JSON?, error: NSError?) -> Void)) {
+	public func doRefreshToken(callback: ((successParams: OAuth2JSON?, error: NSError?) -> Void)) {
 		if nil == refreshToken || refreshToken!.isEmpty {
 			callback(successParams: nil, error: genOAuth2Error("I don't have a refresh token, not trying to refresh", .PrerequisiteFailed))
 			return

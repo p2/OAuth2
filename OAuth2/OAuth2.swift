@@ -180,7 +180,6 @@ public class OAuth2: OAuth2Base
 			if let date = accessTokenExpiry where date == date.laterDate(NSDate()) {
 				items["accessTokenDate"] = date
 			}
-			logIfVerbose("Storing tokens to keychain")
 			return items
 		}
 		return nil
@@ -211,7 +210,7 @@ public class OAuth2: OAuth2Base
 	    `onFailure` callback.
 	 */
 	public func authorize(params: [String: String]? = nil, autoDismiss: Bool = true) {
-		tryToObtainAccessToken() { success in
+		tryToObtainAccessTokenIfNeeded() { success in
 			if success {
 				self.didAuthorize(OAuth2JSON())
 			}
@@ -259,7 +258,7 @@ public class OAuth2: OAuth2Base
 	    
 	    :param: callback The callback to call once the client knows whether it has an access token or not
 	 */
-	func tryToObtainAccessToken(callback: ((success: Bool) -> Void)) {
+	func tryToObtainAccessTokenIfNeeded(callback: ((success: Bool) -> Void)) {
 		callback(success: hasUnexpiredAccessToken())
 	}
 	

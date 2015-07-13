@@ -101,7 +101,7 @@ public class OAuth2Base
 	/** Stores our current token(s) in the keychain. */
 	internal func storeToKeychain() {
 		if let items = storableKeychainItems() where !items.isEmpty {
-			logIfVerbose("Storing to keychain")
+			logIfVerbose("Storing items to keychain")
 			
 			let keychain = Keychain(serviceName: keychainServiceName())
 			let key = ArchiveKey(keyName: keychainKeyName(), object: items)

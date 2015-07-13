@@ -9,6 +9,9 @@
 import Foundation
 
 
+/**
+	Class to handle dynamic client registration. Preliminary implementation!
+ */
 public class OAuth2DynReg: OAuth2Base
 {
 	/// The URL to register against.
