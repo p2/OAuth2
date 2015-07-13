@@ -123,12 +123,12 @@ If you need to provide additional parameters to the authorize URL take a look at
     See the [OAuth2 Sample App][sample]'s AppDelegate class on how to receive the callback URL in your Mac app.
 
 4. After everything completes either the `onAuthorize` or the `onFailure` closure will be called, and after that the `afterAuthorizeOrFailure` closure if it has been set.
-You can use any of those.
+    You can use any of those.
 
 5. You can now obtain an `OAuth2Request`, which is an already signed `NSMutableURLRequest`, to retrieve data from your server.
     
     ```swift
-    let req = oauth.request(forURL: <# resource URL #>)
+    let req = oauth2.request(forURL: <# resource URL #>)
     let session = NSURLSession.sharedSession()
     let task = session.dataTaskWithRequest(req) { data, response, error in
         if nil != error {
@@ -140,7 +140,11 @@ You can use any of those.
         }
     }
     task.resume()
-    ``` 
+    ```
+
+6. It is safe to always call `oauth2.authorize()` before performing a request.
+    You can also perform the authorization before the first request after your app became active again.
+    Or you can always intercept 401s in your requests and call authorize again before re-attempting the request.
 
 
 Flows
