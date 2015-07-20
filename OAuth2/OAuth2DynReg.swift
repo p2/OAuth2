@@ -10,7 +10,9 @@ import Foundation
 
 
 /**
-	Class to handle dynamic client registration. Preliminary implementation!
+	Class to handle OAuth2 Dynamic Client Registration.
+
+	This class is WiP and not complete. For the full spec see https://tools.ietf.org/html/draft-ietf-oauth-dyn-reg-30
  */
 public class OAuth2DynReg: OAuth2Base
 {
@@ -37,20 +39,20 @@ public class OAuth2DynReg: OAuth2Base
 	
 	
 	/**
-	    Designated initializer.
+	Designated initializer.
 	
-	    The following settings keys are currently supported:
+	The following settings keys are currently supported:
 	
-	    - client_name (string)
-	    - registration_uri (URL-string)
-	    - redirect_uris (list of URL-strings)
-	    - logo_uri (URL-string)
+	- client_name (string)
+	- registration_uri (URL-string)
+	- redirect_uris (list of URL-strings)
+	- logo_uri (URL-string)
 	
-	    - keychain (bool, true by default, applies to using the system keychain)
-	    - verbose (bool, false by default, applies to client logging)
+	- keychain (bool, true by default, applies to using the system keychain)
+	- verbose (bool, false by default, applies to client logging)
 	
-	    NOTE that you **must** supply at least `registration_uri` upon initialization. If you forget, a _fatalError_ will be raised.
-	 */
+	NOTE that you **must** supply at least `registration_uri` upon initialization. If you forget, a _fatalError_ will be raised.
+	*/
 	override public init(settings: OAuth2JSON) {
 		if let client = settings["client_name"] as? String {
 			clientName = client
@@ -122,10 +124,31 @@ public class OAuth2DynReg: OAuth2Base
 	// MARK: - Registration
 	
 	/**
-	    Attempts to register the client **unless** the receiver already has a client id.
+	Attempts to register for client credentials **unless** the given client (1st priority) or the receiver (2nd priority) already have a
+	client id.
 	
-	    :param: callback The callback to call when done. Any combination of json and error is possible (in regards to nil-ness)
-	 */
+	:param: callback The callback to call when done. Any combination of json and error is possible (in regards to nil-ness)
+	*/
+	public func registerIfNeededAndUpdateClient(client: OAuth2, callback: ((json: OAuth2JSON?, error: NSError?) -> Void)) {
+		clientId = client.clientId.isEmpty ? clientId : client.clientId
+		clientSecret = client.clientSecret ?? clientSecret
+		
+		registerIfNeeded { json, error in
+			if let id = self.clientId {
+				client.clientId = id
+			}
+			if let secret = self.clientSecret {
+				client.clientSecret = secret
+			}
+			callback(json: json, error: error)
+		}
+	}
+	
+	/**
+	Attempts to register the client **unless** the receiver already has a client id.
+	
+	:param: callback The callback to call when done. Any combination of json and error is possible (in regards to nil-ness)
+	*/
 	public func registerIfNeeded(callback: ((json: OAuth2JSON?, error: NSError?) -> Void)) {
 		if nil == clientId {
 			logIfVerbose("No client id, will need to register")
@@ -138,10 +161,10 @@ public class OAuth2DynReg: OAuth2Base
 	}
 	
 	/**
-	    Register using the receiver's current setup.
+	Register using the receiver's current setup.
 	
-	    :param: callback The callback to call when done with the registration response (JSON) and/or an error
-	 */
+	:param: callback The callback to call when done with the registration response (JSON) and/or an error
+	*/
 	public func register(callback: ((json: OAuth2JSON?, error: NSError?) -> Void)) {
 		let req = registrationRequest()
 		logIfVerbose("Registering client at \(req.URL!)")
@@ -198,6 +221,7 @@ public class OAuth2DynReg: OAuth2Base
 		if let logoURL = logo {
 			dict["logo_uri"] = logoURL
 		}
+		// TODO: "grant_types"
 		return dict
 	}
 	
@@ -218,6 +242,7 @@ public class OAuth2DynReg: OAuth2Base
 		}
 		if let secret = json["client_secret"] as? String {
 			clientSecret = secret
+			// TODO: look at "client_secret_expires_at"
 		}
 		if useKeychain && nil != clientId {
 			storeToKeychain()
