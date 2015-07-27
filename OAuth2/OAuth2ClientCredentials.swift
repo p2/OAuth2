@@ -26,7 +26,7 @@ import Foundation
  */
 public class OAuth2ClientCredentials: OAuth2
 {
-	public override func authorize(# params: [String : String]?, autoDismiss: Bool) {
+	public override func authorize(params: [String : String]?, autoDismiss: Bool) {
 		if hasUnexpiredAccessToken() {
 			self.didAuthorize([String: String]())
 		}
@@ -93,7 +93,7 @@ public class OAuth2ClientCredentials: OAuth2
 		logIfVerbose("Adding “Authorization” header as “Basic client-key:client-secret”")
 		let pw = "\(clientId.wwwFormURLEncodedString):\(clientSecret!.wwwFormURLEncodedString)"
 		if let utf8 = pw.dataUsingEncoding(NSUTF8StringEncoding) {
-			req.setValue("Basic \(utf8.base64EncodedStringWithOptions(nil))", forHTTPHeaderField: "Authorization")
+			req.setValue("Basic \(utf8.base64EncodedStringWithOptions(NSDataBase64EncodingOptions()))", forHTTPHeaderField: "Authorization")
 		}
 		else {
 			logIfVerbose("ERROR: for some reason failed to base-64 encode the client-key:client-secret combo")

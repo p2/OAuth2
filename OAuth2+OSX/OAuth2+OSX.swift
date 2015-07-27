@@ -30,7 +30,7 @@ extension OAuth2
 	    :returs: A bool indicating success
 	 */
 	public final func openAuthorizeURLInBrowser(params: [String: String]? = nil) -> Bool {
-		let url = authorizeURL(params: params)
+		let url = authorizeURL(params)
 		return NSWorkspace.sharedWorkspace().openURL(url)
 	}
 	

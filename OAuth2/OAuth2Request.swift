@@ -67,10 +67,10 @@ public class OAuth2DebugURLSessionDelegate: NSObject, NSURLSessionDelegate
 	}
 	
 	public func URLSession(session: NSURLSession, didReceiveChallenge challenge: NSURLAuthenticationChallenge,
-		completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential!) -> Void) {
+		completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential?) -> Void) {
 		if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust {
 			if challenge.protectionSpace.host == host {
-				let credential = NSURLCredential(forTrust: challenge.protectionSpace.serverTrust)
+				let credential = NSURLCredential(forTrust: challenge.protectionSpace.serverTrust!)
 				completionHandler(.UseCredential, credential)
 				return
 			}
