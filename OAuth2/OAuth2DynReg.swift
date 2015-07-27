@@ -189,11 +189,15 @@ public class OAuth2DynReg: OAuth2Base
 	
 	/** Returns a mutable URL request, set up to be used for registration: POST method, JSON body data. */
 	public func registrationRequest() -> NSMutableURLRequest {
-		var error: NSError?
-		let body = NSJSONSerialization.dataWithJSONObject(registrationBody(), options: nil, error: &error)
-		if nil == body {
-			logIfVerbose("WARNING: the registration body is empty, which will likely cause registration to fail")
-		}
+        var body: NSData?
+        do {
+            body = try NSJSONSerialization.dataWithJSONObject(registrationBody(), options: NSJSONWritingOptions())
+            if (body == nil) {
+                print("JSON Body is empty, this request will likely fail")
+            }
+        } catch {
+            print(error)
+        }
 		
 		let req = NSMutableURLRequest(URL: registrationURL)
 		req.HTTPMethod = "POST"
@@ -226,9 +230,13 @@ public class OAuth2DynReg: OAuth2Base
 	}
 	
 	public func parseRegistrationResponse(data: NSData, error: NSErrorPointer) -> OAuth2JSON? {
-		if let json = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: error) as? OAuth2JSON {
+        do {
+		if let json = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions()) as? OAuth2JSON {
 			return json
 		}
+        } catch {
+            print(error)
+        }
 		return nil
 	}
 	

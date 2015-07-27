@@ -50,7 +50,7 @@ class OAuth2PasswordGrantTests: XCTestCase
 		let request = oauth.tokenRequest()
 		XCTAssertEqual("POST", request.HTTPMethod, "Must be a POST request")
 		
-		let authHeader = request.allHTTPHeaderFields?["Authorization"] as? String
+		let authHeader = request.allHTTPHeaderFields?["Authorization"] as String!
 		XCTAssertNotNil(authHeader, "Must create “Authorization” header")
 		XCTAssertEqual(authHeader!, "Basic YWJjOmRlZg==", "Must correctly Base64 encode header")
 		

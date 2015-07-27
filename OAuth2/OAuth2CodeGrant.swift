@@ -81,7 +81,7 @@ public class OAuth2CodeGrant: OAuth2
 			logIfVerbose("Adding “Authorization” header as “Basic client-key:client-secret”")
 			let pw = "\(clientId.wwwFormURLEncodedString):\(secret.wwwFormURLEncodedString)"
 			if let utf8 = pw.dataUsingEncoding(NSUTF8StringEncoding) {
-				req.setValue("Basic \(utf8.base64EncodedStringWithOptions(nil))", forHTTPHeaderField: "Authorization")
+				req.setValue("Basic \(utf8.base64EncodedStringWithOptions(NSDataBase64EncodingOptions()))", forHTTPHeaderField: "Authorization")
 			}
 			else {
 				logIfVerbose("ERROR: for some reason failed to base-64 encode the client-key:client-secret combo")
@@ -128,7 +128,7 @@ public class OAuth2CodeGrant: OAuth2
 		else {
 			logIfVerbose("No access token, maybe I can refresh")
 			doRefreshToken({ successParams, error in
-				if let success = successParams {
+				if let _ = successParams {
 					callback(true)
 				}
 				else {
@@ -302,7 +302,7 @@ public class OAuth2CodeGrant: OAuth2
 		var error: NSError?
 		
 		let comp = NSURLComponents(URL: redirect, resolvingAgainstBaseURL: true)
-		if let compQuery = comp?.query where count(compQuery) > 0 {
+		if let compQuery = comp?.query where compQuery.characters.count > 0 {
 			let query = OAuth2CodeGrant.paramsFromQuery(comp!.percentEncodedQuery!)
 			if let cd = query["code"] {
 				

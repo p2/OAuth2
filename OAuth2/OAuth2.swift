@@ -222,7 +222,7 @@ public class OAuth2: OAuth2Base
 						}
 					}
 					else {
-						if !self.openAuthorizeURLInBrowser(params: params) {
+						if !self.openAuthorizeURLInBrowser(params) {
 							fatalError("Cannot open authorize URL")
 						}
 					}
@@ -416,7 +416,8 @@ public class OAuth2: OAuth2Base
 	    :returns: An OAuth2JSON instance with token data; may contain additional information
 	 */
 	func parseAccessTokenResponse(data: NSData, error: NSErrorPointer) -> OAuth2JSON? {
-		if let json = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: error) as? OAuth2JSON {
+        do {
+        if let json = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions()) as? OAuth2JSON {
 			if let access = json["access_token"] as? String {
 				accessToken = access
 			}
@@ -431,12 +432,15 @@ public class OAuth2: OAuth2Base
 		}
 		if let err = error.memory where err.domain == NSCocoaErrorDomain && 3840 == err.code {		// JSON parse error
 			var msg = err.localizedFailureReason
-			msg = msg ?? err.userInfo?["NSDebugDescription"] as? String
+			msg = msg ?? err.userInfo["NSDebugDescription"] as? String
 			error.memory = genOAuth2Error(msg ?? err.localizedDescription, .JSONParserError)
 		}
 		if let str = NSString(data: data, encoding: NSUTF8StringEncoding) {
 			logIfVerbose("Unparsable JSON was: \(str)")
-		}
+        }
+        } catch {
+                print(error)
+        }
 		return nil
 	}
 }

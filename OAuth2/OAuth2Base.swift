@@ -145,7 +145,7 @@ public class OAuth2Base
 				callback(data: data, status: http.statusCode, error: nil)
 			}
 			else {
-				let error = genOAuth2Error("Unknown response \(sessResponse) with data “\(NSString(data: sessData, encoding: NSUTF8StringEncoding))”", .NetworkError)
+				let error = genOAuth2Error("Unknown response \(sessResponse) with data “\(NSString(data: sessData!, encoding: NSUTF8StringEncoding))”", .NetworkError)
 				callback(data: nil, status: nil, error: error)
 			}
 		}
@@ -189,10 +189,10 @@ public class OAuth2Base
 	    automatically perform percent decoding, potentially messing with your query string.
 	 */
 	public final class func paramsFromQuery(query: String) -> [String: String] {
-		let parts = split(query, maxSplit: .max, allowEmptySlices: false) { $0 == "&" }
+        let parts = query.componentsSeparatedByString("&")
 		var params = [String: String](minimumCapacity: parts.count)
 		for part in parts {
-			let subparts = split(part, maxSplit: .max, allowEmptySlices: false) { $0 == "=" }
+			let subparts = part.componentsSeparatedByString("=")
 			if 2 == subparts.count {
 				params[subparts[0]] = subparts[1].wwwFormURLDecodedString
 			}
@@ -254,7 +254,7 @@ public class OAuth2Base
 	 */
 	public func logIfVerbose(log: String) {
 		if verbose {
-			println("OAuth2: \(log)")
+			print("OAuth2: \(log)")
 		}
 	}
 }
