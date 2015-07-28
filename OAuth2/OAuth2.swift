@@ -174,7 +174,7 @@ public class OAuth2: OAuth2Base
 			}
 		}
 		else if accessTokenAssumeUnexpired {
-			logIfVerbose("Found access token but no expiration date, assuming unexpired (set `accessTokenAssumeUnexpired` to discard)")
+			logIfVerbose("Found access token but no expiration date, assuming unexpired (set `accessTokenAssumeUnexpired` to false to discard)")
 			accessToken = token
 		}
 		else {
