@@ -22,8 +22,8 @@ import XCTest
 @testable
 import OAuth2
 
-class OAuth2PasswordGrantTests: XCTestCase{
-	
+class OAuth2PasswordGrantTests: XCTestCase
+{
 	func genericOAuth2Password() -> OAuth2PasswordGrant {
 		return OAuth2PasswordGrant(settings: [
 			"client_id": "abc",
@@ -33,7 +33,7 @@ class OAuth2PasswordGrantTests: XCTestCase{
 			"username":"My User",
 			"password":"Here is my password",
 			"verbose": true
-			])
+		])
 	}
 	
 	func testInit() {
@@ -58,7 +58,7 @@ class OAuth2PasswordGrantTests: XCTestCase{
 		
 		let body = NSString(data: request.HTTPBody!, encoding: NSUTF8StringEncoding)
 		XCTAssertNotNil(body, "Body data must be present")
-		XCTAssertEqual(body!, "grant_type=password&scope=login+and+more&username=My+User&password=Here+is+my+password", "Must create correct request body")
+		XCTAssertEqual(body!, "grant_type=password&username=My+User&password=Here+is+my+password&scope=login+and+more", "Must create correct request body")
 	}
 	
 	func testTokenRequestNoScope() throws {
@@ -77,3 +77,4 @@ class OAuth2PasswordGrantTests: XCTestCase{
 		XCTAssertEqual(body!, "grant_type=password&username=My+User&password=Here+is+my+password", "Must create correct request body")
 	}
 }
+

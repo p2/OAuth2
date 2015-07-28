@@ -5,6 +5,13 @@ Version numbering represents the Swift version, plus a running number representi
 You can also refer to commit logs to get details on what was implemented, fixed and improved.
 
 
+### 1.2.7
+
+- Add `accessTokenAssumeUnexpired` variable to allow storing of access tokens even if "expires_in" is not supplied. You may need to intercept 401s and re-authorize when performing REST requests.
+- Add `OAuth2DynReg` class to help with dynamic client registration (preliminary/incomplete).
+- Code refactoring
+
+
 ### 1.2.6
 
 - Add `OAuth2PasswordGrant` for password grant flow, courtesy of Tim Sneed.

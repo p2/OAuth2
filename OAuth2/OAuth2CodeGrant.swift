@@ -125,7 +125,7 @@ public class OAuth2CodeGrant: OAuth2
 	
 	// MARK: - Authorization
 	
-	override public func tryToObtainAccessToken(callback: (Bool -> Void)) {
+	override public func tryToObtainAccessTokenIfNeeded(callback: (Bool -> Void)) {
 		if hasUnexpiredAccessToken() {
 			callback(true)
 		}
@@ -205,8 +205,13 @@ public class OAuth2CodeGrant: OAuth2
 				if let data = data {
 					do {
 						let json = try self.parseAccessTokenResponse(data)
-						self.logIfVerbose("Did exchange code for access [\(nil != self.accessToken)] and refresh [\(nil != self.refreshToken)] tokens")
-						self.didAuthorize(json)
+						if status < 400 && nil == json["error"] {
+							self.logIfVerbose("Did exchange code for access [\(nil != self.accessToken)] and refresh [\(nil != self.refreshToken)] tokens")
+							self.didAuthorize(json)
+						}
+						else {
+							throw self.errorForErrorResponse(json)
+						}
 					}
 					catch let err {
 						self.didFail(err as NSError)
@@ -268,7 +273,7 @@ public class OAuth2CodeGrant: OAuth2
 	
 	    - parameter callback: The callback to call after the refresh token exchange has finished
 	 */
-	func doRefreshToken(callback: ((successParams: OAuth2JSON?, error: NSError?) -> Void)) {
+	public func doRefreshToken(callback: ((successParams: OAuth2JSON?, error: NSError?) -> Void)) {
 		guard let refresh = refreshToken where !refresh.isEmpty else {
 			callback(successParams: nil, error: genOAuth2Error("I don't have a refresh token, not trying to refresh", .PrerequisiteFailed))
 			return
@@ -282,8 +287,13 @@ public class OAuth2CodeGrant: OAuth2
 				if let data = data {
 					do {
 						let json = try self.parseAccessTokenResponse(data)
-						self.logIfVerbose("Did use refresh token for access token [\(nil != self.accessToken)]")
-						callback(successParams: json, error: nil)
+						if status < 400 && nil == json["error"] {			// we might get a 200 with an error message from some servers
+							self.logIfVerbose("Did use refresh token for access token [\(nil != self.accessToken)]")
+							callback(successParams: json, error: nil)
+						}
+						else {
+							throw self.errorForErrorResponse(json)
+						}
 					}
 					catch let err {
 						self.logIfVerbose("Error parsing refreshed access token: \((err as NSError).localizedDescription)")

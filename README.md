@@ -123,12 +123,12 @@ If you need to provide additional parameters to the authorize URL take a look at
     See the [OAuth2 Sample App][sample]'s AppDelegate class on how to receive the callback URL in your Mac app.
 
 4. After everything completes either the `onAuthorize` or the `onFailure` closure will be called, and after that the `afterAuthorizeOrFailure` closure if it has been set.
-You can use any of those.
+    You can use any of those.
 
 5. You can now obtain an `OAuth2Request`, which is an already signed `NSMutableURLRequest`, to retrieve data from your server.
     
     ```swift
-    let req = oauth.request(forURL: <# resource URL #>)
+    let req = oauth2.request(forURL: <# resource URL #>)
     let session = NSURLSession.sharedSession()
     let task = session.dataTaskWithRequest(req) { data, response, error in
         if nil != error {
@@ -140,7 +140,11 @@ You can use any of those.
         }
     }
     task.resume()
-    ``` 
+    ```
+
+6. It is safe to always call `oauth2.authorize()` before performing a request.
+    You can also perform the authorization before the first request after your app became active again.
+    Or you can always intercept 401s in your requests and call authorize again before re-attempting the request.
 
 
 Flows
@@ -184,6 +188,33 @@ The framework deals with those deviations by creating site-specific subclasses.
 - **Google**: If you authorize against Google with a `OAuth2CodeGrant`, the built-in iOS web view will intercept the `http://localhost` as well as the `urn:ietf:wg:oauth:2.0:oob` (with or without `:auto`) callbacks.
 
 
+Dynamic Client Registration
+---------------------------
+
+There is preliminary support for dynamic client registration.
+The `registerIfNeeded()` immediately calls the callback if there are client credentials in the keychain, otherwise a registration is attempted.
+
+> **Note**: currently only user-interaction-free registrations are supported.
+
+```
+let oauth2 = OAuth2...()
+let dynreg = OAuth2DynReg(settings: [
+    "client_name": "<# app-name #>",
+    "redirect_uris": ["<# redirect-uri #>"],
+    "registration_uri": "<# registration-url-string #>,
+])
+dynreg.registerIfNeeded() { json, error in
+    if let id = dynreg.clientId where !id.isEmpty {
+        oauth2.clientId = id
+        oauth2.clientSecret = dynreg.clientSecret
+    }
+    else {
+        // failed to register
+    }
+}
+```
+
+
 Keychain
 --------
 
@@ -193,6 +224,11 @@ Since this is **enabled by default**, if you do _not_ turn it off during initial
 If you turn it off _after_ initialization, the keychain will be queried for existing tokens, but new tokens will not be written to the keychain.
 
 If you want to delete the tokens from keychain, i.e. **log the user out** completely, call `forgetTokens()`.
+
+Ideally, access tokens get delivered with an "expires_in" parameter that tells you how long the token is valid.
+If it is missing the framework will still use those tokens if one is found in the keychain and not re-perform the OAuth dance.
+You will need to intercept 401s and re-authenticate if an access token has expired but the framework has still pulled it from the keychain.
+This behavior can be turned off by supplying "token_assume_unexpired": false in settings or setting `accessTokenAssumeUnexpired` to false.
 
 
 Installation
