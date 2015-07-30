@@ -52,7 +52,11 @@ public class OAuth2PasswordGrant: OAuth2
 					self.didFail(error)
 				}
 				else {
-					self.didAuthorize([String: String]())
+					if self.accessToken == nil {
+						self.didFail(nil)
+					} else {
+						self.didAuthorize([String: String]())
+					}
 				}
 			}
 		}
