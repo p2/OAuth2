@@ -52,11 +52,7 @@ public class OAuth2PasswordGrant: OAuth2
 					self.didFail(error)
 				}
 				else {
-					if self.accessToken == nil {
-						self.didFail(nil)
-					} else {
-						self.didAuthorize([String: String]())
-					}
+					self.didAuthorize([String: String]())
 				}
 			}
 		}
@@ -74,8 +70,12 @@ public class OAuth2PasswordGrant: OAuth2
 		performRequest(post) { (data, status, error) -> Void in
 			var myError = error
 			if let data = data, let json = self.parseAccessTokenResponse(data, error: &myError) {
-				self.logIfVerbose("Did get access token [\(nil != self.accessToken)]")
-				callback(error: nil)
+				if json["error"] == nil {
+					self.logIfVerbose("Did get access token [\(nil != self.accessToken)]")
+					callback(error: nil)
+				} else {
+					callback(error: self.errorForErrorResponse(json, fallback: "The username or password is incorrect"))
+				}
 			}
 			else {
 				callback(error: myError ?? genOAuth2Error("Unknown error when requesting access token"))
