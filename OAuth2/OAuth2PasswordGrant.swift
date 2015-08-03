@@ -70,10 +70,11 @@ public class OAuth2PasswordGrant: OAuth2
 		performRequest(post) { (data, status, error) -> Void in
 			var myError = error
 			if let data = data, let json = self.parseAccessTokenResponse(data, error: &myError) {
-				if json["error"] == nil {
+				if status < 400 && nil == json["error"] {
 					self.logIfVerbose("Did get access token [\(nil != self.accessToken)]")
 					callback(error: nil)
-				} else {
+				}
+				else {
 					callback(error: self.errorForErrorResponse(json, fallback: "The username or password is incorrect"))
 				}
 			}
