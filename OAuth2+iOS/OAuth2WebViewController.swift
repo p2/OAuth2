@@ -63,6 +63,16 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 	/// Called when the web view is about to be dismissed.
 	var onWillDismiss: ((didCancel: Bool) -> Void)?
 	
+	/// Assign to override the back button, shown when it's possible to go back in history. Will adjust target/action accordingly.
+	public var backButton: UIBarButtonItem? {
+		didSet {
+			if let backButton = backButton {
+				backButton.target = self
+				backButton.action = "goBack:"
+			}
+		}
+	}
+	
 	var cancelButton: UIBarButtonItem?
 	
 	/// Our web view; implicitly unwrapped so do not attempt to use it unless isViewLoaded() returns true.
@@ -119,7 +129,7 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 	
 	func showHideBackButton(show: Bool) {
 		if show {
-			let bb = UIBarButtonItem(barButtonSystemItem: .Rewind, target: self, action: "goBack:")
+			let bb = backButton ?? UIBarButtonItem(barButtonSystemItem: .Rewind, target: self, action: "goBack:")
 			navigationItem.leftBarButtonItem = bb
 		}
 		else {

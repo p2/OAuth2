@@ -37,17 +37,18 @@ If you need to provide additional parameters to the authorize URL take a look at
         "token_uri": "https://authorize.smartplatforms.org/token",
         "scope": "profile email",
         "redirect_uris": ["myapp://oauth/callback"],   // don't forget to register this scheme
-        "keychain": false,  // if you DON'T want keychain integration
-    ] as OAuth2JSON         // the "as" part may or may not be needed
+        "keychain": false,     // if you DON'T want keychain integration
+        "title": "My Service"  // optional title to show in views
+    ] as OAuth2JSON            // the "as" part may or may not be needed
     ```
 
-2. Create an `OAuth2CodeGrant` instance. **Optionally**, set the `onAuthorize` and `onFailure` closures **or** just the `afterAuthorizeOrFailure` closure to keep informed about the status.
+2. Create an `OAuth2CodeGrant` instance.
+    **Optionally**, set the `onAuthorize` and `onFailure` closures **or** just the `afterAuthorizeOrFailure` closure to keep informed about the status.
     Note that _afterAuthorizeOrFailure_ gets called immediately after either _onAuthorize_ or _onFailure_.
     Hence, unless you have a reason to, you don't need to set all three callbacks.
     
     ```swift
     let oauth2 = OAuth2CodeGrant(settings: settings)
-    oauth2.viewTitle = "My Service"      // optional
     oauth2.onAuthorize = { parameters in
         println("Did authorize with parameters: \(parameters)")
     }
@@ -57,6 +58,8 @@ If you need to provide additional parameters to the authorize URL take a look at
         }
     }
     ```
+    
+    Take a look at `oauth2.authConfig` for configuration options on how to customize login.
 
 3. There are three ways to have the user authorize:
     
@@ -71,6 +74,7 @@ If you need to provide additional parameters to the authorize URL take a look at
     ```swift
     oauth2.authConfig.authorizeEmbedded = true
     oauth2.authConfig.authorizeContext = <# presenting view controller #>
+    oauth2.authConfig.ui.backButton = <# UIBarButtonItem(...) #>    // to customize go-back button
     oauth2.authorize()
     ```
     
@@ -88,6 +92,7 @@ If you need to provide additional parameters to the authorize URL take a look at
     ```swift
     let vc = <# presenting view controller #>
     let web = oauth2.authorizeEmbeddedFrom(vc, params: nil)
+    // customize go-back button: oauth2.backButton = UIBarButtonItem(...)
     oauth2.afterAuthorizeOrFailure = { wasFailure, error in
         web.dismissViewControllerAnimated(true, completion: nil)
     }
