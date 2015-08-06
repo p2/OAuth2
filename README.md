@@ -92,7 +92,7 @@ If you need to provide additional parameters to the authorize URL take a look at
     ```swift
     let vc = <# presenting view controller #>
     let web = oauth2.authorizeEmbeddedFrom(vc, params: nil)
-    // customize go-back button: oauth2.backButton = UIBarButtonItem(...)
+    // customize go-back button: web.backButton = UIBarButtonItem(...)
     oauth2.afterAuthorizeOrFailure = { wasFailure, error in
         web.dismissViewControllerAnimated(true, completion: nil)
     }
