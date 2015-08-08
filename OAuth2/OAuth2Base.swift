@@ -160,7 +160,7 @@ public class OAuth2Base
 				callback(data: nil, status: nil, error: error)
 			}
 		}
-		task!.resume()
+		task.resume()
 	}
 	
 	func URLSession() -> NSURLSession {
@@ -200,10 +200,10 @@ public class OAuth2Base
 	    automatically perform percent decoding, potentially messing with your query string.
 	 */
 	public final class func paramsFromQuery(query: String) -> [String: String] {
-		let parts = split(query.characters) { $0 == "&" }.map() { String($0) }
+		let parts = query.characters.split() { $0 == "&" }.map() { String($0) }
 		var params = [String: String](minimumCapacity: parts.count)
 		for part in parts {
-			let subparts = split(part.characters) { $0 == "=" }.map() { String($0) }
+			let subparts = part.characters.split() { $0 == "=" }.map() { String($0) }
 			if 2 == subparts.count {
 				params[subparts[0]] = subparts[1].wwwFormURLDecodedString
 			}
