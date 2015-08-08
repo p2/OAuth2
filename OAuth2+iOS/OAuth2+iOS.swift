@@ -120,7 +120,8 @@ extension OAuth2
 	 */
 	final func presentAuthorizeViewFor(url: NSURL, intercept: String, from: UIViewController) -> OAuth2WebViewController {
 		let web = OAuth2WebViewController()
-		web.title = viewTitle
+		web.title = authConfig.ui.title
+		web.backButton = authConfig.ui.backButton as? UIBarButtonItem
 		web.startURL = url
 		web.interceptURLString = intercept
 		web.onIntercept = { url in

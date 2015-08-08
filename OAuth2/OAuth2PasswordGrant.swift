@@ -71,17 +71,22 @@ public class OAuth2PasswordGrant: OAuth2
 			performRequest(post) { data, status, error in
 				if let data = data {
 					do {
-						try self.parseAccessTokenResponse(data)
-						self.logIfVerbose("Did get access token [\(nil != self.accessToken)]")
-						callback(error: nil)
+						let json = try self.parseAccessTokenResponse(data)
+						if status < 400 && nil == json["error"] {
+							self.logIfVerbose("Did get access token [\(nil != self.accessToken)]")
+							callback(error: nil)
+						}
+						else {
+							callback(error: self.errorForErrorResponse(json, fallback: "The username or password is incorrect"))
+						}
 					}
 					catch let err {
-						self.logIfVerbose("Error parsing access token: \((err as NSError).localizedDescription)")
+						self.logIfVerbose("Error parsing response: \((err as NSError).localizedDescription)")
 						callback(error: err as NSError)
 					}
 				}
 				else {
-					callback(error: error ?? genOAuth2Error("Error when requesting access token: no data received"))
+					callback(error: error ?? genOAuth2Error("Error checking username and password: no data received"))
 				}
 			}
 		}

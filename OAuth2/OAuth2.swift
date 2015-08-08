@@ -29,11 +29,24 @@ let OAuth2KeychainTokenKey = "currentTokens"
  */
 public struct OAuth2AuthConfig
 {
+	public struct UI {
+		
+		/// Title to propagate to views handled by OAuth2, such as OAuth2WebViewController.
+		public var title: String? = nil
+		
+		// TODO: figure out a neat way to make this a UIBarButtonItem if compiled for iOS
+		/// By assigning your own UIBarButtonItem (!) you can override the back button that is shown in the iOS embedded web view.
+		public var backButton: AnyObject? = nil
+	}
+	
 	/// Whether to use an embedded web view for authorization (true), the OS browser (false, the default) or don't do anything (nil).
 	public var authorizeEmbedded: Bool? = false
 	
 	/// Context information for the authorization flow; e.g. the parent view controller to use on iOS.
 	public var authorizeContext: AnyObject? = nil
+	
+	/// UI-specific configuration
+	public var ui = UI()
 }
 
 /**
@@ -54,7 +67,7 @@ public enum OAuth2IncompleteSetup: ErrorType {
 public class OAuth2: OAuth2Base
 {
 	/// Client-side configurations.
-	public var authConfig: OAuth2AuthConfig
+	public var authConfig = OAuth2AuthConfig()
 	
 	/// The client id.
 	public final var clientId: String
@@ -120,6 +133,7 @@ public class OAuth2: OAuth2Base
 	    - verbose (bool, false by default, applies to client logging)
 	    - secret_in_body (bool, false by default, forces code grant flow to use the request body for the client secret)
 	    - token_assume_unexpired (bool, true by default, uses access token that do not come with an "expires_in" parameter)
+	    - title (string, to be shown in views shown by the framework)
 	
 	    NOTE that you **must** supply at least `client_id` and `authorize_uri` upon initialization. If you forget the former a _fatalError_
 	    will be raised, if you forget the latter `http://localhost` will be used.
@@ -134,7 +148,6 @@ public class OAuth2: OAuth2Base
 			aURL = NSURL(string: auth)
 		}
 		authURL = aURL ?? NSURL(string: "http://localhost")!
-		authConfig = OAuth2AuthConfig()
 		
 		// access token options
 		if let assume = settings["token_assume_unexpired"] as? Bool {
@@ -145,6 +158,11 @@ public class OAuth2: OAuth2Base
 		scope = settings["scope"] as? String
 		if let st = settings["state_for_testing"] as? String {
 			state = st
+		}
+		
+		// other configuration options
+		if let ttl = settings["title"] as? String {
+			authConfig.ui.title = ttl
 		}
 		super.init(settings: settings)
 	}
