@@ -324,7 +324,7 @@ public class OAuth2: OAuth2Base
 		
 		if state.isEmpty {
 			state = NSUUID().UUIDString
-			state = state[state.startIndex..<advance(state.startIndex, 8)]		// only use the first 8 chars, should be enough
+			state = state[state.startIndex..<state.startIndex.advancedBy(8)]		// only use the first 8 chars, should be enough
 		}
 		
 		// compose the URL query component

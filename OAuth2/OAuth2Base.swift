@@ -187,7 +187,7 @@ public class OAuth2Base
 		for (key, val) in params {
 			arr.append("\(key)=\(val.wwwFormURLEncodedString)")
 		}
-		return "&".join(arr)
+		return arr.joinWithSeparator("&")
 	}
 	
 	/**
