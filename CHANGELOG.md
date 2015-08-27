@@ -5,6 +5,12 @@ Version numbering represents the Swift version, plus a running number representi
 You can also refer to commit logs to get details on what was implemented, fixed and improved.
 
 
+### 1.2.8
+
+- Allow to customize the _Back_ button in iOS' login web view.
+- Fix _“wrong password”_ detection in password grant, thanks Tim!
+
+
 ### 1.2.7
 
 - Add `accessTokenAssumeUnexpired` variable to allow storing of access tokens even if "expires_in" is not supplied. You may need to intercept 401s and re-authorize when performing REST requests.
