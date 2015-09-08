@@ -136,14 +136,14 @@ public class OAuth2Base
 	}
 	
 	/**
-	    Perform the supplied request and call the callback with the response JSON dict or an error.
+	Perform the supplied request and call the callback with the response JSON dict or an error.
 	
-	    This implementation uses the shared `NSURLSession` and executes a data task. If the server responds with an error, this will be
-	    converted into an NSError instance with information supplied in the response JSON (if availale), using `errorForErrorResponse`.
+	This implementation uses the shared `NSURLSession` and executes a data task. If the server responds with an error, this will be
+	converted into an NSError instance with information supplied in the response JSON (if availale), using `errorForErrorResponse`.
 	
-	    :param: request The request to execute
-	    :param: callback The callback to call when the request completes/fails; data and error are mutually exclusive
-	 */
+	- param request: The request to execute
+	- param callback: The callback to call when the request completes/fails; data and error are mutually exclusive
+	*/
 	public func performRequest(request: NSURLRequest, callback: ((data: NSData?, status: Int?, error: NSError?) -> Void)) {
 		let task = URLSession().dataTaskWithRequest(request) { sessData, sessResponse, error in
 			if let error = error {
@@ -210,13 +210,13 @@ public class OAuth2Base
 	}
 	
 	/**
-	    Handles access token error response.
+	Handles access token error response.
 	
-	    :param: params The URL parameters passed into the redirect URL upon error
-	    :param: fallback The message string to use in case no error description is found in the parameters
-	    :returns: An NSError instance with the "best" localized error key and all parameters in the userInfo dictionary;
-	    domain "OAuth2ErrorDomain", code 600
-	 */
+	- param params: The URL parameters passed into the redirect URL upon error
+	- param fallback: The message string to use in case no error description is found in the parameters
+	- returns: An NSError instance with the "best" localized error key and all parameters in the userInfo dictionary;
+	domain "OAuth2ErrorDomain", code 600
+	*/
 	public func errorForErrorResponse(params: OAuth2JSON, fallback: String? = nil) -> NSError {
 		var message = ""
 		
