@@ -26,7 +26,7 @@ extension OAuth2
 	/**
 	Uses `UIApplication` to open the authorize URL in iOS's browser.
 	
-	- param params: Additional parameters to pass to the authorize URL
+	- parameter params: Additional parameters to pass to the authorize URL
 	- returns: A bool indicating success
 	*/
 	public final func openAuthorizeURLInBrowser(params: [String: String]? = nil) -> Bool {
@@ -69,8 +69,8 @@ extension OAuth2
 	automatically, you probably want to do this in the `afterAuthorizeOrFailure` closure. Simply call this method first, then assign
 	that closure in which you call `dismissViewController()` on the returned web view controller instance.
 	
-	- param controller: The view controller to use for presentation
-	- param params: Optional additional URL parameters
+	- parameter controller: The view controller to use for presentation
+	- parameter params: Optional additional URL parameters
 	- returns: OAuth2WebViewController, embedded in a UINavigationController being presented automatically
 	*/
 	public func authorizeEmbeddedFrom(controller: UIViewController, params: [String: String]? = nil) -> OAuth2WebViewController? {
@@ -91,10 +91,10 @@ extension OAuth2
 	automatically, you probably want to do this in the `afterAuthorizeOrFailure` closure. Simply call this method first, then assign
 	that closure in which you call `dismissViewController()` on the returned web view controller instance.
 	
-	- param controller: The view controller to use for presentation
-	- param redirect: The redirect URL to use
-	- param scope: The scope to use
-	- param params: Optional additional URL parameters
+	- parameter controller: The view controller to use for presentation
+	- parameter redirect: The redirect URL to use
+	- parameter scope: The scope to use
+	- parameter params: Optional additional URL parameters
 	- returns: OAuth2WebViewController, embedded in a UINavigationController being presented automatically
 	*/
 	public func authorizeEmbeddedFrom(controller: UIViewController,

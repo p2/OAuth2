@@ -139,9 +139,9 @@ public class OAuth2DynReg: OAuth2Base
 	Attempts to register for client credentials **unless** the given client (1st priority) or the receiver (2nd priority) already have a
 	client id. If `onlyIfNeeded` is false will try to register anyway.
 	
-	- param client: The OAuth2 client to update credentials on.
-	- param onlyIfNeeded: If set to false will register even when the receiver and the client already have a client-id
-	- param callback: The callback to call when done. Any combination of json and error is possible (in regards to nil-ness)
+	- parameter client: The OAuth2 client to update credentials on.
+	- parameter onlyIfNeeded: If set to false will register even when the receiver and the client already have a client-id
+	- parameter callback: The callback to call when done. Any combination of json and error is possible (in regards to nil-ness)
 	*/
 	public func registerAndUpdateClient(client: OAuth2, onlyIfNeeded: Bool = true, callback: ((json: OAuth2JSON?, error: NSError?) -> Void)) {
 		clientId = client.clientId.isEmpty ? clientId : client.clientId
@@ -169,7 +169,7 @@ public class OAuth2DynReg: OAuth2Base
 	/**
 	Attempts to register the client **unless** the given client (1st priority) or the receiver (2nd priority) already have a client id.
 	
-	- param callback: The callback to call when done. Any combination of json and error is possible (in regards to nil-ness)
+	- parameter callback: The callback to call when done. Any combination of json and error is possible (in regards to nil-ness)
 	*/
 	public func registerIfNeeded(callback: ((json: OAuth2JSON?, error: NSError?) -> Void)) {
 		if nil == clientId {
@@ -185,7 +185,7 @@ public class OAuth2DynReg: OAuth2Base
 	/**
 	Register using the receiver's current setup.
 	
-	- param callback: The callback to call when done with the registration response (JSON) and/or an error
+	- parameter callback: The callback to call when done with the registration response (JSON) and/or an error
 	*/
 	public func register(callback: ((json: OAuth2JSON?, error: NSError?) -> Void)) {
 		let req = registrationRequest()
