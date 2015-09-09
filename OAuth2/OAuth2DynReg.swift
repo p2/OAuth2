@@ -137,15 +137,18 @@ public class OAuth2DynReg: OAuth2Base
 	
 	/**
 	Attempts to register for client credentials **unless** the given client (1st priority) or the receiver (2nd priority) already have a
-	client id.
+	client id. If `onlyIfNeeded` is false will try to register anyway.
 	
+	- param client: The OAuth2 client to update credentials on.
+	- param onlyIfNeeded: If set to false will register even when the receiver and the client already have a client-id
 	- param callback: The callback to call when done. Any combination of json and error is possible (in regards to nil-ness)
 	*/
-	public func registerIfNeededAndUpdateClient(client: OAuth2, callback: ((json: OAuth2JSON?, error: NSError?) -> Void)) {
+	public func registerAndUpdateClient(client: OAuth2, onlyIfNeeded: Bool = true, callback: ((json: OAuth2JSON?, error: NSError?) -> Void)) {
 		clientId = client.clientId.isEmpty ? clientId : client.clientId
 		clientSecret = client.clientSecret ?? clientSecret
 		
-		registerIfNeeded { json, error in
+		// update the client in the callback
+		let cb: ((json: OAuth2JSON?, error: NSError?) -> Void) = { json, error in
 			if let id = self.clientId {
 				client.clientId = id
 			}
@@ -154,10 +157,17 @@ public class OAuth2DynReg: OAuth2Base
 			}
 			callback(json: json, error: error)
 		}
+		
+		if onlyIfNeeded {
+			registerIfNeeded(cb)
+		}
+		else {
+			register(cb)
+		}
 	}
 	
 	/**
-	Attempts to register the client **unless** the receiver already has a client id.
+	Attempts to register the client **unless** the given client (1st priority) or the receiver (2nd priority) already have a client id.
 	
 	- param callback: The callback to call when done. Any combination of json and error is possible (in regards to nil-ness)
 	*/
