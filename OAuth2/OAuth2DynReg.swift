@@ -129,11 +129,12 @@ public class OAuth2DynReg: OAuth2Base
 	
 	:param: callback The callback to call when done. Any combination of json and error is possible (in regards to nil-ness)
 	*/
-	public func registerIfNeededAndUpdateClient(client: OAuth2, callback: ((json: OAuth2JSON?, error: NSError?) -> Void)) {
+	public func registerAndUpdateClient(client: OAuth2, onlyIfNeeded: Bool = true, callback: ((json: OAuth2JSON?, error: NSError?) -> Void)) {
 		clientId = client.clientId.isEmpty ? clientId : client.clientId
 		clientSecret = client.clientSecret ?? clientSecret
 		
-		registerIfNeeded { json, error in
+		// update the client in the callback
+		let cb: ((json: OAuth2JSON?, error: NSError?) -> Void) = { json, error in
 			if let id = self.clientId {
 				client.clientId = id
 			}
@@ -141,6 +142,13 @@ public class OAuth2DynReg: OAuth2Base
 				client.clientSecret = secret
 			}
 			callback(json: json, error: error)
+		}
+		
+		if onlyIfNeeded {
+			registerIfNeeded(cb)
+		}
+		else {
+			register(cb)
 		}
 	}
 	
