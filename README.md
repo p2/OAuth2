@@ -15,7 +15,7 @@ Supported OAuth2 [flows](#flows) are the _code grant_ (`response_type=code`) and
 
 Since the Swift language is constantly evolving I have adopted a versioning scheme mirroring Swift versions:
 the framework version's first two digits are always the Swift version the library is compatible with, see [releases](https://github.com/p2/OAuth2/releases).
-Code compatible with brand new Swift versions are to be found on a separate branch named after their swift version.
+Code compatible with brand new Swift versions are to be found on a separate feature branch named after their swift version.
 
 
 Usage
