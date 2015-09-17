@@ -84,10 +84,8 @@ public class OAuth2: OAuth2Base
 	/// The redirect URL string currently in use.
 	public var redirect: String?
 	
-	/** The state sent to the server when requesting a token.
-		We internally generate a UUID and use the first 8 chars.
-	 */
-	internal(set) public var state = ""
+	/// Context for the current auth dance.
+	var context = OAuth2ContextStore()
 	
 	/// The receiver's access token.
 	public var accessToken: String?
@@ -157,7 +155,7 @@ public class OAuth2: OAuth2Base
 		// scope and state (state should only be manually set for testing purposes!)
 		scope = settings["scope"] as? String
 		if let st = settings["state_for_testing"] as? String {
-			state = st
+			context.enforceState(st)
 		}
 		
 		// other configuration options
@@ -322,11 +320,6 @@ public class OAuth2: OAuth2Base
 			throw OAuth2IncompleteSetup.NoRedirectURL
 		}
 		
-		if state.isEmpty {
-			state = NSUUID().UUIDString
-			state = state[state.startIndex..<state.startIndex.advancedBy(8)]		// only use the first 8 chars, should be enough
-		}
-		
 		// compose the URL query component
 		let comp = NSURLComponents(URL: base, resolvingAgainstBaseURL: true)
 		assert(nil != comp && "https" == comp!.scheme, "You MUST use HTTPS")
@@ -334,7 +327,7 @@ public class OAuth2: OAuth2Base
 		var urlParams = params ?? [String: String]()
 		urlParams["client_id"] = clientId
 		urlParams["redirect_uri"] = self.redirect!
-		urlParams["state"] = state
+		urlParams["state"] = context.state
 		
 		if nil != scope {
 			self.scope = scope!
@@ -467,6 +460,39 @@ public class OAuth2: OAuth2Base
 			logIfVerbose("Unparsable JSON was: \(str)")		// TODO: we'll never get here, will we?
 		}
 		throw genOAuth2Error("Error parsing token response")	// TODO: we'll never get here either, will we?
+	}
+}
+
+
+class OAuth2ContextStore
+{
+	internal(set) var _state = ""
+	
+	/** The state sent to the server when requesting a token.
+	
+	We internally generate a UUID and use the first 8 chars if `_state` is empty.
+	*/
+	var state: String {
+		if _state.isEmpty {
+			_state = NSUUID().UUIDString
+			_state = _state[_state.startIndex..<_state.startIndex.advancedBy(8)]		// only use the first 8 chars, should be enough
+		}
+		return _state
+	}
+	
+	func enforceState(state: String) {
+		_state = state
+	}
+	
+	func matchesState(state: String?) -> Bool {
+		if let st = state {
+			return st == _state
+		}
+		return false
+	}
+	
+	func resetState() {
+		_state = ""
 	}
 }
 

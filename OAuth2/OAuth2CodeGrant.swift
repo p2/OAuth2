@@ -326,9 +326,9 @@ public class OAuth2CodeGrant: OAuth2
 			if let cd = query["code"] {
 				
 				// we got a code, use it if state is correct (and reset state)
-				if let st = query["state"] where st == state {
+				if context.matchesState(query["state"]) {
 					code = cd
-					state = ""
+					context.resetState()
 				}
 				else {
 					error = genOAuth2Error("Invalid state, will not use the code", .InvalidState)
