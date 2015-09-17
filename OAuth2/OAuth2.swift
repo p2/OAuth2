@@ -35,8 +35,11 @@ public struct OAuth2AuthConfig
 		public var title: String? = nil
 		
 		// TODO: figure out a neat way to make this a UIBarButtonItem if compiled for iOS
-		/// By assigning your own UIBarButtonItem (!) you can override the back button that is shown in the iOS embedded web view.
+		/// By assigning your own UIBarButtonItem (!) you can override the back button that is shown in the iOS embedded web view (does NOT apply to `SFSafariViewController`).
 		public var backButton: AnyObject? = nil
+		
+		/// Starting with iOS 9, `SFSafariViewController` will be used for embedded authorization instead of our custom class. You can turn this off here.
+		public var useSafariView = true
 	}
 	
 	/// Whether to use an embedded web view for authorization (true), the OS browser (false, the default) or don't do anything (nil).
@@ -241,7 +244,7 @@ public class OAuth2: OAuth2Base
 			else {
 				if let embed = self.authConfig.authorizeEmbedded {
 					if embed {
-						if !self.authorizeEmbeddedWith(self.authConfig.authorizeContext, params: params, autoDismiss: autoDismiss) {
+						if !self.authorizeEmbeddedWith(self.authConfig, params: params, autoDismiss: autoDismiss) {
 							self.didFail(genOAuth2Error("Client settings insufficient to show an authorization screen (no or invalid context given)", .PrerequisiteFailed))
 						}
 					}

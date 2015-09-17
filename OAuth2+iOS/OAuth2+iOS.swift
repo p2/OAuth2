@@ -19,6 +19,7 @@
 //
 
 import UIKit
+import SafariServices
 
 
 extension OAuth2
@@ -44,12 +45,20 @@ extension OAuth2
 	// MARK: - Built-In Web View
 	
 	/**
-	Tries to use the given context, which on iOS should be a UIViewController, to present the authorization screen.
+	Tries to use the current auth config context, which on iOS should be a UIViewController, to present the authorization screen.
 	
 	- returns: A bool indicating whether the method was able to show the authorize screen
 	*/
-	public func authorizeEmbeddedWith(context: AnyObject?, params: [String: String]? = nil, autoDismiss: Bool = true) -> Bool {
-		if let controller = context as? UIViewController {
+	public func authorizeEmbeddedWith(config: OAuth2AuthConfig, params: [String: String]? = nil, autoDismiss: Bool = true) -> Bool {
+		if let controller = config.authorizeContext as? UIViewController {
+			if #available(iOS 9, *), config.ui.useSafariView, let web = authorizeSafariEmbeddedFrom(controller, params: params) {
+				if autoDismiss {
+					internalAfterAuthorizeOrFailure = { wasFailure, error in
+						web.dismissViewControllerAnimated(true, completion: nil)
+					}
+				}
+				return true
+			}
 			if let web = authorizeEmbeddedFrom(controller, params: params) {
 				if autoDismiss {
 					internalAfterAuthorizeOrFailure = { wasFailure, error in
@@ -61,6 +70,81 @@ extension OAuth2
 		}
 		return false
 	}
+	
+	
+	// MARK: - Safari Web View Controller
+	
+	/**
+	Presents a Safari view controller from the supplied view controller, loading the authorize URL.
+	
+	The mechanism works just like when you're using Safari itself to log the user in, hence you **need to implement**
+	`application(application:openURL:sourceApplication:annotation:)` in your application delegate.
+	
+	This method does NOT dismiss the view controller automatically, you probably want to do this in the `afterAuthorizeOrFailure` closure.
+	Simply call this method first, then call `dismissViewController()` on the returned web view controller instance in that closure. Or use
+	`authorizeEmbeddedWith()` which does all this automatically.
+	
+	- parameter controller: The view controller to use for presentation
+	- parameter params: Optional additional URL parameters
+	- returns: SFSafariViewController, being already presented automatically
+	*/
+	@available(iOS 9.0, *)
+	public func authorizeSafariEmbeddedFrom(controller: UIViewController, params: [String: String]? = nil) -> SFSafariViewController? {
+		do {
+			let url = try authorizeURL(params)
+			return presentSafariViewFor(url, from: controller)
+		}
+		catch let err {
+			logIfVerbose("Cannot present authorize URL: \((err as NSError).localizedDescription)")
+		}
+		return nil
+	}
+	
+	/**
+	Presents a Safari view controller from the supplied view controller, loading the authorize URL.
+	
+	The mechanism works just like when you're using Safari itself to log the user in, hence you **need to implement**
+	`application(application:openURL:sourceApplication:annotation:)` in your application delegate.
+	
+	Automatically intercepts the redirect URL and performs the token exchange. It does NOT however dismiss the web view controller
+	automatically, you probably want to do this in the `afterAuthorizeOrFailure` closure. Simply call this method first, then assign
+	that closure in which you call `dismissViewController()` on the returned web view controller instance.
+	
+	- parameter controller: The view controller to use for presentation
+	- parameter redirect: The redirect URL to use
+	- parameter scope: The scope to use
+	- parameter params: Optional additional URL parameters
+	- returns: SFSafariViewController, being already presented automatically
+	*/
+	@available(iOS 9.0, *)
+	public func authorizeSafariEmbeddedFrom(controller: UIViewController, redirect: String, scope: String, params: [String: String]? = nil) -> SFSafariViewController? {
+			do {
+				let url = try authorizeURLWithRedirect(redirect, scope: scope, params: params)
+				return presentSafariViewFor(url, from: controller)
+			}
+			catch let err {
+				logIfVerbose("Cannot present authorize URL: \((err as NSError).localizedDescription)")
+			}
+			return nil
+	}
+	
+	/**
+	Presents and returns a Safari view controller loading the given URL and intercepting the given URL.
+	
+	- returns: SFSafariViewController, embedded in a UINavigationController being presented automatically
+	*/
+	@available(iOS 9.0, *)
+	final func presentSafariViewFor(url: NSURL, from: UIViewController) -> SFSafariViewController {
+		let web = SFSafariViewController(URL: url)
+		web.title = authConfig.ui.title
+		
+		from.presentViewController(web, animated: true, completion: nil)
+		
+		return web
+	}
+	
+	
+	// MARK: - Custom Web View Controller
 	
 	/**
 	Presents a web view controller, contained in a UINavigationController, on the supplied view controller and loads the authorize URL.
