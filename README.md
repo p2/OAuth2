@@ -48,11 +48,11 @@ Optionally, set the `onAuthorize` and `onFailure` closures **or** the `afterAuth
 ```swift
 let oauth2 = OAuth2CodeGrant(settings: settings)
 oauth2.onAuthorize = { parameters in
-    println("Did authorize with parameters: \(parameters)")
+    print("Did authorize with parameters: \(parameters)")
 }
 oauth2.onFailure = { error in        // `error` is nil on cancel
     if nil != error {
-        println("Authorization went wrong: \(error!.localizedDescription)")
+        print("Authorization went wrong: \(error!.localizedDescription)")
     }
 }
 ```
