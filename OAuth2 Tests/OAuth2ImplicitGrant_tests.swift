@@ -91,7 +91,7 @@ class OAuth2ImplicitGrantTests: XCTestCase
 			XCTAssertNotNil(error, "Error message expected")
 			XCTAssertEqual(error!.code, OAuth2Error.PrerequisiteFailed.rawValue)
 		}
-		oauth.handleRedirectURL(NSURL(string: "https://auth.ful.io#access_token=abc&state=\(oauth.state)")!)
+		oauth.handleRedirectURL(NSURL(string: "https://auth.ful.io#access_token=abc&state=\(oauth.context.state)")!)
 		XCTAssertNil(oauth.accessToken, "Must not have an access token")
 		
 		// unsupported token type
@@ -99,7 +99,7 @@ class OAuth2ImplicitGrantTests: XCTestCase
 			XCTAssertNotNil(error, "Error message expected")
 			XCTAssertEqual(error!.code, OAuth2Error.Unsupported.rawValue)
 		}
-		oauth.handleRedirectURL(NSURL(string: "https://auth.ful.io#token_type=helicopter&access_token=abc&state=\(oauth.state)")!)
+		oauth.handleRedirectURL(NSURL(string: "https://auth.ful.io#token_type=helicopter&access_token=abc&state=\(oauth.context.state)")!)
 		XCTAssertNil(oauth.accessToken, "Must not have an access token")
 		
 		// Invalid state
@@ -118,7 +118,7 @@ class OAuth2ImplicitGrantTests: XCTestCase
 			XCTAssertFalse(wasFailure)
 			XCTAssertNil(error, "No error message expected")
 		}
-		oauth.handleRedirectURL(NSURL(string: "https://auth.ful.io#token_type=bearer&access_token=abc&state=\(oauth.state)&expires_in=3599")!)
+		oauth.handleRedirectURL(NSURL(string: "https://auth.ful.io#token_type=bearer&access_token=abc&state=\(oauth.context.state)&expires_in=3599")!)
 		XCTAssertNotNil(oauth.accessToken, "Must have an access token")
 		XCTAssertEqual(oauth.accessToken!, "abc")
 		XCTAssertNotNil(oauth.accessTokenExpiry)
@@ -128,7 +128,7 @@ class OAuth2ImplicitGrantTests: XCTestCase
 		oauth.onFailure = { error in
 			XCTAssertTrue(false, "Should not call this")
 		}
-		oauth.handleRedirectURL(NSURL(string: "https://auth.ful.io#token_type=bearer&access_token=abc&state=\(oauth.state)")!)
+		oauth.handleRedirectURL(NSURL(string: "https://auth.ful.io#token_type=bearer&access_token=abc&state=\(oauth.context.state)")!)
 		XCTAssertNotNil(oauth.accessToken, "Must have an access token")
 		XCTAssertEqual(oauth.accessToken!, "abc")
 		XCTAssertNil(oauth.accessTokenExpiry)

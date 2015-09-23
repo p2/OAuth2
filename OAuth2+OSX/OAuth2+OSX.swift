@@ -48,8 +48,8 @@ extension OAuth2
 	
 	    - returns: A bool indicating whether the method was able to show the authorize screen
 	 */
-	public func authorizeEmbeddedWith(context: AnyObject?, params: [String: String]? = nil, autoDismiss: Bool = true) -> Bool {
-		if let controller = context as? NSViewController {
+	public func authorizeEmbeddedWith(config: OAuth2AuthConfig, params: [String: String]? = nil, autoDismiss: Bool = true) -> Bool {
+		if let controller = config.authorizeContext as? NSViewController {
 			let web: AnyObject = authorizeEmbeddedFrom(controller, params: params)
 			if autoDismiss {
 				internalAfterAuthorizeOrFailure = { wasFailure, error in

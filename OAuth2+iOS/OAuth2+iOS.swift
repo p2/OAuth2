@@ -42,7 +42,7 @@ extension OAuth2
 	}
 	
 	
-	// MARK: - Built-In Web View
+	// MARK: - Authorize Embedded
 	
 	/**
 	Tries to use the current auth config context, which on iOS should be a UIViewController, to present the authorization screen.
