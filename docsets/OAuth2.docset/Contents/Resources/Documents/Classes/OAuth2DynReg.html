@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>OAuth2DynReg Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Class/OAuth2DynReg" class="dashAnchor"></a>
+    <a title="OAuth2DynReg Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">OAuth2 Docs</a> (57% documented)</p>
+        <p class="header-right"><a href="https://github.com/p2/OAuth2"><img src="../img/gh.png"/>View on GitHub</a></p>
+        <p class="header-right"><a href="dash-feed://http%3A%2F%2Fp2%2Egithub%2Eio%2Fdocsets%2FOAuth2%2Exml"><img src="../img/dash.png"/>Install in Dash</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">OAuth2 Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        OAuth2DynReg Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+          <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/ArchiveKey.html">ArchiveKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/BaseKey.html">BaseKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/GenericKey.html">GenericKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Keychain.html">Keychain</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/KeychainQuery.html">KeychainQuery</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/OAuth2.html">OAuth2</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/OAuth2Base.html">OAuth2Base</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/OAuth2ClientCredentials.html">OAuth2ClientCredentials</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/OAuth2CodeGrant.html">OAuth2CodeGrant</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/OAuth2CodeGrantBasicAuth.html">OAuth2CodeGrantBasicAuth</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/s:C6OAuth223OAuth2CodeGrantFacebook">OAuth2CodeGrantFacebook</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/OAuth2DebugURLSessionDelegate.html">OAuth2DebugURLSessionDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/OAuth2DynReg.html">OAuth2DynReg</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/OAuth2ImplicitGrant.html">OAuth2ImplicitGrant</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/OAuth2PasswordGrant.html">OAuth2PasswordGrant</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/s:C6OAuth213OAuth2Request">OAuth2Request</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+          <a href="../Enums.html">Enums</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/OAuth2Error.html">OAuth2Error</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/OAuth2IncompleteSetup.html">OAuth2IncompleteSetup</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+          <a href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions/Keychain.html">Keychain</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/NSHTTPURLResponse.html">NSHTTPURLResponse</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/OAuth2.html">OAuth2</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+          <a href="../Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F6OAuth214genOAuth2ErrorFTSSOS_11OAuth2Error_CSo7NSError">genOAuth2Error(_:_:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+          <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/KeychainItem.html">KeychainItem</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/KeychainService.html">KeychainService</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+          <a href="../Structs.html">Structs</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/OAuth2AuthConfig.html">OAuth2AuthConfig</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+          <a href="../Typealiases.html">Typealiases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>OAuth2DynReg</h1>
+              <div class="declaration">
+                <div class="Swift">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2DynReg</span><span class="p">:</span> <span class="kt">OAuth2Base</span></code></pre>
+
+                </div>
+              </div>
+            <p>Class to handle OAuth2 Dynamic Client Registration.</p>
+
+<p>This class is WiP and not complete. For the full spec see <a href="https://tools.ietf.org/html/draft-ietf-oauth-dyn-reg-30">https://tools.ietf.org/html/draft-ietf-oauth-dyn-reg-30</a></p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC6OAuth212OAuth2DynReg15registrationURLCSo5NSURL"></a>
+                    <a name="//apple_ref/swift/Property/registrationURL" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC6OAuth212OAuth2DynReg15registrationURLCSo5NSURL">registrationURL</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The URL to register against.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">let</span> <span class="nv">registrationURL</span><span class="p">:</span> <span class="kt">NSURL</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC6OAuth212OAuth2DynReg10clientNameGSqSS_"></a>
+                    <a name="//apple_ref/swift/Property/clientName" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC6OAuth212OAuth2DynReg10clientNameGSqSS_">clientName</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The name of the App to advertise during registration.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">clientName</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC6OAuth212OAuth2DynReg8clientIdGSqSS_"></a>
+                    <a name="//apple_ref/swift/Property/clientId" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC6OAuth212OAuth2DynReg8clientIdGSqSS_">clientId</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Client id/key.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">clientId</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC6OAuth212OAuth2DynReg12clientSecretGSqSS_"></a>
+                    <a name="//apple_ref/swift/Property/clientSecret" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC6OAuth212OAuth2DynReg12clientSecretGSqSS_">clientSecret</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The client secret.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">clientSecret</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC6OAuth212OAuth2DynReg12redirectURIsGSqGSaSS__"></a>
+                    <a name="//apple_ref/swift/Property/redirectURIs" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC6OAuth212OAuth2DynReg12redirectURIsGSqGSaSS__">redirectURIs</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The redirect-URIs to register.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">redirectURIs</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">]?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC6OAuth212OAuth2DynReg4logoGSqSS_"></a>
+                    <a name="//apple_ref/swift/Property/logo" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC6OAuth212OAuth2DynReg4logoGSqSS_">logo</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Where a logo identifying the app can be found.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">logo</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC6OAuth212OAuth2DynReg12extraHeadersGSqGVSs10DictionarySSSS__"></a>
+                    <a name="//apple_ref/swift/Property/extraHeaders" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC6OAuth212OAuth2DynReg12extraHeadersGSqGVSs10DictionarySSSS__">extraHeaders</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Additional HTTP headers to supply during registration.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">extraHeaders</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">String</span><span class="p">]?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6OAuth212OAuth2DynRegcFMS0_FT8settingsGVSs10DictionarySSPSs9AnyObject___S0_"></a>
+                    <a name="//apple_ref/swift/Method/init(settings:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth212OAuth2DynRegcFMS0_FT8settingsGVSs10DictionarySSPSs9AnyObject___S0_">init(settings:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Designated initializer.</p>
+
+<p>The following settings keys are currently supported:</p>
+
+<ul>
+<li>client_name (string)</li>
+<li>registration_uri (URL-string)</li>
+<li>redirect_uris (list of URL-strings)</li>
+<li><p>logo_uri (URL-string)</p></li>
+<li><p>keychain (bool, true by default, applies to using the system keychain)</p></li>
+<li><p>verbose (bool, false by default, applies to client logging)</p></li>
+</ul>
+
+<p>NOTE that you <strong>must</strong> supply at least <code>registration_uri</code> upon initialization. If you forget, a <em>fatalError</em> will be raised.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">override</span> <span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">settings</span><span class="p">:</span> <span class="kt">OAuth2JSON</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+                <div class="task-name-container">
+                  <a name="/Keychain"></a>
+                  <a name="//apple_ref/swift/Section/Keychain" class="dashAnchor"></a>
+                  <a href="#/Keychain">
+                    <h3 class="section-name">Keychain</h3>
+                  </a>
+                </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6OAuth212OAuth2DynReg19keychainServiceNameFS0_FT_SS"></a>
+                    <a name="//apple_ref/swift/Method/keychainServiceName()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth212OAuth2DynReg19keychainServiceNameFS0_FT_SS">keychainServiceName()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2DynReg</span><span class="p">:</span> <span class="kt">OAuth2Base</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6OAuth212OAuth2DynReg15keychainKeyNameFS0_FT_SS"></a>
+                    <a name="//apple_ref/swift/Method/keychainKeyName()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth212OAuth2DynReg15keychainKeyNameFS0_FT_SS">keychainKeyName()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2DynReg</span><span class="p">:</span> <span class="kt">OAuth2Base</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6OAuth212OAuth2DynReg12forgetClientFS0_FT_T_"></a>
+                    <a name="//apple_ref/swift/Method/forgetClient()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth212OAuth2DynReg12forgetClientFS0_FT_T_">forgetClient()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Unsets the client credentials and deletes them from the keychain.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">forgetClient</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+                <div class="task-name-container">
+                  <a name="/Registration"></a>
+                  <a name="//apple_ref/swift/Section/Registration" class="dashAnchor"></a>
+                  <a href="#/Registration">
+                    <h3 class="section-name">Registration</h3>
+                  </a>
+                </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6OAuth212OAuth2DynReg23registerAndUpdateClientFS0_FTCS_6OAuth212onlyIfNeededSb8callbackFT4jsonGSqGVSs10DictionarySSPSs9AnyObject___5errorGSqCSo7NSError__T__T_"></a>
+                    <a name="//apple_ref/swift/Method/registerAndUpdateClient(_:onlyIfNeeded:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth212OAuth2DynReg23registerAndUpdateClientFS0_FTCS_6OAuth212onlyIfNeededSb8callbackFT4jsonGSqGVSs10DictionarySSPSs9AnyObject___5errorGSqCSo7NSError__T__T_">registerAndUpdateClient(_:onlyIfNeeded:callback:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Attempts to register for client credentials <strong>unless</strong> the given client (1st priority) or the receiver (2nd priority) already have a
+client id. If <code>onlyIfNeeded</code> is false will try to register anyway.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">registerAndUpdateClient</span><span class="p">(</span><span class="nv">client</span><span class="p">:</span> <span class="kt">OAuth2</span><span class="p">,</span> <span class="nv">onlyIfNeeded</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="nv">json</span><span class="p">:</span> <span class="kt">OAuth2JSON</span><span class="p">?,</span> <span class="nv">error</span><span class="p">:</span> <span class="kt">NSError</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">))</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6OAuth212OAuth2DynReg16registerIfNeededFS0_FFT4jsonGSqGVSs10DictionarySSPSs9AnyObject___5errorGSqCSo7NSError__T_T_"></a>
+                    <a name="//apple_ref/swift/Method/registerIfNeeded(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth212OAuth2DynReg16registerIfNeededFS0_FFT4jsonGSqGVSs10DictionarySSPSs9AnyObject___5errorGSqCSo7NSError__T_T_">registerIfNeeded(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Attempts to register the client <strong>unless</strong> the given client (1st priority) or the receiver (2nd priority) already have a client id.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">registerIfNeeded</span><span class="p">(</span><span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="nv">json</span><span class="p">:</span> <span class="kt">OAuth2JSON</span><span class="p">?,</span> <span class="nv">error</span><span class="p">:</span> <span class="kt">NSError</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">))</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6OAuth212OAuth2DynReg8registerFS0_FFT4jsonGSqGVSs10DictionarySSPSs9AnyObject___5errorGSqCSo7NSError__T_T_"></a>
+                    <a name="//apple_ref/swift/Method/register(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth212OAuth2DynReg8registerFS0_FFT4jsonGSqGVSs10DictionarySSPSs9AnyObject___5errorGSqCSo7NSError__T_T_">register(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Register using the receiver&rsquo;s current setup.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">register</span><span class="p">(</span><span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="nv">json</span><span class="p">:</span> <span class="kt">OAuth2JSON</span><span class="p">?,</span> <span class="nv">error</span><span class="p">:</span> <span class="kt">NSError</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">))</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6OAuth212OAuth2DynReg19registrationRequestFS0_FT_CSo19NSMutableURLRequest"></a>
+                    <a name="//apple_ref/swift/Method/registrationRequest()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth212OAuth2DynReg19registrationRequestFS0_FT_CSo19NSMutableURLRequest">registrationRequest()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns a mutable URL request, set up to be used for registration: POST method, JSON body data.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">registrationRequest</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">NSMutableURLRequest</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6OAuth212OAuth2DynReg16registrationBodyFS0_FT_GVSs10DictionarySSPSs9AnyObject__"></a>
+                    <a name="//apple_ref/swift/Method/registrationBody()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth212OAuth2DynReg16registrationBodyFS0_FT_GVSs10DictionarySSPSs9AnyObject__">registrationBody()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The body data to use for registration.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">registrationBody</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">OAuth2JSON</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6OAuth212OAuth2DynReg25parseRegistrationResponseFS0_FTCSo6NSData5errorGVSs33AutoreleasingUnsafeMutablePointerGSqCSo7NSError___GSqGVSs10DictionarySSPSs9AnyObject___"></a>
+                    <a name="//apple_ref/swift/Method/parseRegistrationResponse(_:error:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth212OAuth2DynReg25parseRegistrationResponseFS0_FTCSo6NSData5errorGVSs33AutoreleasingUnsafeMutablePointerGSqCSo7NSError___GSqGVSs10DictionarySSPSs9AnyObject___">parseRegistrationResponse(_:error:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2DynReg</span><span class="p">:</span> <span class="kt">OAuth2Base</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6OAuth212OAuth2DynReg15didRegisterWithFS0_FGVSs10DictionarySSPSs9AnyObject__T_"></a>
+                    <a name="//apple_ref/swift/Method/didRegisterWith(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth212OAuth2DynReg15didRegisterWithFS0_FGVSs10DictionarySSPSs9AnyObject__T_">didRegisterWith(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2DynReg</span><span class="p">:</span> <span class="kt">OAuth2Base</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2015 <a class="link" href="http://www.github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2015-09-23)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.3.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

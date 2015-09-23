@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>OAuth2Base Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Class/OAuth2Base" class="dashAnchor"></a>
+    <a title="OAuth2Base Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">OAuth2 Docs</a> (57% documented)</p>
+        <p class="header-right"><a href="https://github.com/p2/OAuth2"><img src="../img/gh.png"/>View on GitHub</a></p>
+        <p class="header-right"><a href="dash-feed://http%3A%2F%2Fp2%2Egithub%2Eio%2Fdocsets%2FOAuth2%2Exml"><img src="../img/dash.png"/>Install in Dash</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">OAuth2 Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        OAuth2Base Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+          <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/ArchiveKey.html">ArchiveKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/BaseKey.html">BaseKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/GenericKey.html">GenericKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Keychain.html">Keychain</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/KeychainQuery.html">KeychainQuery</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/OAuth2.html">OAuth2</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/OAuth2Base.html">OAuth2Base</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/OAuth2ClientCredentials.html">OAuth2ClientCredentials</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/OAuth2CodeGrant.html">OAuth2CodeGrant</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/OAuth2CodeGrantBasicAuth.html">OAuth2CodeGrantBasicAuth</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/s:C6OAuth223OAuth2CodeGrantFacebook">OAuth2CodeGrantFacebook</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/OAuth2DebugURLSessionDelegate.html">OAuth2DebugURLSessionDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/OAuth2DynReg.html">OAuth2DynReg</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/OAuth2ImplicitGrant.html">OAuth2ImplicitGrant</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/OAuth2PasswordGrant.html">OAuth2PasswordGrant</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/s:C6OAuth213OAuth2Request">OAuth2Request</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+          <a href="../Enums.html">Enums</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/OAuth2Error.html">OAuth2Error</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/OAuth2IncompleteSetup.html">OAuth2IncompleteSetup</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+          <a href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions/Keychain.html">Keychain</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/NSHTTPURLResponse.html">NSHTTPURLResponse</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/OAuth2.html">OAuth2</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+          <a href="../Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F6OAuth214genOAuth2ErrorFTSSOS_11OAuth2Error_CSo7NSError">genOAuth2Error(_:_:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+          <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/KeychainItem.html">KeychainItem</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/KeychainService.html">KeychainService</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+          <a href="../Structs.html">Structs</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/OAuth2AuthConfig.html">OAuth2AuthConfig</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+          <a href="../Typealiases.html">Typealiases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>OAuth2Base</h1>
+              <div class="declaration">
+                <div class="Swift">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2Base</span></code></pre>
+
+                </div>
+              </div>
+            <p>Abstract base class for OAuth2 authorization as well as client registration classes.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC6OAuth210OAuth2Base7verboseSb"></a>
+                    <a name="//apple_ref/swift/Property/verbose" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC6OAuth210OAuth2Base7verboseSb">verbose</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Set to <code>true</code> to log all the things. <code>false</code> by default. Use <code>&quot;verbose&quot;: bool</code> in settings.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">verbose</span> <span class="o">=</span> <span class="kc">false</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC6OAuth210OAuth2Base11useKeychainSb"></a>
+                    <a name="//apple_ref/swift/Property/useKeychain" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC6OAuth210OAuth2Base11useKeychainSb">useKeychain</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>If set to <code>true</code> (the default) will use system keychain to store tokens. Use <code>&quot;keychain&quot;: bool</code> in settings.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">useKeychain</span> <span class="o">=</span> <span class="kc">true</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6OAuth210OAuth2Base19keychainServiceNameFS0_FT_SS"></a>
+                    <a name="//apple_ref/swift/Method/keychainServiceName()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth210OAuth2Base19keychainServiceNameFS0_FT_SS">keychainServiceName()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The service key under which to store keychain items. Returns nil, to be overridden by subclasses.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">keychainServiceName</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6OAuth210OAuth2Base15keychainKeyNameFS0_FT_SS"></a>
+                    <a name="//apple_ref/swift/Method/keychainKeyName()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth210OAuth2Base15keychainKeyNameFS0_FT_SS">keychainKeyName()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2Base</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6OAuth210OAuth2BasecFMS0_FT8settingsGVSs10DictionarySSPSs9AnyObject___S0_"></a>
+                    <a name="//apple_ref/swift/Method/init(settings:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth210OAuth2BasecFMS0_FT8settingsGVSs10DictionarySSPSs9AnyObject___S0_">init(settings:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2Base</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+                <div class="task-name-container">
+                  <a name="/Requests"></a>
+                  <a name="//apple_ref/swift/Section/Requests" class="dashAnchor"></a>
+                  <a href="#/Requests">
+                    <h3 class="section-name">Requests</h3>
+                  </a>
+                </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC6OAuth210OAuth2Base15sessionDelegateGSqPSo20NSURLSessionDelegate__"></a>
+                    <a name="//apple_ref/swift/Property/sessionDelegate" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC6OAuth210OAuth2Base15sessionDelegateGSqPSo20NSURLSessionDelegate__">sessionDelegate</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2Base</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6OAuth210OAuth2Base14performRequestFS0_FTCSo12NSURLRequest8callbackFT4dataGSqCSo6NSData_6statusGSqSi_5errorGSqCSo7NSError__T__T_"></a>
+                    <a name="//apple_ref/swift/Method/performRequest(_:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth210OAuth2Base14performRequestFS0_FTCSo12NSURLRequest8callbackFT4dataGSqCSo6NSData_6statusGSqSi_5errorGSqCSo7NSError__T__T_">performRequest(_:callback:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Perform the supplied request and call the callback with the response JSON dict or an error.</p>
+
+<p>This implementation uses the shared <code>NSURLSession</code> and executes a data task. If the server responds with an error, this will be
+converted into an NSError instance with information supplied in the response JSON (if availale), using <code>errorForErrorResponse</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">performRequest</span><span class="p">(</span><span class="nv">request</span><span class="p">:</span> <span class="kt">NSURLRequest</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="nv">data</span><span class="p">:</span> <span class="kt">NSData</span><span class="p">?,</span> <span class="nv">status</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?,</span> <span class="nv">error</span><span class="p">:</span> <span class="kt">NSError</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">))</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+                <div class="task-name-container">
+                  <a name="/Utilities"></a>
+                  <a name="//apple_ref/swift/Section/Utilities" class="dashAnchor"></a>
+                  <a href="#/Utilities">
+                    <h3 class="section-name">Utilities</h3>
+                  </a>
+                </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFC6OAuth210OAuth2Base14queryStringForFMS0_FGVSs10DictionarySSSS_SS"></a>
+                    <a name="//apple_ref/swift/Method/queryStringFor(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFC6OAuth210OAuth2Base14queryStringForFMS0_FGVSs10DictionarySSSS_SS">queryStringFor(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Create a query string from a dictionary of string: string pairs.</p>
+
+<p>This method does <strong>form encode</strong> the value part. If you&rsquo;re using NSURLComponents you want to assign the return
+value to <code>percentEncodedQuery</code>, NOT <code>query</code> as this would double-encode the value.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">queryStringFor</span><span class="p">(</span><span class="nv">params</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">String</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFC6OAuth210OAuth2Base15paramsFromQueryFMS0_FSSGVSs10DictionarySSSS_"></a>
+                    <a name="//apple_ref/swift/Method/paramsFromQuery(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFC6OAuth210OAuth2Base15paramsFromQueryFMS0_FSSGVSs10DictionarySSSS_">paramsFromQuery(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Parse a query string into a dictionary of String: String pairs.</p>
+
+<p>If you&rsquo;re retrieving a query or fragment from NSURLComponents, use the <code>percentEncoded##</code> variant as the others
+automatically perform percent decoding, potentially messing with your query string.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">paramsFromQuery</span><span class="p">(</span><span class="nv">query</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">String</span><span class="p">]</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6OAuth210OAuth2Base21errorForErrorResponseFS0_FTGVSs10DictionarySSPSs9AnyObject__8fallbackGSqSS__CSo7NSError"></a>
+                    <a name="//apple_ref/swift/Method/errorForErrorResponse(_:fallback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth210OAuth2Base21errorForErrorResponseFS0_FTGVSs10DictionarySSPSs9AnyObject__8fallbackGSqSS__CSo7NSError">errorForErrorResponse(_:fallback:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Handles access token error response.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">errorForErrorResponse</span><span class="p">(</span><span class="nv">params</span><span class="p">:</span> <span class="kt">OAuth2JSON</span><span class="p">,</span> <span class="nv">fallback</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">NSError</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6OAuth210OAuth2Base12logIfVerboseFS0_FSST_"></a>
+                    <a name="//apple_ref/swift/Method/logIfVerbose(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth210OAuth2Base12logIfVerboseFS0_FSST_">logIfVerbose(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Debug logging, will only log if <code>verbose</code> is YES.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">logIfVerbose</span><span class="p">(</span><span class="nv">log</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2015 <a class="link" href="http://www.github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2015-09-23)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.3.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

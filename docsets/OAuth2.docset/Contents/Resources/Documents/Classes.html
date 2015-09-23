@@ -12,7 +12,7 @@
     <a title="Classes  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">OAuth2 Docs</a> (60% documented)</p>
+        <p><a href="index.html">OAuth2 Docs</a> (57% documented)</p>
         <p class="header-right"><a href="https://github.com/p2/OAuth2"><img src="img/gh.png"/>View on GitHub</a></p>
         <p class="header-right"><a href="dash-feed://http%3A%2F%2Fp2%2Egithub%2Eio%2Fdocsets%2FOAuth2%2Exml"><img src="img/dash.png"/>Install in Dash</a></p>
       </div>
@@ -49,6 +49,12 @@
                 <a href="Classes/OAuth2.html">OAuth2</a>
               </li>
               <li class="nav-group-task">
+                <a href="Classes/OAuth2Base.html">OAuth2Base</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/OAuth2ClientCredentials.html">OAuth2ClientCredentials</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Classes/OAuth2CodeGrant.html">OAuth2CodeGrant</a>
               </li>
               <li class="nav-group-task">
@@ -58,7 +64,16 @@
                 <a href="Classes.html#/s:C6OAuth223OAuth2CodeGrantFacebook">OAuth2CodeGrantFacebook</a>
               </li>
               <li class="nav-group-task">
+                <a href="Classes/OAuth2DebugURLSessionDelegate.html">OAuth2DebugURLSessionDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/OAuth2DynReg.html">OAuth2DynReg</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Classes/OAuth2ImplicitGrant.html">OAuth2ImplicitGrant</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/OAuth2PasswordGrant.html">OAuth2PasswordGrant</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes.html#/s:C6OAuth213OAuth2Request">OAuth2Request</a>
@@ -69,7 +84,10 @@
           <a href="Enums.html">Enums</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Enums.html#/s:O6OAuth211OAuth2Error">OAuth2Error</a>
+                <a href="Enums/OAuth2Error.html">OAuth2Error</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Enums/OAuth2IncompleteSetup.html">OAuth2IncompleteSetup</a>
               </li>
             </ul>
           </li>
@@ -77,16 +95,13 @@
           <a href="Extensions.html">Extensions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a href="Extensions/Keychain.html">Keychain</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Extensions/NSHTTPURLResponse.html">NSHTTPURLResponse</a>
               </li>
               <li class="nav-group-task">
-                <a href="Extensions.html#/c:objc(cs)NSMutableCharacterSet">NSMutableCharacterSet</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="Extensions/OAuth2.html">OAuth2</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Extensions.html#/s:SS">String</a>
               </li>
             </ul>
           </li>
@@ -140,6 +155,30 @@
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:C6OAuth28Keychain"></a>
+                    <a name="//apple_ref/swift/Class/Keychain" class="dashAnchor"></a>
+                    <a class="token" href="#/s:C6OAuth28Keychain">Keychain</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Classes/Keychain.html" class="slightly-smaller">See more</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:C6OAuth213KeychainQuery"></a>
                     <a name="//apple_ref/swift/Class/KeychainQuery" class="dashAnchor"></a>
                     <a class="token" href="#/s:C6OAuth213KeychainQuery">KeychainQuery</a>
@@ -164,9 +203,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:C6OAuth26OAuth2"></a>
-                    <a name="//apple_ref/swift/Class/OAuth2" class="dashAnchor"></a>
-                    <a class="token" href="#/s:C6OAuth26OAuth2">OAuth2</a>
+                    <a name="/s:C6OAuth27BaseKey"></a>
+                    <a name="//apple_ref/swift/Class/BaseKey" class="dashAnchor"></a>
+                    <a class="token" href="#/s:C6OAuth27BaseKey">BaseKey</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -174,15 +213,15 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Base class for specific OAuth2 authentication flow implementations.</p>
+                        <p>BaseKey</p>
 
-                        <a href="Classes/OAuth2.html" class="slightly-smaller">See more</a>
+                        <a href="Classes/BaseKey.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="Swift">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">BaseKey</span><span class="p">:</span> <span class="kt">KeychainItem</span></code></pre>
 
                         </div>
                       </div>
@@ -220,6 +259,94 @@
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:C6OAuth210ArchiveKey"></a>
+                    <a name="//apple_ref/swift/Class/ArchiveKey" class="dashAnchor"></a>
+                    <a class="token" href="#/s:C6OAuth210ArchiveKey">ArchiveKey</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Classes/ArchiveKey.html" class="slightly-smaller">See more</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:C6OAuth210OAuth2Base"></a>
+                    <a name="//apple_ref/swift/Class/OAuth2Base" class="dashAnchor"></a>
+                    <a class="token" href="#/s:C6OAuth210OAuth2Base">OAuth2Base</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Abstract base class for OAuth2 authorization as well as client registration classes.</p>
+
+                        <a href="Classes/OAuth2Base.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2Base</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:C6OAuth26OAuth2"></a>
+                    <a name="//apple_ref/swift/Class/OAuth2" class="dashAnchor"></a>
+                    <a class="token" href="#/s:C6OAuth26OAuth2">OAuth2</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Base class for specific OAuth2 authentication flow implementations.</p>
+
+                        <a href="Classes/OAuth2.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2</span><span class="p">:</span> <span class="kt">OAuth2Base</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:C6OAuth213OAuth2Request"></a>
                     <a name="//apple_ref/swift/Class/OAuth2Request" class="dashAnchor"></a>
                     <a class="token" href="#/s:C6OAuth213OAuth2Request">OAuth2Request</a>
@@ -244,16 +371,12 @@
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:C6OAuth28Keychain"></a>
-                    <a name="//apple_ref/swift/Class/Keychain" class="dashAnchor"></a>
-                    <a class="token" href="#/s:C6OAuth28Keychain">Keychain</a>
+                    <a name="/s:C6OAuth229OAuth2DebugURLSessionDelegate"></a>
+                    <a name="//apple_ref/swift/Class/OAuth2DebugURLSessionDelegate" class="dashAnchor"></a>
+                    <a class="token" href="#/s:C6OAuth229OAuth2DebugURLSessionDelegate">OAuth2DebugURLSessionDelegate</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -261,9 +384,53 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>An NSURLSession delegate that allows you to use self-signed SSL certificates.</p>
 
-                        <a href="Classes/Keychain.html" class="slightly-smaller">See more</a>
+<p>Doing so is a REALLY BAD IDEA, even in development environments where you can use real, free certificates that are valid a few months.
+Still, sometimes you&rsquo;ll have to do this so this class is provided, but DO NOT SUBMIT your app using self-signed SSL certs to the App
+Store. You have been warned!</p>
+
+                        <a href="Classes/OAuth2DebugURLSessionDelegate.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2DebugURLSessionDelegate</span><span class="p">:</span> <span class="kt">NSObject</span><span class="p">,</span> <span class="kt">NSURLSessionDelegate</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:C6OAuth223OAuth2ClientCredentials"></a>
+                    <a name="//apple_ref/swift/Class/OAuth2ClientCredentials" class="dashAnchor"></a>
+                    <a class="token" href="#/s:C6OAuth223OAuth2ClientCredentials">OAuth2ClientCredentials</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Class to handle two-legged OAuth2 requests of the <q>client_credentials</q> type.</p>
+
+                        <a href="Classes/OAuth2ClientCredentials.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2ClientCredentials</span><span class="p">:</span> <span class="kt">OAuth2</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -294,62 +461,6 @@
                         <div class="Swift">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2ImplicitGrant</span><span class="p">:</span> <span class="kt">OAuth2</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:C6OAuth210ArchiveKey"></a>
-                    <a name="//apple_ref/swift/Class/ArchiveKey" class="dashAnchor"></a>
-                    <a class="token" href="#/s:C6OAuth210ArchiveKey">ArchiveKey</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                        <a href="Classes/ArchiveKey.html" class="slightly-smaller">See more</a>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:C6OAuth27BaseKey"></a>
-                    <a name="//apple_ref/swift/Class/BaseKey" class="dashAnchor"></a>
-                    <a class="token" href="#/s:C6OAuth27BaseKey">BaseKey</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>BaseKey</p>
-
-                        <a href="Classes/BaseKey.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="Swift">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">BaseKey</span><span class="p">:</span> <span class="kt">KeychainItem</span></code></pre>
 
                         </div>
                       </div>
@@ -462,11 +573,77 @@ this subclass if you need a different header (this is different to version 1.2.3
                 </li>
               </ul>
             </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:C6OAuth219OAuth2PasswordGrant"></a>
+                    <a name="//apple_ref/swift/Class/OAuth2PasswordGrant" class="dashAnchor"></a>
+                    <a class="token" href="#/s:C6OAuth219OAuth2PasswordGrant">OAuth2PasswordGrant</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A class to handle authorization for clients via password grant.</p>
+
+                        <a href="Classes/OAuth2PasswordGrant.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2PasswordGrant</span><span class="p">:</span> <span class="kt">OAuth2</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:C6OAuth212OAuth2DynReg"></a>
+                    <a name="//apple_ref/swift/Class/OAuth2DynReg" class="dashAnchor"></a>
+                    <a class="token" href="#/s:C6OAuth212OAuth2DynReg">OAuth2DynReg</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Class to handle OAuth2 Dynamic Client Registration.</p>
+
+<p>This class is WiP and not complete. For the full spec see <a href="https://tools.ietf.org/html/draft-ietf-oauth-dyn-reg-30">https://tools.ietf.org/html/draft-ietf-oauth-dyn-reg-30</a></p>
+
+                        <a href="Classes/OAuth2DynReg.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="Swift">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2DynReg</span><span class="p">:</span> <span class="kt">OAuth2Base</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2015 <a class="link" href="http://www.github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2015-05-24)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.2.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2015 <a class="link" href="http://www.github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2015-09-23)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.3.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>
