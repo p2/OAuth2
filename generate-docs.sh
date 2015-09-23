@@ -10,4 +10,4 @@ jazzy \
 	-g "https://github.com/p2/OAuth2" \
 	-r "http://p2.github.io/OAuth2" \
 	-o "docs" \
-	--module-version "1.0"
+	--module-version "2.0.1"
