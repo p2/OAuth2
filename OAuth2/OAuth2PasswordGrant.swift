@@ -42,22 +42,22 @@ public class OAuth2PasswordGrant: OAuth2
 	}
 	
 	public override func authorize(params params: [String : String]? = nil, autoDismiss: Bool = true) {
-        tryToObtainAccessTokenIfNeeded() { success in
-            if success {
-                self.didAuthorize(OAuth2JSON())
-            }
-            else {
-                self.logIfVerbose("No access token, requesting a new one")
-                self.obtainAccessToken() { error in
-                    if let error = error {
-                        self.didFail(error)
-                    }
-                    else {
-                        self.didAuthorize([String: String]())
-                    }
-                }
-            }
-        }
+		tryToObtainAccessTokenIfNeeded() { success in
+			if success {
+				self.didAuthorize(OAuth2JSON())
+			}
+			else {
+				self.logIfVerbose("No access token, requesting a new one")
+				self.obtainAccessToken() { error in
+					if let error = error {
+						self.didFail(error)
+					}
+					else {
+						self.didAuthorize([String: String]())
+					}
+				}
+			}
+		}
 	}
 	
 	/**

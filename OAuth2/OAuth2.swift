@@ -79,13 +79,13 @@ public class OAuth2: OAuth2Base
 	public final var clientSecret: String?
 	
 	/// The URL to authorize against.
-    public final let authURL: NSURL
-    
-    /// The URL string where we can exchange a code for a token; if nil `authURL` will be used.
-    public let tokenURL: NSURL?
-    
-    /// Whether the receiver should use the request body instead of the Authorization header for the client secret.
-    public var secretInBody: Bool = false
+	public final let authURL: NSURL
+
+	/// The URL string where we can exchange a code for a token; if nil `authURL` will be used.
+	public let tokenURL: NSURL?
+
+	/// Whether the receiver should use the request body instead of the Authorization header for the client secret.
+	public var secretInBody: Bool = false
 	
 	/// The scope currently in use.
 	public var scope: String?
@@ -103,10 +103,10 @@ public class OAuth2: OAuth2Base
 	public var accessTokenExpiry: NSDate?
 	
 	/// If set to true (the default), uses a keychain-supplied access token even if no "expires_in" parameter was supplied.
-    public var accessTokenAssumeUnexpired = true
-    
-    /// The receiver's long-time refresh token.
-    public var refreshToken: String?
+	public var accessTokenAssumeUnexpired = true
+	
+	/// The receiver's long-time refresh token.
+	public var refreshToken: String?
 	
 	/// Closure called on successful authentication on the main thread.
 	public final var onAuthorize: ((parameters: OAuth2JSON) -> Void)?
@@ -157,20 +157,20 @@ public class OAuth2: OAuth2Base
 		if let auth = settings["authorize_uri"] as? String {
 			aURL = NSURL(string: auth)
 		}
-        authURL = aURL ?? NSURL(string: "http://localhost")!
-        
-        // token URL
-        if let token = settings["token_uri"] as? String {
-            tokenURL = NSURL(string: token)
-        }
-        else {
-            tokenURL = nil
-        }
-        
-        // client authentication options
-        if let inBody = settings["secret_in_body"] as? Bool {
-            secretInBody = inBody
-        }
+		authURL = aURL ?? NSURL(string: "http://localhost")!
+		
+		// token URL
+		if let token = settings["token_uri"] as? String {
+			tokenURL = NSURL(string: token)
+		}
+		else {
+			tokenURL = nil
+		}
+		
+		// client authentication options
+		if let inBody = settings["secret_in_body"] as? Bool {
+			secretInBody = inBody
+		}
 		
 		// access token options
 		if let assume = settings["token_assume_unexpired"] as? Bool {
@@ -221,7 +221,7 @@ public class OAuth2: OAuth2Base
 		else {
 			logIfVerbose("Found access token but no expiration date, discarding (set `accessTokenAssumeUnexpired` to true to still use it)")
 		}
-        
+		
 		if let token = items["refreshToken"] as? String where !token.isEmpty {
 			logIfVerbose("Found refresh token")
 			refreshToken = token
@@ -235,10 +235,10 @@ public class OAuth2: OAuth2Base
 		var items: [String: NSCoding] = ["accessToken": access]
 		if let date = accessTokenExpiry where date == date.laterDate(NSDate()) {
 			items["accessTokenDate"] = date
-        }
-        if let refresh = refreshToken where !refresh.isEmpty {
-            items["refreshToken"] = refresh
-        }
+		}
+		if let refresh = refreshToken where !refresh.isEmpty {
+			items["refreshToken"] = refresh
+		}
 		return items
 	}
 	
@@ -252,8 +252,8 @@ public class OAuth2: OAuth2Base
 		}
 		
 		accessToken = nil
-        accessTokenExpiry = nil
-        refreshToken = nil
+		accessTokenExpiry = nil
+		refreshToken = nil
 	}
 	
 	
@@ -314,7 +314,7 @@ public class OAuth2: OAuth2Base
 	*/
 	func tryToObtainAccessTokenIfNeeded(callback: ((success: Bool) -> Void)) {
 		if hasUnexpiredAccessToken() {
-            callback(success: true)
+			callback(success: true)
 		}
 		else {
 			logIfVerbose("No access token, maybe I can refresh")
@@ -597,19 +597,19 @@ public class OAuth2: OAuth2Base
 			if let access = json["access_token"] as? String {
 				accessToken = access
 			}
-            
+			
 			accessTokenExpiry = nil
 			if let expires = json["expires_in"] as? NSTimeInterval {
 				accessTokenExpiry = NSDate(timeIntervalSinceNow: expires)
 			}
 			else {
 				self.logIfVerbose("Did not get access token expiration interval")
-            }
-            
-            if let refresh = json["refresh_token"] as? String {
-                refreshToken = refresh
-            }
-            
+			}
+			
+			if let refresh = json["refresh_token"] as? String {
+				refreshToken = refresh
+			}
+			
 			return json
 		}
 		if let str = NSString(data: data, encoding: NSUTF8StringEncoding) {
