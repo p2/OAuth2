@@ -41,21 +41,23 @@ public class OAuth2PasswordGrant: OAuth2
 		super.init(settings: settings)
 	}
 	
-	public override func authorize(params params: [String : String]?, autoDismiss: Bool) {
-		if hasUnexpiredAccessToken() {
-			self.didAuthorize([String: String]())
-		}
-		else {
-			logIfVerbose("No access token, requesting a new one")
-			obtainAccessToken() { error in
-				if let error = error {
-					self.didFail(error)
-				}
-				else {
-					self.didAuthorize([String: String]())
-				}
-			}
-		}
+	public override func authorize(params params: [String : String]? = nil, autoDismiss: Bool = true) {
+        tryToObtainAccessTokenIfNeeded() { success in
+            if success {
+                self.didAuthorize(OAuth2JSON())
+            }
+            else {
+                self.logIfVerbose("No access token, requesting a new one")
+                self.obtainAccessToken() { error in
+                    if let error = error {
+                        self.didFail(error)
+                    }
+                    else {
+                        self.didAuthorize([String: String]())
+                    }
+                }
+            }
+        }
 	}
 	
 	/**
@@ -112,7 +114,7 @@ public class OAuth2PasswordGrant: OAuth2
 			throw OAuth2IncompleteSetup.NoClientSecret
 		}
 		
-		let req = NSMutableURLRequest(URL: authURL)
+		let req = NSMutableURLRequest(URL: tokenURL ?? authURL)
 		req.HTTPMethod = "POST"
 		req.setValue("application/x-www-form-urlencoded; charset=utf-8", forHTTPHeaderField: "Content-Type")
 		req.setValue("application/json", forHTTPHeaderField: "Accept")
