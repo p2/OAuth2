@@ -80,6 +80,12 @@ public class OAuth2: OAuth2Base
 	
 	/// The URL to authorize against.
 	public final let authURL: NSURL
+
+	/// The URL string where we can exchange a code for a token; if nil `authURL` will be used.
+	public let tokenURL: NSURL?
+
+	/// Whether the receiver should use the request body instead of the Authorization header for the client secret.
+	public var secretInBody: Bool = false
 	
 	/// The scope currently in use.
 	public var scope: String?
@@ -98,6 +104,9 @@ public class OAuth2: OAuth2Base
 	
 	/// If set to true (the default), uses a keychain-supplied access token even if no "expires_in" parameter was supplied.
 	public var accessTokenAssumeUnexpired = true
+	
+	/// The receiver's long-time refresh token.
+	public var refreshToken: String?
 	
 	/// Closure called on successful authentication on the main thread.
 	public final var onAuthorize: ((parameters: OAuth2JSON) -> Void)?
@@ -126,7 +135,7 @@ public class OAuth2: OAuth2Base
 	    - client_id (string)
 	    - client_secret (string), usually only needed for code grant
 	    - authorize_uri (URL-string)
-	    - token_uri (URL-string), only for code grant
+	    - token_uri (URL-string), if omitted the authorize_uri will be used to obtain tokens
 	    - redirect_uris (list of URL-strings)
 	    - scope (string)
 	
@@ -149,6 +158,19 @@ public class OAuth2: OAuth2Base
 			aURL = NSURL(string: auth)
 		}
 		authURL = aURL ?? NSURL(string: "http://localhost")!
+		
+		// token URL
+		if let token = settings["token_uri"] as? String {
+			tokenURL = NSURL(string: token)
+		}
+		else {
+			tokenURL = nil
+		}
+		
+		// client authentication options
+		if let inBody = settings["secret_in_body"] as? Bool {
+			secretInBody = inBody
+		}
 		
 		// access token options
 		if let assume = settings["token_assume_unexpired"] as? Bool {
@@ -199,6 +221,11 @@ public class OAuth2: OAuth2Base
 		else {
 			logIfVerbose("Found access token but no expiration date, discarding (set `accessTokenAssumeUnexpired` to true to still use it)")
 		}
+		
+		if let token = items["refreshToken"] as? String where !token.isEmpty {
+			logIfVerbose("Found refresh token")
+			refreshToken = token
+		}
 	}
 	
 	/** Returns a dictionary of our tokens and expiration date, ready to be stored to the keychain. */
@@ -208,6 +235,9 @@ public class OAuth2: OAuth2Base
 		var items: [String: NSCoding] = ["accessToken": access]
 		if let date = accessTokenExpiry where date == date.laterDate(NSDate()) {
 			items["accessTokenDate"] = date
+		}
+		if let refresh = refreshToken where !refresh.isEmpty {
+			items["refreshToken"] = refresh
 		}
 		return items
 	}
@@ -223,6 +253,7 @@ public class OAuth2: OAuth2Base
 		
 		accessToken = nil
 		accessTokenExpiry = nil
+		refreshToken = nil
 	}
 	
 	
@@ -279,14 +310,26 @@ public class OAuth2: OAuth2Base
 	Indicates, in the callback, whether the client has been able to obtain an access token that is likely to still
 	work (but there is no guarantee).
 	
-	This method calls the callback immediately with the result of `hasUnexpiredAccessToken()`. Subclasses such as
-	the code grant however might perform a refresh token call and only call the callback after this succeeds or
-	fails.
-	
 	- parameter callback: The callback to call once the client knows whether it has an access token or not
 	*/
 	func tryToObtainAccessTokenIfNeeded(callback: ((success: Bool) -> Void)) {
-		callback(success: hasUnexpiredAccessToken())
+		if hasUnexpiredAccessToken() {
+			callback(success: true)
+		}
+		else {
+			logIfVerbose("No access token, maybe I can refresh")
+			doRefreshToken({ successParams, error in
+				if nil != successParams {
+					callback(success: true)
+				}
+				else {
+					if let err = error {
+						self.logIfVerbose("\(err.localizedDescription)")
+					}
+					callback(success: false)
+				}
+			})
+		}
 	}
 	
 	/**
@@ -430,7 +473,111 @@ public class OAuth2: OAuth2Base
 	}
 	
 	
+	// MARK: - Refresh Token
+	
+	/**
+	    Generate the URL to be used for the token request when we have a refresh token.
+	
+	    This will set "grant_type" to "refresh_token", add the refresh token, then forward to `authorizeURLWithBase()` to fill the remaining
+	    parameters.
+	 */
+	func tokenURLWithRefreshToken(redirect: String?, refreshToken: String, params: [String: String]? = nil) throws -> NSURL {
+		var urlParams = params ?? [String: String]()
+		urlParams["grant_type"] = "refresh_token"
+		urlParams["refresh_token"] = refreshToken
+		if let secret = clientSecret where secretInBody {
+			urlParams["client_secret"] = secret
+		}
+		
+		return try authorizeURLWithBase(tokenURL ?? authURL, redirect: redirect, scope: nil, responseType: nil, params: urlParams)
+	}
+	
+	/**
+	    Create a request for token refresh.
+	 */
+	func tokenRequestWithRefreshToken(refreshToken: String) throws -> NSMutableURLRequest {
+		let url = try tokenURLWithRefreshToken(redirect, refreshToken: refreshToken)
+		return try tokenRequestWithURL(url)
+	}
+	
+	/**
+	    If there is a refresh token, use it to receive a fresh access token.
+	
+	    - parameter callback: The callback to call after the refresh token exchange has finished
+	 */
+	public func doRefreshToken(callback: ((successParams: OAuth2JSON?, error: NSError?) -> Void)) {
+		guard let refresh = refreshToken where !refresh.isEmpty else {
+			callback(successParams: nil, error: genOAuth2Error("I don't have a refresh token, not trying to refresh", .PrerequisiteFailed))
+			return
+		}
+		
+		do {
+			let post = try tokenRequestWithRefreshToken(refresh)
+			logIfVerbose("Using refresh token to receive access token from \(post.URL?.description)")
+			
+			performRequest(post) { data, status, error in
+				if let data = data {
+					do {
+						let json = try self.parseAccessTokenResponse(data)
+						if status < 400 && nil == json["error"] {			// we might get a 200 with an error message from some servers
+							self.logIfVerbose("Did use refresh token for access token [\(nil != self.accessToken)]")
+							callback(successParams: json, error: nil)
+						}
+						else {
+							throw self.errorForErrorResponse(json)
+						}
+					}
+					catch let err {
+						self.logIfVerbose("Error parsing refreshed access token: \((err as NSError).localizedDescription)")
+						callback(successParams: nil, error: err as NSError)
+					}
+				}
+				else {
+					callback(successParams: nil, error: error ?? genOAuth2Error("Unknown error during token refresh"))
+				}
+			}
+		}
+		catch let err {
+			callback(successParams: nil, error: err as NSError)
+		}
+	}
+	
+	
 	// MARK: - Utilities
+	
+	/**
+	    Creates a POST request with x-www-form-urlencoded body created from the supplied URL's query part.
+	 */
+	func tokenRequestWithURL(url: NSURL) throws -> NSMutableURLRequest {
+		if clientId.isEmpty {
+			throw OAuth2IncompleteSetup.NoClientId
+		}
+		
+		let comp = NSURLComponents(URL: url, resolvingAgainstBaseURL: true)
+		assert(comp != nil, "It seems NSURLComponents cannot parse \(url)");
+		let body = comp!.percentEncodedQuery
+		comp!.query = nil
+		
+		let req = NSMutableURLRequest(URL: comp!.URL!)
+		req.HTTPMethod = "POST"
+		req.setValue("application/x-www-form-urlencoded; charset=utf-8", forHTTPHeaderField: "Content-Type")
+		req.setValue("application/json", forHTTPHeaderField: "Accept")
+		req.HTTPBody = body?.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+		
+		// add Authorization header if we have a client secret (even if it's empty)
+		if let secret = clientSecret where !secretInBody {
+			logIfVerbose("Adding “Authorization” header as “Basic client-key:client-secret”")
+			let pw = "\(clientId.wwwFormURLEncodedString):\(secret.wwwFormURLEncodedString)"
+			if let utf8 = pw.dataUsingEncoding(NSUTF8StringEncoding) {
+				req.setValue("Basic \(utf8.base64EncodedStringWithOptions([]))", forHTTPHeaderField: "Authorization")
+			}
+			else {
+				logIfVerbose("ERROR: for some reason failed to base-64 encode the client-key:client-secret combo")
+			}
+		}
+		
+		return req
+	}
 	
 	/**
 	Parse the NSData object returned while exchanging the code for a token in `exchangeCodeForToken`, usually JSON data.
@@ -450,6 +597,7 @@ public class OAuth2: OAuth2Base
 			if let access = json["access_token"] as? String {
 				accessToken = access
 			}
+			
 			accessTokenExpiry = nil
 			if let expires = json["expires_in"] as? NSTimeInterval {
 				accessTokenExpiry = NSDate(timeIntervalSinceNow: expires)
@@ -457,6 +605,11 @@ public class OAuth2: OAuth2Base
 			else {
 				self.logIfVerbose("Did not get access token expiration interval")
 			}
+			
+			if let refresh = json["refresh_token"] as? String {
+				refreshToken = refresh
+			}
+			
 			return json
 		}
 		if let str = NSString(data: data, encoding: NSUTF8StringEncoding) {

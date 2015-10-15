@@ -26,7 +26,7 @@ import Foundation
  */
 public class OAuth2ClientCredentials: OAuth2
 {
-	public override func authorize(params params: [String : String]?, autoDismiss: Bool) {
+	public override func authorize(params params: [String : String]? = nil, autoDismiss: Bool = true) {
 		if hasUnexpiredAccessToken() {
 			self.didAuthorize([String: String]())
 		}
@@ -44,9 +44,9 @@ public class OAuth2ClientCredentials: OAuth2
 	}
 	
 	/**
-	    If there is a refresh token, use it to receive a fresh access token.
+	    Use the client credentials to retrieve a fresh access token.
 	
-	    - parameter callback: The callback to call after the refresh token exchange has finished
+	    - parameter callback: The callback to call after the process has finished
 	 */
 	func obtainAccessToken(callback: ((error: NSError?) -> Void)) {
 		do {
@@ -86,7 +86,7 @@ public class OAuth2ClientCredentials: OAuth2
 			throw OAuth2IncompleteSetup.NoClientSecret
 		}
 		
-		let req = NSMutableURLRequest(URL: authURL)
+		let req = NSMutableURLRequest(URL: tokenURL ?? authURL)
 		req.HTTPMethod = "POST"
 		req.setValue("application/x-www-form-urlencoded; charset=utf-8", forHTTPHeaderField: "Content-Type")
 		req.setValue("application/json", forHTTPHeaderField: "Accept")
