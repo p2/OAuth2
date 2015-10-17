@@ -141,12 +141,12 @@ public class OAuth2: OAuth2Base
 	
 	    - keychain (bool, true by default, applies to using the system keychain)
 	    - verbose (bool, false by default, applies to client logging)
-	    - secret_in_body (bool, false by default, forces code grant flow to use the request body for the client secret)
-	    - token_assume_unexpired (bool, true by default, uses access token that do not come with an "expires_in" parameter)
+	    - secret_in_body (bool, false by default, forces the flow to use the request body for the client secret)
+	    - token_assume_unexpired (bool, true by default, whether to use access tokens that do not come with an "expires_in" parameter)
 	    - title (string, to be shown in views shown by the framework)
 	
-	    NOTE that you **must** supply at least `client_id` and `authorize_uri` upon initialization. If you forget the former a _fatalError_
-	    will be raised, if you forget the latter `http://localhost` will be used.
+	    NOTE that you **must** supply at least `client_id` and `authorize_uri` upon initialization. If you forget the former an exception
+	    will be thrown when trying to authorize. If you forget the latter `http://localhost` will be used.
 	 */
 	public override init(settings: OAuth2JSON) {
 		clientId = settings["client_id"] as? String ?? ""
@@ -203,25 +203,25 @@ public class OAuth2: OAuth2Base
 	
 	/** Updates the token properties according to the items found in the passed dictionary. */
 	override func updateFromKeychainItems(items: [String: NSCoding]) {
-		guard let token = items["accessToken"] as? String where !token.isEmpty else { return }
-		if let date = items["accessTokenDate"] as? NSDate {
-			if date == date.laterDate(NSDate()) {
-				logIfVerbose("Found access token, valid until \(date)")
-				accessTokenExpiry = date
+		if let token = items["accessToken"] as? String where !token.isEmpty {
+			if let date = items["accessTokenDate"] as? NSDate {
+				if date == date.laterDate(NSDate()) {
+					logIfVerbose("Found access token, valid until \(date)")
+					accessTokenExpiry = date
+					accessToken = token
+				}
+				else {
+					logIfVerbose("Found access token but it seems to have expired")
+				}
+			}
+			else if accessTokenAssumeUnexpired {
+				logIfVerbose("Found access token but no expiration date, assuming unexpired (set `accessTokenAssumeUnexpired` to false to discard)")
 				accessToken = token
 			}
 			else {
-				logIfVerbose("Found access token but it seems to have expired")
+				logIfVerbose("Found access token but no expiration date, discarding (set `accessTokenAssumeUnexpired` to true to still use it)")
 			}
 		}
-		else if accessTokenAssumeUnexpired {
-			logIfVerbose("Found access token but no expiration date, assuming unexpired (set `accessTokenAssumeUnexpired` to false to discard)")
-			accessToken = token
-		}
-		else {
-			logIfVerbose("Found access token but no expiration date, discarding (set `accessTokenAssumeUnexpired` to true to still use it)")
-		}
-		
 		if let token = items["refreshToken"] as? String where !token.isEmpty {
 			logIfVerbose("Found refresh token")
 			refreshToken = token
@@ -427,6 +427,79 @@ public class OAuth2: OAuth2Base
 		throw NSError(domain: OAuth2ErrorDomain, code: -99, userInfo: [NSLocalizedDescriptionKey: "Abstract class use"])
 	}
 	
+	
+	// MARK: - Refresh Token
+	
+	/**
+	Generate the URL to be used for the token request when we have a refresh token.
+	
+	This will set "grant_type" to "refresh_token", add the refresh token, then forward to `authorizeURLWithBase()` to fill the remaining
+	parameters.
+	*/
+	func tokenURLWithRefreshToken(redirect: String?, refreshToken: String, params: [String: String]? = nil) throws -> NSURL {
+		var urlParams = params ?? [String: String]()
+		urlParams["grant_type"] = "refresh_token"
+		urlParams["refresh_token"] = refreshToken
+		if let secret = clientSecret where secretInBody {
+			urlParams["client_secret"] = secret
+		}
+		
+		return try authorizeURLWithBase(tokenURL ?? authURL, redirect: redirect, scope: nil, responseType: nil, params: urlParams)
+	}
+	
+	/**
+	Create a request for token refresh.
+	*/
+	func tokenRequestWithRefreshToken(refreshToken: String) throws -> NSMutableURLRequest {
+		let url = try tokenURLWithRefreshToken(redirect, refreshToken: refreshToken)
+		return try tokenRequestWithURL(url)
+	}
+	
+	/**
+	If there is a refresh token, use it to receive a fresh access token.
+	
+	- parameter callback: The callback to call after the refresh token exchange has finished
+	*/
+	public func doRefreshToken(callback: ((successParams: OAuth2JSON?, error: NSError?) -> Void)) {
+		guard let refresh = refreshToken where !refresh.isEmpty else {
+			callback(successParams: nil, error: genOAuth2Error("I don't have a refresh token, not trying to refresh", .PrerequisiteFailed))
+			return
+		}
+		
+		do {
+			let post = try tokenRequestWithRefreshToken(refresh)
+			logIfVerbose("Using refresh token to receive access token from \(post.URL?.description)")
+			
+			performRequest(post) { data, status, error in
+				if let data = data {
+					do {
+						let json = try self.parseAccessTokenResponse(data)
+						if status < 400 && nil == json["error"] {			// we might get a 200 with an error message from some servers
+							self.logIfVerbose("Did use refresh token for access token [\(nil != self.accessToken)]")
+							callback(successParams: json, error: nil)
+						}
+						else {
+							throw self.errorForErrorResponse(json)
+						}
+					}
+					catch let err {
+						self.logIfVerbose("Error parsing refreshed access token: \((err as NSError).localizedDescription)")
+						callback(successParams: nil, error: err as NSError)
+					}
+				}
+				else {
+					callback(successParams: nil, error: error ?? genOAuth2Error("Unknown error during token refresh"))
+				}
+			}
+		}
+		catch let err {
+			callback(successParams: nil, error: err as NSError)
+		}
+	}
+	
+	
+	// MARK: - Callbacks
+	
 	/**
 	    Internally used on success. Calls the `onAuthorize` and `afterAuthorizeOrFailure` callbacks on the main thread.
 	 */
@@ -470,76 +543,6 @@ public class OAuth2: OAuth2Base
 	*/
 	public func request(forURL url: NSURL) -> OAuth2Request {
 		return OAuth2Request(URL: url, oauth: self, cachePolicy: .ReturnCacheDataElseLoad, timeoutInterval: 20)
-	}
-	
-	
-	// MARK: - Refresh Token
-	
-	/**
-	    Generate the URL to be used for the token request when we have a refresh token.
-	
-	    This will set "grant_type" to "refresh_token", add the refresh token, then forward to `authorizeURLWithBase()` to fill the remaining
-	    parameters.
-	 */
-	func tokenURLWithRefreshToken(redirect: String?, refreshToken: String, params: [String: String]? = nil) throws -> NSURL {
-		var urlParams = params ?? [String: String]()
-		urlParams["grant_type"] = "refresh_token"
-		urlParams["refresh_token"] = refreshToken
-		if let secret = clientSecret where secretInBody {
-			urlParams["client_secret"] = secret
-		}
-		
-		return try authorizeURLWithBase(tokenURL ?? authURL, redirect: redirect, scope: nil, responseType: nil, params: urlParams)
-	}
-	
-	/**
-	    Create a request for token refresh.
-	 */
-	func tokenRequestWithRefreshToken(refreshToken: String) throws -> NSMutableURLRequest {
-		let url = try tokenURLWithRefreshToken(redirect, refreshToken: refreshToken)
-		return try tokenRequestWithURL(url)
-	}
-	
-	/**
-	    If there is a refresh token, use it to receive a fresh access token.
-	
-	    - parameter callback: The callback to call after the refresh token exchange has finished
-	 */
-	public func doRefreshToken(callback: ((successParams: OAuth2JSON?, error: NSError?) -> Void)) {
-		guard let refresh = refreshToken where !refresh.isEmpty else {
-			callback(successParams: nil, error: genOAuth2Error("I don't have a refresh token, not trying to refresh", .PrerequisiteFailed))
-			return
-		}
-		
-		do {
-			let post = try tokenRequestWithRefreshToken(refresh)
-			logIfVerbose("Using refresh token to receive access token from \(post.URL?.description)")
-			
-			performRequest(post) { data, status, error in
-				if let data = data {
-					do {
-						let json = try self.parseAccessTokenResponse(data)
-						if status < 400 && nil == json["error"] {			// we might get a 200 with an error message from some servers
-							self.logIfVerbose("Did use refresh token for access token [\(nil != self.accessToken)]")
-							callback(successParams: json, error: nil)
-						}
-						else {
-							throw self.errorForErrorResponse(json)
-						}
-					}
-					catch let err {
-						self.logIfVerbose("Error parsing refreshed access token: \((err as NSError).localizedDescription)")
-						callback(successParams: nil, error: err as NSError)
-					}
-				}
-				else {
-					callback(successParams: nil, error: error ?? genOAuth2Error("Unknown error during token refresh"))
-				}
-			}
-		}
-		catch let err {
-			callback(successParams: nil, error: err as NSError)
-		}
 	}
 	
 	

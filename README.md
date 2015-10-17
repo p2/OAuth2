@@ -31,8 +31,8 @@ If you need to provide additional parameters to the authorize URL take a look at
 let settings = [
     "client_id": "my_swift_app",
     "client_secret": "C7447242-A0CF-47C5-BAC7-B38BA91970A9",
-    "authorize_uri": "https://authorize.smartplatforms.org/authorize",
-    "token_uri": "https://authorize.smartplatforms.org/token",
+    "authorize_uri": "https://authorize.smarthealthit.org/authorize",
+    "token_uri": "https://authorize.smarthealthit.org/token",   // code grant only!
     "scope": "profile email",
     "redirect_uris": ["myapp://oauth/callback"],   // don't forget to register this scheme
     "keychain": false,     // if you DON'T want keychain integration
