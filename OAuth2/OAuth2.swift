@@ -307,7 +307,7 @@ public class OAuth2: OAuth2Base
 	the query part
 	- returns: NSURL to be used to start the OAuth dance
 	*/
-	public func authorizeURLWithBase(base: NSURL, redirect: String?, scope: String?, responseType: String?, params: [String: String]?) throws -> NSURL {
+	public func authorizeURLWithBase(base: NSURL, redirect: String?, scope: String?, responseType: String?, params: [String: String]?, isTokenRequest: Bool = false) throws -> NSURL {
 		
 		// verify that we have all parts
 		if clientId.isEmpty {
@@ -333,7 +333,10 @@ public class OAuth2: OAuth2Base
 		var urlParams = params ?? [String: String]()
 		urlParams["client_id"] = clientId
 		urlParams["redirect_uri"] = self.redirect!
-		urlParams["state"] = context.state
+		
+		if !isTokenRequest {
+			urlParams["state"] = context.state
+		}
 		
 		if nil != scope {
 			self.scope = scope!
