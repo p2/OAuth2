@@ -22,8 +22,8 @@ import UIKit
 import SafariServices
 
 
-extension OAuth2
-{
+extension OAuth2 {
+	
 	/**
 	Uses `UIApplication` to open the authorize URL in iOS's browser.
 	
@@ -138,9 +138,23 @@ extension OAuth2
 		let web = SFSafariViewController(URL: url)
 		web.title = authConfig.ui.title
 		
+		let delegate = OAuth2SFViewControllerDelegate(oauth: self)
+		web.delegate = delegate
+		authConfig.ui.safariViewDelegate = delegate
+		
 		from.presentViewController(web, animated: true, completion: nil)
 		
 		return web
+	}
+	
+	/**
+	Called from our delegate, which reacts to users pressing "Done". We can assume this is always a cancel as nomally the Safari view
+	controller is dismissed automatically.
+	*/
+	@available(iOS 9.0, *)
+	func safariViewControllerDidCancel(safari: SFSafariViewController) {
+		authConfig.ui.safariViewDelegate = nil
+		didFail(nil)
 	}
 	
 	
@@ -226,6 +240,21 @@ extension OAuth2
 		from.presentViewController(navi, animated: true, completion: nil)
 		
 		return web
+	}
+}
+
+
+class OAuth2SFViewControllerDelegate: NSObject, SFSafariViewControllerDelegate {
+	
+	let oauth: OAuth2
+	
+	init(oauth: OAuth2) {
+		self.oauth = oauth
+	}
+	
+	@available(iOS 9.0, *)
+	func safariViewControllerDidFinish(controller: SFSafariViewController) {
+		oauth.safariViewControllerDidCancel(controller)
 	}
 }
 

@@ -5,6 +5,11 @@ Version numbering represents the Swift version, plus a running number representi
 You can also refer to commit logs to get details on what was implemented, fixed and improved.
 
 
+### 2.0.2
+
+- Fix issue #53, not detecting cancelling the `SFSafariViewController` by the user
+
+
 ### 2.0.1
 
 - Use `SFSafariViewController` for embedded authorization if used on iOS 9+
