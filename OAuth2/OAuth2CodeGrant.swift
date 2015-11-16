@@ -162,7 +162,7 @@ public class OAuth2CodeGrant: OAuth2
 			urlParams["client_secret"] = secret
 		}
 		
-		return try authorizeURLWithBase(tokenURL ?? authURL, redirect: redirect, scope: nil, responseType: nil, params: urlParams)
+		return try authorizeURLWithBase(tokenURL ?? authURL, redirect: redirect, scope: nil, responseType: nil, params: urlParams, isTokenRequest: true)
 	}
 	
 	/**
@@ -257,7 +257,7 @@ public class OAuth2CodeGrant: OAuth2
 			urlParams["client_secret"] = secret
 		}
 		
-		return try authorizeURLWithBase(tokenURL ?? authURL, redirect: redirect, scope: nil, responseType: nil, params: urlParams)
+		return try authorizeURLWithBase(tokenURL ?? authURL, redirect: redirect, scope: nil, responseType: nil, params: urlParams, isTokenRequest: true)
 	}
 	
 	/**
