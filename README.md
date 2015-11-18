@@ -207,7 +207,7 @@ The framework deals with those deviations by creating site-specific subclasses.
 
 - **Facebook**: `OAuth2CodeGrantFacebook` to deal with the [URL-query-style response](https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow/v2.2) instead of the expected JSON dictionary.
 - **GitHub**: `OAuth2CodeGrant` automatically puts the client-key/client-secret into an “Authorization: Basic” header.
-    GitHub however needs those two in the POSTed body; you need to set the `secretInBody` setting to true, either directly in code or via the `secret_in_body` key in the settings dictionary.
+    GitHub however needs those two in the POSTed body; you need to set the `authConfig.secretInBody` setting to true, either directly in code or via the `secret_in_body` key in the settings dictionary.
 - **Reddit**: `OAuth2CodeGrant` automatically adds a _Basic_ authorization header when a client secret is set.
     This means that you **must** specify a client_secret; if there is none (like for [Reddit](https://github.com/reddit/reddit/wiki/OAuth2#token-retrieval-code-flow)) specify the empty string.
     There is a [RedditLoader](https://github.com/p2/OAuth2App/blob/master/OAuth2App/RedditLoader.swift) example in the [OAuth2App sample app][sample] for a basic usage example.
@@ -254,7 +254,7 @@ If you want to delete the tokens from keychain, i.e. **log the user out** comple
 Ideally, access tokens get delivered with an "expires_in" parameter that tells you how long the token is valid.
 If it is missing the framework will still use those tokens if one is found in the keychain and not re-perform the OAuth dance.
 You will need to intercept 401s and re-authenticate if an access token has expired but the framework has still pulled it from the keychain.
-This behavior can be turned off by supplying "token_assume_unexpired": false in settings or setting `accessTokenAssumeUnexpired` to false.
+This behavior can be turned off by supplying "token_assume_unexpired": false in settings or setting `clientConfig.accessTokenAssumeUnexpired` to false.
 
 
 Advanced Settings

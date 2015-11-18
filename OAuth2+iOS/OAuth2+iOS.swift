@@ -30,13 +30,13 @@ extension OAuth2 {
 	- parameter params: Additional parameters to pass to the authorize URL
 	- returns: A bool indicating success
 	*/
-	public final func openAuthorizeURLInBrowser(params: [String: String]? = nil) -> Bool {
+	public final func openAuthorizeURLInBrowser(params: OAuth2StringDict? = nil) -> Bool {
 		do {
 			let url = try authorizeURL(params)
 			return UIApplication.sharedApplication().openURL(url)
 		}
 		catch let err {
-			logIfVerbose("Cannot open authorize URL: \((err as NSError).localizedDescription)")
+			logIfVerbose("Cannot open authorize URL: \(err)")
 		}
 		return false
 	}
@@ -49,7 +49,7 @@ extension OAuth2 {
 	
 	- returns: A bool indicating whether the method was able to show the authorize screen
 	*/
-	public func authorizeEmbeddedWith(config: OAuth2AuthConfig, params: [String: String]? = nil, autoDismiss: Bool = true) -> Bool {
+	public func authorizeEmbeddedWith(config: OAuth2AuthConfig, params: OAuth2StringDict? = nil, autoDismiss: Bool = true) -> Bool {
 		if let controller = config.authorizeContext as? UIViewController {
 			if #available(iOS 9, *), config.ui.useSafariView, let web = authorizeSafariEmbeddedFrom(controller, params: params) {
 				if autoDismiss {
@@ -89,13 +89,13 @@ extension OAuth2 {
 	- returns: SFSafariViewController, being already presented automatically
 	*/
 	@available(iOS 9.0, *)
-	public func authorizeSafariEmbeddedFrom(controller: UIViewController, params: [String: String]? = nil) -> SFSafariViewController? {
+	public func authorizeSafariEmbeddedFrom(controller: UIViewController, params: OAuth2StringDict? = nil) -> SFSafariViewController? {
 		do {
 			let url = try authorizeURL(params)
 			return presentSafariViewFor(url, from: controller)
 		}
 		catch let err {
-			logIfVerbose("Cannot present authorize URL: \((err as NSError).localizedDescription)")
+			logIfVerbose("Cannot present authorize URL: \(err)")
 		}
 		return nil
 	}
@@ -117,13 +117,13 @@ extension OAuth2 {
 	- returns: SFSafariViewController, being already presented automatically
 	*/
 	@available(iOS 9.0, *)
-	public func authorizeSafariEmbeddedFrom(controller: UIViewController, redirect: String, scope: String, params: [String: String]? = nil) -> SFSafariViewController? {
+	public func authorizeSafariEmbeddedFrom(controller: UIViewController, redirect: String, scope: String, params: OAuth2StringDict? = nil) -> SFSafariViewController? {
 			do {
 				let url = try authorizeURLWithRedirect(redirect, scope: scope, params: params)
 				return presentSafariViewFor(url, from: controller)
 			}
 			catch let err {
-				logIfVerbose("Cannot present authorize URL: \((err as NSError).localizedDescription)")
+				logIfVerbose("Cannot present authorize URL: \(err)")
 			}
 			return nil
 	}
@@ -171,13 +171,13 @@ extension OAuth2 {
 	- parameter params: Optional additional URL parameters
 	- returns: OAuth2WebViewController, embedded in a UINavigationController being presented automatically
 	*/
-	public func authorizeEmbeddedFrom(controller: UIViewController, params: [String: String]? = nil) -> OAuth2WebViewController? {
+	public func authorizeEmbeddedFrom(controller: UIViewController, params: OAuth2StringDict? = nil) -> OAuth2WebViewController? {
 		do {
 			let url = try authorizeURL(params)
 			return presentAuthorizeViewFor(url, intercept: redirect!, from: controller)
 		}
 		catch let err {
-			logIfVerbose("Cannot present authorize URL: \((err as NSError).localizedDescription)")
+			logIfVerbose("Cannot present authorize URL: \(err)")
 		}
 		return nil
 	}
@@ -198,13 +198,13 @@ extension OAuth2 {
 	public func authorizeEmbeddedFrom(controller: UIViewController,
 	                                    redirect: String,
 	                                       scope: String,
-		                                  params: [String: String]? = nil) -> OAuth2WebViewController? {
+		                                  params: OAuth2StringDict? = nil) -> OAuth2WebViewController? {
 		do {
 			let url = try authorizeURLWithRedirect(redirect, scope: scope, params: params)
 			return presentAuthorizeViewFor(url, intercept: redirect, from: controller)
 		}
 		catch let err {
-			logIfVerbose("Cannot present authorize URL: \((err as NSError).localizedDescription)")
+			logIfVerbose("Cannot present authorize URL: \(err)")
 		}
 		return nil
 	}
@@ -226,7 +226,7 @@ extension OAuth2 {
 				return true
 			}
 			catch let err {
-				self.logIfVerbose("Cannot intercept redirect URL: \((err as NSError).localizedDescription)")
+				self.logIfVerbose("Cannot intercept redirect URL: \(err)")
 			}
 			return false
 		}

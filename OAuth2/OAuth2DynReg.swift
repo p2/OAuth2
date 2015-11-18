@@ -47,7 +47,7 @@ public class OAuth2DynReg: OAuth2Base
 	public final var logo: String?
 	
 	/// Additional HTTP headers to supply during registration.
-	public var extraHeaders: [String: String]?
+	public var extraHeaders: OAuth2StringDict?
 	
 	
 	/**
@@ -143,17 +143,17 @@ public class OAuth2DynReg: OAuth2Base
 	- parameter onlyIfNeeded: If set to false will register even when the receiver and the client already have a client-id
 	- parameter callback: The callback to call when done. Any combination of json and error is possible (in regards to nil-ness)
 	*/
-	public func registerAndUpdateClient(client: OAuth2, onlyIfNeeded: Bool = true, callback: ((json: OAuth2JSON?, error: NSError?) -> Void)) {
-		clientId = client.clientId.isEmpty ? clientId : client.clientId
-		clientSecret = client.clientSecret ?? clientSecret
+	public func registerAndUpdateClient(client: OAuth2, onlyIfNeeded: Bool = true, callback: ((json: OAuth2JSON?, error: ErrorType?) -> Void)) {
+		clientId = client.clientConfig.clientId.isEmpty ? clientId : client.clientConfig.clientId
+		clientSecret = client.clientConfig.clientSecret ?? clientSecret
 		
 		// update the client in the callback
-		let cb: ((json: OAuth2JSON?, error: NSError?) -> Void) = { json, error in
+		let cb: ((json: OAuth2JSON?, error: ErrorType?) -> Void) = { json, error in
 			if let id = self.clientId {
-				client.clientId = id
+				client.clientConfig.clientId = id
 			}
 			if let secret = self.clientSecret {
-				client.clientSecret = secret
+				client.clientConfig.clientSecret = secret
 			}
 			callback(json: json, error: error)
 		}
@@ -171,7 +171,7 @@ public class OAuth2DynReg: OAuth2Base
 	
 	- parameter callback: The callback to call when done. Any combination of json and error is possible (in regards to nil-ness)
 	*/
-	public func registerIfNeeded(callback: ((json: OAuth2JSON?, error: NSError?) -> Void)) {
+	public func registerIfNeeded(callback: ((json: OAuth2JSON?, error: ErrorType?) -> Void)) {
 		if nil == clientId {
 			logIfVerbose("No client id, will need to register")
 			register(callback)
@@ -187,25 +187,30 @@ public class OAuth2DynReg: OAuth2Base
 	
 	- parameter callback: The callback to call when done with the registration response (JSON) and/or an error
 	*/
-	public func register(callback: ((json: OAuth2JSON?, error: NSError?) -> Void)) {
+	public func register(callback: ((json: OAuth2JSON?, error: ErrorType?) -> Void)) {
 		let req = registrationRequest()
 		logIfVerbose("Registering client at \(req.URL!)")
 		
 		performRequest(req) { data, status, error in
-			var myError = error
-			if let data = data, let json = self.parseRegistrationResponse(data, error: &myError) {
-				if status < 400 && nil == json["error"] {
-					self.didRegisterWith(json)
-					callback(json: json, error: nil)
-					return
+			if let data = data {
+				do {
+					let dict = try self.parseRegistrationResponse(data)
+					try self.assureNoErrorInResponse(dict)
+					if status >= 400 {
+						self.logIfVerbose("Registration failed with \(status)")
+					}
+					else {
+						self.didRegisterWith(dict)
+					}
+					callback(json: dict, error: nil)
 				}
-				
-				myError = self.errorForErrorResponse(json)
+				catch let err {
+					callback(json: nil, error: err)
+				}
 			}
-			
-			let err = myError ?? genOAuth2Error("Unknown error during client registration")
-			self.logIfVerbose("Registration failed: \(err.localizedDescription)")
-			callback(json: nil, error: err)
+			else {
+				callback(json: nil, error: error ?? OAuth2Error.NoDataInResponse)
+			}
 		}
 	}
 	
@@ -250,14 +255,8 @@ public class OAuth2DynReg: OAuth2Base
 		return dict
 	}
 	
-	public func parseRegistrationResponse(data: NSData, error: NSErrorPointer) -> OAuth2JSON? {
-		do {
-			return try NSJSONSerialization.JSONObjectWithData(data, options: []) as? OAuth2JSON
-		}
-		catch let error {
-			logIfVerbose("Failed to parse registration response data: \((error as NSError).localizedDescription)")
-		}
-		return nil
+	public func parseRegistrationResponse(data: NSData) throws -> OAuth2JSON {
+		return try parseJSON(data)
 	}
 	
 	public func didRegisterWith(json: OAuth2JSON) {

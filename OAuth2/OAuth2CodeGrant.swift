@@ -30,8 +30,10 @@ import Foundation
  */
 public class OAuth2CodeGrant: OAuth2
 {
-	public override func authorizeURLWithRedirect(redirect: String?, scope: String?, params: [String: String]?) throws -> NSURL {
-		return try authorizeURLWithBase(authURL, redirect: redirect, scope: scope, responseType: "code", params: params)
+	public override func authorizeURLWithRedirect(redirect: String?, scope: String?, params: OAuth2StringDict?) throws -> NSURL {
+		var prms = params ?? OAuth2StringDict()
+		prms["response_type"] = "code"
+		return try super.authorizeURLWithRedirect(redirect, scope: scope, params: prms)
 	}
 	
 	
@@ -40,25 +42,25 @@ public class OAuth2CodeGrant: OAuth2
 	/**
 	    Generate the URL to be used for the token request from known instance variables and supplied parameters.
 	
-	    This will set "grant_type" to "authorization_code", add the "code" provided and forward to `authorizeURLWithBase()` to fill the
+	    This will set "grant_type" to "authorization_code", add the "code" provided and forward to `authorizeURLWithRedirect()` to fill the
 	    remaining parameters.
 	 */
-	func tokenURLWithRedirect(redirect: String?, code: String, params: [String: String]? = nil) throws -> NSURL {
-		var urlParams = params ?? [String: String]()
+	func tokenURLWithRedirect(redirect: String?, code: String, params: OAuth2StringDict? = nil) throws -> NSURL {
+		var urlParams = params ?? OAuth2StringDict()
 		urlParams["code"] = code
 		urlParams["grant_type"] = "authorization_code"
-		if let secret = clientSecret where secretInBody {
+		if let secret = clientConfig.clientSecret where authConfig.secretInBody {
 			urlParams["client_secret"] = secret
 		}
 		
-		return try authorizeURLWithBase(tokenURL ?? authURL, redirect: redirect, scope: nil, responseType: nil, params: urlParams)
+		return try authorizeURLWithRedirect(redirect, params: urlParams, asTokenURL: true)
 	}
 	
 	/**
 	    Create a request for token exchange.
 	 */
 	func tokenRequestWithCode(code: String) throws -> NSMutableURLRequest {
-		let url = try tokenURLWithRedirect(redirect, code: code)
+		let url = try tokenURLWithRedirect(clientConfig.redirect, code: code)
 		return try tokenRequestWithURL(url)
 	}
 	
@@ -82,37 +84,37 @@ public class OAuth2CodeGrant: OAuth2
 	 */
 	func exchangeCodeForToken(code: String) {
 		if (code.isEmpty) {
-			didFail(genOAuth2Error("I don't have a code to exchange, let the user authorize first", .PrerequisiteFailed))
+			didFail(OAuth2Error.PrerequisiteFailed("I don't have a code to exchange, let the user authorize first"))
 			return;
 		}
 		
 		do {
 			let post = try tokenRequestWithCode(code)
-			logIfVerbose("Exchanging code \(code) with redirect \(redirect!) for access token at \(post.URL!)")
+			logIfVerbose("Exchanging code \(code) with redirect \(clientConfig.redirect!) for access token at \(post.URL!)")
 			
 			performRequest(post) { data, status, error in
 				if let data = data {
 					do {
-						let json = try self.parseAccessTokenResponse(data)
-						if status < 400 && nil == json["error"] {
-							self.logIfVerbose("Did exchange code for access [\(nil != self.accessToken)] and refresh [\(nil != self.refreshToken)] tokens")
-							self.didAuthorize(json)
+						let params = try self.parseAccessTokenResponse(data)
+						if status < 400 {
+							self.logIfVerbose("Did exchange code for access [\(nil != self.clientConfig.accessToken)] and refresh [\(nil != self.clientConfig.refreshToken)] tokens")
+							self.didAuthorize(params)
 						}
 						else {
-							throw self.errorForErrorResponse(json)
+							throw OAuth2Error.Generic("\(status)")
 						}
 					}
 					catch let err {
-						self.didFail(err as NSError)
+						self.didFail(err)
 					}
 				}
 				else {
-					self.didFail(error ?? genOAuth2Error("Error when requesting access token: no data received"))
+					self.didFail(error ?? OAuth2Error.NoDataInResponse)
 				}
 			}
 		}
 		catch let err {
-			didFail(err as NSError)
+			didFail(err)
 		}
 	}
 	
@@ -122,9 +124,9 @@ public class OAuth2CodeGrant: OAuth2
 	/**
 	    Validates the redirect URI: returns a tuple with the code and nil on success, nil and an error on failure.
 	 */
-	func validateRedirectURL(redirect: NSURL) -> (code: String?, error: NSError?) {
+	func validateRedirectURL(redirect: NSURL) -> (code: String?, error: OAuth2Error?) {
 		var code: String?
-		var error: NSError?
+		var error: OAuth2Error?
 		
 		let comp = NSURLComponents(URL: redirect, resolvingAgainstBaseURL: true)
 		if let compQuery = comp?.query where compQuery.characters.count > 0 {
@@ -137,15 +139,15 @@ public class OAuth2CodeGrant: OAuth2
 					context.resetState()
 				}
 				else {
-					error = genOAuth2Error("Invalid state, will not use the code", .InvalidState)
+					error = OAuth2Error.InvalidState
 				}
 			}
 			else {
-				error = errorForErrorResponse(query)
+				error = OAuth2Error.ResponseError("No “code” received")
 			}
 		}
 		else {
-			error = genOAuth2Error("The redirect URL contains no query fragment", .PrerequisiteFailed)
+			error = OAuth2Error.PrerequisiteFailed("The redirect URL contains no query fragment")
 		}
 		
 		return (code, error)

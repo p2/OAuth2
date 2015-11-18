@@ -29,13 +29,13 @@ extension OAuth2
 	    - parameter params: Additional parameters to pass to the authorize URL
 	    :returs: A bool indicating success
 	 */
-	public final func openAuthorizeURLInBrowser(params: [String: String]? = nil) -> Bool {
+	public final func openAuthorizeURLInBrowser(params: OAuth2StringDict? = nil) -> Bool {
 		do {
 			let url = try authorizeURL(params)
 			return NSWorkspace.sharedWorkspace().openURL(url)
 		}
 		catch let err {
-			logIfVerbose("Cannot open authorize URL: \((err as NSError).localizedDescription)")
+			logIfVerbose("Cannot open authorize URL: \(err)")
 		}
 		return false
 	}
@@ -48,7 +48,7 @@ extension OAuth2
 	
 	    - returns: A bool indicating whether the method was able to show the authorize screen
 	 */
-	public func authorizeEmbeddedWith(config: OAuth2AuthConfig, params: [String: String]? = nil, autoDismiss: Bool = true) -> Bool {
+	public func authorizeEmbeddedWith(config: OAuth2AuthConfig, params: OAuth2StringDict? = nil, autoDismiss: Bool = true) -> Bool {
 		if let controller = config.authorizeContext as? NSViewController {
 			let web: AnyObject = authorizeEmbeddedFrom(controller, params: params)
 			if autoDismiss {
@@ -61,7 +61,7 @@ extension OAuth2
 		return false
 	}
 	
-	public func authorizeEmbeddedFrom(controller: NSViewController, params: [String: String]?) -> AnyObject {
+	public func authorizeEmbeddedFrom(controller: NSViewController, params: OAuth2StringDict?) -> AnyObject {
 		fatalError("Not yet implemented")
 	}
 }

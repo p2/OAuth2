@@ -80,7 +80,7 @@ class OAuth2ClientCredentialsTests: XCTestCase
 			try oauth.tokenRequest()
 			XCTAssertFalse(true, "`tokenRequest()` without client secret must throw .NoClientSecret")
 		}
-		catch OAuth2IncompleteSetup.NoClientSecret {
+		catch OAuth2Error.NoClientSecret {
 		}
 		catch let err {
 			XCTAssertFalse(true, "`tokenRequest()` without client secret must throw .NoClientSecret, but threw \(err)")

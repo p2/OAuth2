@@ -33,6 +33,7 @@ class OAuth2Tests: XCTestCase
 		return OAuth2(settings: [
 			"client_id": "abc",
 			"authorize_uri": "https://auth.ful.io",
+			"token_uri": "https://token.ful.io",
 			"scope": "login",
 			"verbose": true
 		])
@@ -49,18 +50,31 @@ class OAuth2Tests: XCTestCase
 		XCTAssertTrue(oauth.verbose, "Must init `verbose`")
 	}
 	
-	func testAuthorizeURL() throws {
+	func testAuthorizeURL() {
 		let oa = genericOAuth2()
-		let auth = try oa.authorizeURLWithBase(oa.authURL, redirect: "oauth2app://callback", scope: "launch", responseType: "code", params: nil)
+		let auth = try! oa.authorizeURLWithRedirect("oauth2app://callback", scope: "launch", params: nil)
 		
 		let comp = NSURLComponents(URL: auth, resolvingAgainstBaseURL: true)!
 		XCTAssertEqual("https", comp.scheme!, "Need correct scheme")
 		XCTAssertEqual("auth.ful.io", comp.host!, "Need correct host")
 		
 		let params = OAuth2.paramsFromQuery(comp.percentEncodedQuery!)
-		XCTAssertEqual(params["redirect_uri"]!, "oauth2app://callback", "Expecting `` in query")
+		XCTAssertEqual(params["redirect_uri"]!, "oauth2app://callback", "Expecting correct `redirect_uri` in query")
 		XCTAssertEqual(params["scope"]!, "launch", "Expecting `scope` in query")
 		XCTAssertNotNil(params["state"], "Expecting `state` in query")
+	}
+	
+	func testTokenURL() {
+		let oa = genericOAuth2()
+		let auth = try! oa.authorizeURLWithRedirect("oauth2app://callback", params: nil, asTokenURL: true)
+		
+		let comp = NSURLComponents(URL: auth, resolvingAgainstBaseURL: true)!
+		XCTAssertEqual("https", comp.scheme!, "Need correct scheme")
+		XCTAssertEqual("token.ful.io", comp.host!, "Need correct host")
+		
+		let params = OAuth2.paramsFromQuery(comp.percentEncodedQuery!)
+		XCTAssertEqual(params["redirect_uri"]!, "oauth2app://callback", "Expecting correct `redirect_uri` in query")
+		XCTAssertNil(params["state"], "Expecting no `state` in query")
 	}
 	
 	func testQueryParamParsing() {
