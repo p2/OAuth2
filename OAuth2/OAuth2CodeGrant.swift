@@ -36,6 +36,13 @@ public class OAuth2CodeGrant: OAuth2
 		return try super.authorizeURLWithRedirect(redirect, scope: scope, params: prms)
 	}
 	
+	override func assureMatchesState(params: OAuth2JSON) throws {
+		if nil == params["code"] {		// no state in the second step (exchange code)
+			return
+		}
+		try super.assureMatchesState(params)
+	}
+	
 	
 	// MARK: - Token Request
 	

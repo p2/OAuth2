@@ -54,9 +54,9 @@ class OAuth2ClientCredentialsTests: XCTestCase
 		XCTAssertTrue(oauth.verbose, "Set to verbose")
 	}
 	
-	func testTokenRequest() throws {
+	func testTokenRequest() {
 		let oauth = genericOAuth2()
-		let request = try oauth.tokenRequest()
+		let request = try! oauth.tokenRequest()
 		XCTAssertEqual("POST", request.HTTPMethod, "Must be a POST request")
 		
 		let authHeader = request.allHTTPHeaderFields?["Authorization"]
@@ -87,9 +87,9 @@ class OAuth2ClientCredentialsTests: XCTestCase
 		}
 	}
     
-	func testTokenRequestNoScope() throws {
+	func testTokenRequestNoScope() {
 		let oauth = genericOAuth2NoScope()
-		let request = try oauth.tokenRequest()
+		let request = try! oauth.tokenRequest()
 		XCTAssertEqual("POST", request.HTTPMethod, "Must be a POST request")
 		
 		let body = NSString(data: request.HTTPBody!, encoding: NSUTF8StringEncoding)
