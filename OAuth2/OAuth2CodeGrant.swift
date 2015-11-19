@@ -89,7 +89,7 @@ public class OAuth2CodeGrant: OAuth2
 	/**
 	    Takes the received code and exchanges it for a token.
 	 */
-	func exchangeCodeForToken(code: String) {
+	public func exchangeCodeForToken(code: String) {
 		if (code.isEmpty) {
 			didFail(OAuth2Error.PrerequisiteFailed("I don't have a code to exchange, let the user authorize first"))
 			return;
