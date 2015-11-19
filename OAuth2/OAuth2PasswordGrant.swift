@@ -61,9 +61,9 @@ public class OAuth2PasswordGrant: OAuth2
 	}
 	
 	/**
-	If there is a refresh token, use it to receive a fresh access token.
+	Create a token request and execute it to receive an access token.
 	
-	- parameter callback: The callback to call after the refresh token exchange has finished
+	- parameter callback: The callback to call after the request has returned
 	*/
 	func obtainAccessToken(callback: ((params: OAuth2JSON?, error: ErrorType?) -> Void)) {
 		do {
@@ -124,17 +124,23 @@ public class OAuth2PasswordGrant: OAuth2
 		if let scope = clientConfig.scope {
 			body += "&scope=\(scope.wwwFormURLEncodedString)"
 		}
-		req.HTTPBody = body.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+		if let secret = clientConfig.clientSecret where authConfig.secretInBody {
+			logIfVerbose("Adding “client_id” and “client_secret” to request body")
+			body += "&client_id=\(clientConfig.clientId.wwwFormURLEncodedString)&client_secret=\(secret.wwwFormURLEncodedString)"
+		}
 		
-		// add Authorization header
-		logIfVerbose("Adding “Authorization” header as “Basic client-key:client-secret”")
-		let pw = "\(clientConfig.clientId.wwwFormURLEncodedString):\(clientConfig.clientSecret!.wwwFormURLEncodedString)"
-		if let utf8 = pw.dataUsingEncoding(NSUTF8StringEncoding) {
-			req.setValue("Basic \(utf8.base64EncodedStringWithOptions([]))", forHTTPHeaderField: "Authorization")
-		}
+		// add Authorization header (if not in body)
 		else {
-			logIfVerbose("ERROR: for some reason failed to base-64 encode the client-key:client-secret combo")
+			logIfVerbose("Adding “Authorization” header as “Basic client-key:client-secret”")
+			let pw = "\(clientConfig.clientId.wwwFormURLEncodedString):\(clientConfig.clientSecret!.wwwFormURLEncodedString)"
+			if let utf8 = pw.dataUsingEncoding(NSUTF8StringEncoding) {
+				req.setValue("Basic \(utf8.base64EncodedStringWithOptions([]))", forHTTPHeaderField: "Authorization")
+			}
+			else {
+				logIfVerbose("ERROR: for some reason failed to base-64 encode the client-key:client-secret combo")
+			}
 		}
+		req.HTTPBody = body.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
 		
 		return req
 	}

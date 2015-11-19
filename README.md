@@ -223,6 +223,44 @@ The framework deals with those deviations by creating site-specific subclasses.
 - **LinkedIn**: Since I don't see a way to set any other redirect-url other than ones starting with `https`, this framework can only be used against LinkedIn via built-in web-view, disabling `SFSafariWebViewController`.
 
 
+Usage with Alamofire
+--------------------
+
+Here's an extension to be used with Alamofire:
+
+```swift
+import Alamofire
+
+extension OAuth2 {
+    public func request(
+        method: Alamofire.Method,
+        _ URLString: URLStringConvertible,
+        parameters: [String: AnyObject]? = nil,
+        encoding: Alamofire.ParameterEncoding = .URL,
+        headers: [String: String]? = nil)
+        -> Alamofire.Request
+    {
+        var hdrs = headers
+        hdrs["Authorization"] = "Bearer \(accessToken)"
+        return Alamofire.request(
+            method,
+            URLString,
+            parameters: parameters,
+            encoding: encoding,
+            headers: hdrs)
+    }
+}
+```
+
+You can now use the handle to your `OAuth2` instance instead of using _Alamofire_ directly to make requests that are signed.
+Of course this will only work once you have an access token.
+You can use `hasUnexpiredAccessToken()` to check for one or just always call `authorize()` first; it will call your callback immediately if you have a token.
+
+```swift
+oauth2.request(.GET, "http://httpbin.org/get")
+```
+
+
 Dynamic Client Registration
 ---------------------------
 
