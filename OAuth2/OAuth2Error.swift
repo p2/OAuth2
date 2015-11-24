@@ -38,6 +38,7 @@ public enum OAuth2Error: ErrorType, CustomStringConvertible, Equatable {
 	case NoAuthorizationContext
 	case InvalidAuthorizationContext
 	case InvalidRedirectURL(String)
+	case NoRefreshToken
 	
 	case NoTokenType
 	case UnsupportedTokenType(String)
@@ -99,6 +100,8 @@ public enum OAuth2Error: ErrorType, CustomStringConvertible, Equatable {
 			return "Invalid authorization context"
 		case InvalidRedirectURL(let url):
 			return "Invalid redirect URL: \(url)"
+		case .NoRefreshToken:
+			return "I don't have a refresh token, not trying to refresh"
 		
 		case NoTokenType:
 			return "No token type received, will not use the token"
@@ -147,6 +150,7 @@ public func ==(lhs: OAuth2Error, rhs: OAuth2Error) -> Bool {
 	case (.NoAuthorizationContext, .NoAuthorizationContext):                 return true
 	case (.InvalidAuthorizationContext, .InvalidAuthorizationContext):       return true
 	case (.InvalidRedirectURL(let lhu), .InvalidRedirectURL(let rhu)):       return lhu == rhu
+	case (.NoRefreshToken, .NoRefreshToken):			         return true
 	
 	case (.NoTokenType, .NoTokenType):                           return true
 	case (.UnsupportedTokenType(let lhm), .UnsupportedTokenType(let rhm)):   return lhm == rhm

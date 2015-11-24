@@ -288,12 +288,9 @@ public class OAuth2: OAuth2Base
 	- parameter asTokenURL:   Whether this will go to the token_uri endpoint, not the authorize_uri
 	- returns:                NSURL to be used to start or continue the OAuth dance
 	*/
-	func authorizeURLWithRedirect(redirect: String?, params: OAuth2StringDict?, asTokenURL: Bool = false) throws -> NSURL {
+	func authorizeURLWithParams(params: OAuth2StringDict?, asTokenURL: Bool = false) throws -> NSURL {
 		guard !clientId.isEmpty else {
 			throw OAuth2Error.NoClientId
-		}
-		guard let redirect = (redirect ?? clientConfig.redirect) else {
-			throw OAuth2Error.NoRedirectURL
 		}
 		
 		// compose URL base
@@ -304,7 +301,6 @@ public class OAuth2: OAuth2Base
 		// compose the URL query component
 		var urlParams = params ?? OAuth2StringDict()
 		urlParams["client_id"] = clientConfig.clientId
-		urlParams["redirect_uri"] = redirect
 		if !asTokenURL {
 			urlParams["state"] = context.state
 		}
@@ -338,11 +334,15 @@ public class OAuth2: OAuth2Base
 	- returns: NSURL to be used to start the OAuth dance
 	*/
 	public func authorizeURLWithRedirect(redirect: String?, scope: String?, params: OAuth2StringDict?) throws -> NSURL {
+		guard let redirect = (redirect ?? clientConfig.redirect) else {
+			throw OAuth2Error.NoRedirectURL
+		}
 		var prms = params ?? OAuth2StringDict()
+		prms["redirect_uri"] = redirect
 		if let scope = scope ?? clientConfig.scope {
 			prms["scope"] = scope
 		}
-		return try authorizeURLWithRedirect(redirect, params: prms, asTokenURL: false)
+		return try authorizeURLWithParams(prms, asTokenURL: false)
 	}
 	
 	/**
@@ -358,7 +358,7 @@ public class OAuth2: OAuth2Base
 	/**
 	Generate the URL to be used for the token request when we have a refresh token.
 	
-	This will set "grant_type" to "refresh_token", add the refresh token, then forward to `authorizeURLWithRedirect()` to fill the remaining
+	This will set "grant_type" to "refresh_token", add the refresh token, then forward to `authorizeURLWithParams()` to fill the remaining
 	parameters.
 	*/
 	func tokenURLWithRefreshToken(redirect: String?, refreshToken: String, params: OAuth2StringDict? = nil) throws -> NSURL {
@@ -368,8 +368,7 @@ public class OAuth2: OAuth2Base
 		if let secret = clientConfig.clientSecret where authConfig.secretInBody {
 			urlParams["client_secret"] = secret
 		}
-		
-		return try authorizeURLWithRedirect(redirect, params: urlParams, asTokenURL: true)
+		return try authorizeURLWithParams(urlParams, asTokenURL: true)
 	}
 	
 	/**
@@ -387,13 +386,13 @@ public class OAuth2: OAuth2Base
 	*/
 	public func doRefreshToken(callback: ((successParams: OAuth2JSON?, error: ErrorType?) -> Void)) {
 		guard let refresh = clientConfig.refreshToken where !refresh.isEmpty else {
-			callback(successParams: nil, error: OAuth2Error.PrerequisiteFailed("I don't have a refresh token, not trying to refresh"))
+			callback(successParams: nil, error: OAuth2Error.NoRefreshToken)
 			return
 		}
 		
 		do {
 			let post = try tokenRequestWithRefreshToken(refresh)
-			logIfVerbose("Using refresh token to receive access token from \(post.URL?.description)")
+			logIfVerbose("Using refresh token to receive access token from \(post.URL?.description ?? "nil")")
 			
 			performRequest(post) { data, status, error in
 				if let data = data {

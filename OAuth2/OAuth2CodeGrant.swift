@@ -47,33 +47,36 @@ public class OAuth2CodeGrant: OAuth2
 	// MARK: - Token Request
 	
 	/**
-	    Generate the URL to be used for the token request from known instance variables and supplied parameters.
+	Generate the URL to be used for the token request from known instance variables and supplied parameters.
 	
-	    This will set "grant_type" to "authorization_code", add the "code" provided and forward to `authorizeURLWithRedirect()` to fill the
-	    remaining parameters.
-	 */
-	func tokenURLWithRedirect(redirect: String?, code: String, params: OAuth2StringDict? = nil) throws -> NSURL {
+	This will set "grant_type" to "authorization_code", add the "code" provided and forward to `authorizeURLWithBase()` to fill the
+	remaining parameters.
+	
+	- parameter code: The code you want to exchange for an access token
+	- parameter params: Optional additional params to add as URL parameters
+	- returns: The URL you can use to exchange the code for an access token
+	*/
+	func tokenURLWithCode(code: String, params: OAuth2StringDict? = nil) throws -> NSURL {
 		var urlParams = params ?? OAuth2StringDict()
 		urlParams["code"] = code
 		urlParams["grant_type"] = "authorization_code"
 		if let secret = clientConfig.clientSecret where authConfig.secretInBody {
 			urlParams["client_secret"] = secret
 		}
-		
-		return try authorizeURLWithRedirect(redirect, params: urlParams, asTokenURL: true)
+		return try authorizeURLWithParams(urlParams, asTokenURL: true)
 	}
 	
 	/**
-	    Create a request for token exchange.
-	 */
+	Create a request for token exchange.
+	*/
 	func tokenRequestWithCode(code: String) throws -> NSMutableURLRequest {
-		let url = try tokenURLWithRedirect(clientConfig.redirect, code: code)
+		let url = try tokenURLWithCode(code)
 		return try tokenRequestWithURL(url)
 	}
 	
 	/**
-	    Extracts the code from the redirect URL and exchanges it for a token.
-	 */
+	Extracts the code from the redirect URL and exchanges it for a token.
+	*/
 	public override func handleRedirectURL(redirect: NSURL) {
 		logIfVerbose("Handling redirect URL \(redirect.description)")
 		
@@ -87,8 +90,8 @@ public class OAuth2CodeGrant: OAuth2
 	}
 	
 	/**
-	    Takes the received code and exchanges it for a token.
-	 */
+	Takes the received code and exchanges it for a token.
+	*/
 	public func exchangeCodeForToken(code: String) {
 		if (code.isEmpty) {
 			didFail(OAuth2Error.PrerequisiteFailed("I don't have a code to exchange, let the user authorize first"))
@@ -97,7 +100,7 @@ public class OAuth2CodeGrant: OAuth2
 		
 		do {
 			let post = try tokenRequestWithCode(code)
-			logIfVerbose("Exchanging code \(code) with redirect \(clientConfig.redirect!) for access token at \(post.URL!)")
+			logIfVerbose("Exchanging code \(code) for access token at \(post.URL!)")
 			
 			performRequest(post) { data, status, error in
 				if let data = data {
@@ -129,8 +132,8 @@ public class OAuth2CodeGrant: OAuth2
 	// MARK: - Utilities
 	
 	/**
-	    Validates the redirect URI: returns a tuple with the code and nil on success, nil and an error on failure.
-	 */
+	Validates the redirect URI: returns a tuple with the code and nil on success, nil and an error on failure.
+	*/
 	func validateRedirectURL(redirect: NSURL) -> (code: String?, error: OAuth2Error?) {
 		var code: String?
 		var error: OAuth2Error?
