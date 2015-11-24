@@ -19,6 +19,9 @@
 //
 
 import Foundation
+#if IMPORT_SWIFT_KEYCHAIN
+import SwiftKeychain
+#endif
 
 
 /**

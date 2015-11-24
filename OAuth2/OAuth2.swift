@@ -19,6 +19,9 @@
 //
 
 import Foundation
+#if IMPORT_SWIFT_KEYCHAIN
+import SwiftKeychain
+#endif
 
 /// We store the current tokens under this keychain key name.
 let OAuth2KeychainTokenKey = "currentTokens"
