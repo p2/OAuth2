@@ -27,17 +27,19 @@ import Foundation
 public class OAuth2ClientCredentials: OAuth2
 {
 	public override func authorize(params params: OAuth2StringDict? = nil, autoDismiss: Bool = true) {
-		if hasUnexpiredAccessToken() {
-			self.didAuthorize(OAuth2JSON())
-		}
-		else {
-			logIfVerbose("No access token, requesting a new one")
-			obtainAccessToken() { params, error in
-				if let error = error {
-					self.didFail(error)
-				}
-				else {
-					self.didAuthorize(params ?? OAuth2JSON())
+		tryToObtainAccessTokenIfNeeded() { success in
+			if success {
+				self.didAuthorize(OAuth2JSON())
+			}
+			else {
+				self.logIfVerbose("No access token, requesting a new one")
+				self.obtainAccessToken() { params, error in
+					if let error = error {
+						self.didFail(error)
+					}
+					else {
+						self.didAuthorize(params ?? OAuth2JSON())
+					}
 				}
 			}
 		}
