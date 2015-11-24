@@ -342,6 +342,7 @@ public class OAuth2: OAuth2Base
 		if let scope = scope ?? clientConfig.scope {
 			prms["scope"] = scope
 		}
+		context.redirectURL = redirect
 		return try authorizeURLWithParams(prms, asTokenURL: false)
 	}
 	
@@ -598,6 +599,9 @@ public class OAuth2: OAuth2Base
 
 
 class OAuth2ContextStore {
+	
+	/// Currently used redirect_url.
+	var redirectURL: String?
 	
 	internal(set) var _state = ""
 	

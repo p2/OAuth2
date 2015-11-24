@@ -57,9 +57,13 @@ public class OAuth2CodeGrant: OAuth2
 	- returns: The URL you can use to exchange the code for an access token
 	*/
 	func tokenURLWithCode(code: String, params: OAuth2StringDict? = nil) throws -> NSURL {
+		guard let redirect = context.redirectURL else {
+			throw OAuth2Error.NoRedirectURL
+		}
 		var urlParams = params ?? OAuth2StringDict()
 		urlParams["code"] = code
 		urlParams["grant_type"] = "authorization_code"
+		urlParams["redirect_uri"] = redirect
 		if let secret = clientConfig.clientSecret where authConfig.secretInBody {
 			urlParams["client_secret"] = secret
 		}
