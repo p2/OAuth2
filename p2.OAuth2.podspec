@@ -26,9 +26,11 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = "8.0"
   s.osx.deployment_target = "10.9"
+  s.tvos.deployment_target = '9.0'
   s.requires_arc = true
   
   s.source_files = "OAuth2/*.swift", "SwiftKeychain/SwiftKeychain/Keychain/*.swift"
   s.ios.source_files = "OAuth2+iOS/*.swift"
   s.osx.source_files = "OAuth2+OSX/*.swift"
+  s.tvos.source_files = "OAuth2+TVOS/*.swift"
 end
