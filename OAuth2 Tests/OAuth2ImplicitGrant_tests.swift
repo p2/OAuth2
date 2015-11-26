@@ -29,12 +29,10 @@ class OAuth2ImplicitGrantTests: XCTestCase
 	func testInit() {
 		let oauth = OAuth2ImplicitGrant(settings: [
 			"client_id": "abc",
-			"verbose": true,
 			"keychain": false,
 			"authorize_uri": "https://auth.ful.io",
 		])
 		XCTAssertEqual(oauth.clientId, "abc", "Must init `client_id`")
-		XCTAssertTrue(oauth.verbose, "Set to verbose")
 		XCTAssertNil(oauth.scope, "Empty scope")
 		
 		XCTAssertEqual(oauth.authURL, NSURL(string: "https://auth.ful.io")!, "Must init `authorize_uri`")

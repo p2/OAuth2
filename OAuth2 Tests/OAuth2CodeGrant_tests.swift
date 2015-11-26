@@ -30,13 +30,13 @@ class OAuth2CodeGrantTests: XCTestCase
 		let oauth = OAuth2CodeGrant(settings: [
 			"client_id": "abc",
 			"client_secret": "xyz",
-			"verbose": 1,
 			"authorize_uri": "https://auth.ful.io",
 			"token_uri": "https://token.ful.io",
+			"keychain": false,
 		])
 		XCTAssertEqual(oauth.clientId, "abc", "Must init `client_id`")
 		XCTAssertEqual(oauth.clientSecret!, "xyz", "Must init `client_secret`")
-		XCTAssertTrue(oauth.verbose, "Set to verbose")
+		XCTAssertFalse(oauth.useKeychain, "No keychain")
 		XCTAssertNil(oauth.scope, "Empty scope")
 		
 		XCTAssertEqual(oauth.authURL, NSURL(string: "https://auth.ful.io")!, "Must init `authorize_uri`")
@@ -49,6 +49,7 @@ class OAuth2CodeGrantTests: XCTestCase
 			"client_secret": "xyz",
 			"authorize_uri": "https://auth.ful.io",
 			"token_uri": "https://token.ful.io",
+			"keychain": false,
 		])
 		
 		XCTAssertNotNil(oauth.authURL, "Must init `authorize_uri`")
@@ -70,8 +71,24 @@ class OAuth2CodeGrantTests: XCTestCase
 			"client_secret": "xyz",
 			"authorize_uri": "https://auth.ful.io",
 			"token_uri": "https://token.ful.io",
+			"keychain": false,
 		])
 		oauth.redirect = "oauth2://callback"
+		
+		// no redirect in context - fail
+		do {
+			try oauth.tokenRequestWithCode("pp")
+			XCTAssertTrue(false, "Should not be here any more")
+		}
+		catch OAuth2Error.NoRedirectURL {
+			XCTAssertTrue(true, "Must be here")
+		}
+		catch {
+			XCTAssertTrue(false, "Should not be here")
+		}
+		
+		// with redirect in context - success
+		oauth.context.redirectURL = "oauth2://callback"
 		
 		let req = try! oauth.tokenRequestWithCode("pp")
 		let comp = NSURLComponents(URL: req.URL!, resolvingAgainstBaseURL: true)!
@@ -93,6 +110,8 @@ class OAuth2CodeGrantTests: XCTestCase
 			"authorize_uri": "https://auth.ful.io",
 		])
 		oauth.redirect = "oauth2://callback"
+		oauth.context.redirectURL = "oauth2://callback"
+		
 		let req2 = try! oauth.tokenRequestWithCode("pp")
 		let comp2 = NSURLComponents(URL: req2.URL!, resolvingAgainstBaseURL: true)!
 		XCTAssertEqual(comp2.host!, "auth.ful.io", "Correct host")

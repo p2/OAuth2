@@ -32,7 +32,7 @@ class OAuth2ClientCredentialsTests: XCTestCase
 			"client_secret": "def",
 			"authorize_uri": "https://auth.ful.io",
 			"scope": "login and more",
-			"verbose": true
+			"keychain": false,
 		])
 	}
     
@@ -41,7 +41,7 @@ class OAuth2ClientCredentialsTests: XCTestCase
 			"client_id": "abc",
 			"client_secret": "def",
 			"authorize_uri": "https://auth.ful.io",
-			"verbose": true
+			"keychain": false,
 		])
 	}
 	
@@ -51,7 +51,7 @@ class OAuth2ClientCredentialsTests: XCTestCase
 		XCTAssertEqual(oauth.clientSecret!, "def", "Must init `client_secret`")
 		XCTAssertEqual(oauth.scope!, "login and more", "Must init correct scope")
 		XCTAssertEqual(oauth.authURL, NSURL(string: "https://auth.ful.io")!, "Must init `authorize_uri`")
-		XCTAssertTrue(oauth.verbose, "Set to verbose")
+		XCTAssertFalse(oauth.useKeychain, "Don't use keychain")
 	}
 	
 	func testTokenRequest() {
@@ -73,7 +73,7 @@ class OAuth2ClientCredentialsTests: XCTestCase
 			"client_id": "abc",
 			"authorize_uri": "https://auth.ful.io",
 			"scope": "login",
-			"verbose": true
+			"keychain": false,
 		])
 		
 		do {

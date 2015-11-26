@@ -32,7 +32,7 @@ class OAuth2PasswordGrantTests: XCTestCase
 			"scope": "login and more",
 			"username":"My User",
 			"password":"Here is my password",
-			"verbose": true
+			"keychain": false,
 		])
 	}
 	
@@ -44,7 +44,7 @@ class OAuth2PasswordGrantTests: XCTestCase
 		XCTAssertEqual(oauth.username, "My User", "Must init user")
 		XCTAssertEqual(oauth.password, "Here is my password", "Must init password")
 		XCTAssertEqual(oauth.authURL, NSURL(string: "https://auth.ful.io")!, "Must init `authorize_uri`")
-		XCTAssertTrue(oauth.verbose, "Set to verbose")
+		XCTAssertFalse(oauth.useKeychain, "Don't use keychain")
 	}
 	
 	func testTokenRequest() {
@@ -69,7 +69,7 @@ class OAuth2PasswordGrantTests: XCTestCase
 			"username":"My User",
 			"password":"Here is my password",
 			"verbose": true
-			])
+		])
 		let request = try! oauth.tokenRequest()
 		
 		let body = NSString(data: request.HTTPBody!, encoding: NSUTF8StringEncoding)
