@@ -24,8 +24,12 @@ import Foundation
 /**
     A class to handle authorization for clients via password grant.
  */
-public class OAuth2PasswordGrant: OAuth2
-{
+public class OAuth2PasswordGrant: OAuth2 {
+	
+	public override class var grantType: String {
+		return "password"
+	}
+	
 	/// Username to use during authentication.
 	public var username: String
 	
@@ -107,11 +111,8 @@ public class OAuth2PasswordGrant: OAuth2
 		if password.isEmpty{
 			throw OAuth2Error.NoPassword
 		}
-		if clientConfig.clientId.isEmpty {
+		guard let clientId = clientConfig.clientId where !clientId.isEmpty else {
 			throw OAuth2Error.NoClientId
-		}
-		if nil == clientConfig.clientSecret {
-			throw OAuth2Error.NoClientSecret
 		}
 		
 		let req = NSMutableURLRequest(URL: clientConfig.tokenURL ?? clientConfig.authorizeURL)
@@ -126,13 +127,13 @@ public class OAuth2PasswordGrant: OAuth2
 		}
 		if let secret = clientConfig.clientSecret where authConfig.secretInBody {
 			logIfVerbose("Adding “client_id” and “client_secret” to request body")
-			body += "&client_id=\(clientConfig.clientId.wwwFormURLEncodedString)&client_secret=\(secret.wwwFormURLEncodedString)"
+			body += "&client_id=\(clientId.wwwFormURLEncodedString)&client_secret=\(secret.wwwFormURLEncodedString)"
 		}
 		
 		// add Authorization header (if not in body)
-		else {
+		else if let secret = clientSecret {
 			logIfVerbose("Adding “Authorization” header as “Basic client-key:client-secret”")
-			let pw = "\(clientConfig.clientId.wwwFormURLEncodedString):\(clientConfig.clientSecret!.wwwFormURLEncodedString)"
+			let pw = "\(clientId.wwwFormURLEncodedString):\(secret.wwwFormURLEncodedString)"
 			if let utf8 = pw.dataUsingEncoding(NSUTF8StringEncoding) {
 				req.setValue("Basic \(utf8.base64EncodedStringWithOptions([]))", forHTTPHeaderField: "Authorization")
 			}

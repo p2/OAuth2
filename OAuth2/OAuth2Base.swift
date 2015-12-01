@@ -19,7 +19,7 @@
 //
 
 import Foundation
-#if IMPORT_SWIFT_KEYCHAIN
+#if IMPORT_SWIFT_KEYCHAIN		// experimental for SwiftKeychain integration via CocoaPods
 import SwiftKeychain
 #endif
 
@@ -29,6 +29,12 @@ public typealias OAuth2JSON = [String: AnyObject]
 
 /// Typealias to work with dictionaries full of strings.
 public typealias OAuth2StringDict = [String: String]
+
+/// We store the client's credentials (id and secret) under this keychain key name.
+let OAuth2KeychainCredentialsKey = "clientCredentials"
+
+/// We store the current tokens under this keychain key name.
+let OAuth2KeychainTokenKey = "currentTokens"
 
 
 /**
@@ -51,16 +57,12 @@ public class OAuth2Base
 		}
 	}
 	
-	/** The service key under which to store keychain items. Returns nil, to be overridden by subclasses. */
-	public func keychainServiceName() -> String {
-		return "http://localhost"
-	}
 	
-	public func keychainKeyName() -> String {
-		return "currentTokens"
-	}
+	/**
+	Base initializer.
 	
-	
+	Looks at the `keychain` and `verbose` keys in the _settings_ dict. Everything else is handled by subclasses.
+	*/
 	public init(settings: OAuth2JSON) {
 		self.settings = settings
 		
@@ -76,43 +78,88 @@ public class OAuth2Base
 		if useKeychain {
 			updateFromKeychain()
 		}
-		
 		logIfVerbose("Initialization finished")
 	}
 	
 	
 	// MARK: - Keychain Integration
 	
+	/** The service key under which to store keychain items. Returns the authorize URL by default. */
+	public func keychainServiceName() -> String {
+		return "http://localhost"
+	}
+	
 	/** Queries the keychain for tokens stored for the receiver's authorize URL, and updates the token properties accordingly. */
 	private func updateFromKeychain() {
 		logIfVerbose("Looking for items in keychain")
 		
 		let keychain = Keychain(serviceName: keychainServiceName())
-		let key = ArchiveKey(keyName: keychainKeyName())
-		if let items = keychain.get(key).item?.object as? [String: NSCoding] {
+		let creds = ArchiveKey(keyName: OAuth2KeychainCredentialsKey)
+		if let items = keychain.get(creds).item?.object as? [String: NSCoding] {
+			updateFromKeychainItems(items)
+		}
+		let toks = ArchiveKey(keyName: OAuth2KeychainTokenKey)
+		if let items = keychain.get(toks).item?.object as? [String: NSCoding] {
 			updateFromKeychainItems(items)
 		}
 	}
 	
-	/** Updates instance properties according to the items found in the passed dictionary found in the keychain. */
+	/** Updates instance properties according to the items found in the given dictionary, which was found in the keychain. */
 	func updateFromKeychainItems(items: [String: NSCoding]) {
 	}
 	
-	/** Stores our current token(s) in the keychain. */
-	internal func storeToKeychain() {
-		guard let items = storableKeychainItems() else { return }
-		logIfVerbose("Storing tokens to keychain")
-		
-		let keychain = Keychain(serviceName: keychainServiceName())
-		let key = ArchiveKey(keyName: keychainKeyName(), object: items)
-		if let error = keychain.update(key) {
-			NSLog("Failed to store to keychain: \(error.localizedDescription)")
+	/** Items that should be stored when storing client credentials. */
+	func storableCredentialItems() -> [String: NSCoding]? {
+		return nil
+	}
+	
+	/** Stores our client credentials in the keychain. */
+	internal func storeClientToKeychain() {
+		if let items = storableCredentialItems() {
+			logIfVerbose("Storing client credentials to keychain")
+			let keychain = Keychain(serviceName: keychainServiceName())
+			let key = ArchiveKey(keyName: OAuth2KeychainCredentialsKey, object: items)
+			if let error = keychain.update(key) {
+				NSLog("Failed to store to keychain: \(error.localizedDescription)")
+			}
 		}
 	}
 	
-	/** Returns a dictionary of whatever you want to store to the keychain. */
-	func storableKeychainItems() -> [String: NSCoding]? {
+	/** Items that should be stored when tokens are stored to the keychain. */
+	func storableTokenItems() -> [String: NSCoding]? {
 		return nil
+	}
+	
+	/** Stores our current token(s) in the keychain. */
+	internal func storeTokensToKeychain() {
+		if let items = storableTokenItems() {
+			logIfVerbose("Storing tokens to keychain")
+			let keychain = Keychain(serviceName: keychainServiceName())
+			let key = ArchiveKey(keyName: OAuth2KeychainTokenKey, object: items)
+			if let error = keychain.update(key) {
+				NSLog("Failed to store to keychain: \(error.localizedDescription)")
+			}
+		}
+	}
+	
+	/** Unsets the client credentials and deletes them from the keychain. */
+	public func forgetClient() {
+		logIfVerbose("Forgetting client credentials and removing them from keychain")
+		let keychain = Keychain(serviceName: keychainServiceName())
+		let key = ArchiveKey(keyName: OAuth2KeychainCredentialsKey)
+		if let error = keychain.remove(key) {
+			NSLog("Failed to delete tokens from keychain: \(error.localizedDescription)")
+		}
+	}
+	
+	/** Unsets the tokens and deletes them from the keychain. */
+	public func forgetTokens() {
+		logIfVerbose("Forgetting tokens and removing them from keychain")
+		let keychain = Keychain(serviceName: keychainServiceName())
+		let key = ArchiveKey(keyName: OAuth2KeychainTokenKey)
+		if let error = keychain.remove(key) {
+			NSLog("Failed to delete tokens from keychain: \(error.localizedDescription)")
+		}
 	}
 	
 	

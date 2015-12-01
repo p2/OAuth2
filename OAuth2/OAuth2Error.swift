@@ -40,6 +40,8 @@ public enum OAuth2Error: ErrorType, CustomStringConvertible, Equatable {
 	case InvalidRedirectURL(String)
 	case NoRefreshToken
 	
+	case NoRegistrationURL
+	
 	case NoTokenType
 	case UnsupportedTokenType(String)
 	case NoDataInResponse
@@ -102,6 +104,9 @@ public enum OAuth2Error: ErrorType, CustomStringConvertible, Equatable {
 			return "Invalid redirect URL: \(url)"
 		case .NoRefreshToken:
 			return "I don't have a refresh token, not trying to refresh"
+		
+		case .NoRegistrationURL:
+			return "No registration URL defined"
 		
 		case NoTokenType:
 			return "No token type received, will not use the token"

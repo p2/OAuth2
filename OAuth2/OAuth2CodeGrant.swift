@@ -28,8 +28,12 @@ import Foundation
     code exchange and token refresh flows, **if** the client has a secret, a "Basic key:secret" Authorization header will be used. If not
     the client key will be embedded into the request body.
  */
-public class OAuth2CodeGrant: OAuth2
-{
+public class OAuth2CodeGrant: OAuth2 {
+	
+	public override class var grantType: String {
+		return "authorization_code"
+	}
+	
 	public override func authorizeURLWithRedirect(redirect: String?, scope: String?, params: OAuth2StringDict?) throws -> NSURL {
 		var prms = params ?? OAuth2StringDict()
 		prms["response_type"] = "code"
@@ -62,7 +66,7 @@ public class OAuth2CodeGrant: OAuth2
 		}
 		var urlParams = params ?? OAuth2StringDict()
 		urlParams["code"] = code
-		urlParams["grant_type"] = "authorization_code"
+		urlParams["grant_type"] = self.dynamicType.grantType
 		urlParams["redirect_uri"] = redirect
 		if let secret = clientConfig.clientSecret where authConfig.secretInBody {
 			urlParams["client_secret"] = secret
@@ -163,7 +167,6 @@ public class OAuth2CodeGrant: OAuth2
 		else {
 			error = OAuth2Error.PrerequisiteFailed("The redirect URL contains no query fragment")
 		}
-		
 		return (code, error)
 	}
 }

@@ -19,19 +19,17 @@
 //
 
 import Foundation
-#if IMPORT_SWIFT_KEYCHAIN
-import SwiftKeychain
-#endif
-
-/// We store the current tokens under this keychain key name.
-let OAuth2KeychainTokenKey = "currentTokens"
 
 
 /**
     Base class for specific OAuth2 authentication flow implementations.
  */
-public class OAuth2: OAuth2Base
-{
+public class OAuth2: OAuth2Base {
+	
+	public class var grantType: String {
+		return "__undefined"
+	}
+	
 	/// Client setup
 	public let clientConfig: OAuth2ClientConfig
 	
@@ -39,7 +37,7 @@ public class OAuth2: OAuth2Base
 	public var authConfig = OAuth2AuthConfig()
 	
 	/// The client id.
-	public final var clientId: String {
+	public final var clientId: String? {
 		get { return clientConfig.clientId }
 		set { clientConfig.clientId = newValue }
 	}
@@ -66,7 +64,7 @@ public class OAuth2: OAuth2Base
 		set { clientConfig.scope = newValue }
 	}
 	
-	/// The redirect URL string currently in use.
+	/// The redirect URL string to use.
 	public var redirect: String? {
 		get { return clientConfig.redirect }
 		set { clientConfig.redirect = newValue }
@@ -117,22 +115,23 @@ public class OAuth2: OAuth2Base
 	
 	The following settings keys are currently supported:
 	
-	    - client_id (string)
-	    - client_secret (string), usually only needed for code grant
-	    - authorize_uri (URL-string)
-	    - token_uri (URL-string), if omitted the authorize_uri will be used to obtain tokens
-	    - redirect_uris (list of URL-strings)
-	    - scope (string)
+	- client_id (string)
+	- client_secret (string), usually only needed for code grant
+	- authorize_uri (URL-string)
+	- token_uri (URL-string), if omitted the authorize_uri will be used to obtain tokens
+	- redirect_uris (list of URL-strings)
+	- scope (string)
 	
-	    - keychain (bool, true by default, applies to using the system keychain)
-	    - verbose (bool, false by default, applies to client logging)
-	    - secret_in_body (bool, false by default, forces the flow to use the request body for the client secret)
-	    - token_assume_unexpired (bool, true by default, whether to use access tokens that do not come with an "expires_in" parameter)
-	    - title (string, to be shown in views shown by the framework)
+	- client_name (string)
+	- registration_uri (URL-string)
+	- logo_uri (URL-string)
 	
-	    NOTE that you **must** supply at least `client_id` and `authorize_uri` upon initialization. If you forget the former an exception
-	    will be thrown when trying to authorize. If you forget the latter `http://localhost` will be used.
-	 */
+	- keychain (bool, true by default, applies to using the system keychain)
+	- verbose (bool, false by default, applies to client logging)
+	- secret_in_body (bool, false by default, forces the flow to use the request body for the client secret)
+	- token_assume_unexpired (bool, true by default, whether to use access tokens that do not come with an "expires_in" parameter)
+	- title (string, to be shown in views shown by the framework)
+	*/
 	public override init(settings: OAuth2JSON) {
 		clientConfig = OAuth2ClientConfig(settings: settings)
 		
@@ -158,50 +157,27 @@ public class OAuth2: OAuth2Base
 		return authURL.description
 	}
 	
-	public override func keychainKeyName() -> String {
-		return OAuth2KeychainTokenKey
-	}
-	
-	/** Updates the token properties according to the items found in the passed dictionary. */
-	override func updateFromKeychainItems(items: [String: NSCoding]) {
-		if let token = items["accessToken"] as? String where !token.isEmpty {
-			if let date = items["accessTokenDate"] as? NSDate {
-				if date == date.laterDate(NSDate()) {
-					logIfVerbose("Found access token, valid until \(date)")
-					accessTokenExpiry = date
-					accessToken = token
-				}
-				else {
-					logIfVerbose("Found access token but it seems to have expired")
-				}
-			}
-			else if clientConfig.accessTokenAssumeUnexpired {
-				logIfVerbose("Found access token but no expiration date, assuming unexpired (set `accessTokenAssumeUnexpired` to false to discard)")
-				accessToken = token
-			}
-			else {
-				logIfVerbose("Found access token but no expiration date, discarding (set `accessTokenAssumeUnexpired` to true to still use it)")
-			}
-		}
-		if let token = items["refreshToken"] as? String where !token.isEmpty {
-			logIfVerbose("Found refresh token")
-			refreshToken = token
+	override func updateFromKeychainItems(items: [String : NSCoding]) {
+		for message in clientConfig.updateFromStorableItems(items) {
+			logIfVerbose(message)
 		}
 	}
 	
-	/** Returns a dictionary of our tokens and expiration date, ready to be stored to the keychain. */
-	override func storableKeychainItems() -> [String: NSCoding]? {
-		return clientConfig.storableItems()
+	override func storableCredentialItems() -> [String : NSCoding]? {
+		return clientConfig.storableCredentialItems()
 	}
 	
-	/** Unsets the tokens and deletes them from the keychain. */
-	public func forgetTokens() {
-		logIfVerbose("Forgetting tokens and removing them from keychain")
-		let keychain = Keychain(serviceName: keychainServiceName())
-		let key = ArchiveKey(keyName: keychainKeyName())
-		if let error = keychain.remove(key) {
-			NSLog("Failed to delete tokens from keychain: \(error.localizedDescription)")
-		}
+	override func storableTokenItems() -> [String : NSCoding]? {
+		return clientConfig.storableTokenItems()
+	}
+	
+	public override func forgetClient() {
+		super.forgetClient()
+		clientConfig.forgetCredentials()
+	}
+	
+	public override func forgetTokens() {
+		super.forgetTokens()
 		clientConfig.forgetTokens()
 	}
 	
@@ -289,7 +265,7 @@ public class OAuth2: OAuth2Base
 	- returns:                NSURL to be used to start or continue the OAuth dance
 	*/
 	func authorizeURLWithParams(params: OAuth2StringDict?, asTokenURL: Bool = false) throws -> NSURL {
-		guard !clientId.isEmpty else {
+		guard let clientId = clientId where !clientId.isEmpty else {
 			throw OAuth2Error.NoClientId
 		}
 		
@@ -300,7 +276,7 @@ public class OAuth2: OAuth2Base
 		
 		// compose the URL query component
 		var urlParams = params ?? OAuth2StringDict()
-		urlParams["client_id"] = clientConfig.clientId
+		urlParams["client_id"] = clientId
 		if !asTokenURL {
 			urlParams["state"] = context.state
 		}
@@ -430,7 +406,7 @@ public class OAuth2: OAuth2Base
 	*/
 	func didAuthorize(parameters: OAuth2JSON) {
 		if useKeychain {
-			storeToKeychain()
+			storeTokensToKeychain()
 		}
 		
 		callOnMainThread() {
@@ -477,7 +453,7 @@ public class OAuth2: OAuth2Base
 	    Creates a POST request with x-www-form-urlencoded body created from the supplied URL's query part.
 	 */
 	func tokenRequestWithURL(url: NSURL) throws -> NSMutableURLRequest {
-		if clientId.isEmpty {
+		guard let clientId = clientId where !clientId.isEmpty else {
 			throw OAuth2Error.NoClientId
 		}
 		

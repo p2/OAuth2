@@ -24,8 +24,12 @@ import Foundation
 /**
     Class to handle two-legged OAuth2 requests of the "client_credentials" type.
  */
-public class OAuth2ClientCredentials: OAuth2
-{
+public class OAuth2ClientCredentials: OAuth2 {
+	
+	public override class var grantType: String {
+		return "client_credentials"
+	}
+	
 	public override func authorize(params params: OAuth2StringDict? = nil, autoDismiss: Bool = true) {
 		tryToObtainAccessTokenIfNeeded() { success in
 			if success {
@@ -81,7 +85,7 @@ public class OAuth2ClientCredentials: OAuth2
 	    Creates a POST request with x-www-form-urlencoded body created from the supplied URL's query part.
 	 */
 	func tokenRequest() throws -> NSMutableURLRequest {
-		guard !clientConfig.clientId.isEmpty else {
+		guard let clientId = clientConfig.clientId where !clientId.isEmpty else {
 			throw OAuth2Error.NoClientId
 		}
 		guard let secret = clientConfig.clientSecret else {
@@ -103,7 +107,7 @@ public class OAuth2ClientCredentials: OAuth2
 		
 		// add Authorization header
 		logIfVerbose("Adding “Authorization” header as “Basic client-key:client-secret”")
-		let pw = "\(clientConfig.clientId.wwwFormURLEncodedString):\(secret.wwwFormURLEncodedString)"
+		let pw = "\(clientId.wwwFormURLEncodedString):\(secret.wwwFormURLEncodedString)"
 		if let utf8 = pw.dataUsingEncoding(NSUTF8StringEncoding) {
 			req.setValue("Basic \(utf8.base64EncodedStringWithOptions([]))", forHTTPHeaderField: "Authorization")
 		}
