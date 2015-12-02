@@ -56,5 +56,13 @@ public class OAuth2ImplicitGrant: OAuth2 {
 			didFail(OAuth2Error.InvalidRedirectURL(redirect.absoluteString))
 		}
 	}
+	
+	override func assureMatchesState(params: OAuth2JSON) throws {
+		try super.assureMatchesState(params)
+		if !context.matchesState(params["state"] as? String) {
+			throw OAuth2Error.InvalidState
+		}
+		context.resetState()
+	}
 }
 

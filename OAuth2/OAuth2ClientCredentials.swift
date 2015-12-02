@@ -98,22 +98,27 @@ public class OAuth2ClientCredentials: OAuth2 {
 		req.setValue("application/json", forHTTPHeaderField: "Accept")
         
 		// check if scope is set
+		var body = "grant_type=client_credentials"
 		if let scope = clientConfig.scope {
-			req.HTTPBody = "grant_type=client_credentials&scope=\(scope.wwwFormURLEncodedString)".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+			body += "&scope=\(scope.wwwFormURLEncodedString)"
 		}
+		if authConfig.secretInBody {
+			logIfVerbose("Adding “client_id” and “client_secret” to request body")
+			body += "&client_id=\(clientId.wwwFormURLEncodedString)&client_secret=\(secret.wwwFormURLEncodedString)"
+		}
+			
+			// add Authorization header (if not in body)
 		else {
-			req.HTTPBody = "grant_type=client_credentials".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+			logIfVerbose("Adding “Authorization” header as “Basic client-key:client-secret”")
+			let pw = "\(clientId.wwwFormURLEncodedString):\(secret.wwwFormURLEncodedString)"
+			if let utf8 = pw.dataUsingEncoding(NSUTF8StringEncoding) {
+				req.setValue("Basic \(utf8.base64EncodedStringWithOptions([]))", forHTTPHeaderField: "Authorization")
+			}
+			else {
+				throw OAuth2Error.Base64EncodeError
+			}
 		}
-		
-		// add Authorization header
-		logIfVerbose("Adding “Authorization” header as “Basic client-key:client-secret”")
-		let pw = "\(clientId.wwwFormURLEncodedString):\(secret.wwwFormURLEncodedString)"
-		if let utf8 = pw.dataUsingEncoding(NSUTF8StringEncoding) {
-			req.setValue("Basic \(utf8.base64EncodedStringWithOptions([]))", forHTTPHeaderField: "Authorization")
-		}
-		else {
-			logIfVerbose("ERROR: for some reason failed to base-64 encode the client-key:client-secret combo")
-		}
+		req.HTTPBody = body.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
 		
 		return req
 	}

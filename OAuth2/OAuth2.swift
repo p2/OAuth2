@@ -135,12 +135,7 @@ public class OAuth2: OAuth2Base {
 	public override init(settings: OAuth2JSON) {
 		clientConfig = OAuth2ClientConfig(settings: settings)
 		
-		// state; should only be manually set for testing purposes!
-		if let st = settings["state_for_testing"] as? String {
-			context.enforceState(st)
-		}
-		
-		// other configuration options
+		// auth configuration options
 		if let inBody = settings["secret_in_body"] as? Bool {
 			authConfig.secretInBody = inBody
 		}
@@ -275,12 +270,9 @@ public class OAuth2: OAuth2Base {
 		assert(nil != comp && "https" == comp!.scheme, "You MUST use HTTPS")
 		
 		// compose the URL query component
-		var urlParams = params ?? OAuth2StringDict()
-		urlParams["client_id"] = clientId
-		if !asTokenURL {
-			urlParams["state"] = context.state
-		}
-		comp!.percentEncodedQuery = OAuth2.queryStringFor(urlParams)
+		var prms = params ?? OAuth2StringDict()
+		prms["client_id"] = clientId
+		comp!.percentEncodedQuery = OAuth2.queryStringFor(prms)
 		
 		if let final = comp!.URL {
 			logIfVerbose("Authorizing against \(final.description)")
@@ -315,6 +307,7 @@ public class OAuth2: OAuth2Base {
 		}
 		var prms = params ?? OAuth2StringDict()
 		prms["redirect_uri"] = redirect
+		prms["state"] = context.state
 		if let scope = scope ?? clientConfig.scope {
 			prms["scope"] = scope
 		}
@@ -504,12 +497,13 @@ public class OAuth2: OAuth2Base {
 	Parse response data returned while exchanging the code for a token.
 	
 	This method extracts token data and fills the receiver's properties accordingly. If the response contains an "error" key, will parse the
-	error and throw it.
+	error and throw it. The method is final to ensure correct order of error parsing and not parsing the response if an error happens. This
+	is not possible in overrides. Instead, override the various `assureXy(dict:)` methods.
 	
 	- parameter json: Dictionary data parsed from the response
 	- returns: An OAuth2JSON instance with token data; may contain additional information
 	*/
-	func parseAccessTokenResponse(dict: OAuth2JSON) throws -> OAuth2JSON {
+	final func parseAccessTokenResponse(dict: OAuth2JSON) throws -> OAuth2JSON {
 		try assureNoErrorInResponse(dict)
 		try assureMatchesState(dict)
 		try assureCorrectBearerType(dict)
@@ -550,13 +544,9 @@ public class OAuth2: OAuth2Base {
 	}
 	
 	/**
-	Throws if "state" does not match up; if matches up, resets internal state.
+	This method does nothing in the base class. Implicit and code grant flows override it to check state.
 	*/
 	func assureMatchesState(params: OAuth2JSON) throws {
-		if !context.matchesState(params["state"] as? String) {
-			throw OAuth2Error.InvalidState
-		}
-		context.resetState()
 	}
 	
 	/**

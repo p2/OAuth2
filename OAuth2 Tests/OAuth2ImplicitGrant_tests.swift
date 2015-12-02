@@ -42,7 +42,6 @@ class OAuth2ImplicitGrantTests: XCTestCase
 		let oauth = OAuth2ImplicitGrant(settings: [
 			"client_id": "abc",
 			"authorize_uri": "https://auth.ful.io",
-			"state_for_testing": "ONSTUH",
 			"keychain": false,
 		])
 		
@@ -55,6 +54,7 @@ class OAuth2ImplicitGrantTests: XCTestCase
 			XCTAssertTrue(wasFailure)
 			XCTAssertNotNil(error, "Error message expected")
 		}
+		oauth.context.enforceState("ONSTUH")
 		oauth.handleRedirectURL(NSURL(string: "")!)
 		XCTAssertNil(oauth.accessToken, "Must not have an access token")
 		
@@ -67,6 +67,7 @@ class OAuth2ImplicitGrantTests: XCTestCase
 		XCTAssertNil(oauth.accessToken, "Must not have an access token")
 		
 		// standard error
+		oauth.context.enforceState("ONSTUH")		// because it has been reset
 		oauth.onFailure = { error in
 			XCTAssertNotNil(error, "Error message expected")
 			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.AccessDenied)
@@ -76,6 +77,7 @@ class OAuth2ImplicitGrantTests: XCTestCase
 		XCTAssertNil(oauth.accessToken, "Must not have an access token")
 		
 		// explicit error
+		oauth.context.enforceState("ONSTUH")		// because it has been reset
 		oauth.onFailure = { error in
 			XCTAssertNotNil(error, "Error message expected")
 			XCTAssertNotEqual((error as! OAuth2Error), OAuth2Error.Generic("Not good"))
@@ -86,6 +88,7 @@ class OAuth2ImplicitGrantTests: XCTestCase
 		XCTAssertNil(oauth.accessToken, "Must not have an access token")
 		
 		// no token type
+		oauth.context.enforceState("ONSTUH")		// because it has been reset
 		oauth.onFailure = { error in
 			XCTAssertNotNil(error, "Error message expected")
 			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.NoTokenType)
@@ -94,6 +97,7 @@ class OAuth2ImplicitGrantTests: XCTestCase
 		XCTAssertNil(oauth.accessToken, "Must not have an access token")
 		
 		// unsupported token type
+		oauth.context.enforceState("ONSTUH")		// because it has been reset
 		oauth.onFailure = { error in
 			XCTAssertNotNil(error, "Error message expected")
 			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.UnsupportedTokenType("Only “bearer” token is supported, but received “helicopter”"))
@@ -102,6 +106,7 @@ class OAuth2ImplicitGrantTests: XCTestCase
 		XCTAssertNil(oauth.accessToken, "Must not have an access token")
 		
 		// Invalid state
+		oauth.context.enforceState("ONSTUH")		// because it has been reset
 		oauth.onFailure = { error in
 			XCTAssertNotNil(error, "Error message expected")
 			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.InvalidState)

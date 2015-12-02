@@ -52,7 +52,7 @@ public class OAuth2PasswordGrant: OAuth2 {
 			}
 			else {
 				self.logIfVerbose("No access token, requesting a new one")
-				self.obtainAccessToken() { params, error in
+				self.obtainAccessToken(params: params) { params, error in
 					if let error = error {
 						self.didFail(error)
 					}
@@ -69,9 +69,9 @@ public class OAuth2PasswordGrant: OAuth2 {
 	
 	- parameter callback: The callback to call after the request has returned
 	*/
-	func obtainAccessToken(callback: ((params: OAuth2JSON?, error: ErrorType?) -> Void)) {
+	func obtainAccessToken(params params: [String : String]? = nil, callback: ((params: OAuth2JSON?, error: ErrorType?) -> Void)) {
 		do {
-			let post = try tokenRequest()
+			let post = try tokenRequest(params: params)
 			logIfVerbose("Requesting new access token from \(post.URL?.description)")
 			
 			performRequest(post) { data, status, error in
@@ -104,7 +104,7 @@ public class OAuth2PasswordGrant: OAuth2 {
 	/**
 	Creates a POST request with x-www-form-urlencoded body created from the supplied URL's query part.
 	*/
-	func tokenRequest() throws -> NSMutableURLRequest {
+	func tokenRequest(params params: [String : String]? = nil) throws -> NSMutableURLRequest {
 		if username.isEmpty{
 			throw OAuth2Error.NoUsername
 		}
@@ -125,6 +125,9 @@ public class OAuth2PasswordGrant: OAuth2 {
 		if let scope = clientConfig.scope {
 			body += "&scope=\(scope.wwwFormURLEncodedString)"
 		}
+		if let params = params {
+			body += "&" + self.dynamicType.queryStringFor(params)
+		}
 		if let secret = clientConfig.clientSecret where authConfig.secretInBody {
 			logIfVerbose("Adding “client_id” and “client_secret” to request body")
 			body += "&client_id=\(clientId.wwwFormURLEncodedString)&client_secret=\(secret.wwwFormURLEncodedString)"
@@ -138,7 +141,7 @@ public class OAuth2PasswordGrant: OAuth2 {
 				req.setValue("Basic \(utf8.base64EncodedStringWithOptions([]))", forHTTPHeaderField: "Authorization")
 			}
 			else {
-				logIfVerbose("ERROR: for some reason failed to base-64 encode the client-key:client-secret combo")
+				throw OAuth2Error.Base64EncodeError
 			}
 		}
 		req.HTTPBody = body.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)

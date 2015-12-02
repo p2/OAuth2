@@ -41,10 +41,14 @@ public class OAuth2CodeGrant: OAuth2 {
 	}
 	
 	override func assureMatchesState(params: OAuth2JSON) throws {
+		try super.assureMatchesState(params)
 		if nil == params["code"] {		// no state in the second step (exchange code)
 			return
 		}
-		try super.assureMatchesState(params)
+		if !context.matchesState(params["state"] as? String) {
+			throw OAuth2Error.InvalidState
+		}
+		context.resetState()
 	}
 	
 	
@@ -87,13 +91,12 @@ public class OAuth2CodeGrant: OAuth2 {
 	*/
 	public override func handleRedirectURL(redirect: NSURL) {
 		logIfVerbose("Handling redirect URL \(redirect.description)")
-		
-		let (code, error) = validateRedirectURL(redirect)
-		if nil != error {
-			didFail(error)
+		do {
+			let code = try validateRedirectURL(redirect)
+			exchangeCodeForToken(code)
 		}
-		else {
-			exchangeCodeForToken(code!)
+		catch let error {
+			didFail(error)
 		}
 	}
 	
@@ -142,10 +145,7 @@ public class OAuth2CodeGrant: OAuth2 {
 	/**
 	Validates the redirect URI: returns a tuple with the code and nil on success, nil and an error on failure.
 	*/
-	func validateRedirectURL(redirect: NSURL) -> (code: String?, error: OAuth2Error?) {
-		var code: String?
-		var error: OAuth2Error?
-		
+	func validateRedirectURL(redirect: NSURL) throws -> String {
 		let comp = NSURLComponents(URL: redirect, resolvingAgainstBaseURL: true)
 		if let compQuery = comp?.query where compQuery.characters.count > 0 {
 			let query = OAuth2CodeGrant.paramsFromQuery(comp!.percentEncodedQuery!)
@@ -153,21 +153,14 @@ public class OAuth2CodeGrant: OAuth2 {
 				
 				// we got a code, use it if state is correct (and reset state)
 				if context.matchesState(query["state"]) {
-					code = cd
 					context.resetState()
+					return cd
 				}
-				else {
-					error = OAuth2Error.InvalidState
-				}
+				throw OAuth2Error.InvalidState
 			}
-			else {
-				error = OAuth2Error.ResponseError("No “code” received")
-			}
+			throw OAuth2Error.ResponseError("No “code” received")
 		}
-		else {
-			error = OAuth2Error.PrerequisiteFailed("The redirect URL contains no query fragment")
-		}
-		return (code, error)
+		throw OAuth2Error.PrerequisiteFailed("The redirect URL contains no query fragment")
 	}
 }
 
