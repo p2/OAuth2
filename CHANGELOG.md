@@ -5,6 +5,14 @@ Version numbering represents the Swift version, plus a running number representi
 You can also refer to commit logs to get details on what was implemented, fixed and improved.
 
 
+### 2.1
+
+- Refresh tokens now work for all grants
+- Rewrite most parts of the code to use `OAuth2Error` instead of `NSError`
+- Improvements to password grant
+- Properly implement dynamic client registration
+- Fix issues #47, #59, #61, #66 and improve behavior in several scenarios
+
 ### 2.0.2
 
 - Fix issue #53, not detecting cancelling the `SFSafariViewController` by the user
