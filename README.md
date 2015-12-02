@@ -194,6 +194,7 @@ This flow is typically used by applications that can guard their secrets, like s
 In case an application cannot guard its secret, such as a distributed iOS app, you would use the _implicit grant_ or, in some cases, still a _code grant_ but omitting the client secret.
 It has however become common practice to still use code grants from mobile devices, including a client secret.
 This class fully supports those flows, it automatically creates a “Basic” Authorization header if the client has a client secret.
+If the site requires client credentials in the request body, set `secretInBody` to true, as explained below.
 
 #### Implicit Grant
 
@@ -206,6 +207,11 @@ Would be nice to add another code example here, but it's pretty much the same as
 
 A 2-legged flow that lets an app authenticate itself via its client id and secret.
 Instantiate `OAuth2ClientCredentials`, as usual supplying `client_id` but also a `client_secret` – plus your other configurations – in the settings dict, and you should be good to go.
+
+#### Username and Password
+
+The _Resource Owner Password Credentials Grant_ is supported with the `OAuth2PasswordGrant` subclass.
+Create an instance as shown above, set its `username` and `password` properties, then call `authorize()`.
 
 
 ### Site-Specific Peculiarities
@@ -226,7 +232,7 @@ The framework deals with those deviations by creating site-specific subclasses.
 Usage with Alamofire
 --------------------
 
-Here's an extension to be used with Alamofire:
+Here's an extension that can be used with Alamofire:
 
 ```swift
 import Alamofire
@@ -264,14 +270,27 @@ oauth2.request(.GET, "http://httpbin.org/get")
 Dynamic Client Registration
 ---------------------------
 
-There is preliminary support for [dynamic client registration](https://tools.ietf.org/html/rfc7591).
-If during setup `registration_url` is set and `client_id` is not, the `authorize()` call automatically attempts to register the client.
+There is support for [dynamic client registration](https://tools.ietf.org/html/rfc7591).
+If during setup `registration_url` is set but `client_id` is not, the `authorize()` call automatically attempts to register the client before continuing to the actual authorization.
+Client credentials returned from registration are stored to the keychain.
 
 The `OAuth2DynReg` class is responsible for handling client registration.
-You can use its `registerClient(client:callback:)` method manually if you need.
+You can use its `registerClient(client:callback:)` method manually if you need to.
 Registration parameters are taken from the client's configuration.
 
+```swift
+let oauth2 = OAuth2...()
+oauth2.registerClientIfNeeded() { error in
+    if let error = error {
+        // registration failed
+    }
+    else {
+        // client was registered
+    }
+}
 ```
+
+```swift
 let oauth2 = OAuth2...()
 let dynreg = OAuth2DynReg()
 dynreg.registerClient(oauth2) { params, error in
@@ -290,10 +309,11 @@ Keychain
 
 This framework can transparently use the iOS and OS X keychain.
 It is controlled by the `useKeychain` property, which can be disabled during initialization with the "keychain" setting.
-Since this is **enabled by default**, if you do _not_ turn it off during initialization, the keychain will be queried for tokens related to the authorization URL.
+Since this is **enabled by default**, if you do _not_ turn it off during initialization, the keychain will be queried for tokens and client credentials related to the authorization URL.
 If you turn it off _after_ initialization, the keychain will be queried for existing tokens, but new tokens will not be written to the keychain.
 
 If you want to delete the tokens from keychain, i.e. **log the user out** completely, call `forgetTokens()`.
+If you have dynamically registered your client and want to start anew, you can call `forgetClient()`.
 
 Ideally, access tokens get delivered with an "expires_in" parameter that tells you how long the token is valid.
 If it is missing the framework will still use those tokens if one is found in the keychain and not re-perform the OAuth dance.
@@ -360,8 +380,7 @@ These three steps are needed to:
 
 > NOTE that as of Xcode 6.2, the "embed" step happens in the "General" tab.
 > You may want to perform step 2 and 3 from the "General" tab.
-> Also make sure you select the framework for the platform (OS X vs. iOS).
-> This is currently a bit tricky since Xcode shows both as _OAuth2.framework_; I've filed a bug report with Apple so that it also shows the target name, fingers crossed.
+> Also make sure you select the framework for the platform, as of Xcode 7 this is visible behind _OAuth2.framework_.
 
 
 License
