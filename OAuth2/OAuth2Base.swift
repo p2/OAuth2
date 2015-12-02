@@ -19,7 +19,7 @@
 //
 
 import Foundation
-#if IMPORT_SWIFT_KEYCHAIN		// experimental for SwiftKeychain integration via CocoaPods
+#if IMPORT_SWIFT_KEYCHAIN		// experimental for SwiftKeychain integration via CocoaPods (iOS only)
 import SwiftKeychain
 #endif
 

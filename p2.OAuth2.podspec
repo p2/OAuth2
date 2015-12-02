@@ -27,8 +27,10 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = "8.0"
   s.osx.deployment_target = "10.9"
   s.requires_arc = true
+  s.ios.pod_target_xcconfig = { 'OTHER_SWIFT_FLAGS' => '-DIMPORT_SWIFT_KEYCHAIN' }
+  s.ios.dependency 'SwiftKeychain', '~> 0.1.5'
   
-  s.source_files = "OAuth2/*.swift", "SwiftKeychain/SwiftKeychain/Keychain/*.swift"
+  s.source_files = "OAuth2/*.swift"
   s.ios.source_files = "OAuth2+iOS/*.swift"
-  s.osx.source_files = "OAuth2+OSX/*.swift"
+  s.osx.source_files = "OAuth2+OSX/*.swift", "SwiftKeychain/SwiftKeychain/Keychain/*.swift"
 end
