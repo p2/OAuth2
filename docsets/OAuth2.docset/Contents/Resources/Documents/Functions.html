@@ -12,7 +12,7 @@
     <a title="Functions  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">OAuth2 Docs</a> (57% documented)</p>
+        <p><a href="index.html">OAuth2 Docs</a> (51% documented)</p>
         <p class="header-right"><a href="https://github.com/p2/OAuth2"><img src="img/gh.png"/>View on GitHub</a></p>
         <p class="header-right"><a href="dash-feed://http%3A%2F%2Fp2%2Egithub%2Eio%2Fdocsets%2FOAuth2%2Exml"><img src="img/dash.png"/>Install in Dash</a></p>
       </div>
@@ -28,7 +28,7 @@
       <nav class="sidebar">
         <ul class="nav-groups">
           <li class="nav-group-name">
-          <a href="Classes.html">Classes</a>
+            <a href="Classes.html">Classes</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="Classes/ArchiveKey.html">ArchiveKey</a>
@@ -50,6 +50,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Classes/OAuth2Base.html">OAuth2Base</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/OAuth2ClientConfig.html">OAuth2ClientConfig</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/OAuth2ClientCredentials.html">OAuth2ClientCredentials</a>
@@ -81,40 +84,37 @@
             </ul>
           </li>
           <li class="nav-group-name">
-          <a href="Enums.html">Enums</a>
+            <a href="Enums.html">Enums</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Enums/OAuth2Error.html">OAuth2Error</a>
+                <a href="Enums/OAuth2EndpointAuthMethod.html">OAuth2EndpointAuthMethod</a>
               </li>
               <li class="nav-group-task">
-                <a href="Enums/OAuth2IncompleteSetup.html">OAuth2IncompleteSetup</a>
+                <a href="Enums/OAuth2Error.html">OAuth2Error</a>
               </li>
             </ul>
           </li>
           <li class="nav-group-name">
-          <a href="Extensions.html">Extensions</a>
+            <a href="Extensions.html">Extensions</a>
             <ul class="nav-group-tasks">
-              <li class="nav-group-task">
-                <a href="Extensions/Keychain.html">Keychain</a>
-              </li>
               <li class="nav-group-task">
                 <a href="Extensions/NSHTTPURLResponse.html">NSHTTPURLResponse</a>
               </li>
               <li class="nav-group-task">
-                <a href="Extensions/OAuth2.html">OAuth2</a>
+                <a href="Extensions/NSURLRequest.html">NSURLRequest</a>
               </li>
             </ul>
           </li>
           <li class="nav-group-name">
-          <a href="Functions.html">Functions</a>
+            <a href="Functions.html">Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Functions.html#/s:F6OAuth214genOAuth2ErrorFTSSOS_11OAuth2Error_CSo7NSError">genOAuth2Error(_:_:)</a>
+                <a href="Functions.html#/s:ZF6OAuth2oi2eeFTOS_11OAuth2ErrorS0__Sb">==(_:_:)</a>
               </li>
             </ul>
           </li>
           <li class="nav-group-name">
-          <a href="Protocols.html">Protocols</a>
+            <a href="Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="Protocols/KeychainItem.html">KeychainItem</a>
@@ -125,7 +125,7 @@
             </ul>
           </li>
           <li class="nav-group-name">
-          <a href="Structs.html">Structs</a>
+            <a href="Structs.html">Structs</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="Structs/OAuth2AuthConfig.html">OAuth2AuthConfig</a>
@@ -133,10 +133,13 @@
             </ul>
           </li>
           <li class="nav-group-name">
-          <a href="Typealiases.html">Typealiases</a>
+            <a href="Typealiases.html">Typealiases</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="Typealiases.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Typealiases.html#/s:6OAuth216OAuth2StringDict">OAuth2StringDict</a>
               </li>
             </ul>
           </li>
@@ -155,9 +158,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:F6OAuth214genOAuth2ErrorFTSSOS_11OAuth2Error_CSo7NSError"></a>
-                    <a name="//apple_ref/swift/Function/genOAuth2Error(_:_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:F6OAuth214genOAuth2ErrorFTSSOS_11OAuth2Error_CSo7NSError">genOAuth2Error(_:_:)</a>
+                    <a name="/s:ZF6OAuth2oi2eeFTOS_11OAuth2ErrorS0__Sb"></a>
+                    <a name="//apple_ref/swift/Function/==(_:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZF6OAuth2oi2eeFTOS_11OAuth2ErrorS0__Sb">==(_:_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -165,16 +168,8 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Convenience function to create an error in the <q>OAuth2ErrorDomain</q> error domain.</p>
+                        <p>Undocumented</p>
 
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="Swift">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">genOAuth2Error</span><span class="p">(</span><span class="nv">message</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">_</span> <span class="nv">code</span><span class="p">:</span> <span class="kt">OAuth2Error</span> <span class="o">=</span> <span class="o">.</span><span class="kt">Generic</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">NSError</span></code></pre>
-
-                        </div>
                       </div>
                     </section>
                   </div>
@@ -184,8 +179,8 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2015 <a class="link" href="http://www.github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2015-09-23)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.3.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2015 <a class="link" href="http://www.github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2015-12-02)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.4.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

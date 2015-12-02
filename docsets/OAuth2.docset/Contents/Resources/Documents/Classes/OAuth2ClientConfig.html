@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>OAuth2Base Class Reference</title>
+    <title>OAuth2ClientConfig Class Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -9,8 +9,8 @@
     <script src="../js/jazzy.js" defer></script>
   </head>
   <body>
-    <a name="//apple_ref/swift/Class/OAuth2Base" class="dashAnchor"></a>
-    <a title="OAuth2Base Class Reference"></a>
+    <a name="//apple_ref/swift/Class/OAuth2ClientConfig" class="dashAnchor"></a>
+    <a title="OAuth2ClientConfig Class Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">OAuth2 Docs</a> (51% documented)</p>
@@ -22,7 +22,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">OAuth2 Reference</a>
         <img id="carat" src="../img/carat.png" />
-        OAuth2Base Class Reference
+        OAuth2ClientConfig Class Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -149,14 +149,8 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>OAuth2Base</h1>
-              <div class="declaration">
-                <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2Base</span></code></pre>
-
-                </div>
-              </div>
-            <p>Abstract base class for OAuth2 authorization as well as client registration classes.</p>
+            <h1>OAuth2ClientConfig</h1>
+            <p>Undocumented</p>
 
           </section>
           <section class="section task-group-section">
@@ -165,9 +159,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC6OAuth210OAuth2Base7verboseSb"></a>
-                    <a name="//apple_ref/swift/Property/verbose" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC6OAuth210OAuth2Base7verboseSb">verbose</a>
+                    <a name="/s:vC6OAuth218OAuth2ClientConfig8clientIdGSqSS_"></a>
+                    <a name="//apple_ref/swift/Property/clientId" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC6OAuth218OAuth2ClientConfig8clientIdGSqSS_">clientId</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -175,14 +169,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Set to <code>true</code> to log all the things. <code>false</code> by default. Use <code>&quot;verbose&quot;: bool</code> in settings.</p>
+                        <p>The client id.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">verbose</span> <span class="o">=</span> <span class="kc">false</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">clientId</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -192,9 +186,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC6OAuth210OAuth2Base11useKeychainSb"></a>
-                    <a name="//apple_ref/swift/Property/useKeychain" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC6OAuth210OAuth2Base11useKeychainSb">useKeychain</a>
+                    <a name="/s:vC6OAuth218OAuth2ClientConfig12clientSecretGSqSS_"></a>
+                    <a name="//apple_ref/swift/Property/clientSecret" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC6OAuth218OAuth2ClientConfig12clientSecretGSqSS_">clientSecret</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -202,14 +196,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>If set to <code>true</code> (the default) will use system keychain to store tokens. Use <code>&quot;keychain&quot;: bool</code> in settings.</p>
+                        <p>The client secret, usually only needed for code grant.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">useKeychain</span> <span class="o">=</span> <span class="kc">true</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">clientSecret</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -219,141 +213,361 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth210OAuth2BasecFMS0_FT8settingsGVSs10DictionarySSPSs9AnyObject___S0_"></a>
+                    <a name="/s:vC6OAuth218OAuth2ClientConfig10clientNameGSqSS_"></a>
+                    <a name="//apple_ref/swift/Property/clientName" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC6OAuth218OAuth2ClientConfig10clientNameGSqSS_">clientName</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The name of the client, e.g. for use during dynamic client registration.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">clientName</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC6OAuth218OAuth2ClientConfig12authorizeURLCSo5NSURL"></a>
+                    <a name="//apple_ref/swift/Property/authorizeURL" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC6OAuth218OAuth2ClientConfig12authorizeURLCSo5NSURL">authorizeURL</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The URL to authorize against.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">let</span> <span class="nv">authorizeURL</span><span class="p">:</span> <span class="kt">NSURL</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC6OAuth218OAuth2ClientConfig8tokenURLGSqCSo5NSURL_"></a>
+                    <a name="//apple_ref/swift/Property/tokenURL" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC6OAuth218OAuth2ClientConfig8tokenURLGSqCSo5NSURL_">tokenURL</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The URL where we can exchange a code for a token.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">tokenURL</span><span class="p">:</span> <span class="kt">NSURL</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC6OAuth218OAuth2ClientConfig7logoURLGSqCSo5NSURL_"></a>
+                    <a name="//apple_ref/swift/Property/logoURL" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC6OAuth218OAuth2ClientConfig7logoURLGSqCSo5NSURL_">logoURL</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Where a logo/icon for the app can be found.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">logoURL</span><span class="p">:</span> <span class="kt">NSURL</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC6OAuth218OAuth2ClientConfig5scopeGSqSS_"></a>
+                    <a name="//apple_ref/swift/Property/scope" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC6OAuth218OAuth2ClientConfig5scopeGSqSS_">scope</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The scope currently in use.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">scope</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC6OAuth218OAuth2ClientConfig8redirectGSqSS_"></a>
+                    <a name="//apple_ref/swift/Property/redirect" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC6OAuth218OAuth2ClientConfig8redirectGSqSS_">redirect</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The redirect URL string currently in use.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">redirect</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC6OAuth218OAuth2ClientConfig12redirectURLsGSqGSaSS__"></a>
+                    <a name="//apple_ref/swift/Property/redirectURLs" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC6OAuth218OAuth2ClientConfig12redirectURLsGSqGSaSS__">redirectURLs</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>All redirect URLs passed to the initializer.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">redirectURLs</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">]?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC6OAuth218OAuth2ClientConfig11accessTokenGSqSS_"></a>
+                    <a name="//apple_ref/swift/Property/accessToken" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC6OAuth218OAuth2ClientConfig11accessTokenGSqSS_">accessToken</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The receiver&rsquo;s access token.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">accessToken</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC6OAuth218OAuth2ClientConfig17accessTokenExpiryGSqCSo6NSDate_"></a>
+                    <a name="//apple_ref/swift/Property/accessTokenExpiry" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC6OAuth218OAuth2ClientConfig17accessTokenExpiryGSqCSo6NSDate_">accessTokenExpiry</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The access token&rsquo;s expiry date.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">accessTokenExpiry</span><span class="p">:</span> <span class="kt">NSDate</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC6OAuth218OAuth2ClientConfig26accessTokenAssumeUnexpiredSb"></a>
+                    <a name="//apple_ref/swift/Property/accessTokenAssumeUnexpired" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC6OAuth218OAuth2ClientConfig26accessTokenAssumeUnexpiredSb">accessTokenAssumeUnexpired</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>If set to true (the default), uses a keychain-supplied access token even if no <q>expires_in</q> parameter was supplied.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">accessTokenAssumeUnexpired</span> <span class="o">=</span> <span class="kc">true</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC6OAuth218OAuth2ClientConfig12refreshTokenGSqSS_"></a>
+                    <a name="//apple_ref/swift/Property/refreshToken" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC6OAuth218OAuth2ClientConfig12refreshTokenGSqSS_">refreshToken</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The receiver&rsquo;s long-time refresh token.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">refreshToken</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC6OAuth218OAuth2ClientConfig15registrationURLGSqCSo5NSURL_"></a>
+                    <a name="//apple_ref/swift/Property/registrationURL" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC6OAuth218OAuth2ClientConfig15registrationURLGSqCSo5NSURL_">registrationURL</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The URL to register a client against.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">registrationURL</span><span class="p">:</span> <span class="kt">NSURL</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC6OAuth218OAuth2ClientConfig18endpointAuthMethodOS_24OAuth2EndpointAuthMethod"></a>
+                    <a name="//apple_ref/swift/Property/endpointAuthMethod" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC6OAuth218OAuth2ClientConfig18endpointAuthMethodOS_24OAuth2EndpointAuthMethod">endpointAuthMethod</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>How the client communicates the client secret with the server. Defaults to <q>.None</q> if there is no secret, <q>.ClientSecretPost</q> if
+<q>secret_in_body</q> is <code>true</code> and <q>.ClientSecretBasic</q> otherwise. Interacts with the <code>authConfig.secretInBody</code> client setting.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">endpointAuthMethod</span> <span class="o">=</span> <span class="kt">OAuth2EndpointAuthMethod</span><span class="o">.</span><span class="kt">None</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6OAuth218OAuth2ClientConfigcFMS0_FT8settingsGVSs10DictionarySSPSs9AnyObject___S0_"></a>
                     <a name="//apple_ref/swift/Method/init(settings:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth210OAuth2BasecFMS0_FT8settingsGVSs10DictionarySSPSs9AnyObject___S0_">init(settings:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Base initializer.</p>
-
-<p>Looks at the <code>keychain</code> and <code><a href="../Classes/OAuth2Base.html#/s:vC6OAuth210OAuth2Base7verboseSb">verbose</a></code> keys in the <em>settings</em> dict. Everything else is handled by subclasses.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">settings</span><span class="p">:</span> <span class="kt">OAuth2JSON</span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Keychain%20Integration"></a>
-                <a name="//apple_ref/swift/Section/Keychain Integration" class="dashAnchor"></a>
-                <a href="#/Keychain%20Integration">
-                  <h3 class="section-name">Keychain Integration</h3>
-                </a>
-              </div>
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FC6OAuth210OAuth2Base19keychainServiceNameFS0_FT_SS"></a>
-                    <a name="//apple_ref/swift/Method/keychainServiceName()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth210OAuth2Base19keychainServiceNameFS0_FT_SS">keychainServiceName()</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The service key under which to store keychain items. Returns the authorize URL by default.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">keychainServiceName</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">String</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FC6OAuth210OAuth2Base12forgetClientFS0_FT_T_"></a>
-                    <a name="//apple_ref/swift/Method/forgetClient()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth210OAuth2Base12forgetClientFS0_FT_T_">forgetClient()</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Unsets the client credentials and deletes them from the keychain.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">forgetClient</span><span class="p">()</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FC6OAuth210OAuth2Base12forgetTokensFS0_FT_T_"></a>
-                    <a name="//apple_ref/swift/Method/forgetTokens()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth210OAuth2Base12forgetTokensFS0_FT_T_">forgetTokens()</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Unsets the tokens and deletes them from the keychain.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">forgetTokens</span><span class="p">()</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Requests"></a>
-                <a name="//apple_ref/swift/Section/Requests" class="dashAnchor"></a>
-                <a href="#/Requests">
-                  <h3 class="section-name">Requests</h3>
-                </a>
-              </div>
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:vC6OAuth210OAuth2Base15sessionDelegateGSqPSo20NSURLSessionDelegate__"></a>
-                    <a name="//apple_ref/swift/Property/sessionDelegate" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC6OAuth210OAuth2Base15sessionDelegateGSqPSo20NSURLSessionDelegate__">sessionDelegate</a>
+                    <a class="token" href="#/s:FC6OAuth218OAuth2ClientConfigcFMS0_FT8settingsGVSs10DictionarySSPSs9AnyObject___S0_">init(settings:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -364,11 +578,30 @@
                         <p>Undocumented</p>
 
                       </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6OAuth218OAuth2ClientConfig17forgetCredentialsFS0_FT_T_"></a>
+                    <a name="//apple_ref/swift/Method/forgetCredentials()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth218OAuth2ClientConfig17forgetCredentialsFS0_FT_T_">forgetCredentials()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Forgets the configuration&rsquo;s client id and secret.</p>
+
+                      </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2Base</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">forgetCredentials</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -378,9 +611,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth210OAuth2Base14performRequestFS0_FTCSo12NSURLRequest8callbackFT4dataGSqCSo6NSData_6statusGSqSi_5errorGSqPSs9ErrorType___T__T_"></a>
-                    <a name="//apple_ref/swift/Method/performRequest(_:callback:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth210OAuth2Base14performRequestFS0_FTCSo12NSURLRequest8callbackFT4dataGSqCSo6NSData_6statusGSqSi_5errorGSqPSs9ErrorType___T__T_">performRequest(_:callback:)</a>
+                    <a name="/s:FC6OAuth218OAuth2ClientConfig12forgetTokensFS0_FT_T_"></a>
+                    <a name="//apple_ref/swift/Method/forgetTokens()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth218OAuth2ClientConfig12forgetTokensFS0_FT_T_">forgetTokens()</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -388,155 +621,8 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Perform the supplied request and call the callback with the response JSON dict or an error.</p>
+                        <p>Undocumented</p>
 
-<p>This implementation uses the shared <code>NSURLSession</code> and executes a data task. If the server responds with an error, this will be
-converted into an error according to information supplied in the response JSON (if availale).</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">performRequest</span><span class="p">(</span><span class="nv">request</span><span class="p">:</span> <span class="kt">NSURLRequest</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="nv">data</span><span class="p">:</span> <span class="kt">NSData</span><span class="p">?,</span> <span class="nv">status</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?,</span> <span class="nv">error</span><span class="p">:</span> <span class="kt">ErrorType</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">))</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Response%20Verification"></a>
-                <a name="//apple_ref/swift/Section/Response Verification" class="dashAnchor"></a>
-                <a href="#/Response%20Verification">
-                  <h3 class="section-name">Response Verification</h3>
-                </a>
-              </div>
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FC6OAuth210OAuth2Base23assureNoErrorInResponseFS0_FzTGVSs10DictionarySSPSs9AnyObject__8fallbackGSqSS__T_"></a>
-                    <a name="//apple_ref/swift/Method/assureNoErrorInResponse(_:fallback:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth210OAuth2Base23assureNoErrorInResponseFS0_FzTGVSs10DictionarySSPSs9AnyObject__8fallbackGSqSS__T_">assureNoErrorInResponse(_:fallback:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Handles access token error response.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">assureNoErrorInResponse</span><span class="p">(</span><span class="nv">params</span><span class="p">:</span> <span class="kt">OAuth2JSON</span><span class="p">,</span> <span class="nv">fallback</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="n">throws</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Utilities"></a>
-                <a name="//apple_ref/swift/Section/Utilities" class="dashAnchor"></a>
-                <a href="#/Utilities">
-                  <h3 class="section-name">Utilities</h3>
-                </a>
-              </div>
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:ZFC6OAuth210OAuth2Base14queryStringForFMS0_FGVSs10DictionarySSSS_SS"></a>
-                    <a name="//apple_ref/swift/Method/queryStringFor(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFC6OAuth210OAuth2Base14queryStringForFMS0_FGVSs10DictionarySSSS_SS">queryStringFor(_:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Create a query string from a dictionary of string: string pairs.</p>
-
-<p>This method does <strong>form encode</strong> the value part. If you&rsquo;re using NSURLComponents you want to assign the return value to
-<code>percentEncodedQuery</code>, NOT <code>query</code> as this would double-encode the value.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">queryStringFor</span><span class="p">(</span><span class="nv">params</span><span class="p">:</span> <span class="kt">OAuth2StringDict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">String</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:ZFC6OAuth210OAuth2Base15paramsFromQueryFMS0_FSSGVSs10DictionarySSSS_"></a>
-                    <a name="//apple_ref/swift/Method/paramsFromQuery(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFC6OAuth210OAuth2Base15paramsFromQueryFMS0_FSSGVSs10DictionarySSSS_">paramsFromQuery(_:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Parse a query string into a dictionary of String: String pairs.</p>
-
-<p>If you&rsquo;re retrieving a query or fragment from NSURLComponents, use the <code>percentEncoded##</code> variant as the others
-automatically perform percent decoding, potentially messing with your query string.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">paramsFromQuery</span><span class="p">(</span><span class="nv">query</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">OAuth2StringDict</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FC6OAuth210OAuth2Base12logIfVerboseFS0_FSST_"></a>
-                    <a name="//apple_ref/swift/Method/logIfVerbose(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth210OAuth2Base12logIfVerboseFS0_FSST_">logIfVerbose(_:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Debug logging, will only log if <code><a href="../Classes/OAuth2Base.html#/s:vC6OAuth210OAuth2Base7verboseSb">verbose</a></code> is YES.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">logIfVerbose</span><span class="p">(</span><span class="nv">log</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
-
-                        </div>
                       </div>
                     </section>
                   </div>

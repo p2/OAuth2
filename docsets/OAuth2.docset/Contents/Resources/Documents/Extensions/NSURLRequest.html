@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>OAuth2CodeGrantBasicAuth Class Reference</title>
+    <title>NSURLRequest Extension Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -9,8 +9,8 @@
     <script src="../js/jazzy.js" defer></script>
   </head>
   <body>
-    <a name="//apple_ref/swift/Class/OAuth2CodeGrantBasicAuth" class="dashAnchor"></a>
-    <a title="OAuth2CodeGrantBasicAuth Class Reference"></a>
+    <a name="//apple_ref/swift/Extension/NSURLRequest" class="dashAnchor"></a>
+    <a title="NSURLRequest Extension Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">OAuth2 Docs</a> (51% documented)</p>
@@ -22,7 +22,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">OAuth2 Reference</a>
         <img id="carat" src="../img/carat.png" />
-        OAuth2CodeGrantBasicAuth Class Reference
+        NSURLRequest Extension Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -149,18 +149,14 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>OAuth2CodeGrantBasicAuth</h1>
+            <h1>NSURLRequest</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2CodeGrantBasicAuth</span><span class="p">:</span> <span class="kt">OAuth2CodeGrant</span></code></pre>
+                  <pre class="highlight"><code><span class="kd">class</span> <span class="kt">NSURLRequest</span> <span class="p">:</span> <span class="kt">NSObject</span><span class="p">,</span> <span class="kt">NSSecureCoding</span><span class="p">,</span> <span class="kt">NSCopying</span><span class="p">,</span> <span class="kt">NSMutableCopying</span></code></pre>
 
                 </div>
               </div>
-            <p>Enhancing the code grant flow by allowing to specify a specific <q>Basic xx</q> authorization header.</p>
-
-<p>This class allows you to manually set the <q>Authorization</q> header to a given string, as accepted in its <code>basicToken</code> property. It will
-override the superclasses automatic generation of an Authorization header if the client has a clientSecret, so you only need to use
-this subclass if you need a different header (this is different to version 1.2.3 and earlier of this framework).</p>
+            <p>Print the requests&rsquo;s headers and body to stdout.</p>
 
           </section>
           <section class="section task-group-section">
@@ -169,9 +165,9 @@ this subclass if you need a different header (this is different to version 1.2.3
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth224OAuth2CodeGrantBasicAuthcFMS0_FT8settingsGVSs10DictionarySSPSs9AnyObject___S0_"></a>
-                    <a name="//apple_ref/swift/Method/init(settings:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth224OAuth2CodeGrantBasicAuthcFMS0_FT8settingsGVSs10DictionarySSPSs9AnyObject___S0_">init(settings:)</a>
+                    <a name="/s:FE6OAuth2CSo12NSURLRequest12oauth2_printFS0_FT_T_"></a>
+                    <a name="//apple_ref/swift/Method/oauth2_print()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FE6OAuth2CSo12NSURLRequest12oauth2_printFS0_FT_T_">oauth2_print()</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -179,18 +175,14 @@ this subclass if you need a different header (this is different to version 1.2.3
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Adds support to override the basic Authorization header value by specifying:</p>
-
-<ul>
-<li>basic: takes precedence over client_id and client_secret for the token request Authorization header</li>
-</ul>
+                        <p>Print the requests&rsquo;s headers and body to stdout.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">override</span> <span class="nf">init</span><span class="p">(</span><span class="nv">settings</span><span class="p">:</span> <span class="kt">OAuth2JSON</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">oauth2_print</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
