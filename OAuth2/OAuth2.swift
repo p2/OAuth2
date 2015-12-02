@@ -30,6 +30,10 @@ public class OAuth2: OAuth2Base {
 		return "__undefined"
 	}
 	
+	public class var responseType: String? {
+		return nil
+	}
+	
 	/// Client setup
 	public let clientConfig: OAuth2ClientConfig
 	
@@ -156,6 +160,7 @@ public class OAuth2: OAuth2Base {
 		for message in clientConfig.updateFromStorableItems(items) {
 			logIfVerbose(message)
 		}
+		authConfig.secretInBody = (clientConfig.endpointAuthMethod == OAuth2EndpointAuthMethod.ClientSecretPost)
 	}
 	
 	override func storableCredentialItems() -> [String : NSCoding]? {
@@ -180,27 +185,35 @@ public class OAuth2: OAuth2Base {
 	// MARK: - Authorization
 	
 	/**
-	    Use this method, together with `authConfig`, to obtain an access token.
+	Use this method, together with `authConfig`, to obtain an access token.
  
-	    This method will first check if the client already has an unexpired access token (possibly from the keychain), if not and it's able
-	    to use a refresh token (code grant flow) it will try to use the refresh token, then if this fails it will show the authorize screen
-	    IF you have `authConfig` set up sufficiently. If `authConfig` is not set up sufficiently this method will end up calling the
-	    `onFailure` callback.
-	 */
+	This method will first check if the client already has an unexpired access token (possibly from the keychain), if not and it's able to
+	use a refresh token it will try to use the refresh token. If this fails it will check whether the client has a client_id and show the
+	authorize screen if you have `authConfig` set up sufficiently. If `authConfig` is not set up sufficiently this method will end up calling the
+	`onFailure` callback. If client_id is not set but a "registration_uri" has been provided, a dynamic client registration will be
+	attempted and if it succees, an access token will be requested.
+	*/
 	public func authorize(params params: OAuth2StringDict? = nil, autoDismiss: Bool = true) {
 		tryToObtainAccessTokenIfNeeded() { success in
 			if success {
 				self.didAuthorize(OAuth2JSON())
 			}
 			else {
-				if self.authConfig.authorizeEmbedded {
-					if !self.authorizeEmbeddedWith(self.authConfig, params: params, autoDismiss: autoDismiss) {
-						self.didFail(nil == self.authConfig.authorizeContext ? OAuth2Error.NoAuthorizationContext : OAuth2Error.InvalidAuthorizationContext)
+				self.registerClientIfNeeded() { error in
+					if let error = error {
+						self.didFail(error)
 					}
-				}
-				else {
-					if !self.openAuthorizeURLInBrowser(params) {
-						fatalError("Cannot open authorize URL")
+					else {
+						if self.authConfig.authorizeEmbedded {
+							if !self.authorizeEmbeddedWith(self.authConfig, params: params, autoDismiss: autoDismiss) {
+								self.didFail(nil == self.authConfig.authorizeContext ? OAuth2Error.NoAuthorizationContext : OAuth2Error.InvalidAuthorizationContext)
+							}
+						}
+						else {
+							if !self.openAuthorizeURLInBrowser(params) {
+								fatalError("Cannot open authorize URL")
+							}
+						}
 					}
 				}
 			}
@@ -311,6 +324,9 @@ public class OAuth2: OAuth2Base {
 		if let scope = scope ?? clientConfig.scope {
 			prms["scope"] = scope
 		}
+		if let responseType = self.dynamicType.responseType {
+			prms["response_type"] = responseType
+		}
 		context.redirectURL = redirect
 		return try authorizeURLWithParams(prms, asTokenURL: false)
 	}
@@ -388,6 +404,31 @@ public class OAuth2: OAuth2Base {
 		}
 		catch let err {
 			callback(successParams: nil, error: err)
+		}
+	}
+	
+	
+	// MARK: - Registration
+	
+	/**
+	Returns immediately if the receiver's `clientId` is nil (with error = nil) or if there is no registration URL (with error). Otherwise
+	instantiates `OAuth2DynReg` to attempt client registration.
+	
+	- parameter callback: The callback to call; error is nil on success, otherwise contains the error encountered
+	*/
+	func registerClientIfNeeded(callback: ((error: ErrorType?) -> Void)) {
+		if nil != clientId {
+			callback(error: nil)
+		}
+		else if nil != clientConfig.registrationURL {
+			let dynreg = OAuth2DynReg()
+			dynreg.verbose = verbose
+			dynreg.registerClient(self) { json, error in
+				callback(error: error)
+			}
+		}
+		else {
+			callback(error: OAuth2Error.NoRegistrationURL)
 		}
 	}
 	
@@ -472,7 +513,6 @@ public class OAuth2: OAuth2Base {
 				logIfVerbose("ERROR: for some reason failed to base-64 encode the client-key:client-secret combo")
 			}
 		}
-		
 		return req
 	}
 	

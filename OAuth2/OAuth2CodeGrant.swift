@@ -34,10 +34,8 @@ public class OAuth2CodeGrant: OAuth2 {
 		return "authorization_code"
 	}
 	
-	public override func authorizeURLWithRedirect(redirect: String?, scope: String?, params: OAuth2StringDict?) throws -> NSURL {
-		var prms = params ?? OAuth2StringDict()
-		prms["response_type"] = "code"
-		return try super.authorizeURLWithRedirect(redirect, scope: scope, params: prms)
+	public override class var responseType: String? {
+		return "code"
 	}
 	
 	override func assureMatchesState(params: OAuth2JSON) throws {

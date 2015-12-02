@@ -264,25 +264,22 @@ oauth2.request(.GET, "http://httpbin.org/get")
 Dynamic Client Registration
 ---------------------------
 
-There is preliminary support for dynamic client registration.
-The `registerIfNeeded()` immediately calls the callback if there are client credentials in the keychain, otherwise a registration is attempted.
+There is preliminary support for [dynamic client registration](https://tools.ietf.org/html/rfc7591).
+If during setup `registration_url` is set and `client_id` is not, the `authorize()` call automatically attempts to register the client.
 
-> **Note**: currently only user-interaction-free registrations are supported.
+The `OAuth2DynReg` class is responsible for handling client registration.
+You can use its `registerClient(client:callback:)` method manually if you need.
+Registration parameters are taken from the client's configuration.
 
 ```
 let oauth2 = OAuth2...()
-let dynreg = OAuth2DynReg(settings: [
-    "client_name": "<# app-name #>",
-    "redirect_uris": ["<# redirect-uri #>"],
-    "registration_uri": "<# registration-url-string #>,
-])
-dynreg.registerIfNeeded() { json, error in
-    if let id = dynreg.clientId where !id.isEmpty {
-        oauth2.clientId = id
-        oauth2.clientSecret = dynreg.clientSecret
+let dynreg = OAuth2DynReg()
+dynreg.registerClient(oauth2) { params, error in
+    if let error = error {
+        // registration failed
     }
     else {
-        // failed to register
+        // client was registered with `params`
     }
 }
 ```

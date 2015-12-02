@@ -66,7 +66,7 @@ class OAuth2CodeGrantTests: XCTestCase
 	}
 	
 	func testTokenRequest() {
-		var oauth = OAuth2CodeGrant(settings: [
+		let oauth = OAuth2CodeGrant(settings: [
 			"client_id": "abc",
 			"client_secret": "xyz",
 			"authorize_uri": "https://auth.ful.io",
@@ -102,19 +102,70 @@ class OAuth2CodeGrantTests: XCTestCase
 		XCTAssertEqual(query["grant_type"]!, "authorization_code", "Expecting correct `grant_type`")
 		XCTAssertEqual(query["redirect_uri"]!, "oauth2://callback", "Expecting correct `redirect_uri`")
 		XCTAssertNil(query["state"], "`state` must be empty")
+	}
+	
+	func testTokenRequestAgainstAuthURL() {
 		
 		// test fallback to authURL
-		oauth = OAuth2CodeGrant(settings: [
+		let oauth = OAuth2CodeGrant(settings: [
 			"client_id": "abc",
 			"client_secret": "xyz",
 			"authorize_uri": "https://auth.ful.io",
+			"keychain": false,
 		])
 		oauth.redirect = "oauth2://callback"
 		oauth.context.redirectURL = "oauth2://callback"
 		
-		let req2 = try! oauth.tokenRequestWithCode("pp")
-		let comp2 = NSURLComponents(URL: req2.URL!, resolvingAgainstBaseURL: true)!
-		XCTAssertEqual(comp2.host!, "auth.ful.io", "Correct host")
+		let req = try! oauth.tokenRequestWithCode("pp")
+		let comp = NSURLComponents(URL: req.URL!, resolvingAgainstBaseURL: true)!
+		XCTAssertEqual(comp.host!, "auth.ful.io", "Correct host")
+	}
+	
+	func testTokenResponse() {
+		let oauth = OAuth2CodeGrant(settings: [
+			"client_id": "abc",
+			"client_secret": "xyz",
+			"authorize_uri": "https://auth.ful.io",
+			"keychain": false,
+		])
+		let response = [
+			"access_token": "2YotnFZFEjr1zCsicMWpAA",
+			"token_type": "bearer",
+			"expires_in": 3600,
+			"refresh_token": "tGzv3JOkF0XG5Qx2TlKWIA",
+			"foo": "bar & hat"
+		]
+		
+		do {
+			let dict = try oauth.parseAccessTokenResponse(response)
+			XCTAssertEqual("bar & hat", dict["foo"] as? String)
+			XCTAssertEqual("2YotnFZFEjr1zCsicMWpAA", oauth.accessToken, "Must extract access token")
+			XCTAssertNotNil(oauth.accessTokenExpiry, "Must extract access token expiry date")
+			XCTAssertEqual("tGzv3JOkF0XG5Qx2TlKWIA", oauth.refreshToken, "Must extract refresh token")
+		}
+		catch {
+			XCTAssertTrue(false, "Not expected to throw")
+		}
+		
+		// unsupported bearer type
+		let response2 = [
+			"access_token": "2YotnFZFEjr1zCsicMWpAA",
+			"token_type": "not_my_type",
+			"expires_in": 3600,
+			"refresh_token": "tGzv3JOkF0XG5Qx2TlKWIA",
+			"foo": "bar & hat"
+		]
+		
+		do {
+			try oauth.parseAccessTokenResponse(response2)
+			XCTAssertTrue(false, "Should not be here any more")
+		}
+		catch OAuth2Error.UnsupportedTokenType {
+			XCTAssertTrue(true, "Throw correct error")
+		}
+		catch {
+			XCTAssertTrue(false, "Should not throw wrong error")
+		}
 	}
 }
 

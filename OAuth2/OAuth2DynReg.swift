@@ -35,60 +35,29 @@ public enum OAuth2EndpointAuthMethod: String {
  */
 public class OAuth2DynReg: OAuth2Base {
 	
-	/// The endpoint auth method to use. If left nil will use server's default.
-	public var endpointAuthMethod: OAuth2EndpointAuthMethod?
-	
 	/// Additional HTTP headers to supply during registration.
 	public var extraHeaders: OAuth2StringDict?
 	
 	/// Whether registration should also allow refresh tokens. Defaults to true.
 	public var allowRefreshTokens = true
 	
+	public init() {
+		super.init(settings: OAuth2JSON())
+	}
+	
 	
 	// MARK: - Registration
 	
 	/**
-	Attempts to register for client credentials **unless** the given client already has a client id. If `onlyIfNeeded` is false will try to
-	register anyway.
+	Register the given client.
 	
-	- parameter client: The OAuth2 client to register and update credentials, once registered.
-	- parameter onlyIfNeeded: If set to false will register even when the receiver and the client already have a client-id
-	- parameter callback: The callback to call when done. Any combination of json and error is possible (in regards to nil-ness)
-	*/
-	public func registerAndUpdateClient(client: OAuth2, onlyIfNeeded: Bool = true, callback: ((json: OAuth2JSON?, error: ErrorType?) -> Void)) {
-		if onlyIfNeeded {
-			registerClientIfNeeded(client, callback: callback)
-		}
-		else {
-			registerClient(client, callback: callback)
-		}
-	}
-	
-	/**
-	Attempts to register the client **unless** the given client (1st priority) or the receiver (2nd priority) already have a client id.
-	
-	- parameter callback: The callback to call when done. Any combination of json and error is possible (in regards to nil-ness)
-	*/
-	public func registerClientIfNeeded(client: OAuth2, callback: ((json: OAuth2JSON?, error: ErrorType?) -> Void)) {
-		if let clientId = client.clientConfig.clientId where !clientId.isEmpty {
-			logIfVerbose("Already have a client id, no need to register")
-			callback(json: nil, error: nil)
-		}
-		else {
-			logIfVerbose("No client id, will need to register")
-			registerClient(client, callback: callback)
-		}
-	}
-	
-	/**
-	Register using the receiver's current setup.
-	
+	- parameter client: The client to register and update with client credentials, when successful
 	- parameter callback: The callback to call when done with the registration response (JSON) and/or an error
 	*/
 	public func registerClient(client: OAuth2, callback: ((json: OAuth2JSON?, error: ErrorType?) -> Void)) {
 		do {
 			let req = try registrationRequest(client)
-			logIfVerbose("Registering client at \(req.URL!)")
+			logIfVerbose("Registering client at \(req.URL!) with scopes “\(client.scope ?? "(none)")”")
 			
 			performRequest(req) { data, status, error in
 				if let data = data {
@@ -135,7 +104,9 @@ public class OAuth2DynReg: OAuth2Base {
 				req.setValue(val, forHTTPHeaderField: key)
 			}
 		}
-		req.HTTPBody = try NSJSONSerialization.dataWithJSONObject(registrationBody(client), options: [])
+		let body = registrationBody(client)
+		client.logIfVerbose("Registration parameters: \(body)")
+		req.HTTPBody = try NSJSONSerialization.dataWithJSONObject(body, options: [])
 		
 		return req
 	}
@@ -152,16 +123,20 @@ public class OAuth2DynReg: OAuth2Base {
 		if let logoURL = client.clientConfig.logoURL {
 			dict["logo_uri"] = logoURL
 		}
-		if let authMethod = endpointAuthMethod {
-			dict["token_endpoint_auth_method"] = authMethod.rawValue
+		if let scope = client.scope {
+			dict["scope"] = scope
 		}
 		
-		// grant types
+		// grant types, response types and auth method
 		var grant_types = [client.dynamicType.grantType]
 		if allowRefreshTokens {
 			grant_types.append("refresh_token")
 		}
 		dict["grant_types"] = grant_types
+		if let responseType = client.dynamicType.responseType {
+			dict["response_types"] = [responseType]
+		}
+		dict["token_endpoint_auth_method"] = client.clientConfig.endpointAuthMethod.rawValue
 		return dict
 	}
 	
@@ -172,15 +147,21 @@ public class OAuth2DynReg: OAuth2Base {
 	public func didRegisterWith(json: OAuth2JSON, client: OAuth2) {
 		if let id = json["client_id"] as? String {
 			client.clientId = id
-			client.logIfVerbose("Did register with client-id “\(id)”")
+			client.logIfVerbose("Did register with client-id “\(id)”, params: \(json)")
 		}
 		else {
-			client.logIfVerbose("Did register but did not get a client-id")
+			client.logIfVerbose("Did register but did not get a client-id. Params: \(json)")
 		}
 		if let secret = json["client_secret"] as? String {
 			client.clientSecret = secret
-			// TODO: look at "client_secret_expires_at"
+			if let expires = json["client_secret_expires_at"] as? Double where 0 != expires {
+				client.logIfVerbose("Client secret will expire on \(NSDate(timeIntervalSince1970: expires))")
+			}
 		}
+		if let methodName = json["token_endpoint_auth_method"] as? String, let method = OAuth2EndpointAuthMethod(rawValue: methodName) {
+			client.clientConfig.endpointAuthMethod = method
+		}
+		
 		if useKeychain {
 			client.storeClientToKeychain()
 		}

@@ -26,9 +26,6 @@ public class OAuth2ClientConfig {
 	/// The URL where we can exchange a code for a token.
 	public final var tokenURL: NSURL?
 	
-	/// The URL to register a client against.
-	public final var registrationURL: NSURL?
-	
 	/// Where a logo/icon for the app can be found.
 	public final var logoURL: NSURL?
 	
@@ -52,6 +49,13 @@ public class OAuth2ClientConfig {
 	
 	/// The receiver's long-time refresh token.
 	public var refreshToken: String?
+	
+	/// The URL to register a client against.
+	public final var registrationURL: NSURL?
+	
+	/// How the client communicates the client secret with the server. Defaults to ".None" if there is no secret, ".ClientSecretPost" if
+	/// "secret_in_body" is `true` and ".ClientSecretBasic" otherwise. Interacts with the `authConfig.secretInBody` client setting.
+	public final var endpointAuthMethod = OAuth2EndpointAuthMethod.None
 	
 	
 	public init(settings: OAuth2JSON) {
@@ -82,6 +86,12 @@ public class OAuth2ClientConfig {
 		if let redirs = settings["redirect_uris"] as? [String] {
 			redirectURLs = redirs
 			redirect = redirs.first
+		}
+		if let inBody = settings["secret_in_body"] as? Bool where inBody {
+			endpointAuthMethod = .ClientSecretPost
+		}
+		else if nil != clientSecret {
+			endpointAuthMethod = .ClientSecretBasic
 		}
 		
 		// access token options
@@ -114,6 +124,7 @@ public class OAuth2ClientConfig {
 		if let secret = clientSecret {
 			items["secret"] = secret
 		}
+		items["endpointAuthMethod"] = endpointAuthMethod.rawValue
 		return items
 	}
 	
@@ -142,6 +153,9 @@ public class OAuth2ClientConfig {
 		if let secret = items["secret"] as? String {
 			clientSecret = secret
 			messages.append("Found client secret")
+		}
+		if let methodName = items["endpointAuthMethod"] as? String, let method = OAuth2EndpointAuthMethod(rawValue: methodName) {
+			endpointAuthMethod = method
 		}
 		if let token = items["accessToken"] as? String where !token.isEmpty {
 			if let date = items["accessTokenDate"] as? NSDate {

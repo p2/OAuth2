@@ -27,8 +27,8 @@ import XCTest
 import OAuth2
 
 
-class OAuth2Tests: XCTestCase
-{
+class OAuth2Tests: XCTestCase {
+	
 	func genericOAuth2() -> OAuth2 {
 		return OAuth2(settings: [
 			"client_id": "abc",

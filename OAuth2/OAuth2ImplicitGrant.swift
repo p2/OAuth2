@@ -30,10 +30,8 @@ public class OAuth2ImplicitGrant: OAuth2 {
 		return "implicit"
 	}
 	
-	public override func authorizeURLWithRedirect(redirect: String?, scope: String?, params: OAuth2StringDict?) throws -> NSURL {
-		var prms = params ?? OAuth2StringDict()
-		prms["response_type"] = "token"
-		return try super.authorizeURLWithRedirect(redirect, scope: scope, params: prms)
+	public override class var responseType: String? {
+		return "token"
 	}
 	
 	public override func handleRedirectURL(redirect: NSURL) {
