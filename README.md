@@ -31,8 +31,8 @@ If you need to provide additional parameters to the authorize URL take a look at
 let settings = [
     "client_id": "my_swift_app",
     "client_secret": "C7447242-A0CF-47C5-BAC7-B38BA91970A9",
-    "authorize_uri": "https://authorize.smartplatforms.org/authorize",
-    "token_uri": "https://authorize.smartplatforms.org/token",
+    "authorize_uri": "https://authorize.smarthealthit.org/authorize",
+    "token_uri": "https://authorize.smarthealthit.org/token",   // code grant only!
     "scope": "profile email",
     "redirect_uris": ["myapp://oauth/callback"],   // don't forget to register this scheme
     "keychain": false,     // if you DON'T want keychain integration
@@ -121,6 +121,19 @@ It is safe to always call `oauth2.authorize()` before performing a request.
 You can also perform the authorization before the first request after your app became active again.
 Or you can always intercept 401s in your requests and call authorize again before re-attempting the request.
 
+### 7. Logout
+
+If you're storing tokens to the keychain, you can call `forgetTokens()` to throw them away.
+
+**However** your user is likely still logged in to the website, so on the next `authorize()` call, the web view may appear and immediately disappear.
+When using the built-in web view on iOS 8, one can use the following snippet to throw away any cookies the app created.
+With the newer `SFSafariViewController`, or logins performed in the browser, it's probably best to directly **open the logout page** so the user sees the logout happen.
+
+```swift
+let storage = NSHTTPCookieStorage.sharedHTTPCookieStorage()
+storage.cookies?.forEach() { storage.deleteCookie($0) }
+```
+
 
 Manually Performing Authentication
 ----------------------------------
@@ -171,6 +184,14 @@ func application(application: UIApplication!,
 **OS X**
 
 See the [OAuth2 Sample App][sample]'s AppDelegate class on how to receive the callback URL in your Mac app.
+If the authentication displays the code to the user, e.g. with Google's `urn:ietf:wg:oauth:2.0:oob` callback URL, you can retrieve the code from the user's pasteboard and continue authorization with:
+
+```swift
+let pboard = NSPasteboard.generalPasteboard()
+if let pasted = pboard.stringForType(NSPasteboardTypeString) {
+    oauth2.exchangeCodeForToken(pasted)
+}
+```
 
 
 Flows
@@ -186,6 +207,7 @@ This flow is typically used by applications that can guard their secrets, like s
 In case an application cannot guard its secret, such as a distributed iOS app, you would use the _implicit grant_ or, in some cases, still a _code grant_ but omitting the client secret.
 It has however become common practice to still use code grants from mobile devices, including a client secret.
 This class fully supports those flows, it automatically creates a “Basic” Authorization header if the client has a client secret.
+If the site requires client credentials in the request body, set `secretInBody` to true, as explained below.
 
 #### Implicit Grant
 
@@ -199,6 +221,11 @@ Would be nice to add another code example here, but it's pretty much the same as
 A 2-legged flow that lets an app authenticate itself via its client id and secret.
 Instantiate `OAuth2ClientCredentials`, as usual supplying `client_id` but also a `client_secret` – plus your other configurations – in the settings dict, and you should be good to go.
 
+#### Username and Password
+
+The _Resource Owner Password Credentials Grant_ is supported with the `OAuth2PasswordGrant` subclass.
+Create an instance as shown above, set its `username` and `password` properties, then call `authorize()`.
+
 
 ### Site-Specific Peculiarities
 
@@ -207,35 +234,84 @@ The framework deals with those deviations by creating site-specific subclasses.
 
 - **Facebook**: `OAuth2CodeGrantFacebook` to deal with the [URL-query-style response](https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow/v2.2) instead of the expected JSON dictionary.
 - **GitHub**: `OAuth2CodeGrant` automatically puts the client-key/client-secret into an “Authorization: Basic” header.
-    GitHub however needs those two in the POSTed body; you need to set the `secretInBody` setting to true, either directly in code or via the `secret_in_body` key in the settings dictionary.
+    GitHub however needs those two in the POSTed body; you need to set the `authConfig.secretInBody` setting to true, either directly in code or via the `secret_in_body` key in the settings dictionary.
 - **Reddit**: `OAuth2CodeGrant` automatically adds a _Basic_ authorization header when a client secret is set.
     This means that you **must** specify a client_secret; if there is none (like for [Reddit](https://github.com/reddit/reddit/wiki/OAuth2#token-retrieval-code-flow)) specify the empty string.
     There is a [RedditLoader](https://github.com/p2/OAuth2App/blob/master/OAuth2App/RedditLoader.swift) example in the [OAuth2App sample app][sample] for a basic usage example.
 - **Google**: If you authorize against Google with a `OAuth2CodeGrant`, the built-in iOS web view will intercept the `http://localhost` as well as the `urn:ietf:wg:oauth:2.0:oob` (with or without `:auto`) callbacks.
+- **LinkedIn**: Since I don't see a way to set any other redirect-url other than ones starting with `https`, this framework can only be used against LinkedIn via built-in web-view, disabling `SFSafariWebViewController`.
+
+
+Usage with Alamofire
+--------------------
+
+Here's an extension that can be used with Alamofire:
+
+```swift
+import Alamofire
+
+extension OAuth2 {
+    public func request(
+        method: Alamofire.Method,
+        _ URLString: URLStringConvertible,
+        parameters: [String: AnyObject]? = nil,
+        encoding: Alamofire.ParameterEncoding = .URL,
+        headers: [String: String]? = nil)
+        -> Alamofire.Request
+    {
+        var hdrs = headers
+        hdrs["Authorization"] = "Bearer \(accessToken)"
+        return Alamofire.request(
+            method,
+            URLString,
+            parameters: parameters,
+            encoding: encoding,
+            headers: hdrs)
+    }
+}
+```
+
+You can now use the handle to your `OAuth2` instance instead of using _Alamofire_ directly to make requests that are signed.
+Of course this will only work once you have an access token.
+You can use `hasUnexpiredAccessToken()` to check for one or just always call `authorize()` first; it will call your callback immediately if you have a token.
+
+```swift
+oauth2.request(.GET, "http://httpbin.org/get")
+```
 
 
 Dynamic Client Registration
 ---------------------------
 
-There is preliminary support for dynamic client registration.
-The `registerIfNeeded()` immediately calls the callback if there are client credentials in the keychain, otherwise a registration is attempted.
+There is support for [dynamic client registration](https://tools.ietf.org/html/rfc7591).
+If during setup `registration_url` is set but `client_id` is not, the `authorize()` call automatically attempts to register the client before continuing to the actual authorization.
+Client credentials returned from registration are stored to the keychain.
 
-> **Note**: currently only user-interaction-free registrations are supported.
+The `OAuth2DynReg` class is responsible for handling client registration.
+You can use its `registerClient(client:callback:)` method manually if you need to.
+Registration parameters are taken from the client's configuration.
 
-```
+```swift
 let oauth2 = OAuth2...()
-let dynreg = OAuth2DynReg(settings: [
-    "client_name": "<# app-name #>",
-    "redirect_uris": ["<# redirect-uri #>"],
-    "registration_uri": "<# registration-url-string #>,
-])
-dynreg.registerIfNeeded() { json, error in
-    if let id = dynreg.clientId where !id.isEmpty {
-        oauth2.clientId = id
-        oauth2.clientSecret = dynreg.clientSecret
+oauth2.registerClientIfNeeded() { error in
+    if let error = error {
+        // registration failed
     }
     else {
-        // failed to register
+        // client was registered
+    }
+}
+```
+
+```swift
+let oauth2 = OAuth2...()
+let dynreg = OAuth2DynReg()
+dynreg.registerClient(oauth2) { params, error in
+    if let error = error {
+        // registration failed
+    }
+    else {
+        // client was registered with `params`
     }
 }
 ```
@@ -246,15 +322,16 @@ Keychain
 
 This framework can transparently use the iOS and OS X keychain.
 It is controlled by the `useKeychain` property, which can be disabled during initialization with the "keychain" setting.
-Since this is **enabled by default**, if you do _not_ turn it off during initialization, the keychain will be queried for tokens related to the authorization URL.
+Since this is **enabled by default**, if you do _not_ turn it off during initialization, the keychain will be queried for tokens and client credentials related to the authorization URL.
 If you turn it off _after_ initialization, the keychain will be queried for existing tokens, but new tokens will not be written to the keychain.
 
 If you want to delete the tokens from keychain, i.e. **log the user out** completely, call `forgetTokens()`.
+If you have dynamically registered your client and want to start anew, you can call `forgetClient()`.
 
 Ideally, access tokens get delivered with an "expires_in" parameter that tells you how long the token is valid.
 If it is missing the framework will still use those tokens if one is found in the keychain and not re-perform the OAuth dance.
 You will need to intercept 401s and re-authenticate if an access token has expired but the framework has still pulled it from the keychain.
-This behavior can be turned off by supplying "token_assume_unexpired": false in settings or setting `accessTokenAssumeUnexpired` to false.
+This behavior can be turned off by supplying "token_assume_unexpired": false in settings or setting `clientConfig.accessTokenAssumeUnexpired` to false.
 
 
 Advanced Settings
@@ -316,8 +393,7 @@ These three steps are needed to:
 
 > NOTE that as of Xcode 6.2, the "embed" step happens in the "General" tab.
 > You may want to perform step 2 and 3 from the "General" tab.
-> Also make sure you select the framework for the platform (OS X vs. iOS).
-> This is currently a bit tricky since Xcode shows both as _OAuth2.framework_; I've filed a bug report with Apple so that it also shows the target name, fingers crossed.
+> Also make sure you select the framework for the platform, as of Xcode 7 this is visible behind _OAuth2.framework_.
 
 
 License

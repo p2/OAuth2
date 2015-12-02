@@ -21,203 +21,78 @@
 import Foundation
 
 
+public enum OAuth2EndpointAuthMethod: String {
+	case None = "none"
+	case ClientSecretPost = "client_secret_post"
+	case ClientSecretBasic = "client_secret_basic"
+}
+
+
 /**
 	Class to handle OAuth2 Dynamic Client Registration.
 
-	This class is WiP and not complete. For the full spec see https://tools.ietf.org/html/draft-ietf-oauth-dyn-reg-30
+	This class is WiP and not complete. For the full spec see https://tools.ietf.org/html/rfc7591
  */
-public class OAuth2DynReg: OAuth2Base
-{
-	/// The URL to register against.
-	public final let registrationURL: NSURL
-	
-	/// The name of the App to advertise during registration.
-	public final var clientName: String?
-	
-	/// Client id/key.
-	public final var clientId: String?
-	
-	/// The client secret.
-	public final var clientSecret: String?
-	
-	/// The redirect-URIs to register.
-	public final var redirectURIs: [String]?
-	
-	/// Where a logo identifying the app can be found.
-	public final var logo: String?
+public class OAuth2DynReg: OAuth2Base {
 	
 	/// Additional HTTP headers to supply during registration.
-	public var extraHeaders: [String: String]?
+	public var extraHeaders: OAuth2StringDict?
 	
+	/// Whether registration should also allow refresh tokens. Defaults to true.
+	public var allowRefreshTokens = true
 	
-	/**
-	Designated initializer.
-	
-	The following settings keys are currently supported:
-	
-	- client_name (string)
-	- registration_uri (URL-string)
-	- redirect_uris (list of URL-strings)
-	- logo_uri (URL-string)
-	
-	- keychain (bool, true by default, applies to using the system keychain)
-	- verbose (bool, false by default, applies to client logging)
-	
-	NOTE that you **must** supply at least `registration_uri` upon initialization. If you forget, a _fatalError_ will be raised.
-	*/
-	override public init(settings: OAuth2JSON) {
-		if let client = settings["client_name"] as? String {
-			clientName = client
-		}
-		if let redirect = settings["redirect_uris"] as? [String] {
-			redirectURIs = redirect
-		}
-		if let logoURL = settings["logo_uri"] as? String {
-			logo = logoURL
-		}
-		
-		// registration URL
-		var aURL: NSURL?
-		if let reg = settings["registration_uri"] as? String, let url = NSURL(string: reg) {
-			aURL = url
-		}
-		else {
-			fatalError("You must provide a valid “registration_uri” in the settings dictionary")
-		}
-		registrationURL = aURL!
-		super.init(settings: settings)
-	}
-	
-	
-	// MARK: - Keychain
-	
-	public override func keychainServiceName() -> String {
-		return registrationURL.description
-	}
-	
-	public override func keychainKeyName() -> String {
-		return "clientCredentials"
-	}
-	
-	override func updateFromKeychainItems(items: [String : NSCoding]) {
-		if let id = items["id"] as? String {
-			clientId = id
-		}
-		if let secret = items["secret"] as? String {
-			clientSecret = secret
-		}
-	}
-	
-	override func storableKeychainItems() -> [String: NSCoding]? {
-		var dict = [String: NSCoding]()
-		if let id = clientId {
-			dict["id"] = id
-		}
-		if let secret = clientSecret {
-			dict["secret"] = secret
-		}
-		return dict.isEmpty ? nil : dict
-	}
-	
-	/** Unsets the client credentials and deletes them from the keychain. */
-	public func forgetClient() {
-		logIfVerbose("Forgetting client credentials and removing them from keychain")
-		let keychain = Keychain(serviceName: keychainServiceName())
-		let key = ArchiveKey(keyName: keychainKeyName())
-		if let error = keychain.remove(key) {
-			NSLog("Failed to delete tokens from keychain: \(error.localizedDescription)")
-		}
-		
-		clientId = nil
-		clientSecret = nil
+	public init() {
+		super.init(settings: OAuth2JSON())
 	}
 	
 	
 	// MARK: - Registration
 	
 	/**
-	Attempts to register for client credentials **unless** the given client (1st priority) or the receiver (2nd priority) already have a
-	client id. If `onlyIfNeeded` is false will try to register anyway.
+	Register the given client.
 	
-	- parameter client: The OAuth2 client to update credentials on.
-	- parameter onlyIfNeeded: If set to false will register even when the receiver and the client already have a client-id
-	- parameter callback: The callback to call when done. Any combination of json and error is possible (in regards to nil-ness)
-	*/
-	public func registerAndUpdateClient(client: OAuth2, onlyIfNeeded: Bool = true, callback: ((json: OAuth2JSON?, error: NSError?) -> Void)) {
-		clientId = client.clientId.isEmpty ? clientId : client.clientId
-		clientSecret = client.clientSecret ?? clientSecret
-		
-		// update the client in the callback
-		let cb: ((json: OAuth2JSON?, error: NSError?) -> Void) = { json, error in
-			if let id = self.clientId {
-				client.clientId = id
-			}
-			if let secret = self.clientSecret {
-				client.clientSecret = secret
-			}
-			callback(json: json, error: error)
-		}
-		
-		if onlyIfNeeded {
-			registerIfNeeded(cb)
-		}
-		else {
-			register(cb)
-		}
-	}
-	
-	/**
-	Attempts to register the client **unless** the given client (1st priority) or the receiver (2nd priority) already have a client id.
-	
-	- parameter callback: The callback to call when done. Any combination of json and error is possible (in regards to nil-ness)
-	*/
-	public func registerIfNeeded(callback: ((json: OAuth2JSON?, error: NSError?) -> Void)) {
-		if nil == clientId {
-			logIfVerbose("No client id, will need to register")
-			register(callback)
-		}
-		else {
-			logIfVerbose("Already have a client id, no need to register")
-			callback(json: nil, error: nil)
-		}
-	}
-	
-	/**
-	Register using the receiver's current setup.
-	
+	- parameter client: The client to register and update with client credentials, when successful
 	- parameter callback: The callback to call when done with the registration response (JSON) and/or an error
 	*/
-	public func register(callback: ((json: OAuth2JSON?, error: NSError?) -> Void)) {
-		let req = registrationRequest()
-		logIfVerbose("Registering client at \(req.URL!)")
-		
-		performRequest(req) { data, status, error in
-			var myError = error
-			if let data = data, let json = self.parseRegistrationResponse(data, error: &myError) {
-				if status < 400 && nil == json["error"] {
-					self.didRegisterWith(json)
-					callback(json: json, error: nil)
-					return
-				}
-				
-				myError = self.errorForErrorResponse(json)
-			}
+	public func registerClient(client: OAuth2, callback: ((json: OAuth2JSON?, error: ErrorType?) -> Void)) {
+		do {
+			let req = try registrationRequest(client)
+			logIfVerbose("Registering client at \(req.URL!) with scopes “\(client.scope ?? "(none)")”")
 			
-			let err = myError ?? genOAuth2Error("Unknown error during client registration")
-			self.logIfVerbose("Registration failed: \(err.localizedDescription)")
-			callback(json: nil, error: err)
+			performRequest(req) { data, status, error in
+				if let data = data {
+					do {
+						let dict = try self.parseRegistrationResponse(data)
+						try self.assureNoErrorInResponse(dict)
+						if status >= 400 {
+							self.logIfVerbose("Registration failed with \(status)")
+						}
+						else {
+							self.didRegisterWith(dict, client: client)
+						}
+						callback(json: dict, error: nil)
+					}
+					catch let err {
+						callback(json: nil, error: err)
+					}
+				}
+				else {
+					callback(json: nil, error: error ?? OAuth2Error.NoDataInResponse)
+				}
+			}
+		}
+		catch let error {
+			callback(json: nil, error: error)
 		}
 	}
 	
+	
+	// MARK: - Registration Request
+	
 	/** Returns a mutable URL request, set up to be used for registration: POST method, JSON body data. */
-	public func registrationRequest() -> NSMutableURLRequest {
-		var body: NSData? = nil
-		do {
-			body = try NSJSONSerialization.dataWithJSONObject(registrationBody(), options: [])
-		}
-		catch {}
-		if nil == body {
-			logIfVerbose("WARNING: the registration body is empty, which will likely cause registration to fail")
+	public func registrationRequest(client: OAuth2) throws -> NSMutableURLRequest {
+		guard let registrationURL = client.clientConfig.registrationURL else {
+			throw OAuth2Error.NoRegistrationURL
 		}
 		
 		let req = NSMutableURLRequest(URL: registrationURL)
@@ -229,51 +104,66 @@ public class OAuth2DynReg: OAuth2Base
 				req.setValue(val, forHTTPHeaderField: key)
 			}
 		}
-		req.HTTPBody = body
+		let body = registrationBody(client)
+		client.logIfVerbose("Registration parameters: \(body)")
+		req.HTTPBody = try NSJSONSerialization.dataWithJSONObject(body, options: [])
 		
 		return req
 	}
 	
 	/** The body data to use for registration. */
-	public func registrationBody() -> OAuth2JSON {
-		var dict = [String: NSCoding]()
-		if let client = clientName {
+	public func registrationBody(client: OAuth2) -> OAuth2JSON {
+		var dict = OAuth2JSON()
+		if let client = client.clientConfig.clientName {
 			dict["client_name"] = client
 		}
-		if let redirect = redirectURIs {
+		if let redirect = client.clientConfig.redirectURLs {
 			dict["redirect_uris"] = redirect
 		}
-		if let logoURL = logo {
+		if let logoURL = client.clientConfig.logoURL?.absoluteString {
 			dict["logo_uri"] = logoURL
 		}
-		// TODO: "grant_types"
+		if let scope = client.scope {
+			dict["scope"] = scope
+		}
+		
+		// grant types, response types and auth method
+		var grant_types = [client.dynamicType.grantType]
+		if allowRefreshTokens {
+			grant_types.append("refresh_token")
+		}
+		dict["grant_types"] = grant_types
+		if let responseType = client.dynamicType.responseType {
+			dict["response_types"] = [responseType]
+		}
+		dict["token_endpoint_auth_method"] = client.clientConfig.endpointAuthMethod.rawValue
 		return dict
 	}
 	
-	public func parseRegistrationResponse(data: NSData, error: NSErrorPointer) -> OAuth2JSON? {
-		do {
-			return try NSJSONSerialization.JSONObjectWithData(data, options: []) as? OAuth2JSON
-		}
-		catch let error {
-			logIfVerbose("Failed to parse registration response data: \((error as NSError).localizedDescription)")
-		}
-		return nil
+	public func parseRegistrationResponse(data: NSData) throws -> OAuth2JSON {
+		return try parseJSON(data)
 	}
 	
-	public func didRegisterWith(json: OAuth2JSON) {
+	public func didRegisterWith(json: OAuth2JSON, client: OAuth2) {
 		if let id = json["client_id"] as? String {
-			clientId = id
-			logIfVerbose("Did register with client-id “\(id)”")
+			client.clientId = id
+			client.logIfVerbose("Did register with client-id “\(id)”, params: \(json)")
 		}
 		else {
-			logIfVerbose("Did register but did not get a client-id. Not good.")
+			client.logIfVerbose("Did register but did not get a client-id. Params: \(json)")
 		}
 		if let secret = json["client_secret"] as? String {
-			clientSecret = secret
-			// TODO: look at "client_secret_expires_at"
+			client.clientSecret = secret
+			if let expires = json["client_secret_expires_at"] as? Double where 0 != expires {
+				client.logIfVerbose("Client secret will expire on \(NSDate(timeIntervalSince1970: expires))")
+			}
 		}
-		if useKeychain && nil != clientId {
-			storeToKeychain()
+		if let methodName = json["token_endpoint_auth_method"] as? String, let method = OAuth2EndpointAuthMethod(rawValue: methodName) {
+			client.clientConfig.endpointAuthMethod = method
+		}
+		
+		if useKeychain {
+			client.storeClientToKeychain()
 		}
 	}
 }

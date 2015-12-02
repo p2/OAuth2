@@ -34,16 +34,9 @@ public class OAuth2CodeGrantFacebook: OAuth2CodeGrant
 	override func parseAccessTokenResponse(data: NSData) throws -> OAuth2JSON {
 		if let str = NSString(data: data, encoding: NSUTF8StringEncoding) as? String {
 			let query = self.dynamicType.paramsFromQuery(str)
-			if nil != query["error"] {
-				throw errorForErrorResponse(query)
-			}
-			
-			if let access = query["access_token"] {
-				accessToken = access
-				return ["access_token": access]
-			}
+			return try parseAccessTokenResponse(query)
 		}
-		throw genOAuth2Error("Invalid response data from token request")
+		throw OAuth2Error.ResponseError("Invalid response data from token request")
 	}
 }
 

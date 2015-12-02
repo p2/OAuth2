@@ -24,57 +24,43 @@ import Foundation
 /**
     Class to handle OAuth2 requests for public clients, such as distributed Mac/iOS Apps.
  */
-public class OAuth2ImplicitGrant: OAuth2
-{
-	public override func authorizeURLWithRedirect(redirect: String?, scope: String?, params: [String: String]?) throws -> NSURL {
-		return try authorizeURLWithBase(authURL, redirect: redirect, scope: scope, responseType: "token", params: params)
+public class OAuth2ImplicitGrant: OAuth2 {
+	
+	public override class var grantType: String {
+		return "implicit"
+	}
+	
+	public override class var responseType: String? {
+		return "token"
 	}
 	
 	public override func handleRedirectURL(redirect: NSURL) {
 		logIfVerbose("Handling redirect URL \(redirect.description)")
 		
-		var error: NSError?
-		let comp = NSURLComponents(URL: redirect, resolvingAgainstBaseURL: true)
-		
 		// token should be in the URL fragment
+		let comp = NSURLComponents(URL: redirect, resolvingAgainstBaseURL: true)
 		if let fragment = comp?.percentEncodedFragment where fragment.characters.count > 0 {
 			let params = OAuth2ImplicitGrant.paramsFromQuery(fragment)
-			if let token = params["access_token"] where !token.isEmpty {
-				if let tokType = params["token_type"] {
-					if "bearer" == tokType.lowercaseString {
-						
-						// got a "bearer" token, use it if state checks out
-						if context.matchesState(params["state"]) {
-							accessToken = token
-							accessTokenExpiry = nil
-							if let expiresStr = params["expires_in"], let expires = NSTimeInterval(expiresStr) {
-								accessTokenExpiry = NSDate(timeIntervalSinceNow: expires)
-							}
-							context.resetState()
-							logIfVerbose("Successfully extracted access token")
-							didAuthorize(params)
-							return
-						}
-						
-						error = genOAuth2Error("Invalid state, will not use the token", .InvalidState)
-					}
-					else {
-						error = genOAuth2Error("Only \"bearer\" token is supported, but received \"\(tokType)\"", .Unsupported)
-					}
-				}
-				else {
-					error = genOAuth2Error("No token type received, will not use the token", .PrerequisiteFailed)
-				}
+			do {
+				let dict = try parseAccessTokenResponse(params)
+				logIfVerbose("Successfully extracted access token")
+				didAuthorize(dict)
 			}
-			else {
-				error = errorForErrorResponse(params)
+			catch let err {
+				didFail(err)
 			}
 		}
 		else {
-			error = genOAuth2Error("Invalid redirect URL: \(redirect)", .PrerequisiteFailed)
+			didFail(OAuth2Error.InvalidRedirectURL(redirect.absoluteString))
 		}
-		
-		didFail(error)
+	}
+	
+	override func assureMatchesState(params: OAuth2JSON) throws {
+		try super.assureMatchesState(params)
+		if !context.matchesState(params["state"] as? String) {
+			throw OAuth2Error.InvalidState
+		}
+		context.resetState()
 	}
 }
 
