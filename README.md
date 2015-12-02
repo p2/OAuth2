@@ -121,6 +121,19 @@ It is safe to always call `oauth2.authorize()` before performing a request.
 You can also perform the authorization before the first request after your app became active again.
 Or you can always intercept 401s in your requests and call authorize again before re-attempting the request.
 
+### 7. Logout
+
+If you're storing tokens to the keychain, you can call `forgetTokens()` to throw them away.
+
+**However** your user is likely still logged in to the website, so on the next `authorize()` call, the web view may appear and immediately disappear.
+When using the built-in web view on iOS 8, one can use the following snippet to throw away any cookies the app created.
+With the newer `SFSafariViewController`, or logins performed in the browser, it's probably best to directly **open the logout page** so the user sees the logout happen.
+
+```swift
+let storage = NSHTTPCookieStorage.sharedHTTPCookieStorage()
+storage.cookies?.forEach() { storage.deleteCookie($0) }
+```
+
 
 Manually Performing Authentication
 ----------------------------------
