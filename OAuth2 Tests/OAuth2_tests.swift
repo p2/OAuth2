@@ -68,7 +68,7 @@ class OAuth2Tests: XCTestCase {
 	
 	func testTokenURL() {
 		let oa = genericOAuth2()
-		let auth = try! oa.authorizeURLWithParams(nil, asTokenURL: true)
+		let auth = try! oa.authorizeURLWithParams([:], asTokenURL: true)
 		
 		let comp = NSURLComponents(URL: auth, resolvingAgainstBaseURL: true)!
 		XCTAssertEqual("https", comp.scheme!, "Need correct scheme")

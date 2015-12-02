@@ -56,7 +56,8 @@ public class OAuth2CodeGrant: OAuth2 {
 	Generate the URL to be used for the token request from known instance variables and supplied parameters.
 	
 	This will set "grant_type" to "authorization_code", add the "code" provided and forward to `authorizeURLWithBase()` to fill the
-	remaining parameters.
+	remaining parameters. The "client_id" is only added if there is no secret (public client) or if the request body is used for id and
+	secret.
 	
 	- parameter code: The code you want to exchange for an access token
 	- parameter params: Optional additional params to add as URL parameters
@@ -70,8 +71,14 @@ public class OAuth2CodeGrant: OAuth2 {
 		urlParams["code"] = code
 		urlParams["grant_type"] = self.dynamicType.grantType
 		urlParams["redirect_uri"] = redirect
-		if let secret = clientConfig.clientSecret where authConfig.secretInBody {
-			urlParams["client_secret"] = secret
+		if let secret = clientConfig.clientSecret {
+			if authConfig.secretInBody {
+				urlParams["client_secret"] = secret
+				urlParams["client_id"] = clientConfig.clientId
+			}
+		}
+		else {
+			urlParams["client_id"] = clientConfig.clientId
 		}
 		return try authorizeURLWithParams(urlParams, asTokenURL: true)
 	}
@@ -110,6 +117,7 @@ public class OAuth2CodeGrant: OAuth2 {
 		do {
 			let post = try tokenRequestWithCode(code)
 			logIfVerbose("Exchanging code \(code) for access token at \(post.URL!)")
+			post.oauth2_print()
 			
 			performRequest(post) { data, status, error in
 				if let data = data {

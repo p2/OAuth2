@@ -272,20 +272,17 @@ public class OAuth2: OAuth2Base {
 	- parameter asTokenURL:   Whether this will go to the token_uri endpoint, not the authorize_uri
 	- returns:                NSURL to be used to start or continue the OAuth dance
 	*/
-	func authorizeURLWithParams(params: OAuth2StringDict?, asTokenURL: Bool = false) throws -> NSURL {
-		guard let clientId = clientId where !clientId.isEmpty else {
-			throw OAuth2Error.NoClientId
-		}
+	func authorizeURLWithParams(params: OAuth2StringDict, asTokenURL: Bool = false) throws -> NSURL {
 		
 		// compose URL base
 		let base = asTokenURL ? (clientConfig.tokenURL ?? clientConfig.authorizeURL) : clientConfig.authorizeURL
 		let comp = NSURLComponents(URL: base, resolvingAgainstBaseURL: true)
-		assert(nil != comp && "https" == comp!.scheme, "You MUST use HTTPS")
+		if nil == comp || "https" != comp!.scheme {
+			throw OAuth2Error.NotUsingTLS
+		}
 		
 		// compose the URL query component
-		var prms = params ?? OAuth2StringDict()
-		prms["client_id"] = clientId
-		comp!.percentEncodedQuery = OAuth2.queryStringFor(prms)
+		comp!.percentEncodedQuery = OAuth2.queryStringFor(params)
 		
 		if let final = comp!.URL {
 			logIfVerbose("Authorizing against \(final.description)")
@@ -307,8 +304,8 @@ public class OAuth2: OAuth2Base {
 	/**
 	Convenience method to be overridden by and used from subclasses.
 	
-	- parameter redirect:  The redirect URI string to supply. If it is nil, the first value of the settings'
-	`redirect_uris` entries is used. Must be present in the end!
+	- parameter redirect:  The redirect URI string to supply. If it is nil, the first value of the settings' `redirect_uris` entries is
+	                       used. Must be present in the end!
 	- parameter scope:     The scope to request
 	- parameter params:    Any additional parameters as dictionary with string keys and values that will be added to the
 	query part
@@ -318,8 +315,12 @@ public class OAuth2: OAuth2Base {
 		guard let redirect = (redirect ?? clientConfig.redirect) else {
 			throw OAuth2Error.NoRedirectURL
 		}
+		guard let clientId = clientId where !clientId.isEmpty else {
+			throw OAuth2Error.NoClientId
+		}
 		var prms = params ?? OAuth2StringDict()
 		prms["redirect_uri"] = redirect
+		prms["client_id"] = clientId
 		prms["state"] = context.state
 		if let scope = scope ?? clientConfig.scope {
 			prms["scope"] = scope

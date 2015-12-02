@@ -50,6 +50,7 @@ public enum OAuth2Error: ErrorType, CustomStringConvertible, Equatable {
 	case JSONParserError
 	case Base64EncodeError
 	
+	case NotUsingTLS
 	case InvalidRequest
 	case UnauthorizedClient
 	case AccessDenied
@@ -124,8 +125,8 @@ public enum OAuth2Error: ErrorType, CustomStringConvertible, Equatable {
 		case Base64EncodeError:
 			return "Failed to base-64 encode the given string"
 		
-		case .ResponseError(let message):
-			return message
+		case .NotUsingTLS:
+			return "You MUST use HTTPS/SSL/TLS"
 		case .InvalidRequest:
 			return "The request is missing a required parameter, includes an invalid parameter value, includes a parameter more than once, or is otherwise malformed."
 		case .UnauthorizedClient:
@@ -140,6 +141,8 @@ public enum OAuth2Error: ErrorType, CustomStringConvertible, Equatable {
 			return "The authorization server encountered an unexpected condition that prevented it from fulfilling the request."
 		case .TemporarilyUnavailable:
 			return "The authorization server is currently unable to handle the request due to a temporary overloading or maintenance of the server."
+		case .ResponseError(let message):
+			return message
 		}
 	}
 }

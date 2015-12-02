@@ -120,7 +120,7 @@ public class OAuth2DynReg: OAuth2Base {
 		if let redirect = client.clientConfig.redirectURLs {
 			dict["redirect_uris"] = redirect
 		}
-		if let logoURL = client.clientConfig.logoURL {
+		if let logoURL = client.clientConfig.logoURL?.absoluteString {
 			dict["logo_uri"] = logoURL
 		}
 		if let scope = client.scope {

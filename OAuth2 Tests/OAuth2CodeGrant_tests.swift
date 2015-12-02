@@ -43,6 +43,37 @@ class OAuth2CodeGrantTests: XCTestCase
 		XCTAssertEqual(oauth.tokenURL!, NSURL(string: "https://token.ful.io")!, "Must init `token_uri`")
 	}
 	
+	func testNotTLS() {
+		let oauth = OAuth2CodeGrant(settings: [
+			"client_id": "abc",
+			"client_secret": "xyz",
+			"authorize_uri": "http://auth.ful.io",
+			"token_uri": "http://token.ful.io",
+			"keychain": false,
+		])
+		
+		XCTAssertNotNil(oauth.authURL, "Must init `authorize_uri`")
+		do {
+			try oauth.authorizeURLWithRedirect("oauth2://callback", scope: nil, params: nil)
+			XCTAssertTrue(false, "Should no longer be here")
+		}
+		catch OAuth2Error.NotUsingTLS {
+		}
+		catch let error {
+			XCTAssertNil(error, "Should not be catching")
+		}
+		
+		do {
+			try oauth.tokenURLWithCode("pp")
+			XCTAssertTrue(false, "Should no longer be here")
+		}
+		catch OAuth2Error.NotUsingTLS {
+		}
+		catch let error {
+			XCTAssertNil(error, "Should not be catching")
+		}
+	}
+	
 	func testAuthorizeURI() {
 		let oauth = OAuth2CodeGrant(settings: [
 			"client_id": "abc",
@@ -61,14 +92,11 @@ class OAuth2CodeGrantTests: XCTestCase
 		XCTAssertEqual(query["response_type"]!, "code", "Expecting correct `response_type`")
 		XCTAssertEqual(query["redirect_uri"]!, "oauth2://callback", "Expecting correct `redirect_uri`")
 		XCTAssertTrue(8 == (query["state"]!).characters.count, "Expecting an auto-generated UUID for `state`")
-		
-		// TODO: test for non-https URLs (must raise)
 	}
 	
 	func testTokenRequest() {
 		let oauth = OAuth2CodeGrant(settings: [
 			"client_id": "abc",
-			"client_secret": "xyz",
 			"authorize_uri": "https://auth.ful.io",
 			"token_uri": "https://token.ful.io",
 			"keychain": false,
@@ -102,6 +130,48 @@ class OAuth2CodeGrantTests: XCTestCase
 		XCTAssertEqual(query["grant_type"]!, "authorization_code", "Expecting correct `grant_type`")
 		XCTAssertEqual(query["redirect_uri"]!, "oauth2://callback", "Expecting correct `redirect_uri`")
 		XCTAssertNil(query["state"], "`state` must be empty")
+	}
+	
+	func testTokenRequestWithSecret() {
+		let oauth = OAuth2CodeGrant(settings: [
+			"client_id": "abc",
+			"client_secret": "xyz",
+			"authorize_uri": "https://auth.ful.io",
+			"token_uri": "https://token.ful.io",
+			"keychain": false,
+		])
+		oauth.redirect = "oauth2://callback"
+		oauth.context.redirectURL = "oauth2://callback"
+		
+		// not in body
+		let req = try! oauth.tokenRequestWithCode("pp")
+		let comp = NSURLComponents(URL: req.URL!, resolvingAgainstBaseURL: true)!
+		XCTAssertEqual(comp.host!, "token.ful.io", "Correct host")
+		
+		let body = NSString(data: req.HTTPBody!, encoding: NSUTF8StringEncoding) as? String
+		let query = OAuth2CodeGrant.paramsFromQuery(body!)
+		XCTAssertNil(query["client_id"], "No `client_id` in body")
+		XCTAssertNil(query["client_secret"], "Must not have `client_secret`")
+		XCTAssertEqual(query["code"]!, "pp", "Expecting correct `code`")
+		XCTAssertEqual(query["grant_type"]!, "authorization_code", "Expecting correct `grant_type`")
+		XCTAssertEqual(query["redirect_uri"]!, "oauth2://callback", "Expecting correct `redirect_uri`")
+		XCTAssertNil(query["state"], "`state` must be empty")
+		
+		// in body
+		oauth.authConfig.secretInBody = true
+		
+		let req2 = try! oauth.tokenRequestWithCode("pp")
+		let comp2 = NSURLComponents(URL: req2.URL!, resolvingAgainstBaseURL: true)!
+		XCTAssertEqual(comp2.host!, "token.ful.io", "Correct host")
+		
+		let body2 = NSString(data: req2.HTTPBody!, encoding: NSUTF8StringEncoding) as? String
+		let query2 = OAuth2CodeGrant.paramsFromQuery(body2!)
+		XCTAssertEqual(query2["client_id"]!, "abc", "Expecting correct `client_id`")
+		XCTAssertEqual(query2["client_secret"]!, "xyz", "Expecting correct `client_secret`")
+		XCTAssertEqual(query2["code"]!, "pp", "Expecting correct `code`")
+		XCTAssertEqual(query2["grant_type"]!, "authorization_code", "Expecting correct `grant_type`")
+		XCTAssertEqual(query2["redirect_uri"]!, "oauth2://callback", "Expecting correct `redirect_uri`")
+		XCTAssertNil(query2["state"], "`state` must be empty")
 	}
 	
 	func testTokenRequestAgainstAuthURL() {
