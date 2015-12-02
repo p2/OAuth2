@@ -117,7 +117,6 @@ public class OAuth2CodeGrant: OAuth2 {
 		do {
 			let post = try tokenRequestWithCode(code)
 			logIfVerbose("Exchanging code \(code) for access token at \(post.URL!)")
-			post.oauth2_print()
 			
 			performRequest(post) { data, status, error in
 				if let data = data {
