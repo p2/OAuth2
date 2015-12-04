@@ -98,38 +98,36 @@ public class OAuth2CodeGrant: OAuth2 {
 	Takes the received code and exchanges it for a token.
 	*/
 	public func exchangeCodeForToken(code: String) {
-		if (code.isEmpty) {
-			didFail(OAuth2Error.PrerequisiteFailed("I don't have a code to exchange, let the user authorize first"))
-			return;
-		}
-		
 		do {
+			guard !code.isEmpty else {
+				throw OAuth2Error.PrerequisiteFailed("I don't have a code to exchange, let the user authorize first")
+			}
+			
 			let post = try tokenRequestWithCode(code)
 			logIfVerbose("Exchanging code \(code) for access token at \(post.URL!)")
 			
 			performRequest(post) { data, status, error in
-				if let data = data {
-					do {
-						let params = try self.parseAccessTokenResponse(data)
-						if status < 400 {
-							self.logIfVerbose("Did exchange code for access [\(nil != self.clientConfig.accessToken)] and refresh [\(nil != self.clientConfig.refreshToken)] tokens")
-							self.didAuthorize(params)
-						}
-						else {
-							throw OAuth2Error.Generic("\(status)")
-						}
+				do {
+					guard let data = data else {
+						throw error ?? OAuth2Error.NoDataInResponse
 					}
-					catch let err {
-						self.didFail(err)
+					
+					let params = try self.parseAccessTokenResponse(data)
+					if status < 400 {
+						self.logIfVerbose("Did exchange code for access [\(nil != self.clientConfig.accessToken)] and refresh [\(nil != self.clientConfig.refreshToken)] tokens")
+						self.didAuthorize(params)
+					}
+					else {
+						throw OAuth2Error.Generic("\(status)")
 					}
 				}
-				else {
-					self.didFail(error ?? OAuth2Error.NoDataInResponse)
+				catch let error {
+					self.didFail(error)
 				}
 			}
 		}
-		catch let err {
-			didFail(err)
+		catch let error {
+			didFail(error)
 		}
 	}
 	

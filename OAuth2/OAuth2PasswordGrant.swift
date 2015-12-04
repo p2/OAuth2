@@ -75,24 +75,23 @@ public class OAuth2PasswordGrant: OAuth2 {
 			logIfVerbose("Requesting new access token from \(post.URL?.description)")
 			
 			performRequest(post) { data, status, error in
-				if let data = data {
-					do {
-						let dict = try self.parseAccessTokenResponse(data)
-						if status < 400 {
-							self.logIfVerbose("Did get access token [\(nil != self.clientConfig.accessToken)]")
-							callback(params: dict, error: nil)
-						}
-						else {
-							callback(params: dict, error: OAuth2Error.ResponseError("The username or password is incorrect"))
-						}
+				do {
+					guard let data = data else {
+						throw error ?? OAuth2Error.NoDataInResponse
 					}
-					catch let err {
-						self.logIfVerbose("Error parsing response: \(err)")
-						callback(params: nil, error: err)
+					
+					let dict = try self.parseAccessTokenResponse(data)
+					if status < 400 {
+						self.logIfVerbose("Did get access token [\(nil != self.clientConfig.accessToken)]")
+						callback(params: dict, error: nil)
+					}
+					else {
+						callback(params: dict, error: OAuth2Error.ResponseError("The username or password is incorrect"))
 					}
 				}
-				else {
-					callback(params: nil, error: error ?? OAuth2Error.NoDataInResponse)
+				catch let error {
+					self.logIfVerbose("Error parsing response: \(error)")
+					callback(params: nil, error: error)
 				}
 			}
 		}

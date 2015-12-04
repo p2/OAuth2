@@ -60,24 +60,23 @@ public class OAuth2DynReg: OAuth2Base {
 			logIfVerbose("Registering client at \(req.URL!) with scopes “\(client.scope ?? "(none)")”")
 			
 			performRequest(req) { data, status, error in
-				if let data = data {
-					do {
-						let dict = try self.parseRegistrationResponse(data)
-						try self.assureNoErrorInResponse(dict)
-						if status >= 400 {
-							self.logIfVerbose("Registration failed with \(status)")
-						}
-						else {
-							self.didRegisterWith(dict, client: client)
-						}
-						callback(json: dict, error: nil)
+				do {
+					guard let data = data else {
+						throw error ?? OAuth2Error.NoDataInResponse
 					}
-					catch let err {
-						callback(json: nil, error: err)
+					
+					let dict = try self.parseRegistrationResponse(data)
+					try self.assureNoErrorInResponse(dict)
+					if status >= 400 {
+						self.logIfVerbose("Registration failed with \(status)")
 					}
+					else {
+						self.didRegisterWith(dict, client: client)
+					}
+					callback(json: dict, error: nil)
 				}
-				else {
-					callback(json: nil, error: error ?? OAuth2Error.NoDataInResponse)
+				catch let error {
+					callback(json: nil, error: error)
 				}
 			}
 		}

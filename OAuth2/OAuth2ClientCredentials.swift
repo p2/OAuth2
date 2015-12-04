@@ -60,24 +60,22 @@ public class OAuth2ClientCredentials: OAuth2 {
 			logIfVerbose("Requesting new access token from \(post.URL?.description)")
 			
 			performRequest(post) { data, status, error in
-				if let data = data {
-					do {
-						let params = try self.parseAccessTokenResponse(data)
-						self.logIfVerbose("Did get access token [\(nil != self.clientConfig.accessToken)]")
-						callback(params: params, error: nil)
+				do {
+					guard let data = data else {
+						throw error ?? OAuth2Error.NoDataInResponse
 					}
-					catch let err {
-						callback(params: nil, error: err)
-					}
+					
+					let params = try self.parseAccessTokenResponse(data)
+					self.logIfVerbose("Did get access token [\(nil != self.clientConfig.accessToken)]")
+					callback(params: params, error: nil)
 				}
-				else {
-					callback(params: nil, error: error ?? OAuth2Error.NoDataInResponse)
+				catch let error {
+					callback(params: nil, error: error)
 				}
 			}
 		}
-		catch let err {
-			callback(params: nil, error: err)
-			return
+		catch let error {
+			callback(params: nil, error: error)
 		}
 	}
 	

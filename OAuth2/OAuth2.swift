@@ -372,39 +372,35 @@ public class OAuth2: OAuth2Base {
 	- parameter callback: The callback to call after the refresh token exchange has finished
 	*/
 	public func doRefreshToken(callback: ((successParams: OAuth2JSON?, error: ErrorType?) -> Void)) {
-		guard let refresh = clientConfig.refreshToken where !refresh.isEmpty else {
-			callback(successParams: nil, error: OAuth2Error.NoRefreshToken)
-			return
-		}
-		
 		do {
+			guard let refresh = clientConfig.refreshToken where !refresh.isEmpty else {
+				throw OAuth2Error.NoRefreshToken
+			}
 			let post = try tokenRequestWithRefreshToken(refresh)
 			logIfVerbose("Using refresh token to receive access token from \(post.URL?.description ?? "nil")")
 			
 			performRequest(post) { data, status, error in
-				if let data = data {
-					do {
-						let json = try self.parseRefreshTokenResponse(data)
-						if status < 400 {
-							self.logIfVerbose("Did use refresh token for access token [\(nil != self.clientConfig.accessToken)]")
-							callback(successParams: json, error: nil)
-						}
-						else {
-							throw OAuth2Error.Generic("\(status)")
-						}
+				do {
+					guard let data = data else {
+						throw error ?? OAuth2Error.NoDataInResponse
 					}
-					catch let err {
-						self.logIfVerbose("Error parsing refreshed access token: \(err)")
-						callback(successParams: nil, error: err)
+					let json = try self.parseRefreshTokenResponse(data)
+					if status < 400 {
+						self.logIfVerbose("Did use refresh token for access token [\(nil != self.clientConfig.accessToken)]")
+						callback(successParams: json, error: nil)
+					}
+					else {
+						throw OAuth2Error.Generic("\(status)")
 					}
 				}
-				else {
-					callback(successParams: nil, error: error ?? OAuth2Error.NoDataInResponse)
+				catch let error {
+					self.logIfVerbose("Error parsing refreshed access token: \(error)")
+					callback(successParams: nil, error: error)
 				}
 			}
 		}
-		catch let err {
-			callback(successParams: nil, error: err)
+		catch let error {
+			callback(successParams: nil, error: error)
 		}
 	}
 	

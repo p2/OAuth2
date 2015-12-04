@@ -118,14 +118,14 @@ extension OAuth2 {
 	*/
 	@available(iOS 9.0, *)
 	public func authorizeSafariEmbeddedFrom(controller: UIViewController, redirect: String, scope: String, params: OAuth2StringDict? = nil) -> SFSafariViewController? {
-			do {
-				let url = try authorizeURLWithRedirect(redirect, scope: scope, params: params)
-				return presentSafariViewFor(url, from: controller)
-			}
-			catch let err {
-				logIfVerbose("Cannot present authorize URL: \(err)")
-			}
-			return nil
+		do {
+			let url = try authorizeURLWithRedirect(redirect, scope: scope, params: params)
+			return presentSafariViewFor(url, from: controller)
+		}
+		catch let err {
+			logIfVerbose("Cannot present authorize URL: \(err)")
+		}
+		return nil
 	}
 	
 	/**
