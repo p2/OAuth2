@@ -26,15 +26,15 @@ import Foundation
  */
 public class OAuth2ImplicitGrant: OAuth2 {
 	
-	public override class var grantType: String {
+	override public class var grantType: String {
 		return "implicit"
 	}
 	
-	public override class var responseType: String? {
+	override public class var responseType: String? {
 		return "token"
 	}
 	
-	public override func handleRedirectURL(redirect: NSURL) {
+	override public func handleRedirectURL(redirect: NSURL) {
 		logIfVerbose("Handling redirect URL \(redirect.description)")
 		
 		// token should be in the URL fragment
@@ -55,12 +55,8 @@ public class OAuth2ImplicitGrant: OAuth2 {
 		}
 	}
 	
-	override func assureMatchesState(params: OAuth2JSON) throws {
-		try super.assureMatchesState(params)
-		if !context.matchesState(params["state"] as? String) {
-			throw OAuth2Error.InvalidState
-		}
-		context.resetState()
+	override public func assureAccessTokenParamsAreValid(params: OAuth2JSON) throws {
+		try assureMatchesState(params)
 	}
 }
 

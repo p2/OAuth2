@@ -34,19 +34,8 @@ public class OAuth2CodeGrant: OAuth2 {
 		return "authorization_code"
 	}
 	
-	public override class var responseType: String? {
+	override public class var responseType: String? {
 		return "code"
-	}
-	
-	override func assureMatchesState(params: OAuth2JSON) throws {
-		try super.assureMatchesState(params)
-		if nil == params["code"] {		// no state in the second step (exchange code)
-			return
-		}
-		if !context.matchesState(params["state"] as? String) {
-			throw OAuth2Error.InvalidState
-		}
-		context.resetState()
 	}
 	
 	
@@ -94,7 +83,7 @@ public class OAuth2CodeGrant: OAuth2 {
 	/**
 	Extracts the code from the redirect URL and exchanges it for a token.
 	*/
-	public override func handleRedirectURL(redirect: NSURL) {
+	override public func handleRedirectURL(redirect: NSURL) {
 		logIfVerbose("Handling redirect URL \(redirect.description)")
 		do {
 			let code = try validateRedirectURL(redirect)
@@ -157,11 +146,8 @@ public class OAuth2CodeGrant: OAuth2 {
 			if let cd = query["code"] {
 				
 				// we got a code, use it if state is correct (and reset state)
-				if context.matchesState(query["state"]) {
-					context.resetState()
-					return cd
-				}
-				throw OAuth2Error.InvalidState
+				try assureMatchesState(query)
+				return cd
 			}
 			throw OAuth2Error.ResponseError("No “code” received")
 		}

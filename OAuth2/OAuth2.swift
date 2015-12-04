@@ -539,18 +539,18 @@ public class OAuth2: OAuth2Base {
 	
 	This method extracts token data and fills the receiver's properties accordingly. If the response contains an "error" key, will parse the
 	error and throw it. The method is final to ensure correct order of error parsing and not parsing the response if an error happens. This
-	is not possible in overrides. Instead, override the various `assureXy(dict:)` methods.
+	is not possible in overrides. Instead, override the various `assureXy(dict:)` methods, especially `assureAccessTokenParamsAreValid()`.
 	
-	- parameter json: Dictionary data parsed from the response
+	- parameter params: Dictionary data parsed from the response
 	- returns: An OAuth2JSON instance with token data; may contain additional information
 	*/
-	final func parseAccessTokenResponse(dict: OAuth2JSON) throws -> OAuth2JSON {
-		try assureNoErrorInResponse(dict)
-		try assureMatchesState(dict)
-		try assureCorrectBearerType(dict)
+	final func parseAccessTokenResponse(params: OAuth2JSON) throws -> OAuth2JSON {
+		try assureNoErrorInResponse(params)
+		try assureCorrectBearerType(params)
+		try assureAccessTokenParamsAreValid(params)
 		
-		clientConfig.updateFromResponse(dict)
-		return dict
+		clientConfig.updateFromResponse(params)
+		return params
 	}
 	
 	/**
@@ -571,23 +571,29 @@ public class OAuth2: OAuth2Base {
 	Parse response data returned while using a refresh token.
 	
 	This method extracts token data and fills the receiver's properties accordingly. If the response contains an "error" key, will parse the
-	error and throw it.
+	error and throw it. The method is final to ensure correct order of error parsing and not parsing the response if an error happens. This
+	is not possible in overrides. Instead, override the various `assureXy(dict:)` methods, especially `assureRefreshTokenParamsAreValid()`.
 	
 	- parameter json: Dictionary data parsed from the response
 	- returns: An OAuth2JSON instance with token data; may contain additional information
 	*/
-	func parseRefreshTokenResponse(dict: OAuth2JSON) throws -> OAuth2JSON {
+	final func parseRefreshTokenResponse(dict: OAuth2JSON) throws -> OAuth2JSON {
 		try assureNoErrorInResponse(dict)
 		try assureCorrectBearerType(dict)
+		try assureRefreshTokenParamsAreValid(dict)
 		
 		clientConfig.updateFromResponse(dict)
 		return dict
 	}
 	
 	/**
-	This method does nothing in the base class. Implicit and code grant flows override it to check state.
+	This method checks `state`, throws `OAuth2Error.InvalidState` if it doesn't match. Resets state if it matches.
 	*/
 	func assureMatchesState(params: OAuth2JSON) throws {
+		if !context.matchesState(params["state"] as? String) {
+			throw OAuth2Error.InvalidState
+		}
+		context.resetState()
 	}
 	
 	/**
@@ -601,6 +607,18 @@ public class OAuth2: OAuth2Base {
 			throw OAuth2Error.UnsupportedTokenType("Only “bearer” token is supported, but received “\(tokType)”")
 		}
 		throw OAuth2Error.NoTokenType
+	}
+	
+	/**
+	Called when parsing the access token response. Does nothing by default, implicit grant flows check state.
+	*/
+	public func assureAccessTokenParamsAreValid(params: OAuth2JSON) throws {
+	}
+	
+	/**
+	Called when parsing the refresh token response. Does nothing by default.
+	*/
+	public func assureRefreshTokenParamsAreValid(params: OAuth2JSON) throws {
 	}
 }
 
@@ -628,6 +646,12 @@ class OAuth2ContextStore {
 		_state = state
 	}
 	
+	/**
+	Checks that given state matches the internal state.
+	
+	- parameter state: The state to check (may be nil)
+	- returns: true if state matches, false otherwise or if given state is nil.
+	*/
 	func matchesState(state: String?) -> Bool {
 		if let st = state {
 			return st == _state
