@@ -141,7 +141,7 @@ public class OAuth2PasswordGrant: OAuth2 {
 				req.setValue("Basic \(utf8.base64EncodedStringWithOptions([]))", forHTTPHeaderField: "Authorization")
 			}
 			else {
-				throw OAuth2Error.Base64EncodeError
+				throw OAuth2Error.UTF8EncodeError
 			}
 		}
 		req.HTTPBody = body.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)

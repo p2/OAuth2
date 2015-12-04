@@ -48,7 +48,7 @@ public enum OAuth2Error: ErrorType, CustomStringConvertible, Equatable {
 	case PrerequisiteFailed(String)
 	case InvalidState
 	case JSONParserError
-	case Base64EncodeError
+	case UTF8EncodeError
 	
 	case NotUsingTLS
 	case InvalidRequest
@@ -122,8 +122,8 @@ public enum OAuth2Error: ErrorType, CustomStringConvertible, Equatable {
 			return "The state was either empty or did not check out"
 		case JSONParserError:
 			return "Error parsing JSON"
-		case Base64EncodeError:
-			return "Failed to base-64 encode the given string"
+		case UTF8EncodeError:
+			return "Failed to UTF-8 encode the given string"
 		
 		case .NotUsingTLS:
 			return "You MUST use HTTPS/SSL/TLS"

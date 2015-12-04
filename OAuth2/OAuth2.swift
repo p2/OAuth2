@@ -511,7 +511,7 @@ public class OAuth2: OAuth2Base {
 				req.setValue("Basic \(utf8.base64EncodedStringWithOptions([]))", forHTTPHeaderField: "Authorization")
 			}
 			else {
-				logIfVerbose("ERROR: for some reason failed to base-64 encode the client-key:client-secret combo")
+				throw OAuth2Error.UTF8EncodeError
 			}
 		}
 		return req
