@@ -29,16 +29,19 @@ public enum OAuth2EndpointAuthMethod: String {
 
 
 /**
-	Class to handle OAuth2 Dynamic Client Registration.
+    Class to handle OAuth2 Dynamic Client Registration.
 
-	This class is WiP. For the full spec see https://tools.ietf.org/html/rfc7591
+    This is a lightweight class that uses a OAuth2 instance's settings when registering, only few settings are held by instances of this
+    class. Hence it's highly portable and can be instantiated when needed with ease.
+
+	For the full OAuth2 Dynamic Client Registration spec see https://tools.ietf.org/html/rfc7591
  */
 public class OAuth2DynReg {
 	
 	/// Additional HTTP headers to supply during registration.
 	public var extraHeaders: OAuth2StringDict?
 	
-	/// Whether registration should also allow refresh tokens. Defaults to true.
+	/// Whether registration should also allow refresh tokens. Defaults to true, making sure "refresh_token" grant type is being registered.
 	public var allowRefreshTokens = true
 	
 	public init() {  }

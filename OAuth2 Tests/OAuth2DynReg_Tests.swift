@@ -25,18 +25,23 @@ import OAuth2
 
 class OAuth2DynReg_Tests: XCTestCase {
 	
-	func genericOAuth2() -> OAuth2 {
-		return OAuth2ImplicitGrant(settings: [
+	func genericOAuth2(extra: OAuth2JSON? = nil) -> OAuth2 {
+		var settings = [
 			"authorize_uri": "https://auth.ful.io",
 			"token_uri": "https://token.ful.io",
 			"scope": "login",
 			"keychain": false,
-		])
+		] as OAuth2JSON
+		if let extra = extra {
+			extra.forEach() { settings[$0] = $1 }
+		}
+		return OAuth2ImplicitGrant(settings: settings)
 	}
 	
 	func testRegistrationRequest() {
-		let oauth = genericOAuth2()
-		oauth.clientConfig.registrationURL = NSURL(string: "https://register.ful.io")
+		let oauth = genericOAuth2(["registration_uri": "https://register.ful.io"])
+		XCTAssertNotNil(oauth.clientConfig.registrationURL, "Must parse registration URL from settings dict")
+		XCTAssertEqual(oauth.clientConfig.registrationURL!.absoluteString, "https://register.ful.io")
 		let dynreg = OAuth2DynReg()
 		dynreg.extraHeaders = ["Foo": "Bar & Hat"]
 		
@@ -44,7 +49,7 @@ class OAuth2DynReg_Tests: XCTestCase {
 			let req = try dynreg.registrationRequest(oauth)
 			XCTAssertEqual("register.ful.io", req.URL?.host)
 			XCTAssertEqual("POST", req.HTTPMethod)
-			let dict = try dynreg.parseJSON(req.HTTPBody!)
+			let dict = try oauth.parseJSON(req.HTTPBody!)
 			
 			XCTAssertEqual("none", dict["token_endpoint_auth_method"] as? String)
 			XCTAssertEqual("login", dict["scope"] as? String)
@@ -58,7 +63,7 @@ class OAuth2DynReg_Tests: XCTestCase {
 	
 	func testNotAttemptingRegistration() {
 		let oauth = genericOAuth2()
-		oauth.registerClientIfNeeded() { error in
+		oauth.registerClientIfNeeded() { json, error in
 			if let error = error as? OAuth2Error {
 				switch error {
 				case .NoRegistrationURL: break
@@ -71,9 +76,37 @@ class OAuth2DynReg_Tests: XCTestCase {
 		}
 		
 		oauth.clientId = "abc"
-		oauth.registerClientIfNeeded { error in
+		oauth.registerClientIfNeeded { json, error in
 			XCTAssertNil(error, "Shouldn't even start registering")
 		}
+	}
+	
+	func testCustomDynRegInstance() {
+		let oauth = genericOAuth2(["registration_uri": "https://register.ful.io"])
+		
+		// return subclass
+		oauth.onBeforeDynamicClientRegistration = { url in
+			XCTAssertEqual(url.absoluteString, "https://register.ful.io", "Should be passed registration URL")
+			return OAuth2TestDynReg()
+		}
+		oauth.registerClientIfNeeded() { json, error in
+			if let error = error as? OAuth2Error {
+				switch error {
+				case .TemporarilyUnavailable: break
+				default:                      XCTAssertTrue(false, "Expecting random `TemporarilyUnavailable` error as implemented in `OAuth2TestDynReg`")
+				}
+			}
+			else {
+				XCTAssertTrue(false, "Should return no-registration-url error")
+			}
+		}
+	}
+}
+
+
+class OAuth2TestDynReg: OAuth2DynReg {
+	override func registerClient(client: OAuth2, callback: ((json: OAuth2JSON?, error: ErrorType?) -> Void)) {
+		callback(json: nil, error: OAuth2Error.TemporarilyUnavailable)
 	}
 }
 

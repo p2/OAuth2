@@ -52,6 +52,11 @@ public class OAuth2: OAuth2Base {
 		set { clientConfig.clientSecret = newValue }
 	}
 	
+	/// The name of the client, as used during dynamic client registration. Use "client_name" during initalization to set.
+	public var clientName: String? {
+		get { return clientConfig.clientName }
+	}
+	
 	/// The URL to authorize against.
 	public final var authURL: NSURL {
 		get { return clientConfig.authorizeURL }
@@ -112,6 +117,9 @@ public class OAuth2: OAuth2Base {
 	
 	/// Same as `afterAuthorizeOrFailure`, but only for internal use and called right BEFORE the public variant.
 	final var internalAfterAuthorizeOrFailure: ((wasFailure: Bool, error: ErrorType?) -> Void)?
+	
+	/// If non-nil, will be called before performing dynamic client registration, giving you a chance to instantiate your own registrar.
+	public final var onBeforeDynamicClientRegistration: (NSURL -> OAuth2DynReg?)?
 	
 	
 	/**
@@ -199,7 +207,7 @@ public class OAuth2: OAuth2Base {
 				self.didAuthorize(OAuth2JSON())
 			}
 			else {
-				self.registerClientIfNeeded() { error in
+				self.registerClientIfNeeded() { json, error in
 					if let error = error {
 						self.didFail(error)
 					}
@@ -409,23 +417,23 @@ public class OAuth2: OAuth2Base {
 	
 	/**
 	Returns immediately if the receiver's `clientId` is nil (with error = nil) or if there is no registration URL (with error). Otherwise
-	instantiates `OAuth2DynReg` to attempt client registration.
+	calls `onBeforeDynamicClientRegistration()` -- if it is non-nil -- and uses the returned `OAuth2DynReg` instance -- if it is non-nil.
+	If both are nil, instantiates a blank `OAuth2DynReg` instead, then attempts client registration.
 	
-	- parameter callback: The callback to call; error is nil on success, otherwise contains the error encountered
+	- parameter callback: The callback to call; if both json and error is nil no registration was attempted; error is nil on success
 	*/
-	func registerClientIfNeeded(callback: ((error: ErrorType?) -> Void)) {
+	func registerClientIfNeeded(callback: ((json: OAuth2JSON?, error: ErrorType?) -> Void)) {
 		if nil != clientId {
-			callback(error: nil)
+			callback(json: nil, error: nil)
 		}
-		else if nil != clientConfig.registrationURL {
-			let dynreg = OAuth2DynReg()
-			dynreg.verbose = verbose
+		else if let url = clientConfig.registrationURL {
+			let dynreg = onBeforeDynamicClientRegistration?(url) ?? OAuth2DynReg()
 			dynreg.registerClient(self) { json, error in
-				callback(error: error)
+				callback(json: json, error: error)
 			}
 		}
 		else {
-			callback(error: OAuth2Error.NoRegistrationURL)
+			callback(json: nil, error: OAuth2Error.NoRegistrationURL)
 		}
 	}
 	
