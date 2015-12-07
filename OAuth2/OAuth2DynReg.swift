@@ -31,9 +31,9 @@ public enum OAuth2EndpointAuthMethod: String {
 /**
 	Class to handle OAuth2 Dynamic Client Registration.
 
-	This class is WiP and not complete. For the full spec see https://tools.ietf.org/html/rfc7591
+	This class is WiP. For the full spec see https://tools.ietf.org/html/rfc7591
  */
-public class OAuth2DynReg: OAuth2Base {
+public class OAuth2DynReg {
 	
 	/// Additional HTTP headers to supply during registration.
 	public var extraHeaders: OAuth2StringDict?
@@ -41,9 +41,7 @@ public class OAuth2DynReg: OAuth2Base {
 	/// Whether registration should also allow refresh tokens. Defaults to true.
 	public var allowRefreshTokens = true
 	
-	public init() {
-		super.init(settings: OAuth2JSON())
-	}
+	public init() {  }
 	
 	
 	// MARK: - Registration
@@ -57,18 +55,17 @@ public class OAuth2DynReg: OAuth2Base {
 	public func registerClient(client: OAuth2, callback: ((json: OAuth2JSON?, error: ErrorType?) -> Void)) {
 		do {
 			let req = try registrationRequest(client)
-			logIfVerbose("Registering client at \(req.URL!) with scopes “\(client.scope ?? "(none)")”")
-			
-			performRequest(req) { data, status, error in
+			client.logIfVerbose("Registering client at \(req.URL!) with scopes “\(client.scope ?? "(none)")”")
+			client.performRequest(req) { data, status, error in
 				do {
 					guard let data = data else {
 						throw error ?? OAuth2Error.NoDataInResponse
 					}
 					
-					let dict = try self.parseRegistrationResponse(data)
-					try self.assureNoErrorInResponse(dict)
+					let dict = try self.parseRegistrationResponse(data, client: client)
+					try client.assureNoErrorInResponse(dict)
 					if status >= 400 {
-						self.logIfVerbose("Registration failed with \(status)")
+						client.logIfVerbose("Registration failed with \(status)")
 					}
 					else {
 						self.didRegisterWith(dict, client: client)
@@ -139,8 +136,8 @@ public class OAuth2DynReg: OAuth2Base {
 		return dict
 	}
 	
-	public func parseRegistrationResponse(data: NSData) throws -> OAuth2JSON {
-		return try parseJSON(data)
+	public func parseRegistrationResponse(data: NSData, client: OAuth2) throws -> OAuth2JSON {
+		return try client.parseJSON(data)
 	}
 	
 	public func didRegisterWith(json: OAuth2JSON, client: OAuth2) {
@@ -161,7 +158,7 @@ public class OAuth2DynReg: OAuth2Base {
 			client.clientConfig.endpointAuthMethod = method
 		}
 		
-		if useKeychain {
+		if client.useKeychain {
 			client.storeClientToKeychain()
 		}
 	}
