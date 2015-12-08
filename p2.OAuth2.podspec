@@ -32,5 +32,5 @@ Pod::Spec.new do |s|
   s.source_files = "OAuth2/*.swift", "SwiftKeychain/SwiftKeychain/Keychain/*.swift"
   s.ios.source_files = "OAuth2+iOS/*.swift"
   s.osx.source_files = "OAuth2+OSX/*.swift"
-  s.tvos.source_files = "OAuth2+TVOS/*.swift"
+  s.tvos.source_files = "OAuth2+tvOS/*.swift"
 end
