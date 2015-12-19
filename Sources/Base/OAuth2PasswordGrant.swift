@@ -45,21 +45,13 @@ public class OAuth2PasswordGrant: OAuth2 {
 		super.init(settings: settings)
 	}
 	
-	public override func authorize(params params: [String : String]? = nil, autoDismiss: Bool = true) {
-		tryToObtainAccessTokenIfNeeded() { success in
-			if success {
-				self.didAuthorize(OAuth2JSON())
+	override func doAuthorize(params params: [String : String]? = nil) {
+		self.obtainAccessToken(params: params) { params, error in
+			if let error = error {
+				self.didFail(error)
 			}
 			else {
-				self.logIfVerbose("No access token, requesting a new one")
-				self.obtainAccessToken(params: params) { params, error in
-					if let error = error {
-						self.didFail(error)
-					}
-					else {
-						self.didAuthorize(params ?? OAuth2JSON())
-					}
-				}
+				self.didAuthorize(params ?? OAuth2JSON())
 			}
 		}
 	}

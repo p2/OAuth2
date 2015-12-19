@@ -21,23 +21,19 @@
 import Cocoa
 
 
-extension OAuth2
-{
-	/**
-	    Uses `NSWorkspace` to open the authorize URL in the OS browser.
+extension OAuth2 {
 	
-	    - parameter params: Additional parameters to pass to the authorize URL
-	    :returs: A bool indicating success
-	 */
-	public final func openAuthorizeURLInBrowser(params: OAuth2StringDict? = nil) -> Bool {
-		do {
-			let url = try authorizeURL(params)
-			return NSWorkspace.sharedWorkspace().openURL(url)
+	/**
+	Uses `NSWorkspace` to open the authorize URL in the OS browser.
+	
+	- parameter params: Additional parameters to pass to the authorize URL
+	- returns: A bool indicating success
+	*/
+	public final func openAuthorizeURLInBrowser(params: OAuth2StringDict? = nil) throws {
+		let url = try authorizeURL(params)
+		if !NSWorkspace.sharedWorkspace().openURL(url) {
+			throw OAuth2Error.UnableToOpenAuthorizeURL
 		}
-		catch let err {
-			logIfVerbose("Cannot open authorize URL: \(err)")
-		}
-		return false
 	}
 	
 	
@@ -48,21 +44,21 @@ extension OAuth2
 	
 	    - returns: A bool indicating whether the method was able to show the authorize screen
 	 */
-	public func authorizeEmbeddedWith(config: OAuth2AuthConfig, params: OAuth2StringDict? = nil, autoDismiss: Bool = true) -> Bool {
+	public func authorizeEmbeddedWith(config: OAuth2AuthConfig, params: OAuth2StringDict? = nil) throws {
 		if let controller = config.authorizeContext as? NSViewController {
-			let web: AnyObject = authorizeEmbeddedFrom(controller, params: params)
-			if autoDismiss {
+			let web: AnyObject = try authorizeEmbeddedFrom(controller, params: params)
+			if config.authorizeEmbeddedAutoDismiss {
 				internalAfterAuthorizeOrFailure = { wasFailure, error in
 					self.logIfVerbose("Should now dismiss \(web)")
 				}
 			}
-			return true
+			return
 		}
-		return false
+		throw (nil == config.authorizeContext) ? OAuth2Error.NoAuthorizationContext : OAuth2Error.InvalidAuthorizationContext
 	}
 	
-	public func authorizeEmbeddedFrom(controller: NSViewController, params: OAuth2StringDict?) -> AnyObject {
-		fatalError("Not yet implemented")
+	public func authorizeEmbeddedFrom(controller: NSViewController, params: OAuth2StringDict?) throws -> AnyObject {
+		throw OAuth2Error.Generic("Embedded authorizing is not yet implemented on OS X")
 	}
 }
 

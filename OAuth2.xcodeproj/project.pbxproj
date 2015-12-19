@@ -10,7 +10,6 @@
 		EA9758181B222CEA007744B1 /* OAuth2PasswordGrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA9758171B222CEA007744B1 /* OAuth2PasswordGrant.swift */; };
 		EA97581D1B223A5D007744B1 /* OAuth2PasswordGrant_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA97581B1B223932007744B1 /* OAuth2PasswordGrant_Tests.swift */; };
 		EA97581E1B2242F9007744B1 /* OAuth2PasswordGrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA9758171B222CEA007744B1 /* OAuth2PasswordGrant.swift */; };
-		EE012EFC1A4162ED002FFD6C /* OAuth2.h in Headers */ = {isa = PBXBuildFile; fileRef = EEDB8629193FAAE500C4EEA1 /* OAuth2.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EE1391DA1AC5B41A002C7B18 /* OAuth2CodeGrantBasicAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE1391D91AC5B41A002C7B18 /* OAuth2CodeGrantBasicAuth.swift */; };
 		EE1391DB1AC5B41A002C7B18 /* OAuth2CodeGrantBasicAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE1391D91AC5B41A002C7B18 /* OAuth2CodeGrantBasicAuth.swift */; };
 		EE24862A1AC85DD4002B31AF /* OAuth2WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2486291AC85DD4002B31AF /* OAuth2WebViewController.swift */; };
@@ -54,7 +53,6 @@
 		EEC7A8DD1AE4851E008C30E7 /* KeychainQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC7A8D21AE4851E008C30E7 /* KeychainQuery.swift */; };
 		EEC7A8DE1AE4851E008C30E7 /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC7A8D31AE4851E008C30E7 /* KeychainService.swift */; };
 		EEC7A8DF1AE4851E008C30E7 /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC7A8D31AE4851E008C30E7 /* KeychainService.swift */; };
-		EEDB862A193FAAE500C4EEA1 /* OAuth2.h in Headers */ = {isa = PBXBuildFile; fileRef = EEDB8629193FAAE500C4EEA1 /* OAuth2.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EEE209A719427DFE00736F1A /* OAuth2_tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEE209A619427DFE00736F1A /* OAuth2_tests.swift */; };
 		EEE209A819427DFE00736F1A /* OAuth2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EEE209471942772800736F1A /* OAuth2.framework */; };
 		EEF47D2B1B1E3FDD0057D838 /* OAuth2Base.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF47D2A1B1E3FDD0057D838 /* OAuth2Base.swift */; };
@@ -137,7 +135,6 @@
 		EEC7A8D31AE4851E008C30E7 /* KeychainService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
 		EEC7A8E01AE48533008C30E7 /* LICENSE.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = LICENSE.txt; path = ../../LICENSE.txt; sourceTree = "<group>"; };
 		EEDB8624193FAAE500C4EEA1 /* OAuth2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OAuth2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		EEDB8629193FAAE500C4EEA1 /* OAuth2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAuth2.h; sourceTree = "<group>"; };
 		EEDB8640193FAB9200C4EEA1 /* OAuth2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2.swift; sourceTree = "<group>"; };
 		EEDB864B19421DAD00C4EEA1 /* extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = extensions.swift; sourceTree = "<group>"; };
 		EEE209471942772800736F1A /* OAuth2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OAuth2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -174,13 +171,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		EE2486281AC85DD4002B31AF /* OAuth2+iOS */ = {
+		EE2486281AC85DD4002B31AF /* iOS */ = {
 			isa = PBXGroup;
 			children = (
 				EEC7A8C81AE47111008C30E7 /* OAuth2+iOS.swift */,
 				EE2486291AC85DD4002B31AF /* OAuth2WebViewController.swift */,
 			);
-			path = "OAuth2+iOS";
+			name = iOS;
+			path = ../iOS;
 			sourceTree = "<group>";
 		};
 		EE79F65C1BFBDFFF00746243 /* Flows */ = {
@@ -196,12 +194,13 @@
 			name = Flows;
 			sourceTree = "<group>";
 		};
-		EEC7A8C51AE46C33008C30E7 /* OAuth2+OSX */ = {
+		EEC7A8C51AE46C33008C30E7 /* OSX */ = {
 			isa = PBXGroup;
 			children = (
 				EEC7A8C61AE46C33008C30E7 /* OAuth2+OSX.swift */,
 			);
-			path = "OAuth2+OSX";
+			name = OSX;
+			path = ../OSX;
 			sourceTree = "<group>";
 		};
 		EEC7A8CD1AE4851E008C30E7 /* SwiftKeychain */ = {
@@ -216,7 +215,7 @@
 				EEC7A8D31AE4851E008C30E7 /* KeychainService.swift */,
 			);
 			name = SwiftKeychain;
-			path = SwiftKeychain/SwiftKeychain/Keychain;
+			path = ../../SwiftKeychain/SwiftKeychain/Keychain;
 			sourceTree = "<group>";
 		};
 		EEDB861A193FAAE500C4EEA1 = {
@@ -226,10 +225,7 @@
 				EE8EE6DA1B12AB35005B90C5 /* CHANGELOG.md */,
 				EE450CD31AD57578008AB6FC /* p2.OAuth2.podspec */,
 				EEDB8626193FAAE500C4EEA1 /* OAuth2 */,
-				EE2486281AC85DD4002B31AF /* OAuth2+iOS */,
-				EEC7A8C51AE46C33008C30E7 /* OAuth2+OSX */,
-				EEC7A8CD1AE4851E008C30E7 /* SwiftKeychain */,
-				EEE209A319427DFE00736F1A /* OAuth2 Tests */,
+				EEE209A319427DFE00736F1A /* Tests */,
 				EEDB8625193FAAE500C4EEA1 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -248,7 +244,6 @@
 		EEDB8626193FAAE500C4EEA1 /* OAuth2 */ = {
 			isa = PBXGroup;
 			children = (
-				EEDB8629193FAAE500C4EEA1 /* OAuth2.h */,
 				EEDB8640193FAB9200C4EEA1 /* OAuth2.swift */,
 				EEF47D2A1B1E3FDD0057D838 /* OAuth2Base.swift */,
 				EE79F6561BFA945C00746243 /* OAuth2ClientConfig.swift */,
@@ -258,9 +253,13 @@
 				EE29EABB195A0DB2008882C8 /* OAuth2Request.swift */,
 				EE79F6591BFAA36900746243 /* OAuth2Error.swift */,
 				EEDB864B19421DAD00C4EEA1 /* extensions.swift */,
+				EE2486281AC85DD4002B31AF /* iOS */,
+				EEC7A8C51AE46C33008C30E7 /* OSX */,
 				EEDB8627193FAAE500C4EEA1 /* Supporting Files */,
+				EEC7A8CD1AE4851E008C30E7 /* SwiftKeychain */,
 			);
-			path = OAuth2;
+			name = OAuth2;
+			path = Sources/Base;
 			sourceTree = "<group>";
 		};
 		EEDB8627193FAAE500C4EEA1 /* Supporting Files */ = {
@@ -269,9 +268,10 @@
 				EEE2098B1942778300736F1A /* Info.plist */,
 			);
 			name = "Supporting Files";
+			path = ../..;
 			sourceTree = "<group>";
 		};
-		EEE209A319427DFE00736F1A /* OAuth2 Tests */ = {
+		EEE209A319427DFE00736F1A /* Tests */ = {
 			isa = PBXGroup;
 			children = (
 				EEE209A619427DFE00736F1A /* OAuth2_tests.swift */,
@@ -282,7 +282,7 @@
 				EE414B6C1C0F6BDE00DE6A8F /* OAuth2DynReg_Tests.swift */,
 				EEE209A419427DFE00736F1A /* Supporting Files */,
 			);
-			path = "OAuth2 Tests";
+			path = Tests;
 			sourceTree = "<group>";
 		};
 		EEE209A419427DFE00736F1A /* Supporting Files */ = {
@@ -300,7 +300,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EEDB862A193FAAE500C4EEA1 /* OAuth2.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -308,7 +307,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EE012EFC1A4162ED002FFD6C /* OAuth2.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -644,9 +642,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = OAuth2/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "-DNO_KEYCHAIN_IMPORT";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.chip.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = OAuth2;
 				SKIP_INSTALL = YES;
@@ -663,9 +662,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = OAuth2/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "-DNO_KEYCHAIN_IMPORT";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.chip.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = OAuth2;
 				SKIP_INSTALL = YES;
@@ -681,9 +681,10 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = OAuth2/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				OTHER_SWIFT_FLAGS = "-DNO_KEYCHAIN_IMPORT";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.chip.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = OAuth2;
 				SDKROOT = macosx;
@@ -701,9 +702,10 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = OAuth2/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				OTHER_SWIFT_FLAGS = "-DNO_KEYCHAIN_IMPORT";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.chip.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = OAuth2;
 				SDKROOT = macosx;
@@ -719,7 +721,7 @@
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = "OAuth2 Tests/Info.plist";
+				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				METAL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.chip.${PRODUCT_NAME:rfc1034identifier}";
@@ -737,7 +739,7 @@
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = "OAuth2 Tests/Info.plist";
+				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				METAL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.chip.${PRODUCT_NAME:rfc1034identifier}";

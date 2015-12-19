@@ -30,30 +30,22 @@ public class OAuth2ClientCredentials: OAuth2 {
 		return "client_credentials"
 	}
 	
-	public override func authorize(params params: OAuth2StringDict? = nil, autoDismiss: Bool = true) {
-		tryToObtainAccessTokenIfNeeded() { success in
-			if success {
-				self.didAuthorize(OAuth2JSON())
+	override func doAuthorize(params params: OAuth2StringDict? = nil) {
+		self.obtainAccessToken() { params, error in
+			if let error = error {
+				self.didFail(error)
 			}
 			else {
-				self.logIfVerbose("No access token, requesting a new one")
-				self.obtainAccessToken() { params, error in
-					if let error = error {
-						self.didFail(error)
-					}
-					else {
-						self.didAuthorize(params ?? OAuth2JSON())
-					}
-				}
+				self.didAuthorize(params ?? OAuth2JSON())
 			}
 		}
 	}
 	
 	/**
-	    Use the client credentials to retrieve a fresh access token.
+	Use the client credentials to retrieve a fresh access token.
 	
-	    - parameter callback: The callback to call after the process has finished
-	 */
+	- parameter callback: The callback to call after the process has finished
+	*/
 	func obtainAccessToken(callback: ((params: OAuth2JSON?, error: ErrorType?) -> Void)) {
 		do {
 			let post = try tokenRequest()
@@ -80,8 +72,8 @@ public class OAuth2ClientCredentials: OAuth2 {
 	}
 	
 	/**
-	    Creates a POST request with x-www-form-urlencoded body created from the supplied URL's query part.
-	 */
+	Creates a POST request with x-www-form-urlencoded body created from the supplied URL's query part.
+	*/
 	func tokenRequest() throws -> NSMutableURLRequest {
 		guard let clientId = clientConfig.clientId where !clientId.isEmpty else {
 			throw OAuth2Error.NoClientId
@@ -104,8 +96,8 @@ public class OAuth2ClientCredentials: OAuth2 {
 			logIfVerbose("Adding “client_id” and “client_secret” to request body")
 			body += "&client_id=\(clientId.wwwFormURLEncodedString)&client_secret=\(secret.wwwFormURLEncodedString)"
 		}
-			
-			// add Authorization header (if not in body)
+		
+		// add Authorization header (if not in body)
 		else {
 			logIfVerbose("Adding “Authorization” header as “Basic client-key:client-secret”")
 			let pw = "\(clientId.wwwFormURLEncodedString):\(secret.wwwFormURLEncodedString)"

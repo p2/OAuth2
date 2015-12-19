@@ -160,9 +160,7 @@ oauth2.afterAuthorizeOrFailure = { wasFailure, error in
 **iOS/OS X browser**:
 
 ```swift
-if !oauth2.openAuthorizeURLInBrowser() {
-    fatalError("Cannot open authorize URL")
-}
+try! oauth2.openAuthorizeURLInBrowser()
 ```
 
 In case you're using the OS browser or the new Safari view controller, you will need to **intercept the callback** in your app delegate.

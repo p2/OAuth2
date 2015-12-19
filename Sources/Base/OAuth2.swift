@@ -197,11 +197,13 @@ public class OAuth2: OAuth2Base {
  
 	This method will first check if the client already has an unexpired access token (possibly from the keychain), if not and it's able to
 	use a refresh token it will try to use the refresh token. If this fails it will check whether the client has a client_id and show the
-	authorize screen if you have `authConfig` set up sufficiently. If `authConfig` is not set up sufficiently this method will end up calling the
-	`onFailure` callback. If client_id is not set but a "registration_uri" has been provided, a dynamic client registration will be
-	attempted and if it succees, an access token will be requested.
+	authorize screen if you have `authConfig` set up sufficiently. If `authConfig` is not set up sufficiently this method will end up
+	calling the `onFailure` callback. If client_id is not set but a "registration_uri" has been provided, a dynamic client registration will
+	be attempted and if it succees, an access token will be requested.
+	
+	- parameter params: Optional key/value pairs to pass during authorization
 	*/
-	public func authorize(params params: OAuth2StringDict? = nil, autoDismiss: Bool = true) {
+	public func authorize(params params: OAuth2StringDict? = nil) {
 		tryToObtainAccessTokenIfNeeded() { success in
 			if success {
 				self.didAuthorize(OAuth2JSON())
@@ -212,15 +214,11 @@ public class OAuth2: OAuth2Base {
 						self.didFail(error)
 					}
 					else {
-						if self.authConfig.authorizeEmbedded {
-							if !self.authorizeEmbeddedWith(self.authConfig, params: params, autoDismiss: autoDismiss) {
-								self.didFail(nil == self.authConfig.authorizeContext ? OAuth2Error.NoAuthorizationContext : OAuth2Error.InvalidAuthorizationContext)
-							}
+						do {
+							try self.doAuthorize(params: params)
 						}
-						else {
-							if !self.openAuthorizeURLInBrowser(params) {
-								fatalError("Cannot open authorize URL")
-							}
+						catch let error {
+							self.didFail(error)
 						}
 					}
 				}
@@ -265,6 +263,23 @@ public class OAuth2: OAuth2Base {
 					callback(success: false)
 				}
 			})
+		}
+	}
+	
+	/**
+	Method to actually start authorization. The public `authorize()` method only proceeds to this method if there is no valid access token
+	and if optional client registration succeeds.
+	
+	Can be overridden in subclasses to perform an authorization dance different from directing the user to a website.
+	
+	- parameter params: Optional key/value pairs to pass during authorization
+	*/
+	func doAuthorize(params params: OAuth2StringDict? = nil) throws {
+		if self.authConfig.authorizeEmbedded {
+			try self.authorizeEmbeddedWith(self.authConfig, params: params)
+		}
+		else {
+			try self.openAuthorizeURLInBrowser(params)
 		}
 	}
 	

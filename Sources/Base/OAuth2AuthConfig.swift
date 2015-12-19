@@ -36,20 +36,23 @@ public struct OAuth2AuthConfig
 		/// Starting with iOS 9, `SFSafariViewController` will be used for embedded authorization instead of our custom class. You can turn this off here.
 		public var useSafariView = true
 		
-		/// Internally used to store the `SFSafariViewControllerDelegate`
+		/// Internally used to store the `SFSafariViewControllerDelegate`.
 		var safariViewDelegate: AnyObject?
 	}
 	
 	/// Whether the receiver should use the request body instead of the Authorization header for the client secret.
-	public var secretInBody: Bool = false
+	public var secretInBody = false
 	
-	/// Whether to use an embedded web view for authorization (true) or the OS browser (false, the default)
-	public var authorizeEmbedded: Bool = false
+	/// Whether to use an embedded web view for authorization (true) or the OS browser (false, the default).
+	public var authorizeEmbedded = false
+	
+	/// Whether to automatically dismiss the auto-presented authorization screen.
+	public var authorizeEmbeddedAutoDismiss = true
 	
 	/// Context information for the authorization flow; e.g. the parent view controller to use on iOS.
 	public var authorizeContext: AnyObject? = nil
 	
-	/// UI-specific configuration
+	/// UI-specific configuration.
 	public var ui = UI()
 }
 
