@@ -355,13 +355,28 @@ public class OAuth2: OAuth2Base {
 	
 	This will set "grant_type" to "refresh_token", add the refresh token, then forward to `authorizeURLWithParams()` to fill the remaining
 	parameters.
+	
+	- parameter params: Additional parameters to pass during token refresh
 	*/
-	func tokenURLWithRefreshToken(redirect: String?, refreshToken: String, params: OAuth2StringDict? = nil) throws -> NSURL {
+	func tokenURLForTokenRefresh(params: OAuth2StringDict? = nil) throws -> NSURL {
+		guard let clientId = clientId where !clientId.isEmpty else {
+			throw OAuth2Error.NoClientId
+		}
+		guard let refreshToken = clientConfig.refreshToken where !refreshToken.isEmpty else {
+			throw OAuth2Error.NoRefreshToken
+		}
+		
 		var urlParams = params ?? OAuth2StringDict()
 		urlParams["grant_type"] = "refresh_token"
-		urlParams["refresh_token"] = clientConfig.refreshToken
-		if let secret = clientConfig.clientSecret where authConfig.secretInBody {
-			urlParams["client_secret"] = secret
+		urlParams["refresh_token"] = refreshToken
+		urlParams["client_id"] = clientId
+		if let secret = clientConfig.clientSecret {
+			if authConfig.secretInBody {
+				urlParams["client_secret"] = secret
+			}
+			else {
+				urlParams.removeValueForKey("client_id")		// will be in the Authorization header
+			}
 		}
 		return try authorizeURLWithParams(urlParams, asTokenURL: true)
 	}
@@ -369,8 +384,8 @@ public class OAuth2: OAuth2Base {
 	/**
 	Create a request for token refresh.
 	*/
-	func tokenRequestWithRefreshToken(refreshToken: String) throws -> NSMutableURLRequest {
-		let url = try tokenURLWithRefreshToken(clientConfig.redirect, refreshToken: refreshToken)
+	func tokenRequestForTokenRefresh() throws -> NSMutableURLRequest {
+		let url = try tokenURLForTokenRefresh()
 		return try tokenRequestWithURL(url)
 	}
 	
@@ -381,10 +396,7 @@ public class OAuth2: OAuth2Base {
 	*/
 	public func doRefreshToken(callback: ((successParams: OAuth2JSON?, error: ErrorType?) -> Void)) {
 		do {
-			guard let refresh = clientConfig.refreshToken where !refresh.isEmpty else {
-				throw OAuth2Error.NoRefreshToken
-			}
-			let post = try tokenRequestWithRefreshToken(refresh)
+			let post = try tokenRequestForTokenRefresh()
 			logIfVerbose("Using refresh token to receive access token from \(post.URL?.description ?? "nil")")
 			
 			performRequest(post) { data, status, error in
