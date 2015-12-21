@@ -5,6 +5,11 @@ Version numbering represents the Swift version, plus a running number representi
 You can also refer to commit logs to get details on what was implemented, fixed and improved.
 
 
+### 2.1.2
+
+- Fix issue #75 (refresh tokens not saved to keychain)
+
+
 ### 2.1.1
 
 - Fix issue #72 (refresh token SNAFU from 2.1)
