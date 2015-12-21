@@ -203,7 +203,8 @@ public class OAuth2: OAuth2Base {
 	
 	- parameter params: Optional key/value pairs to pass during authorization
 	*/
-	public func authorize(params params: OAuth2StringDict? = nil) {
+	public final func authorize(params params: OAuth2StringDict? = nil) {
+		isAuthorizing = true
 		tryToObtainAccessTokenIfNeeded() { success in
 			if success {
 				self.didAuthorize(OAuth2JSON())
@@ -370,13 +371,28 @@ public class OAuth2: OAuth2Base {
 	
 	This will set "grant_type" to "refresh_token", add the refresh token, then forward to `authorizeURLWithParams()` to fill the remaining
 	parameters.
+	
+	- parameter params: Additional parameters to pass during token refresh
 	*/
-	func tokenURLWithRefreshToken(redirect: String?, refreshToken: String, params: OAuth2StringDict? = nil) throws -> NSURL {
+	func tokenURLForTokenRefresh(params: OAuth2StringDict? = nil) throws -> NSURL {
+		guard let clientId = clientId where !clientId.isEmpty else {
+			throw OAuth2Error.NoClientId
+		}
+		guard let refreshToken = clientConfig.refreshToken where !refreshToken.isEmpty else {
+			throw OAuth2Error.NoRefreshToken
+		}
+		
 		var urlParams = params ?? OAuth2StringDict()
 		urlParams["grant_type"] = "refresh_token"
-		urlParams["refresh_token"] = clientConfig.refreshToken
-		if let secret = clientConfig.clientSecret where authConfig.secretInBody {
-			urlParams["client_secret"] = secret
+		urlParams["refresh_token"] = refreshToken
+		urlParams["client_id"] = clientId
+		if let secret = clientConfig.clientSecret {
+			if authConfig.secretInBody {
+				urlParams["client_secret"] = secret
+			}
+			else {
+				urlParams.removeValueForKey("client_id")		// will be in the Authorization header
+			}
 		}
 		return try authorizeURLWithParams(urlParams, asTokenURL: true)
 	}
@@ -384,8 +400,8 @@ public class OAuth2: OAuth2Base {
 	/**
 	Create a request for token refresh.
 	*/
-	func tokenRequestWithRefreshToken(refreshToken: String) throws -> NSMutableURLRequest {
-		let url = try tokenURLWithRefreshToken(clientConfig.redirect, refreshToken: refreshToken)
+	func tokenRequestForTokenRefresh() throws -> NSMutableURLRequest {
+		let url = try tokenURLForTokenRefresh()
 		return try tokenRequestWithURL(url)
 	}
 	
@@ -396,10 +412,7 @@ public class OAuth2: OAuth2Base {
 	*/
 	public func doRefreshToken(callback: ((successParams: OAuth2JSON?, error: ErrorType?) -> Void)) {
 		do {
-			guard let refresh = clientConfig.refreshToken where !refresh.isEmpty else {
-				throw OAuth2Error.NoRefreshToken
-			}
-			let post = try tokenRequestWithRefreshToken(refresh)
+			let post = try tokenRequestForTokenRefresh()
 			logIfVerbose("Using refresh token to receive access token from \(post.URL?.description ?? "nil")")
 			
 			performRequest(post) { data, status, error in
@@ -455,14 +468,17 @@ public class OAuth2: OAuth2Base {
 	
 	// MARK: - Callbacks
 	
+	/// Flag used internally to determine whether authorization is going on at all and can be aborted.
+	private var isAuthorizing = false
+	
 	/**
 	Internally used on success. Calls the `onAuthorize` and `afterAuthorizeOrFailure` callbacks on the main thread.
 	*/
 	func didAuthorize(parameters: OAuth2JSON) {
+		isAuthorizing = false
 		if useKeychain {
 			storeTokensToKeychain()
 		}
-		
 		callOnMainThread() {
 			self.onAuthorize?(parameters: parameters)
 			self.internalAfterAuthorizeOrFailure?(wasFailure: false, error: nil)
@@ -474,11 +490,18 @@ public class OAuth2: OAuth2Base {
 	Internally used on error. Calls the `onFailure` and `afterAuthorizeOrFailure` callbacks on the main thread.
 	*/
 	func didFail(error: ErrorType?) {
-		if let err = error {
-			logIfVerbose("\(err)")
+		isAuthorizing = false
+		
+		var finalError = error
+		if let error = error {
+			logIfVerbose("\(error)")
+			if let oae = error as? OAuth2Error where .RequestCancelled == oae {
+				finalError = nil
+			}
 		}
+		
 		callOnMainThread() {
-			self.onFailure?(error: error)
+			self.onFailure?(error: finalError)
 			self.internalAfterAuthorizeOrFailure?(wasFailure: true, error: error)
 			self.afterAuthorizeOrFailure?(wasFailure: true, error: error)
 		}
@@ -498,6 +521,16 @@ public class OAuth2: OAuth2Base {
 	*/
 	public func request(forURL url: NSURL) -> OAuth2Request {
 		return OAuth2Request(URL: url, oauth: self, cachePolicy: .ReturnCacheDataElseLoad, timeoutInterval: 20)
+	}
+	
+	/**
+	Allows to abort authorization currently in progress.
+	*/
+	public func abortAuthorization() {
+		if !abortTask() && isAuthorizing {
+			logIfVerbose("Aborting authorization")
+			didFail(nil)
+		}
 	}
 	
 	

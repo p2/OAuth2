@@ -19,7 +19,7 @@ Code compatible with brand new Swift versions are to be found on a separate feat
 Usage
 -----
 
-To use OAuth2 in your own code, start with `import OAuth2` (use `p2_OAuth2` if you installed via CocoaPods) in your source files.
+To use OAuth2 in your own code, start with `import OAuth2` (use `p2_OAuth2` if you installed _p2.OAuth2_ via CocoaPods) in your source files.
 
 For a typical code grant flow you want to perform the following steps.
 The steps for other flows are mostly the same short of instantiating a different subclass and using different client settings.
@@ -90,7 +90,6 @@ func application(application: UIApplication,
 
 See _Manually Performing Authentication_ below for details on how to do this on the Mac.
 
-
 ### 4. Receive Callback
 
 After everything completes either the `onAuthorize` or the `onFailure` closure will be called, and after that the `afterAuthorizeOrFailure` closure if it has been set.
@@ -104,8 +103,8 @@ You can now obtain an `OAuth2Request`, which is an already signed `NSMutableURLR
 let req = oauth2.request(forURL: <# resource URL #>)
 let session = NSURLSession.sharedSession()
 let task = session.dataTaskWithRequest(req) { data, response, error in
-    if nil != error {
-        // something went wrong
+    if let error = error {
+        // something went wrong, check the error
     }
     else {
         // check the response and the data
@@ -115,13 +114,19 @@ let task = session.dataTaskWithRequest(req) { data, response, error in
 task.resume()
 ```
 
-### 6. Re-Authorize
+### 6. Cancel Authorization
+
+You can cancel an ongoing authorization any time by calling `oauth2.abortAuthorization()`.
+This will cancel ongoing requests (like a code exchange request) or call the callback while you're waiting for a user to login on a webpage.
+The latter will dismiss embedded login screens or redirect the user back to the app.
+
+### 7. Re-Authorize
 
 It is safe to always call `oauth2.authorize()` before performing a request.
 You can also perform the authorization before the first request after your app became active again.
 Or you can always intercept 401s in your requests and call authorize again before re-attempting the request.
 
-### 7. Logout
+### 8. Logout
 
 If you're storing tokens to the keychain, you can call `forgetTokens()` to throw them away.
 
@@ -230,14 +235,40 @@ Create an instance as shown above, set its `username` and `password` properties,
 Some sites might not strictly adhere to the OAuth2 flow.
 The framework deals with those deviations by creating site-specific subclasses.
 
-- **Facebook**: `OAuth2CodeGrantFacebook` to deal with the [URL-query-style response](https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow/v2.2) instead of the expected JSON dictionary.
-- **GitHub**: `OAuth2CodeGrant` automatically puts the client-key/client-secret into an “Authorization: Basic” header.
-    GitHub however needs those two in the POSTed body; you need to set the `authConfig.secretInBody` setting to true, either directly in code or via the `secret_in_body` key in the settings dictionary.
-- **Reddit**: `OAuth2CodeGrant` automatically adds a _Basic_ authorization header when a client secret is set.
-    This means that you **must** specify a client_secret; if there is none (like for [Reddit](https://github.com/reddit/reddit/wiki/OAuth2#token-retrieval-code-flow)) specify the empty string.
-    There is a [RedditLoader](https://github.com/p2/OAuth2App/blob/master/OAuth2App/RedditLoader.swift) example in the [OAuth2App sample app][sample] for a basic usage example.
-- **Google**: If you authorize against Google with a `OAuth2CodeGrant`, the built-in iOS web view will intercept the `http://localhost` as well as the `urn:ietf:wg:oauth:2.0:oob` (with or without `:auto`) callbacks.
-- **LinkedIn**: Since I don't see a way to set any other redirect-url other than ones starting with `https`, this framework can only be used against LinkedIn via built-in web-view, disabling `SFSafariWebViewController`.
+#### Facebook
+
+Use `OAuth2CodeGrantFacebook` to deal with the [URL-query-style response](https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow/v2.2) instead of the expected JSON dictionary.
+
+#### GitHub
+
+`OAuth2CodeGrant` automatically puts the client-key/client-secret into an “Authorization: Basic” header.
+GitHub however needs those two in the POSTed body; you need to set the `authConfig.secretInBody` setting to true, either directly in code or via the `secret_in_body` key in the settings dictionary.
+
+#### Reddit
+
+`OAuth2CodeGrant` automatically adds a _Basic_ authorization header when a client secret is set.
+This means that you **must** specify a client_secret; if there is none (like for [Reddit](https://github.com/reddit/reddit/wiki/OAuth2#token-retrieval-code-flow)) specify the empty string.
+There is a [RedditLoader](https://github.com/p2/OAuth2App/blob/master/OAuth2App/RedditLoader.swift) example in the [OAuth2App sample app][sample] for a basic usage example.
+
+#### Google
+
+If you authorize against Google with a `OAuth2CodeGrant`, the built-in iOS web view will intercept the `http://localhost` as well as the `urn:ietf:wg:oauth:2.0:oob` (with or without `:auto`) callbacks.
+This means you must disable the Safari view controller and – for now – this only works on iOS.
+
+```swift
+oauth2.authConfig.authorizeEmbedded = true
+oauth2.authConfig.ui.useSafariView = false
+```
+
+#### LinkedIn
+
+There are a couple of peculiarities with LinkedIn's OAuth2 implementation.
+You can use `OAuth2CodeGrantLinkedIn` which deals with those, but since it needs the custom embedded web view this will only work on iOS for now.
+To receive _JSON_ you will also need to use their special header `x-li-format` and set it to `json`:
+
+```swift
+urlRequest.setValue("json", forHTTPHeaderField: "x-li-format")
+```
 
 
 Usage with Alamofire
