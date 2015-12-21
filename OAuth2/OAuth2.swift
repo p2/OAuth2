@@ -407,6 +407,9 @@ public class OAuth2: OAuth2Base {
 					let json = try self.parseRefreshTokenResponse(data)
 					if status < 400 {
 						self.logIfVerbose("Did use refresh token for access token [\(nil != self.clientConfig.accessToken)]")
+						if self.useKeychain {
+							self.storeTokensToKeychain()
+						}
 						callback(successParams: json, error: nil)
 					}
 					else {
