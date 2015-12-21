@@ -203,7 +203,8 @@ public class OAuth2: OAuth2Base {
 	
 	- parameter params: Optional key/value pairs to pass during authorization
 	*/
-	public func authorize(params params: OAuth2StringDict? = nil) {
+	public final func authorize(params params: OAuth2StringDict? = nil) {
+		isAuthorizing = true
 		tryToObtainAccessTokenIfNeeded() { success in
 			if success {
 				self.didAuthorize(OAuth2JSON())
@@ -467,14 +468,17 @@ public class OAuth2: OAuth2Base {
 	
 	// MARK: - Callbacks
 	
+	/// Flag used internally to determine whether authorization is going on at all and can be aborted.
+	private var isAuthorizing = false
+	
 	/**
 	Internally used on success. Calls the `onAuthorize` and `afterAuthorizeOrFailure` callbacks on the main thread.
 	*/
 	func didAuthorize(parameters: OAuth2JSON) {
+		isAuthorizing = false
 		if useKeychain {
 			storeTokensToKeychain()
 		}
-		
 		callOnMainThread() {
 			self.onAuthorize?(parameters: parameters)
 			self.internalAfterAuthorizeOrFailure?(wasFailure: false, error: nil)
@@ -486,11 +490,18 @@ public class OAuth2: OAuth2Base {
 	Internally used on error. Calls the `onFailure` and `afterAuthorizeOrFailure` callbacks on the main thread.
 	*/
 	func didFail(error: ErrorType?) {
-		if let err = error {
-			logIfVerbose("\(err)")
+		isAuthorizing = false
+		
+		var finalError = error
+		if let error = error {
+			logIfVerbose("\(error)")
+			if let oae = error as? OAuth2Error where .RequestCancelled == oae {
+				finalError = nil
+			}
 		}
+		
 		callOnMainThread() {
-			self.onFailure?(error: error)
+			self.onFailure?(error: finalError)
 			self.internalAfterAuthorizeOrFailure?(wasFailure: true, error: error)
 			self.afterAuthorizeOrFailure?(wasFailure: true, error: error)
 		}
@@ -510,6 +521,16 @@ public class OAuth2: OAuth2Base {
 	*/
 	public func request(forURL url: NSURL) -> OAuth2Request {
 		return OAuth2Request(URL: url, oauth: self, cachePolicy: .ReturnCacheDataElseLoad, timeoutInterval: 20)
+	}
+	
+	/**
+	Allows to abort authorization currently in progress.
+	*/
+	public func abortAuthorization() {
+		if !abortTask() && isAuthorizing {
+			logIfVerbose("Aborting authorization")
+			didFail(nil)
+		}
 	}
 	
 	

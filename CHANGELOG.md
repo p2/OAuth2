@@ -7,6 +7,8 @@ You can also refer to commit logs to get details on what was implemented, fixed 
 
 ### x.x
 
+- Add capability to abort ongoing authorization with `abortAuthorization()`
+- Add `RequestCancelled` Error
 - Add `OAuth2CodeGrantLinkedIn` to deal with LinkedIn
 - Move `autoDismiss` param from `authorize()` into the `authConfig` struct
 - Change `openAuthorizeURLInBrowser()` to throw instead of returning a Bool (throwing `UnableToOpenAuthorizeURL` instead of returning false)

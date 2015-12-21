@@ -19,7 +19,7 @@ Code compatible with brand new Swift versions are to be found on a separate feat
 Usage
 -----
 
-To use OAuth2 in your own code, start with `import OAuth2` (use `p2_OAuth2` if you installed via CocoaPods) in your source files.
+To use OAuth2 in your own code, start with `import OAuth2` (use `p2_OAuth2` if you installed _p2.OAuth2_ via CocoaPods) in your source files.
 
 For a typical code grant flow you want to perform the following steps.
 The steps for other flows are mostly the same short of instantiating a different subclass and using different client settings.
@@ -90,7 +90,6 @@ func application(application: UIApplication,
 
 See _Manually Performing Authentication_ below for details on how to do this on the Mac.
 
-
 ### 4. Receive Callback
 
 After everything completes either the `onAuthorize` or the `onFailure` closure will be called, and after that the `afterAuthorizeOrFailure` closure if it has been set.
@@ -104,8 +103,8 @@ You can now obtain an `OAuth2Request`, which is an already signed `NSMutableURLR
 let req = oauth2.request(forURL: <# resource URL #>)
 let session = NSURLSession.sharedSession()
 let task = session.dataTaskWithRequest(req) { data, response, error in
-    if nil != error {
-        // something went wrong
+    if let error = error {
+        // something went wrong, check the error
     }
     else {
         // check the response and the data
@@ -115,13 +114,19 @@ let task = session.dataTaskWithRequest(req) { data, response, error in
 task.resume()
 ```
 
-### 6. Re-Authorize
+### 6. Cancel Authorization
+
+You can cancel an ongoing authorization any time by calling `oauth2.abortAuthorization()`.
+This will cancel ongoing requests (like a code exchange request) or call the callback while you're waiting for a user to login on a webpage.
+The latter will dismiss embedded login screens or redirect the user back to the app.
+
+### 7. Re-Authorize
 
 It is safe to always call `oauth2.authorize()` before performing a request.
 You can also perform the authorization before the first request after your app became active again.
 Or you can always intercept 401s in your requests and call authorize again before re-attempting the request.
 
-### 7. Logout
+### 8. Logout
 
 If you're storing tokens to the keychain, you can call `forgetTokens()` to throw them away.
 
