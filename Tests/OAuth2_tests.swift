@@ -54,6 +54,7 @@ class OAuth2Tests: XCTestCase {
 	
 	func testAuthorizeURL() {
 		let oa = genericOAuth2()
+		oa.verbose = false
 		let auth = try! oa.authorizeURLWithRedirect("oauth2app://callback", scope: "launch", params: nil)
 		
 		let comp = NSURLComponents(URL: auth, resolvingAgainstBaseURL: true)!
@@ -68,6 +69,7 @@ class OAuth2Tests: XCTestCase {
 	
 	func testTokenURL() {
 		let oa = genericOAuth2()
+		oa.verbose = false
 		let auth = try! oa.authorizeURLWithParams([:], asTokenURL: true)
 		
 		let comp = NSURLComponents(URL: auth, resolvingAgainstBaseURL: true)!
@@ -77,6 +79,34 @@ class OAuth2Tests: XCTestCase {
 		let params = OAuth2.paramsFromQuery(comp.percentEncodedQuery!)
 		//XCTAssertEqual(params["redirect_uri"]!, "oauth2app://callback", "Expecting correct `redirect_uri` in query")
 		XCTAssertNil(params["state"], "Expecting no `state` in query")
+	}
+	
+	func testAuthorizeCall() {
+		let oa = genericOAuth2()
+		oa.verbose = false
+		XCTAssertFalse(oa.authConfig.authorizeEmbedded)
+		oa.onAuthorize = { params in
+			XCTAssertTrue(false, "Should not call success callback")
+		}
+		oa.onFailure = { error in
+			XCTAssertNotNil(error)
+			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.NoRedirectURL)
+		}
+		oa.authorize()
+		XCTAssertFalse(oa.authConfig.authorizeEmbedded)
+		
+		// embedded
+		oa.onFailure = { error in
+			XCTAssertNotNil(error)
+			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.InvalidAuthorizationContext)
+		}
+		oa.afterAuthorizeOrFailure = { wasFailure, error in
+			XCTAssertTrue(wasFailure)
+			XCTAssertNotNil(error)
+			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.InvalidAuthorizationContext)
+		}
+		oa.authorizeEmbeddedFrom("A string")
+		XCTAssertTrue(oa.authConfig.authorizeEmbedded)
 	}
 	
 	func testQueryParamParsing() {

@@ -60,17 +60,20 @@ oauth2.onFailure = { error in        // `error` is nil on cancel
 ### 3. Authorize the User
 
 By default the OS browser will be used for authorization if there is no access token present in the keychain.
-If you want to use the embedded web-view, change `authorizeEmbedded` to `true` and set a root view controller, from which to present the login screen if needed, as `authorizeContext`.
+To start authorization call **`authorize()`** or the convenience method `authorizeEmbeddedFrom(<# view controller #>)`.
 
-**Starting with iOS 9**, `SFSafariViewController` will be used when enabling embedded authorization, meaning **you must intercept the callback in your app delegate** or explicitly use the old login screen (see below).
+The latter configures `authConfig` like so: changes `authorizeEmbedded` to `true` and sets a root view controller, from which to present the login screen, as `authorizeContext`.
+See [_Advanced Settings_](#advanced-settings) for other options.
 
-To start authorization call `authorize()`:
+**Starting with iOS 9**, `SFSafariViewController` will be used when enabling embedded authorization.
 
 ```swift
 oauth2.authConfig.authorizeEmbedded = true
 oauth2.authConfig.authorizeContext = <# presenting view controller #>
-// see **Advanced Settings** for more options
 oauth2.authorize()
+
+// for embedded authorization you can just use:
+oauth2.authorizeEmbeddedFrom(<# presenting view controller #>)
 ```
 
 When using the OS browser or the iOS 9 Safari view controller, you will need to **intercept the callback** in your app delegate.
@@ -88,7 +91,7 @@ func application(application: UIApplication,
 }
 ```
 
-See _Manually Performing Authentication_ below for details on how to do this on the Mac.
+See [_Manually Performing Authentication_](#manually-performing-authentication) below for details on how to do this on the Mac.
 
 ### 4. Receive Callback
 
@@ -98,6 +101,7 @@ Hence, unless you have a reason to, you don't need to set all three callbacks, y
 ### 5. Make Requests
 
 You can now obtain an `OAuth2Request`, which is an already signed `NSMutableURLRequest`, to retrieve data from your server.
+If you use _Alamofire_ there's a [class extension](#usage-with-alamofire) below that you can use.
 
 ```swift
 let req = oauth2.request(forURL: <# resource URL #>)
@@ -289,7 +293,9 @@ extension OAuth2 {
         -> Alamofire.Request
     {
         var hdrs = headers
-        hdrs["Authorization"] = "Bearer \(accessToken)"
+        if let access = accessToken {
+            hdrs["Authorization"] = "Bearer \(access)"
+        }
         return Alamofire.request(
             method,
             URLString,
