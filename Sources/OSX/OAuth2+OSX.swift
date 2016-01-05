@@ -27,7 +27,7 @@ extension OAuth2 {
 	Uses `NSWorkspace` to open the authorize URL in the OS browser.
 	
 	- parameter params: Additional parameters to pass to the authorize URL
-	- returns: A bool indicating success
+	- throws: UnableToOpenAuthorizeURL on failure
 	*/
 	public final func openAuthorizeURLInBrowser(params: OAuth2StringDict? = nil) throws {
 		let url = try authorizeURL(params)
@@ -40,9 +40,9 @@ extension OAuth2 {
 	// MARK: - Embedded View (NOT IMPLEMENTED)
 	
 	/**
-	    Tries to use the given context, which on OS X should be a NSViewController, to present the authorization screen.
+	Tries to use the given context, which on OS X should be a NSViewController, to present the authorization screen.
 	
-	    - returns: A bool indicating whether the method was able to show the authorize screen
+	- throws: Can throw several OAuth2Error if the method is unable to show the authorize screen
 	 */
 	public func authorizeEmbeddedWith(config: OAuth2AuthConfig, params: OAuth2StringDict? = nil) throws {
 		if let controller = config.authorizeContext as? NSViewController {
