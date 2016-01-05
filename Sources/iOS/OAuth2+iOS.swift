@@ -28,7 +28,7 @@ extension OAuth2 {
 	Uses `UIApplication` to open the authorize URL in iOS's browser.
 	
 	- parameter params: Additional parameters to pass to the authorize URL
-	- returns: A bool indicating success
+	- throws: UnableToOpenAuthorizeURL on failure
 	*/
 	public final func openAuthorizeURLInBrowser(params: OAuth2StringDict? = nil) throws {
 		let url = try authorizeURL(params)
@@ -43,7 +43,7 @@ extension OAuth2 {
 	/**
 	Tries to use the current auth config context, which on iOS should be a UIViewController, to present the authorization screen.
 	
-	- returns: A bool indicating whether the method was able to show the authorize screen
+	- throws: Can throw several OAuth2Error if the method is unable to show the authorize screen
 	*/
 	public func authorizeEmbeddedWith(config: OAuth2AuthConfig, params: OAuth2StringDict? = nil) throws {
 		if let controller = config.authorizeContext as? UIViewController {
