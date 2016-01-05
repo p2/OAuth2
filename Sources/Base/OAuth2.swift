@@ -228,6 +228,17 @@ public class OAuth2: OAuth2Base {
 	}
 	
 	/**
+	Shortcut function to start embedded authorization from the given context (a UIViewController on iOS).
+	
+	This method sets `authConfig.authorizeEmbedded = true` and `authConfig.authorizeContext = <# context #>`, then calls `authorize()`
+	*/
+	public func authorizeEmbeddedFrom(context: AnyObject, params: OAuth2StringDict? = nil) {
+		authConfig.authorizeEmbedded = true
+		authConfig.authorizeContext = context
+		authorize(params: params)
+	}
+	
+	/**
 	If the instance has an accessToken, checks if its expiry time has not yet passed. If we don't have an expiry date we assume the token
 	is still valid.
 	*/
@@ -423,6 +434,9 @@ public class OAuth2: OAuth2Base {
 					let json = try self.parseRefreshTokenResponse(data)
 					if status < 400 {
 						self.logIfVerbose("Did use refresh token for access token [\(nil != self.clientConfig.accessToken)]")
+						if self.useKeychain {
+							self.storeTokensToKeychain()
+						}
 						callback(successParams: json, error: nil)
 					}
 					else {
