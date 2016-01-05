@@ -175,7 +175,7 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 		if nil != self.onWillDismiss {
 			self.onWillDismiss!(didCancel: asCancel)
 		}
-		presentingViewController?.dismissViewControllerAnimated(animated, completion: nil)
+		dismissViewControllerAnimated(animated, completion: nil)
 	}
 	
 	

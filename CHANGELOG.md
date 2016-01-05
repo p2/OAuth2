@@ -5,6 +5,11 @@ Version numbering represents the Swift version, plus a running number representi
 You can also refer to commit logs to get details on what was implemented, fixed and improved.
 
 
+### 2.1.3
+
+- Fix issue #76 (dismissing built-in web view controller in a more robust way)
+
+
 ### 2.1.2
 
 - Fix issue #75 (refresh tokens not saved to keychain)
