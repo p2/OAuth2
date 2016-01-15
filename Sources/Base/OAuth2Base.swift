@@ -19,10 +19,9 @@
 //
 
 import Foundation
-#if IMPORT_SWIFT_KEYCHAIN		// experimental for SwiftKeychain integration via CocoaPods (iOS only)
+#if IMPORT_SWIFT_KEYCHAIN       // experimental for SwiftKeychain integration via CocoaPods (iOS only)
 import SwiftKeychain
-#endif
-#if !NO_KEYCHAIN_IMPORT			// needs to be imported when using `swift build`, not when building via Xcode
+#elseif !NO_KEYCHAIN_IMPORT     // needs to be imported when using `swift build`, not when building via Xcode
 import SwiftKeychain
 #endif
 
