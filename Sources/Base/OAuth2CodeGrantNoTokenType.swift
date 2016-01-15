@@ -1,9 +1,9 @@
 //
-//  OAuth2CodeGrantLinkedIn.swift
+//  OAuth2CodeGrantNoTokenType.swift
 //  OAuth2
 //
-//  Created by Pascal Pfiffner on 21/12/15.
-//  Copyright 2015 Pascal Pfiffner
+//  Created by Pascal Pfiffner on 1/15/16.
+//  Copyright 2016 Pascal Pfiffner.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -20,22 +20,14 @@
 
 
 /**
-    LinkedIn-specific subclass to deal with LinkedIn peculiarities:
-    
-    - Must have client-id/secret in request body
-    - Must use custom web view in order to be able to intercept http(s) redirects
-    - Will **not** return the "token_type" value, so must ignore it not being present
- */
-public class OAuth2CodeGrantLinkedIn: OAuth2CodeGrant {
-    
+Subclass to deal with sites that don't return `token_type`, such as Instagram or Bitly.
+*/
+public class OAuth2CodeGrantNoTokenType: OAuth2CodeGrant {
+	
 	public override init(settings: OAuth2JSON) {
 		super.init(settings: settings)
-		authConfig.secretInBody = true
-		authConfig.authorizeEmbedded = true     // necessary because only http(s) redirects are allowed
-		authConfig.ui.useSafariView = false     // must use custom web view in order to be able to intercept http(s) redirects
 	}
 	
 	override func assureCorrectBearerType(params: OAuth2JSON) throws {
 	}
 }
-

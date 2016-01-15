@@ -274,6 +274,15 @@ To receive _JSON_ you will also need to use their special header `x-li-format` a
 urlRequest.setValue("json", forHTTPHeaderField: "x-li-format")
 ```
 
+#### Instagram, Bitly, ...
+
+Some sites don't return the required `token_type` parameter in their token response.
+LinkedIn does the same, see above.
+You can tell if you're getting the error _“No token type received, will not use the token”_.
+
+There is a subclass for code grant flows that ignores the missing token type that you can use: [`OAuth2CodeGrantNoTokenType`](Sources/Base/OAuth2CodeGrantNoTokenType.swift).
+There currently is no such class for other flow types, but you can easily create a subclass with 7 lines of code yourself, just look at OAuth2CodeGrantNoTokenType.
+
 
 Usage with Alamofire
 --------------------
@@ -292,7 +301,7 @@ extension OAuth2 {
         headers: [String: String]? = nil)
         -> Alamofire.Request
     {
-        var hdrs = headers
+        var hdrs = headers ?? [:]
         if let access = accessToken {
             hdrs["Authorization"] = "Bearer \(access)"
         }
@@ -386,6 +395,11 @@ To revert to the old custom `OAuth2WebViewController`:
 To customize the _go back_ button when using `OAuth2WebViewController`:
 
     oauth2.authConfig.ui.backButton = <# UIBarButtonItem(...) #>
+
+
+Some sites also want the client-id/secret combination in the request _body_, not in the _Authorization_ header:
+
+    oauth2.authConfig.secretInBody = true
 
 
 Installation
