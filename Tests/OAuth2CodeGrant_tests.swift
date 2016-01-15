@@ -226,6 +226,15 @@ class OAuth2CodeGrantTests: XCTestCase
 			XCTAssertNil(error, "Should not throw")
 		}
 		
+		// Nor the generic no-token-type class
+		let noType = OAuth2CodeGrantNoTokenType(settings: settings)
+		do {
+			let _ = try noType.parseAccessTokenResponse(response)
+		}
+		catch let error {
+			XCTAssertNil(error, "Should not throw")
+		}
+		
 		// must throw when "token_type" is not known
 		response["token_type"] = "guardian"
 		do {
@@ -236,6 +245,14 @@ class OAuth2CodeGrantTests: XCTestCase
 		}
 		catch let error {
 			XCTAssertNil(error, "Should not throw wrong error")
+		}
+		
+		// the no-token-type class must still ignore it
+		do {
+			let _ = try noType.parseAccessTokenResponse(response)
+		}
+		catch let error {
+			XCTAssertNil(error, "Should not throw")
 		}
 		
 		// add "token_type"

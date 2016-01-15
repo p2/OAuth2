@@ -10,6 +10,7 @@ You can also refer to commit logs to get details on what was implemented, fixed 
 - Add capability to abort ongoing authorization with `abortAuthorization()`
 - Add `RequestCancelled` Error
 - Add `OAuth2CodeGrantLinkedIn` to deal with LinkedIn
+- Add `OAuth2CodeGrantNoTokenType` to deal with Instagram, Bitly and all others not returning `token_type`
 - Move `autoDismiss` param from `authorize()` into the `authConfig` struct
 - Change `openAuthorizeURLInBrowser()` to throw instead of returning a Bool (throwing `UnableToOpenAuthorizeURL` instead of returning false)
 - Add `UTF8DecodeError`
