@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E2EF61E11C49DF2F008A39C4 /* OAuth2WkWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2EF61DF1C49DF2F008A39C4 /* OAuth2WkWebViewController.swift */; };
+		E2EF61E21C49DF2F008A39C4 /* OAuth2WkWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2EF61E01C49DF2F008A39C4 /* OAuth2WkWebViewController.xib */; };
+		E2EF61E51C49E0A1008A39C4 /* OAuth2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EEDB8624193FAAE500C4EEA1 /* OAuth2.framework */; };
 		EA9758181B222CEA007744B1 /* OAuth2PasswordGrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA9758171B222CEA007744B1 /* OAuth2PasswordGrant.swift */; };
 		EA97581D1B223A5D007744B1 /* OAuth2PasswordGrant_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA97581B1B223932007744B1 /* OAuth2PasswordGrant_Tests.swift */; };
 		EA97581E1B2242F9007744B1 /* OAuth2PasswordGrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA9758171B222CEA007744B1 /* OAuth2PasswordGrant.swift */; };
@@ -108,6 +111,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E2EF61DF1C49DF2F008A39C4 /* OAuth2WkWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2WkWebViewController.swift; sourceTree = "<group>"; };
+		E2EF61E01C49DF2F008A39C4 /* OAuth2WkWebViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAuth2WkWebViewController.xib; sourceTree = "<group>"; };
 		EA9758171B222CEA007744B1 /* OAuth2PasswordGrant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2PasswordGrant.swift; sourceTree = "<group>"; };
 		EA97581B1B223932007744B1 /* OAuth2PasswordGrant_Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2PasswordGrant_Tests.swift; sourceTree = "<group>"; };
 		EE1391D91AC5B41A002C7B18 /* OAuth2CodeGrantBasicAuth.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2CodeGrantBasicAuth.swift; sourceTree = "<group>"; };
@@ -162,6 +167,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2EF61E51C49E0A1008A39C4 /* OAuth2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -204,6 +210,8 @@
 			isa = PBXGroup;
 			children = (
 				EEC7A8C61AE46C33008C30E7 /* OAuth2+OSX.swift */,
+				E2EF61DF1C49DF2F008A39C4 /* OAuth2WkWebViewController.swift */,
+				E2EF61E01C49DF2F008A39C4 /* OAuth2WkWebViewController.xib */,
 			);
 			name = OSX;
 			path = ../OSX;
@@ -433,6 +441,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2EF61E21C49DF2F008A39C4 /* OAuth2WkWebViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -486,6 +495,7 @@
 				EE79F65A1BFAA36900746243 /* OAuth2Error.swift in Sources */,
 				EE79F6571BFA945C00746243 /* OAuth2ClientConfig.swift in Sources */,
 				EE79F6541BFA93D900746243 /* OAuth2AuthConfig.swift in Sources */,
+				E2EF61E11C49DF2F008A39C4 /* OAuth2WkWebViewController.swift in Sources */,
 				EEC7A8DC1AE4851E008C30E7 /* KeychainQuery.swift in Sources */,
 				EEC7A8DA1AE4851E008C30E7 /* KeychainItem.swift in Sources */,
 				EEC7A8D61AE4851E008C30E7 /* GenericKey.swift in Sources */,
@@ -572,7 +582,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Mac Developer: Renaud Boisjoly (XB4BFU6P3B)";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
