@@ -67,12 +67,10 @@ extension OAuth2 {
 	/**
 	Presents a OAuth2WKWebViewController from the supplied view controller, loading the authorize URL.
 	
-	The mechanism works just like when you're using Safari itself to log the user in, hence you **need to implement**
-	`application(application:openURL:sourceApplication:annotation:)` in your application delegate.
+	The mechanism works differently from using Safari itself to log the user in, and unlike the iOS SafariWebViewCOntroller, 
+	there is **NO need to implement** `application(application:openURL:sourceApplication:annotation:)` in your application delegate.
 	
-	This method does NOT dismiss the view controller automatically, you probably want to do this in the `afterAuthorizeOrFailure` closure.
-	Simply call this method first, then call `dismissViewController()` on the returned web view controller instance in that closure. Or use
-	`authorizeEmbeddedWith()` which does all this automatically.
+	The View controller is dismissed automatically
 	
 	- parameter controller: The view controller to use for presentation
 	- parameter params: Optional additional URL parameters
