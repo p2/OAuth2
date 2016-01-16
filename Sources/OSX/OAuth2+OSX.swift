@@ -97,7 +97,6 @@ extension OAuth2 {
 	}
 
 	func wkWebViewControllerDidCancel() {
-		authConfig.ui.safariViewDelegate = nil
 		didFail(nil)
 	}
 }
