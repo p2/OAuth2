@@ -48,15 +48,18 @@ public class OAuth2WkWebViewController: NSViewController, WKNavigationDelegate, 
 	}
 
 	//WKWebDelegate
-	
-	 public func webView(webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
-		print("Redirect")
-	}
+
 	
 	public func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
-		let webV = webView.title
-		//Got the token in webV!
-		print(webV)
+		//Detect if this is the token success message. Google copies it into the webview's (web page's) title
+		let webViewTitle = webView.title ?? ""
+
+		if webViewTitle.containsString("code=") {
+			let code = webViewTitle.componentsSeparatedByString("code=")[1]
+			print("The code is: \(code)")
+		}
+		
+		
 	}
 
 }
