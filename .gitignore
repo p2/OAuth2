@@ -6,7 +6,7 @@
 *.xcscmblueprint
 build
 .build
-
+*OAuth*
 # Documentation
 docs
 
