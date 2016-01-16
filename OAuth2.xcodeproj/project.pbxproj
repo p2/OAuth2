@@ -7,9 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E2517B4B1C49EBD00082B800 /* OAuth2WkWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2EF61E01C49DF2F008A39C4 /* OAuth2WkWebViewController.xib */; };
 		E2EF61E11C49DF2F008A39C4 /* OAuth2WkWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2EF61DF1C49DF2F008A39C4 /* OAuth2WkWebViewController.swift */; };
-		E2EF61E21C49DF2F008A39C4 /* OAuth2WkWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2EF61E01C49DF2F008A39C4 /* OAuth2WkWebViewController.xib */; };
-		E2EF61E51C49E0A1008A39C4 /* OAuth2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EEDB8624193FAAE500C4EEA1 /* OAuth2.framework */; };
 		EA9758181B222CEA007744B1 /* OAuth2PasswordGrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA9758171B222CEA007744B1 /* OAuth2PasswordGrant.swift */; };
 		EA97581D1B223A5D007744B1 /* OAuth2PasswordGrant_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA97581B1B223932007744B1 /* OAuth2PasswordGrant_Tests.swift */; };
 		EA97581E1B2242F9007744B1 /* OAuth2PasswordGrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA9758171B222CEA007744B1 /* OAuth2PasswordGrant.swift */; };
@@ -167,7 +166,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E2EF61E51C49E0A1008A39C4 /* OAuth2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -441,7 +439,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E2EF61E21C49DF2F008A39C4 /* OAuth2WkWebViewController.xib in Resources */,
+				E2517B4B1C49EBD00082B800 /* OAuth2WkWebViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -704,7 +702,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				OTHER_SWIFT_FLAGS = "-DNO_KEYCHAIN_IMPORT";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.chip.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = OAuth2;
@@ -726,7 +724,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				OTHER_SWIFT_FLAGS = "-DNO_KEYCHAIN_IMPORT";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.chip.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = OAuth2;

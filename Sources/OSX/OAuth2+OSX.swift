@@ -96,11 +96,7 @@ extension OAuth2 {
 		authConfig.ui.safariViewDelegate = delegate
 		//Should we define a new property for this on authConfig?
 		
-		if #available(OSX 10.10, *) {
-			from.presentViewControllerAsModalWindow(vc)
-		} else {
-			// Fallback on earlier versions
-		}
+		from.presentViewControllerAsModalWindow(vc)
 		return vc
 	
 		// Fallback on earlier versions
