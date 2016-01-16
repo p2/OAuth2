@@ -26,7 +26,6 @@ public class OAuth2WkWebViewController: NSViewController, WKNavigationDelegate, 
 		self.wkWebView.UIDelegate = self
 		self.wkWebView.navigationDelegate = self
 		
-		
 		self.wkWebView.autoresizingMask = [.ViewWidthSizable, .ViewHeightSizable]
 		
 		if let theURL = self.startURL {
@@ -57,6 +56,7 @@ public class OAuth2WkWebViewController: NSViewController, WKNavigationDelegate, 
 		if webViewTitle.containsString("code=") {
 			let code = webViewTitle.componentsSeparatedByString("code=")[1]
 			print("The code is: \(code)")
+			self.oauth?.accessToken = code
 		}
 		
 		

@@ -90,10 +90,6 @@ extension OAuth2 {
 		let vc = OAuth2WkWebViewController(startURL: url)
 		vc.title = authConfig.ui.title
 		
-		let delegate = OAuth2WKWebViewControllerDelegate(oauth: self)
-		authConfig.ui.safariViewDelegate = delegate
-		//Should we define a new property for this on authConfig?
-		
 		from.presentViewControllerAsModalWindow(vc)
 		return vc
 	
@@ -103,19 +99,5 @@ extension OAuth2 {
 	func wkWebViewControllerDidCancel() {
 		authConfig.ui.safariViewDelegate = nil
 		didFail(nil)
-	}
-
-}
-
-class OAuth2WKWebViewControllerDelegate: NSObject, WKNavigationDelegate {
-	
-	let oauth: OAuth2
-	
-	init(oauth: OAuth2) {
-		self.oauth = oauth
-	}
-	
-	func wkWebViewControllerDidFinish() {
-		oauth.wkWebViewControllerDidCancel()
 	}
 }
