@@ -47,5 +47,16 @@ public class OAuth2WkWebViewController: NSViewController, WKNavigationDelegate, 
 		super.init(coder: aDecoder)!
 	}
 
+	//WKWebDelegate
 	
+	 public func webView(webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
+		print("Redirect")
+	}
+	
+	public func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
+		let webV = webView.title
+		//Got the token in webV!
+		print(webV)
+	}
+
 }
