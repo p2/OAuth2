@@ -49,10 +49,10 @@ extension OAuth2 {
 	@available(iOS 10.10, *)
 	public func authorizeEmbeddedWith(config: OAuth2AuthConfig, params: OAuth2StringDict? = nil) throws {
 		if let controller = config.authorizeContext as? NSViewController {
-			let web: OAuth2WkWebViewController = try authorizeEmbeddedFrom(controller, params: params)
+			let web: OAuth2WkWebViewController = try authorizeEmbeddedFrom(controller, redirect: redirect!, params: params)
 			if config.authorizeEmbeddedAutoDismiss {
 				internalAfterAuthorizeOrFailure = { wasFailure, error in
-					self.logIfVerbose("Should now dismiss \(web)")
+					web.dismissViewController(web)
 				}
 			}
 			return
@@ -78,18 +78,34 @@ extension OAuth2 {
 	*/
 	
 	@available(iOS 10.10, *)
-	public func authorizeEmbeddedFrom(controller: NSViewController, params: OAuth2StringDict?) throws -> OAuth2WkWebViewController {
+	public func authorizeEmbeddedFrom(controller: NSViewController, redirect: String, params: OAuth2StringDict?) throws -> OAuth2WkWebViewController {
 		let url = try authorizeURL(params)
-		return presentWKWebViewFor(url, from: controller)
+		return presentWKWebViewFor(url, intercept: redirect, from: controller)
 	}
 	
 	@available(iOS 10.10, *)
-	final func presentWKWebViewFor(url: NSURL, from: NSViewController) -> OAuth2WkWebViewController {
+	final func presentWKWebViewFor(url: NSURL, intercept: String, from: NSViewController) -> OAuth2WkWebViewController {
 		
 		//Create a view controller containing a wkwebview
 		let vc = OAuth2WkWebViewController(startURL: url)
+		vc.interceptURLString = intercept
 		vc.title = authConfig.ui.title
-		
+		vc.onIntercept = { url in
+			do {
+				try self.handleRedirectURL(url)
+				return true
+			}
+			catch let err {
+				self.logIfVerbose("Cannot intercept redirect URL: \(err)")
+			}
+			return false
+		}
+		vc.onWillDismiss = { didCancel in
+			if didCancel {
+				self.didFail(nil)
+			}
+		}
+
 		from.presentViewControllerAsModalWindow(vc)
 		return vc
 	

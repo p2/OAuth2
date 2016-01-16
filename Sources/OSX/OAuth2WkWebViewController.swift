@@ -15,6 +15,33 @@ public class OAuth2WkWebViewController: NSViewController, WKNavigationDelegate, 
 	var startURL: NSURL?
 	var wkWebView: WKWebView!
 	
+	/// The URL string to intercept and respond to.
+	var interceptURLString: String? {
+		didSet(oldURL) {
+			if nil != interceptURLString {
+				if let url = NSURL(string: interceptURLString!) {
+					interceptComponents = NSURLComponents(URL: url, resolvingAgainstBaseURL: true)
+				}
+				else {
+					oauth?.logIfVerbose("Failed to parse URL \(interceptURLString), discarding")
+					interceptURLString = nil
+				}
+			}
+			else {
+				interceptComponents = nil
+			}
+		}
+	}
+	var interceptComponents: NSURLComponents?
+	
+	/// Closure called when the web view gets asked to load the redirect URL, specified in `interceptURLString`. Return a Bool indicating
+	/// that you've intercepted the URL.
+	var onIntercept: ((url: NSURL) -> Bool)?
+
+	/// Called when the web view is about to be dismissed.
+	var onWillDismiss: ((didCancel: Bool) -> Void)?
+
+	
 	public override func loadView() {
 		super.loadView()
 	}
@@ -50,16 +77,32 @@ public class OAuth2WkWebViewController: NSViewController, WKNavigationDelegate, 
 
 	
 	public func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
-		//Detect if this is the token success message. Google copies it into the webview's (web page's) title
-		let webViewTitle = webView.title ?? ""
 
-		if webViewTitle.containsString("code=") {
-			let code = webViewTitle.componentsSeparatedByString("code=")[1]
-			print("The code is: \(code)")
-			self.oauth?.accessToken = code
+		if let scheme = interceptComponents?.scheme where "urn" == scheme {
+			if let path = interceptComponents?.path where path.hasPrefix("ietf:wg:oauth:2.0:oob") {
+				if let title = webView.title where title.hasPrefix("Success ") {
+					oauth?.logIfVerbose("Creating redirect URL from document.title")
+					let qry = title.stringByReplacingOccurrencesOfString("Success ", withString: "")
+					if let url = NSURL(string: "http://localhost/?\(qry)") {
+						onIntercept?(url: url)
+						return
+					}
+					else {
+						oauth?.logIfVerbose("Failed to create a URL with query parts \"\(qry)\"")
+					}
+				}
+			}
 		}
-		
-		
 	}
 
+	func dismiss(animated animated: Bool) {
+		dismiss(asCancel: false)
+	}
+	
+	func dismiss(asCancel asCancel: Bool) {
+		self.wkWebView.stopLoading()
+		
+		presentingViewController?.dismissController(self)
+	}
+	
 }
