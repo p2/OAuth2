@@ -279,9 +279,9 @@ urlRequest.setValue("json", forHTTPHeaderField: "x-li-format")
 Some sites don't return the required `token_type` parameter in their token response.
 LinkedIn does the same, see above.
 You can tell if you're getting the error _“No token type received, will not use the token”_.
-
 There is a subclass for code grant flows that ignores the missing token type that you can use: [`OAuth2CodeGrantNoTokenType`](Sources/Base/OAuth2CodeGrantNoTokenType.swift).
-There currently is no such class for other flow types, but you can easily create a subclass with 7 lines of code yourself, just look at OAuth2CodeGrantNoTokenType.
+
+For _Instagram_ you also need to set `oauth2.authConfig.secretInBody = true` (or use `secret_in_body` in your settings dict) because it expects the client secret in the request body, not the _Authorization_ header.
 
 
 Usage with Alamofire
