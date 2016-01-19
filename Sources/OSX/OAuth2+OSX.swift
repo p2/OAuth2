@@ -19,6 +19,7 @@
 //
 
 import Cocoa
+import WebKit
 
 
 extension OAuth2 {
@@ -37,28 +38,81 @@ extension OAuth2 {
 	}
 	
 	
-	// MARK: - Embedded View (NOT IMPLEMENTED)
+	// MARK: - Authorize Embedded
 	
 	/**
 	Tries to use the given context, which on OS X should be a NSViewController, to present the authorization screen.
 	
 	- throws: Can throw several OAuth2Error if the method is unable to show the authorize screen
 	 */
+	
+	@available(iOS 10.10, *)
 	public func authorizeEmbeddedWith(config: OAuth2AuthConfig, params: OAuth2StringDict? = nil) throws {
 		if let controller = config.authorizeContext as? NSViewController {
-			let web: AnyObject = try authorizeEmbeddedFrom(controller, params: params)
+			let web: OAuth2WkWebViewController = try authorizeEmbeddedFrom(controller, redirect: redirect!, params: params)
 			if config.authorizeEmbeddedAutoDismiss {
 				internalAfterAuthorizeOrFailure = { wasFailure, error in
-					self.logIfVerbose("Should now dismiss \(web)")
+					web.dismissViewController(web)
 				}
 			}
 			return
 		}
 		throw (nil == config.authorizeContext) ? OAuth2Error.NoAuthorizationContext : OAuth2Error.InvalidAuthorizationContext
+
 	}
 	
-	public func authorizeEmbeddedFrom(controller: NSViewController, params: OAuth2StringDict?) throws -> AnyObject {
-		throw OAuth2Error.Generic("Embedded authorizing is not yet implemented on OS X")
+	
+	// MARK: - WKWeb View Controller
+	
+	/**
+	Presents a OAuth2WKWebViewController from the supplied view controller, loading the authorize URL.
+	
+	The mechanism works differently from using Safari itself to log the user in, and unlike the iOS SafariWebViewCOntroller, 
+	there is **NO need to implement** `application(application:openURL:sourceApplication:annotation:)` in your application delegate.
+	
+	The View controller is dismissed automatically
+	
+	- parameter controller: The view controller to use for presentation
+	- parameter params: Optional additional URL parameters
+	- returns: OAuth2WKWebViewController, being already presented automatically
+	*/
+	
+	@available(iOS 10.10, *)
+	public func authorizeEmbeddedFrom(controller: NSViewController, redirect: String, params: OAuth2StringDict?) throws -> OAuth2WkWebViewController {
+		let url = try authorizeURL(params)
+		return presentWKWebViewFor(url, intercept: redirect, from: controller)
+	}
+	
+	@available(iOS 10.10, *)
+	final func presentWKWebViewFor(url: NSURL, intercept: String, from: NSViewController) -> OAuth2WkWebViewController {
+		
+		//Create a view controller containing a wkwebview
+		let vc = OAuth2WkWebViewController(startURL: url)
+		vc.interceptURLString = intercept
+		vc.title = authConfig.ui.title
+		vc.onIntercept = { url in
+			do {
+				try self.handleRedirectURL(url)
+				return true
+			}
+			catch let err {
+				self.logIfVerbose("Cannot intercept redirect URL: \(err)")
+			}
+			return false
+		}
+		vc.onWillDismiss = { didCancel in
+			if didCancel {
+				self.didFail(nil)
+			}
+		}
+
+		from.presentViewControllerAsModalWindow(vc)
+		return vc
+	
+		// Fallback on earlier versions
+	}
+
+	func wkWebViewControllerDidCancel() {
+		didFail(nil)
 	}
 }
-
