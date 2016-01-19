@@ -34,7 +34,7 @@ public class OAuth2: OAuth2Base {
 		return nil
 	}
 	
-	/// Client setup
+	/// Settings related to the client-server relationship.
 	public let clientConfig: OAuth2ClientConfig
 	
 	/// Client-side authorization options.

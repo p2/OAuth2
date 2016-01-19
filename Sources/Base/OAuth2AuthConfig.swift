@@ -20,10 +20,10 @@
 
 
 /**
-    Simple struct to hold client-side authorization configuration variables.
+Simple struct to hold settings describing how authorization appears to the user.
 */
-public struct OAuth2AuthConfig
-{
+public struct OAuth2AuthConfig {
+	
 	public struct UI {
 		
 		/// Title to propagate to views handled by OAuth2, such as OAuth2WebViewController.
