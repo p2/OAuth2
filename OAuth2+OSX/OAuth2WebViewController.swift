@@ -23,15 +23,15 @@ import WebKit
 
 
 /**
-    A view controller that allows you to display the login/authorization screen.
- */
+A view controller that allows you to display the login/authorization screen.
+*/
 @available(OSX 10.11, *)
 public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NSWindowDelegate
 {
-    init() {
-        super.init(nibName: nil, bundle: nil)!
-    }
-    
+	init() {
+		super.init(nibName: nil, bundle: nil)!
+	}
+	
 	/// Handle to the OAuth2 instance in play, only used for debug lugging at this time.
 	var oauth: OAuth2?
 	
@@ -73,23 +73,23 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 	/// Our web view; implicitly unwrapped so do not attempt to use it unless isViewLoaded() returns true.
 	var webView: WKWebView!
 	
-    private var progressIndicator: NSProgressIndicator!
-    private var loadingView: NSView {
-        let view = NSView(frame: self.view.bounds)
-        view.translatesAutoresizingMaskIntoConstraints = false
-
-        progressIndicator = NSProgressIndicator(frame: NSZeroRect)
-        progressIndicator.style = .SpinningStyle
-        progressIndicator.displayedWhenStopped = false
-        progressIndicator.sizeToFit()
-        progressIndicator.translatesAutoresizingMaskIntoConstraints = false
-        
-        view.addSubview(progressIndicator)
-        progressIndicator.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor).active = true
-        progressIndicator.centerYAnchor.constraintEqualToAnchor(view.centerYAnchor).active = true
-        
-        return view
-    }
+	private var progressIndicator: NSProgressIndicator!
+	private var loadingView: NSView {
+		let view = NSView(frame: self.view.bounds)
+		view.translatesAutoresizingMaskIntoConstraints = false
+		
+		progressIndicator = NSProgressIndicator(frame: NSZeroRect)
+		progressIndicator.style = .SpinningStyle
+		progressIndicator.displayedWhenStopped = false
+		progressIndicator.sizeToFit()
+		progressIndicator.translatesAutoresizingMaskIntoConstraints = false
+		
+		view.addSubview(progressIndicator)
+		progressIndicator.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor).active = true
+		progressIndicator.centerYAnchor.constraintEqualToAnchor(view.centerYAnchor).active = true
+		
+		return view
+	}
 	
 	required public init?(coder aDecoder: NSCoder) {
 		super.init(coder: aDecoder)
@@ -98,26 +98,26 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 	
 	// MARK: - View Handling
 	
-    internal static let WebViewWindowWidth = CGFloat(600.0)
-    internal static let WebViewWindowHeight = CGFloat(400.0)
-    
+	internal static let WebViewWindowWidth = CGFloat(600.0)
+	internal static let WebViewWindowHeight = CGFloat(400.0)
+	
 	override public func loadView() {
-        view = NSView(frame: NSMakeRect(0, 0, OAuth2WebViewController.WebViewWindowWidth, OAuth2WebViewController.WebViewWindowHeight))
-        view.translatesAutoresizingMaskIntoConstraints = false
-
-        webView = WKWebView(frame: view.bounds, configuration: WKWebViewConfiguration())
-        webView.translatesAutoresizingMaskIntoConstraints = false
-        webView.navigationDelegate = self
-        webView.alphaValue = 0.0
-        
-        view.addSubview(webView)
-        
-        webView.topAnchor.constraintEqualToAnchor(view.topAnchor).active = true
-        webView.bottomAnchor.constraintEqualToAnchor(view.bottomAnchor).active = true
-        webView.leadingAnchor.constraintEqualToAnchor(view.leadingAnchor).active = true
-        webView.trailingAnchor.constraintEqualToAnchor(view.trailingAnchor).active = true
-        
-        showLoadingIndicator()
+		view = NSView(frame: NSMakeRect(0, 0, OAuth2WebViewController.WebViewWindowWidth, OAuth2WebViewController.WebViewWindowHeight))
+		view.translatesAutoresizingMaskIntoConstraints = false
+		
+		webView = WKWebView(frame: view.bounds, configuration: WKWebViewConfiguration())
+		webView.translatesAutoresizingMaskIntoConstraints = false
+		webView.navigationDelegate = self
+		webView.alphaValue = 0.0
+		
+		view.addSubview(webView)
+		
+		webView.topAnchor.constraintEqualToAnchor(view.topAnchor).active = true
+		webView.bottomAnchor.constraintEqualToAnchor(view.bottomAnchor).active = true
+		webView.leadingAnchor.constraintEqualToAnchor(view.leadingAnchor).active = true
+		webView.trailingAnchor.constraintEqualToAnchor(view.trailingAnchor).active = true
+		
+		showLoadingIndicator()
 	}
 	
 	override public func viewWillAppear() {
@@ -133,35 +133,35 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 		}
 	}
 	
-    public override func viewDidAppear() {
-        super.viewDidAppear()
-        
-        view.window?.delegate = self
-    }
-    
+	public override func viewDidAppear() {
+		super.viewDidAppear()
+		
+		view.window?.delegate = self
+	}
+	
 	func showLoadingIndicator() {
-        let loadingContainerView = loadingView
-        
+		let loadingContainerView = loadingView
+		
 		view.addSubview(loadingContainerView)
-        loadingContainerView.topAnchor.constraintEqualToAnchor(view.topAnchor).active = true
-        loadingContainerView.bottomAnchor.constraintEqualToAnchor(view.bottomAnchor).active = true
-        loadingContainerView.leadingAnchor.constraintEqualToAnchor(view.leadingAnchor).active = true
-        loadingContainerView.trailingAnchor.constraintEqualToAnchor(view.trailingAnchor).active = true
-
-        progressIndicator.startAnimation(nil)
+		loadingContainerView.topAnchor.constraintEqualToAnchor(view.topAnchor).active = true
+		loadingContainerView.bottomAnchor.constraintEqualToAnchor(view.bottomAnchor).active = true
+		loadingContainerView.leadingAnchor.constraintEqualToAnchor(view.leadingAnchor).active = true
+		loadingContainerView.trailingAnchor.constraintEqualToAnchor(view.trailingAnchor).active = true
+		
+		progressIndicator.startAnimation(nil)
 	}
 	
 	func hideLoadingIndicator() {
-        guard progressIndicator != nil else { return }
-        
-        progressIndicator.stopAnimation(nil)
-        progressIndicator.superview?.removeFromSuperview()
+		guard progressIndicator != nil else { return }
+		
+		progressIndicator.stopAnimation(nil)
+		progressIndicator.superview?.removeFromSuperview()
 	}
-
+	
 	func showErrorMessage(message: String, animated: Bool) {
-        hideLoadingIndicator()
-        webView.animator().alphaValue = 1.0
-        webView.loadHTMLString("<p style=\"text-align:center;font:'helvetica neue', sans-serif;color:red\">\(message)</p>", baseURL: nil)
+		hideLoadingIndicator()
+		webView.animator().alphaValue = 1.0
+		webView.loadHTMLString("<p style=\"text-align:center;font:'helvetica neue', sans-serif;color:red\">\(message)</p>", baseURL: nil)
 	}
 	
 	// MARK: - Actions
@@ -185,48 +185,48 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 	func dismiss(asCancel asCancel: Bool, animated: Bool) {
 		webView.stopLoading()
 		
-        onWillDismiss?(didCancel: asCancel)
-        
-        dismissViewController(self)
+		onWillDismiss?(didCancel: asCancel)
+		
+		dismissViewController(self)
 	}
 	
 	
 	// MARK: - Web View Delegate
 	
-    public func webView(webView: WKWebView, decidePolicyForNavigationAction navigationAction: WKNavigationAction, decisionHandler: (WKNavigationActionPolicy) -> Void) {
-        let request = navigationAction.request
-        
+	public func webView(webView: WKWebView, decidePolicyForNavigationAction navigationAction: WKNavigationAction, decisionHandler: (WKNavigationActionPolicy) -> Void) {
+		let request = navigationAction.request
+		
 		if nil == onIntercept {
-            decisionHandler(.Allow)
+			decisionHandler(.Allow)
 			return
 		}
-
+		
 		// we compare the scheme and host first, then check the path (if there is any). Not sure if a simple string comparison
 		// would work as there may be URL parameters attached
 		if let url = request.URL where url.scheme == interceptComponents?.scheme && url.host == interceptComponents?.host {
 			let haveComponents = NSURLComponents(URL: url, resolvingAgainstBaseURL: true)
 			if let hp = haveComponents?.path, ip = interceptComponents?.path where hp == ip || ("/" == hp + ip) {
-                if onIntercept!(url: url) {
-                    decisionHandler(.Cancel)
-                } else {
-                    decisionHandler(.Allow)
-                }
+				if onIntercept!(url: url) {
+					decisionHandler(.Cancel)
+				} else {
+					decisionHandler(.Allow)
+				}
 			}
 		}
 		
-        decisionHandler(.Allow)
-    }
-
-    private var gotIntercepted = false
-    
-    public func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
+		decisionHandler(.Allow)
+	}
+	
+	private var gotIntercepted = false
+	
+	public func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
 		if let scheme = interceptComponents?.scheme where "urn" == scheme {
 			if let path = interceptComponents?.path where path.hasPrefix("ietf:wg:oauth:2.0:oob") {
 				if let title = webView.title where title.hasPrefix("Success ") {
 					oauth?.logIfVerbose("Creating redirect URL from document.title")
 					let qry = title.stringByReplacingOccurrencesOfString("Success ", withString: "")
 					if let url = NSURL(string: "http://localhost/?\(qry)") {
-                        gotIntercepted = true
+						gotIntercepted = true
 						onIntercept?(url: url)
 						return
 					}
@@ -237,24 +237,24 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 			}
 		}
 		
-        webView.animator().alphaValue = 1.0
+		webView.animator().alphaValue = 1.0
 		hideLoadingIndicator()
-    }
-    
-    public func webView(webView: WKWebView, didFailNavigation navigation: WKNavigation!, withError error: NSError) {
+	}
+	
+	public func webView(webView: WKWebView, didFailNavigation navigation: WKNavigation!, withError error: NSError) {
 		if NSURLErrorDomain == error.domain && NSURLErrorCancelled == error.code {
 			return
 		}
 		// do we still need to intercept "WebKitErrorDomain" error 102?
-        
-        showErrorMessage(error.localizedDescription, animated: true)
-    }
-    
-    // MARK: - Window Delegate
-    
-    public func windowWillClose(notification: NSNotification) {
-        onWillDismiss?(didCancel: !gotIntercepted)
-    }
-
+		
+		showErrorMessage(error.localizedDescription, animated: true)
+	}
+	
+	// MARK: - Window Delegate
+	
+	public func windowWillClose(notification: NSNotification) {
+		onWillDismiss?(didCancel: !gotIntercepted)
+	}
+	
 }
 
