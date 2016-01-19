@@ -228,11 +228,6 @@ public class OAuth2: OAuth2Base {
 		}
 	}
 	
-	#if os(OSX)
-	/// Used to hold a reference to the container (window controller) for embedded authorization on OS X
-	internal var embeddedUI: AnyObject?
-	#endif
-	
 	/**
 	If the instance has an accessToken, checks if its expiry time has not yet passed. If we don't have an expiry date we assume the token
 	is still valid.

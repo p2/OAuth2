@@ -87,7 +87,7 @@ extension OAuth2
 			window.title = title
 		}
 		let windowController = NSWindowController(window: window)
-		embeddedUI = windowController
+		authConfig.ui.windowController = windowController
 		windowController.contentViewController = controller
 		windowController.window?.center()
 		windowController.showWindow(nil)
@@ -106,7 +106,7 @@ extension OAuth2
 					windowController.close()
 				}
 				
-				self.embeddedUI = nil
+				self.authConfig.ui.windowController = nil
 			}
 		}
 		
