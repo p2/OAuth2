@@ -49,15 +49,13 @@ public struct OAuth2AuthConfig
 	/// Whether to use an embedded web view for authorization (true) or the OS browser (false, the default)
 	public var authorizeEmbedded: Bool = false
 	
-    #if os(OSX)
-    /// The block responsible for presenting the web view controller (if not set, a new window will be opened automatically)
-    public var authorizePresentationBlock: ((webViewController: NSViewController) -> Void)?
-    #endif
-    
+	#if os(OSX)
+	/// The block responsible for presenting the web view controller (if not set, a new window will be opened automatically)
+	public var authorizeContext: ((webViewController: NSViewController) -> Void)?
+	#else
 	/// Context information for the authorization flow; e.g. the parent view controller to use on iOS.
-    ///
-    /// **Not used for OS X, use `authorizePresentationBlock` instead.**
 	public var authorizeContext: AnyObject? = nil
+	#endif
 	
 	/// UI-specific configuration
 	public var ui = UI()
