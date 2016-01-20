@@ -62,7 +62,7 @@ oauth2.onFailure = { error in        // `error` is nil on cancel
 By default the OS browser will be used for authorization if there is no access token present in the keychain.
 To start authorization call **`authorize()`** or the convenience method `authorizeEmbeddedFrom(<# UIViewController or NSWindow #>)`.
 
-The latter configures `authConfig` like so: changes `authorizeEmbedded` to `true` and sets a root view controller, from which to present the login screen, as `authorizeContext`.
+The latter configures `authConfig` like so: changes `authorizeEmbedded` to `true` and sets a root view controller/window, from which to present the login screen, as `authorizeContext`.
 See [_Advanced Settings_](#advanced-settings) for other options.
 
 **Starting with iOS 9**, `SFSafariViewController` will be used when enabling embedded authorization.
@@ -166,7 +166,7 @@ oauth2.afterAuthorizeOrFailure = { wasFailure, error in
 }
 ```
 
-**Modal OS X **:
+**Modal OS X**:
 
 ```swift
 let win = <# window to present from #>
