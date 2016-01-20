@@ -60,7 +60,7 @@ oauth2.onFailure = { error in        // `error` is nil on cancel
 ### 3. Authorize the User
 
 By default the OS browser will be used for authorization if there is no access token present in the keychain.
-To start authorization call **`authorize()`** or the convenience method `authorizeEmbeddedFrom(<# view controller #>)`.
+To start authorization call **`authorize()`** or the convenience method `authorizeEmbeddedFrom(<# UIViewController or NSWindow #>)`.
 
 The latter configures `authConfig` like so: changes `authorizeEmbedded` to `true` and sets a root view controller, from which to present the login screen, as `authorizeContext`.
 See [_Advanced Settings_](#advanced-settings) for other options.
@@ -69,11 +69,11 @@ See [_Advanced Settings_](#advanced-settings) for other options.
 
 ```swift
 oauth2.authConfig.authorizeEmbedded = true
-oauth2.authConfig.authorizeContext = <# presenting view controller #>
+oauth2.authConfig.authorizeContext = <# presenting view controller / window #>
 oauth2.authorize()
 
 // for embedded authorization you can just use:
-oauth2.authorizeEmbeddedFrom(<# presenting view controller #>)
+oauth2.authorizeEmbeddedFrom(<# presenting view controller / window #>)
 ```
 
 When using the OS browser or the iOS 9 Safari view controller, you will need to **intercept the callback** in your app delegate.
@@ -156,14 +156,22 @@ The `authorize()` method will:
 
 If you do **not wish this kind of automation**, the manual steps to show the authorize screens are:
 
-**Embedded (iOS only)**:
+**Embedded iOS**:
 
 ```swift
 let vc = <# presenting view controller #>
-let web = oauth2.authorizeEmbeddedFrom(vc, params: nil)
+let web = oauth2.authorizeEmbeddedFrom(vc)
 oauth2.afterAuthorizeOrFailure = { wasFailure, error in
     web.dismissViewControllerAnimated(true, completion: nil)
 }
+```
+
+**Modal OS X **:
+
+```swift
+let win = <# window to present from #>
+// if `win` is nil, will open a new window
+oauth2.authorizeEmbeddedFrom(win)
 ```
 
 **iOS/OS X browser**:
@@ -301,9 +309,10 @@ extension OAuth2 {
         headers: [String: String]? = nil)
         -> Alamofire.Request
     {
+        
         var hdrs = headers ?? [:]
-        if let access = accessToken {
-            hdrs["Authorization"] = "Bearer \(access)"
+        if let token = accessToken {
+            hdrs["Authorization"] = "Bearer \(token)"
         }
         return Alamofire.request(
             method,

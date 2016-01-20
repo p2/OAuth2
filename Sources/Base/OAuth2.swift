@@ -216,6 +216,7 @@ public class OAuth2: OAuth2Base {
 					}
 					else {
 						do {
+							assert(NSThread.isMainThread())
 							try self.doAuthorize(params: params)
 						}
 						catch let error {
@@ -228,7 +229,7 @@ public class OAuth2: OAuth2Base {
 	}
 	
 	/**
-	Shortcut function to start embedded authorization from the given context (a UIViewController on iOS).
+	Shortcut function to start embedded authorization from the given context (a UIViewController on iOS, an NSWindow on OS X).
 	
 	This method sets `authConfig.authorizeEmbedded = true` and `authConfig.authorizeContext = <# context #>`, then calls `authorize()`
 	*/
@@ -458,24 +459,33 @@ public class OAuth2: OAuth2Base {
 	// MARK: - Registration
 	
 	/**
+	Use OAuth2 dynamic client registration to register the client, if needed.
+	
 	Returns immediately if the receiver's `clientId` is nil (with error = nil) or if there is no registration URL (with error). Otherwise
 	calls `onBeforeDynamicClientRegistration()` -- if it is non-nil -- and uses the returned `OAuth2DynReg` instance -- if it is non-nil.
 	If both are nil, instantiates a blank `OAuth2DynReg` instead, then attempts client registration.
 	
-	- parameter callback: The callback to call; if both json and error is nil no registration was attempted; error is nil on success
+	- parameter callback: The callback to call on the main thread; if both json and error is nil no registration was attempted; error is nil
+	                      on success
 	*/
 	func registerClientIfNeeded(callback: ((json: OAuth2JSON?, error: ErrorType?) -> Void)) {
 		if nil != clientId {
-			callback(json: nil, error: nil)
+			callOnMainThread() {
+				callback(json: nil, error: nil)
+			}
 		}
 		else if let url = clientConfig.registrationURL {
 			let dynreg = onBeforeDynamicClientRegistration?(url) ?? OAuth2DynReg()
 			dynreg.registerClient(self) { json, error in
-				callback(json: json, error: error)
+				callOnMainThread() {
+					callback(json: json, error: error)
+				}
 			}
 		}
 		else {
-			callback(json: nil, error: OAuth2Error.NoRegistrationURL)
+			callOnMainThread() {
+				callback(json: nil, error: OAuth2Error.NoRegistrationURL)
+			}
 		}
 	}
 	
