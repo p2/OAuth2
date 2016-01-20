@@ -18,6 +18,9 @@
 //  limitations under the License.
 //
 
+#if os(OSX)
+    import Cocoa
+#endif
 
 /**
     Simple struct to hold client-side authorization configuration variables.
@@ -36,6 +39,11 @@ public struct OAuth2AuthConfig
 		/// Starting with iOS 9, `SFSafariViewController` will be used for embedded authorization instead of our custom class. You can turn this off here.
 		public var useSafariView = true
 		
+		#if os(OSX)
+		/// Internally used to store default `NSWindowController` created to contain the web view controller
+		var windowController: NSWindowController?
+		#endif
+		
 		/// Internally used to store the `SFSafariViewControllerDelegate`
 		var safariViewDelegate: AnyObject?
 	}
@@ -46,8 +54,13 @@ public struct OAuth2AuthConfig
 	/// Whether to use an embedded web view for authorization (true) or the OS browser (false, the default)
 	public var authorizeEmbedded: Bool = false
 	
+	#if os(OSX)
+	/// The block responsible for presenting the web view controller (if not set, a new window will be opened automatically)
+	public var authorizeContext: ((webViewController: NSViewController) -> Void)?
+	#else
 	/// Context information for the authorization flow; e.g. the parent view controller to use on iOS.
 	public var authorizeContext: AnyObject? = nil
+	#endif
 	
 	/// UI-specific configuration
 	public var ui = UI()
