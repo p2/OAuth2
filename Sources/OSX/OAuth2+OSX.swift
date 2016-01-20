@@ -121,7 +121,7 @@ extension OAuth2 {
 	- parameter params: Additional parameters to pass to the authorize URL
 	*/
 	@available(OSX 10.10, *)
-	func presentableAuthorizeView(params: OAuth2StringDict? = nil) throws -> OAuth2WebViewController {
+	public func presentableAuthorizeView(params: OAuth2StringDict? = nil) throws -> OAuth2WebViewController {
 		let url = try authorizeURL(params)
 		let controller = OAuth2WebViewController()
 		controller.startURL = url
