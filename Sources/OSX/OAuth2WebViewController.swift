@@ -102,7 +102,7 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 	// MARK: - View Handling
 	
 	internal static let WebViewWindowWidth = CGFloat(600.0)
-	internal static let WebViewWindowHeight = CGFloat(400.0)
+	internal static let WebViewWindowHeight = CGFloat(500.0)
 	
 	override public func loadView() {
 		view = NSView(frame: NSMakeRect(0, 0, OAuth2WebViewController.WebViewWindowWidth, OAuth2WebViewController.WebViewWindowHeight))

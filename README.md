@@ -166,12 +166,23 @@ oauth2.afterAuthorizeOrFailure = { wasFailure, error in
 }
 ```
 
-**Modal OS X**:
+**Modal Sheet on OS X**:
 
 ```swift
 let win = <# window to present from #>
 // if `win` is nil, will open a new window
 oauth2.authorizeEmbeddedFrom(win)
+```
+
+**Present yourself on OS X**:
+
+```swift
+let vc = <# view controller #>
+let web = oauth2.presentableAuthorizeViewController()
+oauth2.afterAuthorizeOrFailure = { wasFailure, error in
+    vc.dismissViewController(web)
+}
+vc.presentViewController(web, animator: <# animator #>)
 ```
 
 **iOS/OS X browser**:

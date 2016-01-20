@@ -42,10 +42,11 @@ public struct OAuth2AuthConfig {
 		#if os(OSX)
 		/// Internally used to store default `NSWindowController` created to contain the web view controller.
 		var windowController: NSWindowController?
-		#endif
 		
+		#elseif os(iOS)
 		/// Internally used to store the `SFSafariViewControllerDelegate`.
 		var safariViewDelegate: AnyObject?
+		#endif
 	}
 	
 	/// Whether the receiver should use the request body instead of the Authorization header for the client secret.

@@ -70,9 +70,10 @@ extension OAuth2 {
 	*/
 	@available(OSX 10.10, *)
 	public func authorizeEmbeddedFrom(window: NSWindow, config: OAuth2AuthConfig, params: OAuth2StringDict? = nil) throws -> NSWindow {
-		let controller = try presentableAuthorizeView()
+		let controller = try presentableAuthorizeViewController(params)
 		controller.willBecomeSheet = true
 		let sheet = windowControllerForViewController(controller, withConfiguration: config).window!
+		
 		if config.authorizeEmbeddedAutoDismiss {
 			internalAfterAuthorizeOrFailure = { wasFailure, error in
 				window.endSheet(sheet)
@@ -85,23 +86,14 @@ extension OAuth2 {
 	}
 	
 	/**
-	Creates a new window, containing our `OAuth2WebViewController`, and centers it on the screen -- unless you've set `authorizeContext`
-	to a `((webViewController: NSViewController) -> Void)` block, in which case the block is executed and you must take care of
-	presentation.
+	Creates a new window, containing our `OAuth2WebViewController`, and centers it on the screen.
 	
 	- parameter config: The auth configuration to take into consideration
 	- parameter params: Additional parameters to pass to the authorize URL
 	*/
 	@available(OSX 10.10, *)
 	public func authorizeInNewWindow(config: OAuth2AuthConfig, params: OAuth2StringDict? = nil) throws {
-		let controller = try presentableAuthorizeView(params)
-		
-		// presenting the controller ourselves?
-		if let presentationBlock = config.authorizeContext as? ((webViewController: NSViewController) -> Void) {
-			presentationBlock(webViewController: controller)
-			return
-		}
-		
+		let controller = try presentableAuthorizeViewController(params)
 		let windowController = windowControllerForViewController(controller, withConfiguration: config)
 		authConfig.ui.windowController = windowController
 		
@@ -119,9 +111,10 @@ extension OAuth2 {
 	Instantiates and configures an `OAuth2WebViewController`, ready to be used in a window.
 	
 	- parameter params: Additional parameters to pass to the authorize URL
+	- returns: A web view controller that you can present to the user for login
 	*/
 	@available(OSX 10.10, *)
-	public func presentableAuthorizeView(params: OAuth2StringDict? = nil) throws -> OAuth2WebViewController {
+	public func presentableAuthorizeViewController(params: OAuth2StringDict? = nil) throws -> OAuth2WebViewController {
 		let url = try authorizeURL(params)
 		let controller = OAuth2WebViewController()
 		controller.startURL = url
@@ -143,7 +136,11 @@ extension OAuth2 {
 	}
 	
 	/**
-	Prepares an empty window that we can use to present our web view controller.
+	Prepares a window controller with the given web view controller as content.
+	
+	- parameter controller: The web view controller to use as content
+	- parameter withConfiguration: The auth config to use
+	- returns: A window controller, ready to be presented
 	*/
 	@available(OSX 10.10, *)
 	func windowControllerForViewController(controller: OAuth2WebViewController, withConfiguration config: OAuth2AuthConfig) -> NSWindowController {
