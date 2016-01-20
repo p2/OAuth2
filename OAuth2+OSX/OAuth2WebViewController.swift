@@ -25,14 +25,14 @@ import WebKit
 /**
 A view controller that allows you to display the login/authorization screen.
 */
-@available(OSX 10.11, *)
-public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NSWindowDelegate
-{
+@available(OSX 10.10, *)
+public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NSWindowDelegate {
+	
 	init() {
 		super.init(nibName: nil, bundle: nil)!
 	}
 	
-	/// Handle to the OAuth2 instance in play, only used for debug lugging at this time.
+	/// Handle to the OAuth2 instance in play, only used for debug logging at this time.
 	var oauth: OAuth2?
 	
 	/// The URL to load on first show.
@@ -85,8 +85,8 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 		progressIndicator.translatesAutoresizingMaskIntoConstraints = false
 		
 		view.addSubview(progressIndicator)
-		progressIndicator.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor).active = true
-		progressIndicator.centerYAnchor.constraintEqualToAnchor(view.centerYAnchor).active = true
+		view.addConstraint(NSLayoutConstraint(item: progressIndicator, attribute: .CenterX, relatedBy: .Equal, toItem: view, attribute: .CenterX, multiplier: 1.0, constant: 0.0))
+		view.addConstraint(NSLayoutConstraint(item: progressIndicator, attribute: .CenterY, relatedBy: .Equal, toItem: view, attribute: .CenterY, multiplier: 1.0, constant: 0.0))
 		
 		return view
 	}
@@ -111,11 +111,10 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 		webView.alphaValue = 0.0
 		
 		view.addSubview(webView)
-		
-		webView.topAnchor.constraintEqualToAnchor(view.topAnchor).active = true
-		webView.bottomAnchor.constraintEqualToAnchor(view.bottomAnchor).active = true
-		webView.leadingAnchor.constraintEqualToAnchor(view.leadingAnchor).active = true
-		webView.trailingAnchor.constraintEqualToAnchor(view.trailingAnchor).active = true
+		view.addConstraint(NSLayoutConstraint(item: webView, attribute: .Top, relatedBy: .Equal, toItem: view, attribute: .Top, multiplier: 1.0, constant: 0.0))
+		view.addConstraint(NSLayoutConstraint(item: webView, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Bottom, multiplier: 1.0, constant: 0.0))
+		view.addConstraint(NSLayoutConstraint(item: webView, attribute: .Left, relatedBy: .Equal, toItem: view, attribute: .Left, multiplier: 1.0, constant: 0.0))
+		view.addConstraint(NSLayoutConstraint(item: webView, attribute: .Right, relatedBy: .Equal, toItem: view, attribute: .Right, multiplier: 1.0, constant: 0.0))
 		
 		showLoadingIndicator()
 	}
@@ -143,10 +142,10 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 		let loadingContainerView = loadingView
 		
 		view.addSubview(loadingContainerView)
-		loadingContainerView.topAnchor.constraintEqualToAnchor(view.topAnchor).active = true
-		loadingContainerView.bottomAnchor.constraintEqualToAnchor(view.bottomAnchor).active = true
-		loadingContainerView.leadingAnchor.constraintEqualToAnchor(view.leadingAnchor).active = true
-		loadingContainerView.trailingAnchor.constraintEqualToAnchor(view.trailingAnchor).active = true
+		view.addConstraint(NSLayoutConstraint(item: loadingContainerView, attribute: .Top, relatedBy: .Equal, toItem: view, attribute: .Top, multiplier: 1.0, constant: 0.0))
+		view.addConstraint(NSLayoutConstraint(item: loadingContainerView, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Bottom, multiplier: 1.0, constant: 0.0))
+		view.addConstraint(NSLayoutConstraint(item: loadingContainerView, attribute: .Left, relatedBy: .Equal, toItem: view, attribute: .Left, multiplier: 1.0, constant: 0.0))
+		view.addConstraint(NSLayoutConstraint(item: loadingContainerView, attribute: .Right, relatedBy: .Equal, toItem: view, attribute: .Right, multiplier: 1.0, constant: 0.0))
 		
 		progressIndicator.startAnimation(nil)
 	}
@@ -163,6 +162,7 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 		webView.animator().alphaValue = 1.0
 		webView.loadHTMLString("<p style=\"text-align:center;font:'helvetica neue', sans-serif;color:red\">\(message)</p>", baseURL: nil)
 	}
+	
 	
 	// MARK: - Actions
 	
@@ -184,7 +184,6 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 	
 	func dismiss(asCancel asCancel: Bool, animated: Bool) {
 		webView.stopLoading()
-		
 		onWillDismiss?(didCancel: asCancel)
 		
 		dismissViewController(self)
@@ -208,7 +207,8 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 			if let hp = haveComponents?.path, ip = interceptComponents?.path where hp == ip || ("/" == hp + ip) {
 				if onIntercept!(url: url) {
 					decisionHandler(.Cancel)
-				} else {
+				}
+				else {
 					decisionHandler(.Allow)
 				}
 			}

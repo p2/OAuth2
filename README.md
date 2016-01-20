@@ -63,6 +63,7 @@ By default the OS browser will be used for authorization if there is no access t
 If you want to use the embedded web-view, change `authorizeEmbedded` to `true` and set a root view controller, from which to present the login screen if needed, as `authorizeContext`.
 
 **Starting with iOS 9**, `SFSafariViewController` will be used when enabling embedded authorization, meaning **you must intercept the callback in your app delegate** or explicitly use the old login screen (see below).
+Embedded authorization on OS X requires 10.10.
 
 To start authorization call `authorize()`:
 
@@ -147,7 +148,7 @@ The `authorize()` method will:
 
 If you do **not wish this kind of automation**, the manual steps to show the authorize screens are:
 
-**Embedded (iOS only)**:
+**Embedded iOS**:
 
 ```swift
 let vc = <# presenting view controller #>

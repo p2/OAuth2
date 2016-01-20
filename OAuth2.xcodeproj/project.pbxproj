@@ -203,8 +203,8 @@
 		EEC7A8C51AE46C33008C30E7 /* OAuth2+OSX */ = {
 			isa = PBXGroup;
 			children = (
-				DD0CCBAC1C4DC83A0044C4E3 /* OAuth2WebViewController.swift */,
 				EEC7A8C61AE46C33008C30E7 /* OAuth2+OSX.swift */,
+				DD0CCBAC1C4DC83A0044C4E3 /* OAuth2WebViewController.swift */,
 			);
 			path = "OAuth2+OSX";
 			sourceTree = "<group>";

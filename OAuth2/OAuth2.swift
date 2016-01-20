@@ -213,8 +213,10 @@ public class OAuth2: OAuth2Base {
 					}
 					else {
 						if self.authConfig.authorizeEmbedded {
-							if !self.authorizeEmbeddedWith(self.authConfig, params: params, autoDismiss: autoDismiss) {
-								self.didFail(nil == self.authConfig.authorizeContext ? OAuth2Error.NoAuthorizationContext : OAuth2Error.InvalidAuthorizationContext)
+							callOnMainThread() {
+								if !self.authorizeEmbeddedWith(self.authConfig, params: params, autoDismiss: autoDismiss) {
+									self.didFail(nil == self.authConfig.authorizeContext ? OAuth2Error.NoAuthorizationContext : OAuth2Error.InvalidAuthorizationContext)
+								}
 							}
 						}
 						else {
