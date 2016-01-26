@@ -31,8 +31,8 @@ If you need to provide additional parameters to the authorize URL take a look at
 let settings = [
     "client_id": "my_swift_app",
     "client_secret": "C7447242-A0CF-47C5-BAC7-B38BA91970A9",
-    "authorize_uri": "https://authorize.smartplatforms.org/authorize",
-    "token_uri": "https://authorize.smartplatforms.org/token",
+    "authorize_uri": "https://authorize.smarthealthit.org/authorize",
+    "token_uri": "https://authorize.smarthealthit.org/token",   // code grant only!
     "scope": "profile email",
     "redirect_uris": ["myapp://oauth/callback"],   // don't forget to register this scheme
     "keychain": false,     // if you DON'T want keychain integration
@@ -171,6 +171,14 @@ func application(application: UIApplication!,
 **OS X**
 
 See the [OAuth2 Sample App][sample]'s AppDelegate class on how to receive the callback URL in your Mac app.
+If the authentication displays the code to the user, e.g. with Google's `urn:ietf:wg:oauth:2.0:oob` callback URL, you can retrieve the code from the user's pasteboard and continue authorization with:
+
+```swift
+let pboard = NSPasteboard.generalPasteboard()
+if let pasted = pboard.stringForType(NSPasteboardTypeString) {
+    oauth2.exchangeCodeForToken(pasted)
+}
+```
 
 
 Flows
@@ -207,11 +215,50 @@ The framework deals with those deviations by creating site-specific subclasses.
 
 - **Facebook**: `OAuth2CodeGrantFacebook` to deal with the [URL-query-style response](https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow/v2.2) instead of the expected JSON dictionary.
 - **GitHub**: `OAuth2CodeGrant` automatically puts the client-key/client-secret into an “Authorization: Basic” header.
-    GitHub however needs those two in the POSTed body; you need to set the `secretInBody` setting to true, either directly in code or via the `secret_in_body` key in the settings dictionary.
+    GitHub however needs those two in the POSTed body; you need to set the `authConfig.secretInBody` setting to true, either directly in code or via the `secret_in_body` key in the settings dictionary.
 - **Reddit**: `OAuth2CodeGrant` automatically adds a _Basic_ authorization header when a client secret is set.
     This means that you **must** specify a client_secret; if there is none (like for [Reddit](https://github.com/reddit/reddit/wiki/OAuth2#token-retrieval-code-flow)) specify the empty string.
     There is a [RedditLoader](https://github.com/p2/OAuth2App/blob/master/OAuth2App/RedditLoader.swift) example in the [OAuth2App sample app][sample] for a basic usage example.
 - **Google**: If you authorize against Google with a `OAuth2CodeGrant`, the built-in iOS web view will intercept the `http://localhost` as well as the `urn:ietf:wg:oauth:2.0:oob` (with or without `:auto`) callbacks.
+- **LinkedIn**: Since I don't see a way to set any other redirect-url other than ones starting with `https`, this framework can only be used against LinkedIn via built-in web-view, disabling `SFSafariWebViewController`.
+
+
+Usage with Alamofire
+--------------------
+
+Here's an extension to be used with Alamofire:
+
+```swift
+import Alamofire
+
+extension OAuth2 {
+    public func request(
+        method: Alamofire.Method,
+        _ URLString: URLStringConvertible,
+        parameters: [String: AnyObject]? = nil,
+        encoding: Alamofire.ParameterEncoding = .URL,
+        headers: [String: String]? = nil)
+        -> Alamofire.Request
+    {
+        var hdrs = headers
+        hdrs["Authorization"] = "Bearer \(accessToken)"
+        return Alamofire.request(
+            method,
+            URLString,
+            parameters: parameters,
+            encoding: encoding,
+            headers: hdrs)
+    }
+}
+```
+
+You can now use the handle to your `OAuth2` instance instead of using _Alamofire_ directly to make requests that are signed.
+Of course this will only work once you have an access token.
+You can use `hasUnexpiredAccessToken()` to check for one or just always call `authorize()` first; it will call your callback immediately if you have a token.
+
+```swift
+oauth2.request(.GET, "http://httpbin.org/get")
+```
 
 
 Dynamic Client Registration
@@ -254,7 +301,7 @@ If you want to delete the tokens from keychain, i.e. **log the user out** comple
 Ideally, access tokens get delivered with an "expires_in" parameter that tells you how long the token is valid.
 If it is missing the framework will still use those tokens if one is found in the keychain and not re-perform the OAuth dance.
 You will need to intercept 401s and re-authenticate if an access token has expired but the framework has still pulled it from the keychain.
-This behavior can be turned off by supplying "token_assume_unexpired": false in settings or setting `accessTokenAssumeUnexpired` to false.
+This behavior can be turned off by supplying "token_assume_unexpired": false in settings or setting `clientConfig.accessTokenAssumeUnexpired` to false.
 
 
 Advanced Settings

@@ -30,29 +30,30 @@ class OAuth2CodeGrantTests: XCTestCase
 		let oauth = OAuth2CodeGrant(settings: [
 			"client_id": "abc",
 			"client_secret": "xyz",
-			"verbose": 1,
 			"authorize_uri": "https://auth.ful.io",
 			"token_uri": "https://token.ful.io",
+			"keychain": false,
 		])
 		XCTAssertEqual(oauth.clientId, "abc", "Must init `client_id`")
 		XCTAssertEqual(oauth.clientSecret!, "xyz", "Must init `client_secret`")
-		XCTAssertTrue(oauth.verbose, "Set to verbose")
+		XCTAssertFalse(oauth.useKeychain, "No keychain")
 		XCTAssertNil(oauth.scope, "Empty scope")
 		
 		XCTAssertEqual(oauth.authURL, NSURL(string: "https://auth.ful.io")!, "Must init `authorize_uri`")
 		XCTAssertEqual(oauth.tokenURL!, NSURL(string: "https://token.ful.io")!, "Must init `token_uri`")
 	}
 	
-	func testAuthorizeURI() throws {
+	func testAuthorizeURI() {
 		let oauth = OAuth2CodeGrant(settings: [
 			"client_id": "abc",
 			"client_secret": "xyz",
 			"authorize_uri": "https://auth.ful.io",
 			"token_uri": "https://token.ful.io",
+			"keychain": false,
 		])
 		
 		XCTAssertNotNil(oauth.authURL, "Must init `authorize_uri`")
-		let comp = NSURLComponents(URL: try oauth.authorizeURLWithRedirect("oauth2://callback", scope: nil, params: nil), resolvingAgainstBaseURL: true)!
+		let comp = NSURLComponents(URL: try! oauth.authorizeURLWithRedirect("oauth2://callback", scope: nil, params: nil), resolvingAgainstBaseURL: true)!
 		XCTAssertEqual(comp.host!, "auth.ful.io", "Correct host")
 		let query = OAuth2CodeGrant.paramsFromQuery(comp.percentEncodedQuery!)
 		XCTAssertEqual(query["client_id"]!, "abc", "Expecting correct `client_id`")
@@ -64,16 +65,32 @@ class OAuth2CodeGrantTests: XCTestCase
 		// TODO: test for non-https URLs (must raise)
 	}
 	
-	func testTokenRequest() throws {
+	func testTokenRequest() {
 		var oauth = OAuth2CodeGrant(settings: [
 			"client_id": "abc",
 			"client_secret": "xyz",
 			"authorize_uri": "https://auth.ful.io",
 			"token_uri": "https://token.ful.io",
+			"keychain": false,
 		])
 		oauth.redirect = "oauth2://callback"
 		
-		let req = try oauth.tokenRequestWithCode("pp")
+		// no redirect in context - fail
+		do {
+			try oauth.tokenRequestWithCode("pp")
+			XCTAssertTrue(false, "Should not be here any more")
+		}
+		catch OAuth2Error.NoRedirectURL {
+			XCTAssertTrue(true, "Must be here")
+		}
+		catch {
+			XCTAssertTrue(false, "Should not be here")
+		}
+		
+		// with redirect in context - success
+		oauth.context.redirectURL = "oauth2://callback"
+		
+		let req = try! oauth.tokenRequestWithCode("pp")
 		let comp = NSURLComponents(URL: req.URL!, resolvingAgainstBaseURL: true)!
 		XCTAssertEqual(comp.host!, "token.ful.io", "Correct host")
 		
@@ -84,7 +101,7 @@ class OAuth2CodeGrantTests: XCTestCase
 		XCTAssertEqual(query["code"]!, "pp", "Expecting correct `code`")
 		XCTAssertEqual(query["grant_type"]!, "authorization_code", "Expecting correct `grant_type`")
 		XCTAssertEqual(query["redirect_uri"]!, "oauth2://callback", "Expecting correct `redirect_uri`")
-		XCTAssertTrue(8 == (query["state"]!).characters.count, "Expecting an auto-generated UUID for `state`")
+		XCTAssertNil(query["state"], "`state` must be empty")
 		
 		// test fallback to authURL
 		oauth = OAuth2CodeGrant(settings: [
@@ -93,7 +110,9 @@ class OAuth2CodeGrantTests: XCTestCase
 			"authorize_uri": "https://auth.ful.io",
 		])
 		oauth.redirect = "oauth2://callback"
-		let req2 = try oauth.tokenRequestWithCode("pp")
+		oauth.context.redirectURL = "oauth2://callback"
+		
+		let req2 = try! oauth.tokenRequestWithCode("pp")
 		let comp2 = NSURLComponents(URL: req2.URL!, resolvingAgainstBaseURL: true)!
 		XCTAssertEqual(comp2.host!, "auth.ful.io", "Correct host")
 	}

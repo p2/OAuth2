@@ -40,7 +40,7 @@ public class OAuth2Request: NSMutableURLRequest
 	    Will log an error if the OAuth2 instance does not have an access token!
 	 */
 	func sign(oauth: OAuth2) {
-		if let access = oauth.accessToken where !access.isEmpty {
+		if let access = oauth.clientConfig.accessToken where !access.isEmpty {
 			self.setValue("Bearer \(access)", forHTTPHeaderField: "Authorization")
 		}
 		else {

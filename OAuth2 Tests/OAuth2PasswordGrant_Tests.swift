@@ -32,7 +32,7 @@ class OAuth2PasswordGrantTests: XCTestCase
 			"scope": "login and more",
 			"username":"My User",
 			"password":"Here is my password",
-			"verbose": true
+			"keychain": false,
 		])
 	}
 	
@@ -44,12 +44,12 @@ class OAuth2PasswordGrantTests: XCTestCase
 		XCTAssertEqual(oauth.username, "My User", "Must init user")
 		XCTAssertEqual(oauth.password, "Here is my password", "Must init password")
 		XCTAssertEqual(oauth.authURL, NSURL(string: "https://auth.ful.io")!, "Must init `authorize_uri`")
-		XCTAssertTrue(oauth.verbose, "Set to verbose")
+		XCTAssertFalse(oauth.useKeychain, "Don't use keychain")
 	}
 	
-	func testTokenRequest() throws {
+	func testTokenRequest() {
 		let oauth = genericOAuth2Password()
-		let request = try oauth.tokenRequest()
+		let request = try! oauth.tokenRequest()
 		XCTAssertEqual("POST", request.HTTPMethod, "Must be a POST request")
 		
 		let authHeader = request.allHTTPHeaderFields?["Authorization"]
@@ -61,7 +61,7 @@ class OAuth2PasswordGrantTests: XCTestCase
 		XCTAssertEqual(body!, "grant_type=password&username=My+User&password=Here+is+my+password&scope=login+and+more", "Must create correct request body")
 	}
 	
-	func testTokenRequestNoScope() throws {
+	func testTokenRequestNoScope() {
 		let oauth = OAuth2PasswordGrant(settings: [
 			"client_id": "abc",
 			"client_secret": "def",
@@ -69,8 +69,8 @@ class OAuth2PasswordGrantTests: XCTestCase
 			"username":"My User",
 			"password":"Here is my password",
 			"verbose": true
-			])
-		let request = try oauth.tokenRequest()
+		])
+		let request = try! oauth.tokenRequest()
 		
 		let body = NSString(data: request.HTTPBody!, encoding: NSUTF8StringEncoding)
 		XCTAssertNotNil(body, "Body data must be present")
