@@ -24,8 +24,12 @@ import Foundation
 /**
     A class to handle authorization for clients via password grant.
  */
-public class OAuth2PasswordGrant: OAuth2
-{
+public class OAuth2PasswordGrant: OAuth2 {
+	
+	public override class var grantType: String {
+		return "password"
+	}
+	
 	/// Username to use during authentication.
 	public var username: String
 	
@@ -41,21 +45,13 @@ public class OAuth2PasswordGrant: OAuth2
 		super.init(settings: settings)
 	}
 	
-	public override func authorize(params params: [String : String]? = nil, autoDismiss: Bool = true) {
-		tryToObtainAccessTokenIfNeeded() { success in
-			if success {
-				self.didAuthorize(OAuth2JSON())
+	override func doAuthorize(params params: [String : String]? = nil) {
+		self.obtainAccessToken(params: params) { params, error in
+			if let error = error {
+				self.didFail(error)
 			}
 			else {
-				self.logIfVerbose("No access token, requesting a new one")
-				self.obtainAccessToken() { params, error in
-					if let error = error {
-						self.didFail(error)
-					}
-					else {
-						self.didAuthorize(params ?? OAuth2JSON())
-					}
-				}
+				self.didAuthorize(params ?? OAuth2JSON())
 			}
 		}
 	}
@@ -65,30 +61,29 @@ public class OAuth2PasswordGrant: OAuth2
 	
 	- parameter callback: The callback to call after the request has returned
 	*/
-	func obtainAccessToken(callback: ((params: OAuth2JSON?, error: ErrorType?) -> Void)) {
+	func obtainAccessToken(params params: [String : String]? = nil, callback: ((params: OAuth2JSON?, error: ErrorType?) -> Void)) {
 		do {
-			let post = try tokenRequest()
+			let post = try tokenRequest(params: params)
 			logIfVerbose("Requesting new access token from \(post.URL?.description)")
 			
 			performRequest(post) { data, status, error in
-				if let data = data {
-					do {
-						let dict = try self.parseAccessTokenResponse(data)
-						if status < 400 {
-							self.logIfVerbose("Did get access token [\(nil != self.clientConfig.accessToken)]")
-							callback(params: dict, error: nil)
-						}
-						else {
-							callback(params: dict, error: OAuth2Error.ResponseError("The username or password is incorrect"))
-						}
+				do {
+					guard let data = data else {
+						throw error ?? OAuth2Error.NoDataInResponse
 					}
-					catch let err {
-						self.logIfVerbose("Error parsing response: \(err)")
-						callback(params: nil, error: err)
+					
+					let dict = try self.parseAccessTokenResponse(data)
+					if status < 400 {
+						self.logIfVerbose("Did get access token [\(nil != self.clientConfig.accessToken)]")
+						callback(params: dict, error: nil)
+					}
+					else {
+						callback(params: dict, error: OAuth2Error.ResponseError("The username or password is incorrect"))
 					}
 				}
-				else {
-					callback(params: nil, error: error ?? OAuth2Error.NoDataInResponse)
+				catch let error {
+					self.logIfVerbose("Error parsing response: \(error)")
+					callback(params: nil, error: error)
 				}
 			}
 		}
@@ -100,18 +95,15 @@ public class OAuth2PasswordGrant: OAuth2
 	/**
 	Creates a POST request with x-www-form-urlencoded body created from the supplied URL's query part.
 	*/
-	func tokenRequest() throws -> NSMutableURLRequest {
+	func tokenRequest(params params: [String : String]? = nil) throws -> NSMutableURLRequest {
 		if username.isEmpty{
 			throw OAuth2Error.NoUsername
 		}
 		if password.isEmpty{
 			throw OAuth2Error.NoPassword
 		}
-		if clientConfig.clientId.isEmpty {
+		guard let clientId = clientConfig.clientId where !clientId.isEmpty else {
 			throw OAuth2Error.NoClientId
-		}
-		if nil == clientConfig.clientSecret {
-			throw OAuth2Error.NoClientSecret
 		}
 		
 		let req = NSMutableURLRequest(URL: clientConfig.tokenURL ?? clientConfig.authorizeURL)
@@ -124,20 +116,23 @@ public class OAuth2PasswordGrant: OAuth2
 		if let scope = clientConfig.scope {
 			body += "&scope=\(scope.wwwFormURLEncodedString)"
 		}
+		if let params = params {
+			body += "&" + self.dynamicType.queryStringFor(params)
+		}
 		if let secret = clientConfig.clientSecret where authConfig.secretInBody {
 			logIfVerbose("Adding “client_id” and “client_secret” to request body")
-			body += "&client_id=\(clientConfig.clientId.wwwFormURLEncodedString)&client_secret=\(secret.wwwFormURLEncodedString)"
+			body += "&client_id=\(clientId.wwwFormURLEncodedString)&client_secret=\(secret.wwwFormURLEncodedString)"
 		}
 		
 		// add Authorization header (if not in body)
-		else {
+		else if let secret = clientSecret {
 			logIfVerbose("Adding “Authorization” header as “Basic client-key:client-secret”")
-			let pw = "\(clientConfig.clientId.wwwFormURLEncodedString):\(clientConfig.clientSecret!.wwwFormURLEncodedString)"
+			let pw = "\(clientId.wwwFormURLEncodedString):\(secret.wwwFormURLEncodedString)"
 			if let utf8 = pw.dataUsingEncoding(NSUTF8StringEncoding) {
 				req.setValue("Basic \(utf8.base64EncodedStringWithOptions([]))", forHTTPHeaderField: "Authorization")
 			}
 			else {
-				logIfVerbose("ERROR: for some reason failed to base-64 encode the client-key:client-secret combo")
+				throw OAuth2Error.UTF8EncodeError
 			}
 		}
 		req.HTTPBody = body.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)

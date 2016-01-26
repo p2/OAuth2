@@ -16,7 +16,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "EEE209461942772800736F1A"
                BuildableName = "OAuth2.framework"
-               BlueprintName = "OAuth2"
+               BlueprintName = "OAuth2OSX"
                ReferencedContainer = "container:OAuth2.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -58,7 +58,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "EEE209461942772800736F1A"
             BuildableName = "OAuth2.framework"
-            BlueprintName = "OAuth2"
+            BlueprintName = "OAuth2OSX"
             ReferencedContainer = "container:OAuth2.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -80,7 +80,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "EEE209461942772800736F1A"
             BuildableName = "OAuth2.framework"
-            BlueprintName = "OAuth2"
+            BlueprintName = "OAuth2OSX"
             ReferencedContainer = "container:OAuth2.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -98,7 +98,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "EEE209461942772800736F1A"
             BuildableName = "OAuth2.framework"
-            BlueprintName = "OAuth2"
+            BlueprintName = "OAuth2OSX"
             ReferencedContainer = "container:OAuth2.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

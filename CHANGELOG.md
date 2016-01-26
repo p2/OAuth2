@@ -5,6 +5,41 @@ Version numbering represents the Swift version, plus a running number representi
 You can also refer to commit logs to get details on what was implemented, fixed and improved.
 
 
+### x.x
+
+- Add capability to abort ongoing authorization with `abortAuthorization()`
+- Add `RequestCancelled` Error
+- Add `OAuth2CodeGrantLinkedIn` to deal with LinkedIn
+- Add `OAuth2CodeGrantNoTokenType` to deal with Instagram, Bitly and all others not returning `token_type`
+- Move `autoDismiss` param from `authorize()` into the `authConfig` struct
+- Change `openAuthorizeURLInBrowser()` to throw instead of returning a Bool (throwing `UnableToOpenAuthorizeURL` instead of returning false)
+- Add `UTF8DecodeError`
+
+
+### 2.1.3
+
+- Fix issue #76 (dismissing built-in web view controller in a more robust way)
+
+
+### 2.1.2
+
+- Fix issue #75 (refresh tokens not saved to keychain)
+
+
+### 2.1.1
+
+- Fix issue #72 (refresh token SNAFU from 2.1)
+
+
+### 2.1
+
+- Refresh tokens now work for all grants
+- Rewrite most parts of the code to use `OAuth2Error` instead of `NSError`
+- Improvements to password grant
+- Properly implement dynamic client registration
+- Fix issues #47, #59, #61, #66 and improve behavior in several scenarios
+
+
 ### 2.0.2
 
 - Fix issue #53, not detecting cancelling the `SFSafariViewController` by the user

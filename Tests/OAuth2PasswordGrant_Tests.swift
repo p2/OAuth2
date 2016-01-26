@@ -61,6 +61,27 @@ class OAuth2PasswordGrantTests: XCTestCase
 		XCTAssertEqual(body!, "grant_type=password&username=My+User&password=Here+is+my+password&scope=login+and+more", "Must create correct request body")
 	}
 	
+	func testTokenResponse() {
+		let oauth = genericOAuth2Password()
+		let response = [
+			"access_token":"2YotnFZFEjr1zCsicMWpAA",
+			"token_type":"bearer",
+			"expires_in":3600,
+			"refresh_token":"tGzv3JOkF0XG5Qx2TlKWIA",
+			"foo":"bar"
+		]
+		do {
+			let dict = try oauth.parseAccessTokenResponse(response)
+			XCTAssertEqual("bar", dict["foo"] as? String)
+			XCTAssertEqual("2YotnFZFEjr1zCsicMWpAA", oauth.accessToken, "Must extract access token")
+			XCTAssertNotNil(oauth.accessTokenExpiry, "Must extract access token expiry date")
+			XCTAssertEqual("tGzv3JOkF0XG5Qx2TlKWIA", oauth.refreshToken, "Must extract refresh token")
+		}
+		catch {
+			XCTAssertTrue(false, "Not expected to throw")
+		}
+	}
+	
 	func testTokenRequestNoScope() {
 		let oauth = OAuth2PasswordGrant(settings: [
 			"client_id": "abc",
@@ -70,11 +91,11 @@ class OAuth2PasswordGrantTests: XCTestCase
 			"password":"Here is my password",
 			"verbose": true
 		])
-		let request = try! oauth.tokenRequest()
+		let request = try! oauth.tokenRequest(params: ["foo": "bar & hat"])
 		
 		let body = NSString(data: request.HTTPBody!, encoding: NSUTF8StringEncoding)
 		XCTAssertNotNil(body, "Body data must be present")
-		XCTAssertEqual(body!, "grant_type=password&username=My+User&password=Here+is+my+password", "Must create correct request body")
+		XCTAssertEqual(body!, "grant_type=password&username=My+User&password=Here+is+my+password&foo=bar+%26+hat", "Must create correct request body")
 	}
 }
 
