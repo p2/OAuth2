@@ -11,11 +11,11 @@ Pod::Spec.new do |s|
   s.summary      = "OAuth2 framework for OS X and iOS, written in Swift."
   s.description  = <<-DESC
                    OAuth2 frameworks for OS X and iOS written in Swift.
-                   
+
                    A flexible framework supporting standards-compliant _implicit_ and _code_ grant flows. Some
                    websites like Facebook may use slightly differring OAuth2 implementations, for those the
                    framework aims to provide specific subclasses handling these differences.
-                   
+
                    Start with `import p2_OAuth2` in your source files. Code documentation is available from within
                    Xcode (ALT + click on symbols) and on [p2.github.io/OAuth2/](http://p2.github.io/OAuth2/).
                    DESC
@@ -31,9 +31,9 @@ Pod::Spec.new do |s|
   s.pod_target_xcconfig = { 'OTHER_SWIFT_FLAGS' => '-DNO_KEYCHAIN_IMPORT' }
   s.ios.pod_target_xcconfig = { 'OTHER_SWIFT_FLAGS' => '-DIMPORT_SWIFT_KEYCHAIN' }
   s.ios.dependency 'SwiftKeychain', '~> 0.1.5'
-  
+
   s.source_files = "Sources/Base/*.swift"
   s.ios.source_files = "Sources/iOS/*.swift"
   s.osx.source_files = "Sources/OSX/*.swift", "SwiftKeychain/SwiftKeychain/Keychain/*.swift"
-  s.tvos.source_files = "OAuth2+tvOS/*.swift"
+  s.tvos.source_files = "Sources/tvOS/*.swift", "SwiftKeychain/SwiftKeychain/Keychain/*.swift"
 end

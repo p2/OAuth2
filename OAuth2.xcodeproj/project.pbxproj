@@ -181,6 +181,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		65D294B91C57CB47009DA970 /* tvOS */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = tvOS;
+			sourceTree = "<group>";
+		};
 		EE2486281AC85DD4002B31AF /* iOS */ = {
 			isa = PBXGroup;
 			children = (
@@ -257,6 +264,7 @@
 		EEDB8626193FAAE500C4EEA1 /* OAuth2 */ = {
 			isa = PBXGroup;
 			children = (
+				65D294B91C57CB47009DA970 /* tvOS */,
 				EEDB8640193FAB9200C4EEA1 /* OAuth2.swift */,
 				EEF47D2A1B1E3FDD0057D838 /* OAuth2Base.swift */,
 				EE79F6561BFA945C00746243 /* OAuth2ClientConfig.swift */,
