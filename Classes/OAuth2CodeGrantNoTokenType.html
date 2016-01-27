@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>OAuth2PasswordGrant Class Reference</title>
+    <title>OAuth2CodeGrantNoTokenType Class Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Class/OAuth2PasswordGrant" class="dashAnchor"></a>
-    <a title="OAuth2PasswordGrant Class Reference"></a>
+    <a name="//apple_ref/swift/Class/OAuth2CodeGrantNoTokenType" class="dashAnchor"></a>
+    <a title="OAuth2CodeGrantNoTokenType Class Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">OAuth2 Docs</a> (52% documented)</p>
@@ -23,7 +23,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">OAuth2 Reference</a>
         <img id="carat" src="../img/carat.png" />
-        OAuth2PasswordGrant Class Reference
+        OAuth2CodeGrantNoTokenType Class Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -159,14 +159,14 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>OAuth2PasswordGrant</h1>
+            <h1>OAuth2CodeGrantNoTokenType</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2PasswordGrant</span><span class="p">:</span> <span class="kt">OAuth2</span></code></pre>
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2CodeGrantNoTokenType</span><span class="p">:</span> <span class="kt">OAuth2CodeGrant</span></code></pre>
 
                 </div>
               </div>
-            <p>A class to handle authorization for clients via password grant.</p>
+            <p>Subclass to deal with sites that don&rsquo;t return <code>token_type</code>, such as Instagram or Bitly.</p>
 
           </section>
           <section class="section task-group-section">
@@ -175,9 +175,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ZvC6OAuth219OAuth2PasswordGrant9grantTypeSS"></a>
-                    <a name="//apple_ref/swift/Variable/grantType" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZvC6OAuth219OAuth2PasswordGrant9grantTypeSS">grantType</a>
+                    <a name="/s:FC6OAuth226OAuth2CodeGrantNoTokenTypecFMS0_FT8settingsGVSs10DictionarySSPSs9AnyObject___S0_"></a>
+                    <a name="//apple_ref/swift/Method/init(settings:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth226OAuth2CodeGrantNoTokenTypecFMS0_FT8settingsGVSs10DictionarySSPSs9AnyObject___S0_">init(settings:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -192,88 +192,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2PasswordGrant</span><span class="p">:</span> <span class="kt">OAuth2</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:vC6OAuth219OAuth2PasswordGrant8usernameSS"></a>
-                    <a name="//apple_ref/swift/Property/username" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC6OAuth219OAuth2PasswordGrant8usernameSS">username</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Username to use during authentication.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">username</span><span class="p">:</span> <span class="kt">String</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:vC6OAuth219OAuth2PasswordGrant8passwordSS"></a>
-                    <a name="//apple_ref/swift/Property/password" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC6OAuth219OAuth2PasswordGrant8passwordSS">password</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The user&rsquo;s password.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">password</span><span class="p">:</span> <span class="kt">String</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FC6OAuth219OAuth2PasswordGrantcFMS0_FT8settingsGVSs10DictionarySSPSs9AnyObject___S0_"></a>
-                    <a name="//apple_ref/swift/Method/init(settings:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth219OAuth2PasswordGrantcFMS0_FT8settingsGVSs10DictionarySSPSs9AnyObject___S0_">init(settings:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Adds support for the <q>password</q> &amp; <q>username</q> setting.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">override</span> <span class="nf">init</span><span class="p">(</span><span class="nv">settings</span><span class="p">:</span> <span class="kt">OAuth2JSON</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2CodeGrantNoTokenType</span><span class="p">:</span> <span class="kt">OAuth2CodeGrant</span></code></pre>
 
                         </div>
                       </div>

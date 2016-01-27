@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Keychain Class Reference</title>
+    <title>OAuth2WebViewController Class Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Class/Keychain" class="dashAnchor"></a>
-    <a title="Keychain Class Reference"></a>
+    <a name="//apple_ref/swift/Class/OAuth2WebViewController" class="dashAnchor"></a>
+    <a title="OAuth2WebViewController Class Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">OAuth2 Docs</a> (52% documented)</p>
@@ -23,7 +23,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">OAuth2 Reference</a>
         <img id="carat" src="../img/carat.png" />
-        Keychain Class Reference
+        OAuth2WebViewController Class Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -159,9 +159,14 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>Keychain</h1>
-            <p>Undocumented</p>
+            <h1>OAuth2WebViewController</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2WebViewController</span><span class="p">:</span> <span class="kt">NSViewController</span><span class="p">,</span> <span class="kt">WKNavigationDelegate</span><span class="p">,</span> <span class="kt">NSWindowDelegate</span></code></pre>
 
+                </div>
+              </div>
+            
           </section>
           <section class="section task-group-section">
             <div class="task-group">
@@ -169,9 +174,36 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC6OAuth28Keychain10accessModeCSo8NSString"></a>
-                    <a name="//apple_ref/swift/Property/accessMode" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC6OAuth28Keychain10accessModeCSo8NSString">accessMode</a>
+                    <a name="/s:vC6OAuth223OAuth2WebViewController8startURLGSqCSo5NSURL_"></a>
+                    <a name="//apple_ref/swift/Property/startURL" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC6OAuth223OAuth2WebViewController8startURLGSqCSo5NSURL_">startURL</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The URL to load on first show.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">startURL</span><span class="p">:</span> <span class="kt">NSURL</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6OAuth223OAuth2WebViewControllercFMS0_FT5coderCSo7NSCoder_GSqS0__"></a>
+                    <a name="//apple_ref/swift/Method/init(coder:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth223OAuth2WebViewControllercFMS0_FT5coderCSo7NSCoder_GSqS0__">init(coder:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -182,43 +214,13 @@
                         <p>Undocumented</p>
 
                       </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:vC6OAuth28Keychain11serviceNameSS"></a>
-                    <a name="//apple_ref/swift/Property/serviceName" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC6OAuth28Keychain11serviceNameSS">serviceName</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2WebViewController</span><span class="p">:</span> <span class="kt">NSViewController</span><span class="p">,</span> <span class="kt">WKNavigationDelegate</span><span class="p">,</span> <span class="kt">NSWindowDelegate</span></code></pre>
 
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:vC6OAuth28Keychain11accessGroupGSqSS_"></a>
-                    <a name="//apple_ref/swift/Property/accessGroup" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC6OAuth28Keychain11accessGroupGSqSS_">accessGroup</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -227,46 +229,19 @@
             </div>
             <div class="task-group">
               <div class="task-name-container">
-                <a name="/Initializers"></a>
-                <a name="//apple_ref/swift/Section/Initializers" class="dashAnchor"></a>
-                <a href="#/Initializers">
-                  <h3 class="section-name">Initializers</h3>
+                <a name="/View%20Handling"></a>
+                <a name="//apple_ref/swift/Section/View Handling" class="dashAnchor"></a>
+                <a href="#/View%20Handling">
+                  <h3 class="section-name">View Handling</h3>
                 </a>
               </div>
               <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth28KeychaincFMS0_FT11serviceNameSS10accessModeCSo8NSString5groupGSqSS__S0_"></a>
-                    <a name="//apple_ref/swift/Method/init(serviceName:accessMode:group:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth28KeychaincFMS0_FT11serviceNameSS10accessModeCSo8NSString5groupGSqSS__S0_">init(serviceName:accessMode:group:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>////////////////////////////////////////////////////</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="n">serviceName</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">accessMode</span><span class="p">:</span> <span class="kt">NSString</span> <span class="o">=</span> <span class="n">kSecAttrAccessibleWhenUnlocked</span><span class="p">,</span> <span class="nv">group</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FC6OAuth28KeychaincFMS0_FT_S0_"></a>
-                    <a name="//apple_ref/swift/Method/init()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth28KeychaincFMS0_FT_S0_">init()</a>
+                    <a name="/s:FC6OAuth223OAuth2WebViewController8loadViewFS0_FT_T_"></a>
+                    <a name="//apple_ref/swift/Method/loadView()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth223OAuth2WebViewController8loadViewFS0_FT_T_">loadView()</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -276,6 +251,68 @@
                       <div class="abstract">
                         <p>Undocumented</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2WebViewController</span><span class="p">:</span> <span class="kt">NSViewController</span><span class="p">,</span> <span class="kt">WKNavigationDelegate</span><span class="p">,</span> <span class="kt">NSWindowDelegate</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6OAuth223OAuth2WebViewController14viewWillAppearFS0_FT_T_"></a>
+                    <a name="//apple_ref/swift/Method/viewWillAppear()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth223OAuth2WebViewController14viewWillAppearFS0_FT_T_">viewWillAppear()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2WebViewController</span><span class="p">:</span> <span class="kt">NSViewController</span><span class="p">,</span> <span class="kt">WKNavigationDelegate</span><span class="p">,</span> <span class="kt">NSWindowDelegate</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6OAuth223OAuth2WebViewController13viewDidAppearFS0_FT_T_"></a>
+                    <a name="//apple_ref/swift/Method/viewDidAppear()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth223OAuth2WebViewController13viewDidAppearFS0_FT_T_">viewDidAppear()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2WebViewController</span><span class="p">:</span> <span class="kt">NSViewController</span><span class="p">,</span> <span class="kt">WKNavigationDelegate</span><span class="p">,</span> <span class="kt">NSWindowDelegate</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -284,76 +321,19 @@
             </div>
             <div class="task-group">
               <div class="task-name-container">
-                <a name="/KeychainService"></a>
-                <a name="//apple_ref/swift/Section/KeychainService" class="dashAnchor"></a>
-                <a href="#/KeychainService">
-                  <h3 class="section-name">KeychainService</h3>
+                <a name="/Actions"></a>
+                <a name="//apple_ref/swift/Section/Actions" class="dashAnchor"></a>
+                <a href="#/Actions">
+                  <h3 class="section-name">Actions</h3>
                 </a>
               </div>
               <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth28Keychain3addFS0_FPS_12KeychainItem_GSqCSo7NSError_"></a>
-                    <a name="//apple_ref/swift/Method/add(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth28Keychain3addFS0_FPS_12KeychainItem_GSqCSo7NSError_">add(_:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>////////////////////////////////////////////////////</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">add</span><span class="p">(</span><span class="nv">key</span><span class="p">:</span> <span class="kt">KeychainItem</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">NSError</span><span class="p">?</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FC6OAuth28Keychain6updateFS0_FPS_12KeychainItem_GSqCSo7NSError_"></a>
-                    <a name="//apple_ref/swift/Method/update(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth28Keychain6updateFS0_FPS_12KeychainItem_GSqCSo7NSError_">update(_:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Updates or adds the given keychain item.</p>
-
-<p>:param: key The keychain item to update or add
-:returns: An NSError if something goes wrong, nil otherwise</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">update</span><span class="p">(</span><span class="nv">key</span><span class="p">:</span> <span class="kt">KeychainItem</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">NSError</span><span class="p">?</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FC6OAuth28Keychain6removeFS0_FPS_12KeychainItem_GSqCSo7NSError_"></a>
-                    <a name="//apple_ref/swift/Method/remove(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth28Keychain6removeFS0_FPS_12KeychainItem_GSqCSo7NSError_">remove(_:)</a>
+                    <a name="/s:FC6OAuth223OAuth2WebViewController7loadURLFS0_FCSo5NSURLT_"></a>
+                    <a name="//apple_ref/swift/Method/loadURL(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth223OAuth2WebViewController7loadURLFS0_FCSo5NSURLT_">loadURL(_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -364,24 +344,13 @@
                         <p>Undocumented</p>
 
                       </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FC6OAuth28Keychain3getuRdq_CS_7BaseKey_FS0_Fq_T4itemGSqq__5errorGSqCSo7NSError__"></a>
-                    <a name="//apple_ref/swift/Method/get(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth28Keychain3getuRdq_CS_7BaseKey_FS0_Fq_T4itemGSqq__5errorGSqCSo7NSError__">get(_:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2WebViewController</span><span class="p">:</span> <span class="kt">NSViewController</span><span class="p">,</span> <span class="kt">WKNavigationDelegate</span><span class="p">,</span> <span class="kt">NSWindowDelegate</span></code></pre>
 
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -389,13 +358,20 @@
               </ul>
             </div>
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Web%20View%20Delegate"></a>
+                <a name="//apple_ref/swift/Section/Web View Delegate" class="dashAnchor"></a>
+                <a href="#/Web%20View%20Delegate">
+                  <h3 class="section-name">Web View Delegate</h3>
+                </a>
+              </div>
               <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ZFC6OAuth28Keychain18setTestingInstanceFMS0_FS0_T_"></a>
-                    <a name="//apple_ref/swift/Method/setTestingInstance(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFC6OAuth28Keychain18setTestingInstanceFMS0_FS0_T_">setTestingInstance(_:)</a>
+                    <a name="/s:FC6OAuth223OAuth2WebViewController7webViewFS0_FTCSo9WKWebView31decidePolicyForNavigationActionCSo18WKNavigationAction15decisionHandlerFOSC24WKNavigationActionPolicyT__T_"></a>
+                    <a name="//apple_ref/swift/Method/webView(_:decidePolicyForNavigationAction:decisionHandler:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth223OAuth2WebViewController7webViewFS0_FTCSo9WKWebView31decidePolicyForNavigationActionCSo18WKNavigationAction15decisionHandlerFOSC24WKNavigationActionPolicyT__T_">webView(_:decidePolicyForNavigationAction:decisionHandler:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -405,6 +381,106 @@
                       <div class="abstract">
                         <p>Undocumented</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2WebViewController</span><span class="p">:</span> <span class="kt">NSViewController</span><span class="p">,</span> <span class="kt">WKNavigationDelegate</span><span class="p">,</span> <span class="kt">NSWindowDelegate</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6OAuth223OAuth2WebViewController7webViewFS0_FTCSo9WKWebView19didFinishNavigationGSQCSo12WKNavigation__T_"></a>
+                    <a name="//apple_ref/swift/Method/webView(_:didFinishNavigation:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth223OAuth2WebViewController7webViewFS0_FTCSo9WKWebView19didFinishNavigationGSQCSo12WKNavigation__T_">webView(_:didFinishNavigation:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2WebViewController</span><span class="p">:</span> <span class="kt">NSViewController</span><span class="p">,</span> <span class="kt">WKNavigationDelegate</span><span class="p">,</span> <span class="kt">NSWindowDelegate</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6OAuth223OAuth2WebViewController7webViewFS0_FTCSo9WKWebView17didFailNavigationGSQCSo12WKNavigation_9withErrorCSo7NSError_T_"></a>
+                    <a name="//apple_ref/swift/Method/webView(_:didFailNavigation:withError:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth223OAuth2WebViewController7webViewFS0_FTCSo9WKWebView17didFailNavigationGSQCSo12WKNavigation_9withErrorCSo7NSError_T_">webView(_:didFailNavigation:withError:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2WebViewController</span><span class="p">:</span> <span class="kt">NSViewController</span><span class="p">,</span> <span class="kt">WKNavigationDelegate</span><span class="p">,</span> <span class="kt">NSWindowDelegate</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Window%20Delegate"></a>
+                <a name="//apple_ref/swift/Section/Window Delegate" class="dashAnchor"></a>
+                <a href="#/Window%20Delegate">
+                  <h3 class="section-name">Window Delegate</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6OAuth223OAuth2WebViewController17windowShouldCloseFS0_FPSs9AnyObject_Sb"></a>
+                    <a name="//apple_ref/swift/Method/windowShouldClose(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth223OAuth2WebViewController17windowShouldCloseFS0_FPSs9AnyObject_Sb">windowShouldClose(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2WebViewController</span><span class="p">:</span> <span class="kt">NSViewController</span><span class="p">,</span> <span class="kt">WKNavigationDelegate</span><span class="p">,</span> <span class="kt">NSWindowDelegate</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>

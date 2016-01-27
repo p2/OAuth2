@@ -7,12 +7,13 @@
     <meta charset='utf-8'>
     <script src="js/jquery.min.js" defer></script>
     <script src="js/jazzy.js" defer></script>
+    
   </head>
   <body>
     <a title="OAuth2  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">OAuth2 Docs</a> (51% documented)</p>
+        <p><a href="index.html">OAuth2 Docs</a> (52% documented)</p>
         <p class="header-right"><a href="https://github.com/p2/OAuth2"><img src="img/gh.png"/>View on GitHub</a></p>
         <p class="header-right"><a href="dash-feed://http%3A%2F%2Fp2%2Egithub%2Eio%2Fdocsets%2FOAuth2%2Exml"><img src="img/dash.png"/>Install in Dash</a></p>
       </div>
@@ -67,6 +68,12 @@
                 <a href="Classes.html#/s:C6OAuth223OAuth2CodeGrantFacebook">OAuth2CodeGrantFacebook</a>
               </li>
               <li class="nav-group-task">
+                <a href="Classes/OAuth2CodeGrantLinkedIn.html">OAuth2CodeGrantLinkedIn</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/OAuth2CodeGrantNoTokenType.html">OAuth2CodeGrantNoTokenType</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Classes/OAuth2DebugURLSessionDelegate.html">OAuth2DebugURLSessionDelegate</a>
               </li>
               <li class="nav-group-task">
@@ -80,6 +87,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Classes.html#/s:C6OAuth213OAuth2Request">OAuth2Request</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/OAuth2WebViewController.html">OAuth2WebViewController</a>
               </li>
             </ul>
           </li>
@@ -165,7 +175,7 @@ the framework version&rsquo;s <strong>first two digits are always the Swift vers
 Code compatible with brand new Swift versions are to be found on a separate feature branch named after their swift version.</p>
 <a href='#usage' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='usage'>Usage</h2>
 
-<p>To use OAuth2 in your own code, start with <code>import OAuth2</code> (use <code>p2_OAuth2</code> if you installed via CocoaPods) in your source files.</p>
+<p>To use OAuth2 in your own code, start with <code>import OAuth2</code> (use <code>p2_OAuth2</code> if you installed <em>p2.OAuth2</em> via CocoaPods) in your source files.</p>
 
 <p>For a typical code grant flow you want to perform the following steps.
 The steps for other flows are mostly the same short of instantiating a different subclass and using different client settings.
@@ -199,15 +209,18 @@ Optionally, set the <code>onAuthorize</code> and <code>onFailure</code> closures
 <a href='#3_authorize_the_user' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='3_authorize_the_user'>3. Authorize the User</h3>
 
 <p>By default the OS browser will be used for authorization if there is no access token present in the keychain.
-If you want to use the embedded web-view, change <code>authorizeEmbedded</code> to <code>true</code> and set a root view controller, from which to present the login screen if needed, as <code>authorizeContext</code>.</p>
+To start authorization call <strong><code>authorize()</code></strong> or the convenience method <code>authorizeEmbeddedFrom(&lt;# UIViewController or NSWindow #&gt;)</code>.</p>
 
-<p><strong>Starting with iOS 9</strong>, <code>SFSafariViewController</code> will be used when enabling embedded authorization, meaning <strong>you must intercept the callback in your app delegate</strong> or explicitly use the old login screen (see below).</p>
+<p>The latter configures <code>authConfig</code> like so: changes <code>authorizeEmbedded</code> to <code>true</code> and sets a root view controller/window, from which to present the login screen, as <code>authorizeContext</code>.
+See <a href="#advanced-settings"><em>Advanced Settings</em></a> for other options.</p>
 
-<p>To start authorization call <code>authorize()</code>:</p>
+<p><strong>Starting with iOS 9</strong>, <code>SFSafariViewController</code> will be used when enabling embedded authorization.</p>
 <pre class="highlight swift"><code><span class="n">oauth2</span><span class="o">.</span><span class="n">authConfig</span><span class="o">.</span><span class="n">authorizeEmbedded</span> <span class="o">=</span> <span class="kc">true</span>
-<span class="n">oauth2</span><span class="o">.</span><span class="n">authConfig</span><span class="o">.</span><span class="n">authorizeContext</span> <span class="o">=</span> <span class="o">&lt;</span><span class="err">#</span> <span class="n">presenting</span> <span class="n">view</span> <span class="n">controller</span> <span class="err">#</span><span class="o">&gt;</span>
-<span class="c1">// see **Advanced Settings** for more options</span>
+<span class="n">oauth2</span><span class="o">.</span><span class="n">authConfig</span><span class="o">.</span><span class="n">authorizeContext</span> <span class="o">=</span> <span class="o">&lt;</span><span class="err">#</span> <span class="n">presenting</span> <span class="n">view</span> <span class="n">controller</span> <span class="o">/</span> <span class="n">window</span> <span class="err">#</span><span class="o">&gt;</span>
 <span class="n">oauth2</span><span class="o">.</span><span class="nf">authorize</span><span class="p">()</span>
+
+<span class="c1">// for embedded authorization you can just use:</span>
+<span class="n">oauth2</span><span class="o">.</span><span class="nf">authorizeEmbeddedFrom</span><span class="p">(</span><span class="o">&lt;</span><span class="err">#</span> <span class="n">presenting</span> <span class="n">view</span> <span class="n">controller</span> <span class="o">/</span> <span class="n">window</span> <span class="err">#</span><span class="o">&gt;</span><span class="p">)</span>
 </code></pre>
 
 <p>When using the OS browser or the iOS 9 Safari view controller, you will need to <strong>intercept the callback</strong> in your app delegate.
@@ -223,19 +236,20 @@ Let the OAuth2 instance handle the full URL:</p>
 <span class="p">}</span>
 </code></pre>
 
-<p>See <em>Manually Performing Authentication</em> below for details on how to do this on the Mac.</p>
+<p>See <a href="#manually-performing-authentication"><em>Manually Performing Authentication</em></a> below for details on how to do this on the Mac.</p>
 <a href='#4_receive_callback' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='4_receive_callback'>4. Receive Callback</h3>
 
 <p>After everything completes either the <code>onAuthorize</code> or the <code>onFailure</code> closure will be called, and after that the <code>afterAuthorizeOrFailure</code> closure if it has been set.
 Hence, unless you have a reason to, you don&rsquo;t need to set all three callbacks, you can use any of those.</p>
 <a href='#5_make_requests' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='5_make_requests'>5. Make Requests</h3>
 
-<p>You can now obtain an <code>OAuth2Request</code>, which is an already signed <code>NSMutableURLRequest</code>, to retrieve data from your server.</p>
+<p>You can now obtain an <code>OAuth2Request</code>, which is an already signed <code>NSMutableURLRequest</code>, to retrieve data from your server.
+If you use <em>Alamofire</em> there&rsquo;s a <a href="#usage-with-alamofire">class extension</a> below that you can use.</p>
 <pre class="highlight swift"><code><span class="k">let</span> <span class="nv">req</span> <span class="o">=</span> <span class="n">oauth2</span><span class="o">.</span><span class="nf">request</span><span class="p">(</span><span class="nv">forURL</span><span class="p">:</span> <span class="o">&lt;</span><span class="err">#</span> <span class="n">resource</span> <span class="kt">URL</span> <span class="err">#</span><span class="o">&gt;</span><span class="p">)</span>
 <span class="k">let</span> <span class="nv">session</span> <span class="o">=</span> <span class="kt">NSURLSession</span><span class="o">.</span><span class="nf">sharedSession</span><span class="p">()</span>
 <span class="k">let</span> <span class="nv">task</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="nf">dataTaskWithRequest</span><span class="p">(</span><span class="n">req</span><span class="p">)</span> <span class="p">{</span> <span class="n">data</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="n">error</span> <span class="k">in</span>
-    <span class="k">if</span> <span class="kc">nil</span> <span class="o">!=</span> <span class="n">error</span> <span class="p">{</span>
-        <span class="c1">// something went wrong</span>
+    <span class="k">if</span> <span class="k">let</span> <span class="nv">error</span> <span class="o">=</span> <span class="n">error</span> <span class="p">{</span>
+        <span class="c1">// something went wrong, check the error</span>
     <span class="p">}</span>
     <span class="k">else</span> <span class="p">{</span>
         <span class="c1">// check the response and the data</span>
@@ -244,12 +258,17 @@ Hence, unless you have a reason to, you don&rsquo;t need to set all three callba
 <span class="p">}</span>
 <span class="n">task</span><span class="o">.</span><span class="nf">resume</span><span class="p">()</span>
 </code></pre>
-<a href='#6_re_authorize' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='6_re_authorize'>6. Re-Authorize</h3>
+<a href='#6_cancel_authorization' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='6_cancel_authorization'>6. Cancel Authorization</h3>
+
+<p>You can cancel an ongoing authorization any time by calling <code>oauth2.abortAuthorization()</code>.
+This will cancel ongoing requests (like a code exchange request) or call the callback while you&rsquo;re waiting for a user to login on a webpage.
+The latter will dismiss embedded login screens or redirect the user back to the app.</p>
+<a href='#7_re_authorize' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='7_re_authorize'>7. Re-Authorize</h3>
 
 <p>It is safe to always call <code>oauth2.authorize()</code> before performing a request.
 You can also perform the authorization before the first request after your app became active again.
 Or you can always intercept 401s in your requests and call authorize again before re-attempting the request.</p>
-<a href='#7_logout' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='7_logout'>7. Logout</h3>
+<a href='#8_logout' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='8_logout'>8. Logout</h3>
 
 <p>If you&rsquo;re storing tokens to the keychain, you can call <code>forgetTokens()</code> to throw them away.</p>
 
@@ -272,18 +291,31 @@ With the newer <code>SFSafariViewController</code>, or logins performed in the b
 
 <p>If you do <strong>not wish this kind of automation</strong>, the manual steps to show the authorize screens are:</p>
 
-<p><strong>Embedded (iOS only)</strong>:</p>
+<p><strong>Embedded iOS</strong>:</p>
 <pre class="highlight swift"><code><span class="k">let</span> <span class="nv">vc</span> <span class="o">=</span> <span class="o">&lt;</span><span class="err">#</span> <span class="n">presenting</span> <span class="n">view</span> <span class="n">controller</span> <span class="err">#</span><span class="o">&gt;</span>
-<span class="k">let</span> <span class="nv">web</span> <span class="o">=</span> <span class="n">oauth2</span><span class="o">.</span><span class="nf">authorizeEmbeddedFrom</span><span class="p">(</span><span class="n">vc</span><span class="p">,</span> <span class="nv">params</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">web</span> <span class="o">=</span> <span class="n">oauth2</span><span class="o">.</span><span class="nf">authorizeEmbeddedFrom</span><span class="p">(</span><span class="n">vc</span><span class="p">)</span>
 <span class="n">oauth2</span><span class="o">.</span><span class="n">afterAuthorizeOrFailure</span> <span class="o">=</span> <span class="p">{</span> <span class="n">wasFailure</span><span class="p">,</span> <span class="n">error</span> <span class="k">in</span>
     <span class="n">web</span><span class="o">.</span><span class="nf">dismissViewControllerAnimated</span><span class="p">(</span><span class="kc">true</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre>
 
-<p><strong>iOS/OS X browser</strong>:</p>
-<pre class="highlight swift"><code><span class="k">if</span> <span class="o">!</span><span class="n">oauth2</span><span class="o">.</span><span class="nf">openAuthorizeURLInBrowser</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nf">fatalError</span><span class="p">(</span><span class="s">"Cannot open authorize URL"</span><span class="p">)</span>
+<p><strong>Modal Sheet on OS X</strong>:</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">win</span> <span class="o">=</span> <span class="o">&lt;</span><span class="err">#</span> <span class="n">window</span> <span class="n">to</span> <span class="n">present</span> <span class="n">from</span> <span class="err">#</span><span class="o">&gt;</span>
+<span class="c1">// if `win` is nil, will open a new window</span>
+<span class="n">oauth2</span><span class="o">.</span><span class="nf">authorizeEmbeddedFrom</span><span class="p">(</span><span class="n">win</span><span class="p">)</span>
+</code></pre>
+
+<p><strong>Present yourself on OS X</strong>:</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">vc</span> <span class="o">=</span> <span class="o">&lt;</span><span class="err">#</span> <span class="n">view</span> <span class="n">controller</span> <span class="err">#</span><span class="o">&gt;</span>
+<span class="k">let</span> <span class="nv">web</span> <span class="o">=</span> <span class="n">oauth2</span><span class="o">.</span><span class="nf">presentableAuthorizeViewController</span><span class="p">()</span>
+<span class="n">oauth2</span><span class="o">.</span><span class="n">afterAuthorizeOrFailure</span> <span class="o">=</span> <span class="p">{</span> <span class="n">wasFailure</span><span class="p">,</span> <span class="n">error</span> <span class="k">in</span>
+    <span class="n">vc</span><span class="o">.</span><span class="nf">dismissViewController</span><span class="p">(</span><span class="n">web</span><span class="p">)</span>
 <span class="p">}</span>
+<span class="n">vc</span><span class="o">.</span><span class="nf">presentViewController</span><span class="p">(</span><span class="n">web</span><span class="p">,</span> <span class="nv">animator</span><span class="p">:</span> <span class="o">&lt;</span><span class="err">#</span> <span class="n">animator</span> <span class="err">#</span><span class="o">&gt;</span><span class="p">)</span>
+</code></pre>
+
+<p><strong>iOS/OS X browser</strong>:</p>
+<pre class="highlight swift"><code><span class="k">try!</span> <span class="n">oauth2</span><span class="o">.</span><span class="nf">openAuthorizeURLInBrowser</span><span class="p">()</span>
 </code></pre>
 
 <p>In case you&rsquo;re using the OS browser or the new Safari view controller, you will need to <strong>intercept the callback</strong> in your app delegate.</p>
@@ -339,17 +371,40 @@ Create an instance as shown above, set its <code>username</code> and <code>passw
 
 <p>Some sites might not strictly adhere to the OAuth2 flow.
 The framework deals with those deviations by creating site-specific subclasses.</p>
+<a href='#facebook' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='facebook'>Facebook</h4>
 
-<ul>
-<li><strong>Facebook</strong>: <code>OAuth2CodeGrantFacebook</code> to deal with the <a href="https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow/v2.2">URL-query-style response</a> instead of the expected JSON dictionary.</li>
-<li><strong>GitHub</strong>: <code>OAuth2CodeGrant</code> automatically puts the client-key/client-secret into an “Authorization: Basic” header.
-GitHub however needs those two in the POSTed body; you need to set the <code>authConfig.secretInBody</code> setting to true, either directly in code or via the <code>secret_in_body</code> key in the settings dictionary.</li>
-<li><strong>Reddit</strong>: <code>OAuth2CodeGrant</code> automatically adds a <em>Basic</em> authorization header when a client secret is set.
+<p>Use <code>OAuth2CodeGrantFacebook</code> to deal with the <a href="https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow/v2.2">URL-query-style response</a> instead of the expected JSON dictionary.</p>
+<a href='#github' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='github'>GitHub</h4>
+
+<p><code>OAuth2CodeGrant</code> automatically puts the client-key/client-secret into an “Authorization: Basic” header.
+GitHub however needs those two in the POSTed body; you need to set the <code>authConfig.secretInBody</code> setting to true, either directly in code or via the <code>secret_in_body</code> key in the settings dictionary.</p>
+<a href='#reddit' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='reddit'>Reddit</h4>
+
+<p><code>OAuth2CodeGrant</code> automatically adds a <em>Basic</em> authorization header when a client secret is set.
 This means that you <strong>must</strong> specify a client_secret; if there is none (like for <a href="https://github.com/reddit/reddit/wiki/OAuth2#token-retrieval-code-flow">Reddit</a>) specify the empty string.
-There is a <a href="https://github.com/p2/OAuth2App/blob/master/OAuth2App/RedditLoader.swift">RedditLoader</a> example in the <a href="https://github.com/p2/OAuth2App">OAuth2App sample app</a> for a basic usage example.</li>
-<li><strong>Google</strong>: If you authorize against Google with a <code>OAuth2CodeGrant</code>, the built-in iOS web view will intercept the <code>http://localhost</code> as well as the <code>urn:ietf:wg:oauth:2.0:oob</code> (with or without <code>:auto</code>) callbacks.</li>
-<li><strong>LinkedIn</strong>: Since I don&rsquo;t see a way to set any other redirect-url other than ones starting with <code>https</code>, this framework can only be used against LinkedIn via built-in web-view, disabling <code>SFSafariWebViewController</code>.</li>
-</ul>
+There is a <a href="https://github.com/p2/OAuth2App/blob/master/OAuth2App/RedditLoader.swift">RedditLoader</a> example in the <a href="https://github.com/p2/OAuth2App">OAuth2App sample app</a> for a basic usage example.</p>
+<a href='#google' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='google'>Google</h4>
+
+<p>If you authorize against Google with a <code>OAuth2CodeGrant</code>, the built-in iOS web view will intercept the <code>http://localhost</code> as well as the <code>urn:ietf:wg:oauth:2.0:oob</code> (with or without <code>:auto</code>) callbacks.
+This means you must disable the Safari view controller and – for now – this only works on iOS.</p>
+<pre class="highlight swift"><code><span class="n">oauth2</span><span class="o">.</span><span class="n">authConfig</span><span class="o">.</span><span class="n">authorizeEmbedded</span> <span class="o">=</span> <span class="kc">true</span>
+<span class="n">oauth2</span><span class="o">.</span><span class="n">authConfig</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">useSafariView</span> <span class="o">=</span> <span class="kc">false</span>
+</code></pre>
+<a href='#linkedin' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='linkedin'>LinkedIn</h4>
+
+<p>There are a couple of peculiarities with LinkedIn&rsquo;s OAuth2 implementation.
+You can use <code>OAuth2CodeGrantLinkedIn</code> which deals with those, but since it needs the custom embedded web view this will only work on iOS for now.
+To receive <em>JSON</em> you will also need to use their special header <code>x-li-format</code> and set it to <code>json</code>:</p>
+<pre class="highlight swift"><code><span class="n">urlRequest</span><span class="o">.</span><span class="nf">setValue</span><span class="p">(</span><span class="s">"json"</span><span class="p">,</span> <span class="nv">forHTTPHeaderField</span><span class="p">:</span> <span class="s">"x-li-format"</span><span class="p">)</span>
+</code></pre>
+<a href='#instagram_bitly' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='instagram_bitly'>Instagram, Bitly, &hellip;</h4>
+
+<p>Some sites don&rsquo;t return the required <code>token_type</code> parameter in their token response.
+LinkedIn does the same, see above.
+You can tell if you&rsquo;re getting the error <em>“No token type received, will not use the token”</em>.
+There is a subclass for code grant flows that ignores the missing token type that you can use: <a href="Sources/Base/OAuth2CodeGrantNoTokenType.swift"><code>OAuth2CodeGrantNoTokenType</code></a>.</p>
+
+<p>For <em>Instagram</em> you also need to set <code>oauth2.authConfig.secretInBody = true</code> (or use <code>secret_in_body</code> in your settings dict) because it expects the client secret in the request body, not the <em>Authorization</em> header.</p>
 <a href='#usage_with_alamofire' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='usage_with_alamofire'>Usage with Alamofire</h2>
 
 <p>Here&rsquo;s an extension that can be used with Alamofire:</p>
@@ -364,8 +419,11 @@ There is a <a href="https://github.com/p2/OAuth2App/blob/master/OAuth2App/Reddit
         <span class="nv">headers</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">String</span><span class="p">]?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span>
         <span class="o">-&gt;</span> <span class="kt">Alamofire</span><span class="o">.</span><span class="kt">Request</span>
     <span class="p">{</span>
-        <span class="k">var</span> <span class="nv">hdrs</span> <span class="o">=</span> <span class="n">headers</span>
-        <span class="n">hdrs</span><span class="p">[</span><span class="s">"Authorization"</span><span class="p">]</span> <span class="o">=</span> <span class="s">"Bearer </span><span class="se">\(</span><span class="n">accessToken</span><span class="se">)</span><span class="s">"</span>
+
+        <span class="k">var</span> <span class="nv">hdrs</span> <span class="o">=</span> <span class="n">headers</span> <span class="p">??</span> <span class="p">[:]</span>
+        <span class="k">if</span> <span class="k">let</span> <span class="nv">token</span> <span class="o">=</span> <span class="n">accessToken</span> <span class="p">{</span>
+            <span class="n">hdrs</span><span class="p">[</span><span class="s">"Authorization"</span><span class="p">]</span> <span class="o">=</span> <span class="s">"Bearer </span><span class="se">\(</span><span class="n">token</span><span class="se">)</span><span class="s">"</span>
+        <span class="p">}</span>
         <span class="k">return</span> <span class="kt">Alamofire</span><span class="o">.</span><span class="nf">request</span><span class="p">(</span>
             <span class="n">method</span><span class="p">,</span>
             <span class="kt">URLString</span><span class="p">,</span>
@@ -439,6 +497,10 @@ To revert to the old custom <code>OAuth2WebViewController</code>:</p>
 <p>To customize the <em>go back</em> button when using <code>OAuth2WebViewController</code>:</p>
 <pre class="highlight plaintext"><code>oauth2.authConfig.ui.backButton = &lt;# UIBarButtonItem(...) #&gt;
 </code></pre>
+
+<p>Some sites also want the client-id/secret combination in the request <em>body</em>, not in the <em>Authorization</em> header:</p>
+<pre class="highlight plaintext"><code>oauth2.authConfig.secretInBody = true
+</code></pre>
 <a href='#installation' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='installation'>Installation</h2>
 
 <p>You can use git or CocoaPods to install the framework.</p>
@@ -487,8 +549,8 @@ Since there is no <code>NOTICE</code> file there is nothing that you have to inc
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2015 <a class="link" href="http://www.github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2015-12-02)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.4.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2016 <a class="link" href="http://www.github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2016-01-27)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.5.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

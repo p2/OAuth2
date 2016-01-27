@@ -7,13 +7,14 @@
     <meta charset='utf-8'>
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
+    
   </head>
   <body>
     <a name="//apple_ref/swift/Class/OAuth2" class="dashAnchor"></a>
     <a title="OAuth2 Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">OAuth2 Docs</a> (51% documented)</p>
+        <p><a href="../index.html">OAuth2 Docs</a> (52% documented)</p>
         <p class="header-right"><a href="https://github.com/p2/OAuth2"><img src="../img/gh.png"/>View on GitHub</a></p>
         <p class="header-right"><a href="dash-feed://http%3A%2F%2Fp2%2Egithub%2Eio%2Fdocsets%2FOAuth2%2Exml"><img src="../img/dash.png"/>Install in Dash</a></p>
       </div>
@@ -68,6 +69,12 @@
                 <a href="../Classes.html#/s:C6OAuth223OAuth2CodeGrantFacebook">OAuth2CodeGrantFacebook</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Classes/OAuth2CodeGrantLinkedIn.html">OAuth2CodeGrantLinkedIn</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/OAuth2CodeGrantNoTokenType.html">OAuth2CodeGrantNoTokenType</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Classes/OAuth2DebugURLSessionDelegate.html">OAuth2DebugURLSessionDelegate</a>
               </li>
               <li class="nav-group-task">
@@ -81,6 +88,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes.html#/s:C6OAuth213OAuth2Request">OAuth2Request</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/OAuth2WebViewController.html">OAuth2WebViewController</a>
               </li>
             </ul>
           </li>
@@ -229,7 +239,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Client setup</p>
+                        <p>Settings related to the client-server relationship.</p>
 
                       </div>
                       <div class="declaration">
@@ -318,6 +328,33 @@
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">clientSecret</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC6OAuth26OAuth210clientNameGSqSS_"></a>
+                    <a name="//apple_ref/swift/Property/clientName" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC6OAuth26OAuth210clientNameGSqSS_">clientName</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The name of the client, as used during dynamic client registration. Use <q>client_name</q> during initalization to set.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">clientName</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -591,6 +628,66 @@
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>wasFailure</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Bool indicating success or failure</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>error</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>ErrorType describing the reason for failure, as supplied to the <code>onFailure</code> callback. If it is nil and <code>wasFailure</code> is true, the process was aborted.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC6OAuth26OAuth233onBeforeDynamicClientRegistrationGSqFCSo5NSURLGSqCS_12OAuth2DynReg__"></a>
+                    <a name="//apple_ref/swift/Property/onBeforeDynamicClientRegistration" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC6OAuth26OAuth233onBeforeDynamicClientRegistrationGSqFCSo5NSURLGSqCS_12OAuth2DynReg__">onBeforeDynamicClientRegistration</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>If non-nil, will be called before performing dynamic client registration, giving you a chance to instantiate your own registrar.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">onBeforeDynamicClientRegistration</span><span class="p">:</span> <span class="p">(</span><span class="kt">NSURL</span> <span class="o">-&gt;</span> <span class="kt">OAuth2DynReg</span><span class="p">?)?</span></code></pre>
+
+                        </div>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -746,9 +843,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth26OAuth29authorizeFS0_FT6paramsGSqGVSs10DictionarySSSS__11autoDismissSb_T_"></a>
-                    <a name="//apple_ref/swift/Method/authorize(params:autoDismiss:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth26OAuth29authorizeFS0_FT6paramsGSqGVSs10DictionarySSSS__11autoDismissSb_T_">authorize(params:autoDismiss:)</a>
+                    <a name="/s:FC6OAuth26OAuth29authorizeFS0_FT6paramsGSqGVSs10DictionarySSSS___T_"></a>
+                    <a name="//apple_ref/swift/Method/authorize(params:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth26OAuth29authorizeFS0_FT6paramsGSqGVSs10DictionarySSSS___T_">authorize(params:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -760,16 +857,65 @@
 
 <p>This method will first check if the client already has an unexpired access token (possibly from the keychain), if not and it&rsquo;s able to
 use a refresh token it will try to use the refresh token. If this fails it will check whether the client has a client_id and show the
-authorize screen if you have <code><a href="../Classes/OAuth2.html#/s:vC6OAuth26OAuth210authConfigVS_16OAuth2AuthConfig">authConfig</a></code> set up sufficiently. If <code><a href="../Classes/OAuth2.html#/s:vC6OAuth26OAuth210authConfigVS_16OAuth2AuthConfig">authConfig</a></code> is not set up sufficiently this method will end up calling the
-<code><a href="../Classes/OAuth2.html#/s:vC6OAuth26OAuth29onFailureGSqFT5errorGSqPSs9ErrorType___T__">onFailure</a></code> callback. If client_id is not set but a <q>registration_uri</q> has been provided, a dynamic client registration will be
-attempted and if it succees, an access token will be requested.</p>
+authorize screen if you have <code><a href="../Classes/OAuth2.html#/s:vC6OAuth26OAuth210authConfigVS_16OAuth2AuthConfig">authConfig</a></code> set up sufficiently. If <code><a href="../Classes/OAuth2.html#/s:vC6OAuth26OAuth210authConfigVS_16OAuth2AuthConfig">authConfig</a></code> is not set up sufficiently this method will end up
+calling the <code><a href="../Classes/OAuth2.html#/s:vC6OAuth26OAuth29onFailureGSqFT5errorGSqPSs9ErrorType___T__">onFailure</a></code> callback. If client_id is not set but a <q>registration_uri</q> has been provided, a dynamic client registration will
+be attempted and if it succees, an access token will be requested.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">authorize</span><span class="p">(</span><span class="n">params</span> <span class="nv">params</span><span class="p">:</span> <span class="kt">OAuth2StringDict</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">autoDismiss</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">func</span> <span class="nf">authorize</span><span class="p">(</span><span class="n">params</span> <span class="nv">params</span><span class="p">:</span> <span class="kt">OAuth2StringDict</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>params</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Optional key/value pairs to pass during authorization</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6OAuth26OAuth221authorizeEmbeddedFromFS0_FTPSs9AnyObject_6paramsGSqGVSs10DictionarySSSS___T_"></a>
+                    <a name="//apple_ref/swift/Method/authorizeEmbeddedFrom(_:params:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth26OAuth221authorizeEmbeddedFromFS0_FTPSs9AnyObject_6paramsGSqGVSs10DictionarySSSS___T_">authorizeEmbeddedFrom(_:params:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Shortcut function to start embedded authorization from the given context (a UIViewController on iOS, an NSWindow on OS X).</p>
+
+<p>This method sets <code>authConfig.authorizeEmbedded = true</code> and <code>authConfig.authorizeContext = &lt;# context #&gt;</code>, then calls <code>authorize()</code></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">authorizeEmbeddedFrom</span><span class="p">(</span><span class="nv">context</span><span class="p">:</span> <span class="kt">AnyObject</span><span class="p">,</span> <span class="nv">params</span><span class="p">:</span> <span class="kt">OAuth2StringDict</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -824,9 +970,34 @@ is still valid.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">authorizeURL</span><span class="p">(</span><span class="nv">params</span><span class="p">:</span> <span class="kt">OAuth2StringDict</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="n">throws</span> <span class="o">-&gt;</span> <span class="kt">NSURL</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">authorizeURL</span><span class="p">(</span><span class="nv">params</span><span class="p">:</span> <span class="kt">OAuth2StringDict</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">NSURL</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>params</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Optional, additional URL params to supply to the request</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>NSURL to be used to start the OAuth dance</p>
+
                       </div>
                     </section>
                   </div>
@@ -851,9 +1022,60 @@ is still valid.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">authorizeURLWithRedirect</span><span class="p">(</span><span class="nv">redirect</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">scope</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">params</span><span class="p">:</span> <span class="kt">OAuth2StringDict</span><span class="p">?)</span> <span class="n">throws</span> <span class="o">-&gt;</span> <span class="kt">NSURL</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">authorizeURLWithRedirect</span><span class="p">(</span><span class="nv">redirect</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">scope</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">params</span><span class="p">:</span> <span class="kt">OAuth2StringDict</span><span class="p">?)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">NSURL</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>redirect</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The redirect URI string to supply. If it is nil, the first value of the settings&rsquo; <code>redirect_uris</code> entries is used. Must be present in the end!</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>scope</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The scope to request</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>params</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Any additional parameters as dictionary with string keys and values that will be added to the query part</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>NSURL to be used to start the OAuth dance</p>
+
                       </div>
                     </section>
                   </div>
@@ -878,7 +1100,7 @@ is still valid.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">handleRedirectURL</span><span class="p">(</span><span class="nv">redirect</span><span class="p">:</span> <span class="kt">NSURL</span><span class="p">)</span> <span class="n">throws</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">handleRedirectURL</span><span class="p">(</span><span class="nv">redirect</span><span class="p">:</span> <span class="kt">NSURL</span><span class="p">)</span> <span class="k">throws</span></code></pre>
 
                         </div>
                       </div>
@@ -919,6 +1141,26 @@ is still valid.</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">doRefreshToken</span><span class="p">(</span><span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="nv">successParams</span><span class="p">:</span> <span class="kt">OAuth2JSON</span><span class="p">?,</span> <span class="nv">error</span><span class="p">:</span> <span class="kt">ErrorType</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">))</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The callback to call after the refresh token exchange has finished</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -961,19 +1203,40 @@ your OAuth2 endpoint.</p>
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>forURL</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The URL to create a request for</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>OAuth2Request for the given URL</p>
+
+                      </div>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth26OAuth225openAuthorizeURLInBrowserFS0_FTGSqGVSs10DictionarySSSS___Sb"></a>
-                    <a name="//apple_ref/swift/Method/openAuthorizeURLInBrowser(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth26OAuth225openAuthorizeURLInBrowserFS0_FTGSqGVSs10DictionarySSSS___Sb">openAuthorizeURLInBrowser(_:)</a>
+                    <a name="/s:FC6OAuth26OAuth218abortAuthorizationFS0_FT_T_"></a>
+                    <a name="//apple_ref/swift/Method/abortAuthorization()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth26OAuth218abortAuthorizationFS0_FT_T_">abortAuthorization()</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -981,14 +1244,14 @@ your OAuth2 endpoint.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Uses <code>NSWorkspace</code> to open the authorize URL in the OS browser.</p>
+                        <p>Allows to abort authorization currently in progress.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">func</span> <span class="nf">openAuthorizeURLInBrowser</span><span class="p">(</span><span class="nv">params</span><span class="p">:</span> <span class="kt">OAuth2StringDict</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">abortAuthorization</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -999,19 +1262,141 @@ your OAuth2 endpoint.</p>
             </div>
             <div class="task-group">
               <div class="task-name-container">
-                <a name="/Embedded%20View%20(NOT%20IMPLEMENTED)"></a>
-                <a name="//apple_ref/swift/Section/Embedded View (NOT IMPLEMENTED)" class="dashAnchor"></a>
-                <a href="#/Embedded%20View%20(NOT%20IMPLEMENTED)">
-                  <h3 class="section-name">Embedded View (NOT IMPLEMENTED)</h3>
+                <a name="/Response%20Parsing"></a>
+                <a name="//apple_ref/swift/Section/Response Parsing" class="dashAnchor"></a>
+                <a href="#/Response%20Parsing">
+                  <h3 class="section-name">Response Parsing</h3>
                 </a>
               </div>
               <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth26OAuth221authorizeEmbeddedWithFS0_FTVS_16OAuth2AuthConfig6paramsGSqGVSs10DictionarySSSS__11autoDismissSb_Sb"></a>
-                    <a name="//apple_ref/swift/Method/authorizeEmbeddedWith(_:params:autoDismiss:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth26OAuth221authorizeEmbeddedWithFS0_FTVS_16OAuth2AuthConfig6paramsGSqGVSs10DictionarySSSS__11autoDismissSb_Sb">authorizeEmbeddedWith(_:params:autoDismiss:)</a>
+                    <a name="/s:FC6OAuth26OAuth231assureAccessTokenParamsAreValidFS0_FzGVSs10DictionarySSPSs9AnyObject__T_"></a>
+                    <a name="//apple_ref/swift/Method/assureAccessTokenParamsAreValid(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth26OAuth231assureAccessTokenParamsAreValidFS0_FzGVSs10DictionarySSPSs9AnyObject__T_">assureAccessTokenParamsAreValid(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Called when parsing the access token response. Does nothing by default, implicit grant flows check state.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">assureAccessTokenParamsAreValid</span><span class="p">(</span><span class="nv">params</span><span class="p">:</span> <span class="kt">OAuth2JSON</span><span class="p">)</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6OAuth26OAuth232assureRefreshTokenParamsAreValidFS0_FzGVSs10DictionarySSPSs9AnyObject__T_"></a>
+                    <a name="//apple_ref/swift/Method/assureRefreshTokenParamsAreValid(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth26OAuth232assureRefreshTokenParamsAreValidFS0_FzGVSs10DictionarySSPSs9AnyObject__T_">assureRefreshTokenParamsAreValid(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Called when parsing the refresh token response. Does nothing by default.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">assureRefreshTokenParamsAreValid</span><span class="p">(</span><span class="nv">params</span><span class="p">:</span> <span class="kt">OAuth2JSON</span><span class="p">)</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6OAuth26OAuth225openAuthorizeURLInBrowserFS0_FzTGSqGVSs10DictionarySSSS___T_"></a>
+                    <a name="//apple_ref/swift/Method/openAuthorizeURLInBrowser(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth26OAuth225openAuthorizeURLInBrowserFS0_FzTGSqGVSs10DictionarySSSS___T_">openAuthorizeURLInBrowser(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Uses <code>NSWorkspace</code> to open the authorize URL in the OS browser.</p>
+
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    UnableToOpenAuthorizeURL on failure
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">func</span> <span class="nf">openAuthorizeURLInBrowser</span><span class="p">(</span><span class="nv">params</span><span class="p">:</span> <span class="kt">OAuth2StringDict</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>params</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Additional parameters to pass to the authorize URL</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Embedded%20View"></a>
+                <a name="//apple_ref/swift/Section/Embedded View" class="dashAnchor"></a>
+                <a href="#/Embedded%20View">
+                  <h3 class="section-name">Embedded View</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6OAuth26OAuth221authorizeEmbeddedWithFS0_FzTVS_16OAuth2AuthConfig6paramsGSqGVSs10DictionarySSSS___T_"></a>
+                    <a name="//apple_ref/swift/Method/authorizeEmbeddedWith(_:params:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth26OAuth221authorizeEmbeddedWithFS0_FzTVS_16OAuth2AuthConfig6paramsGSqGVSs10DictionarySSSS___T_">authorizeEmbeddedWith(_:params:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1021,12 +1406,18 @@ your OAuth2 endpoint.</p>
                       <div class="abstract">
                         <p>Tries to use the given context, which on OS X should be a NSViewController, to present the authorization screen.</p>
 
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    Can throw several OAuth2Error if the method is unable to show the authorize screen
+
+</div>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">authorizeEmbeddedWith</span><span class="p">(</span><span class="nv">config</span><span class="p">:</span> <span class="kt">OAuth2AuthConfig</span><span class="p">,</span> <span class="nv">params</span><span class="p">:</span> <span class="kt">OAuth2StringDict</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">autoDismiss</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">authorizeEmbeddedWith</span><span class="p">(</span><span class="nv">config</span><span class="p">:</span> <span class="kt">OAuth2AuthConfig</span><span class="p">,</span> <span class="nv">params</span><span class="p">:</span> <span class="kt">OAuth2StringDict</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="k">throws</span></code></pre>
 
                         </div>
                       </div>
@@ -1036,9 +1427,9 @@ your OAuth2 endpoint.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth26OAuth221authorizeEmbeddedFromFS0_FTCSo16NSViewController6paramsGSqGVSs10DictionarySSSS___PSs9AnyObject_"></a>
-                    <a name="//apple_ref/swift/Method/authorizeEmbeddedFrom(_:params:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth26OAuth221authorizeEmbeddedFromFS0_FTCSo16NSViewController6paramsGSqGVSs10DictionarySSSS___PSs9AnyObject_">authorizeEmbeddedFrom(_:params:)</a>
+                    <a name="/s:FC6OAuth26OAuth221authorizeEmbeddedFromFS0_FzTCSo8NSWindow6configVS_16OAuth2AuthConfig6paramsGSqGVSs10DictionarySSSS___S1_"></a>
+                    <a name="//apple_ref/swift/Method/authorizeEmbeddedFrom(_:config:params:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth26OAuth221authorizeEmbeddedFromFS0_FzTCSo8NSWindow6configVS_16OAuth2AuthConfig6paramsGSqGVSs10DictionarySSSS___S1_">authorizeEmbeddedFrom(_:config:params:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1046,16 +1437,176 @@ your OAuth2 endpoint.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
-
+                        
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2</span><span class="p">:</span> <span class="kt">OAuth2Base</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">authorizeEmbeddedFrom</span><span class="p">(</span><span class="nv">window</span><span class="p">:</span> <span class="kt">NSWindow</span><span class="p">,</span> <span class="nv">config</span><span class="p">:</span> <span class="kt">OAuth2AuthConfig</span><span class="p">,</span> <span class="nv">params</span><span class="p">:</span> <span class="kt">OAuth2StringDict</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">NSWindow</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>window</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The window from which to present the sheet</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>config</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The auth configuration to take into consideration</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>params</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Additional parameters to pass to the authorize URL</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The sheet that is being queued for presentation</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6OAuth26OAuth220authorizeInNewWindowFS0_FzTVS_16OAuth2AuthConfig6paramsGSqGVSs10DictionarySSSS___T_"></a>
+                    <a name="//apple_ref/swift/Method/authorizeInNewWindow(_:params:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth26OAuth220authorizeInNewWindowFS0_FzTVS_16OAuth2AuthConfig6paramsGSqGVSs10DictionarySSSS___T_">authorizeInNewWindow(_:params:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">authorizeInNewWindow</span><span class="p">(</span><span class="nv">config</span><span class="p">:</span> <span class="kt">OAuth2AuthConfig</span><span class="p">,</span> <span class="nv">params</span><span class="p">:</span> <span class="kt">OAuth2StringDict</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>config</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The auth configuration to take into consideration</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>params</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Additional parameters to pass to the authorize URL</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6OAuth26OAuth234presentableAuthorizeViewControllerFS0_FzTGSqGVSs10DictionarySSSS___CS_23OAuth2WebViewController"></a>
+                    <a name="//apple_ref/swift/Method/presentableAuthorizeViewController(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth26OAuth234presentableAuthorizeViewControllerFS0_FzTGSqGVSs10DictionarySSSS___CS_23OAuth2WebViewController">presentableAuthorizeViewController(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">presentableAuthorizeViewController</span><span class="p">(</span><span class="nv">params</span><span class="p">:</span> <span class="kt">OAuth2StringDict</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">OAuth2WebViewController</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>params</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Additional parameters to pass to the authorize URL</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A web view controller that you can present to the user for login</p>
+
                       </div>
                     </section>
                   </div>
@@ -1065,8 +1616,8 @@ your OAuth2 endpoint.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2015 <a class="link" href="http://www.github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2015-12-02)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.4.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2016 <a class="link" href="http://www.github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2016-01-27)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.5.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

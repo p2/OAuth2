@@ -7,12 +7,13 @@
     <meta charset='utf-8'>
     <script src="js/jquery.min.js" defer></script>
     <script src="js/jazzy.js" defer></script>
+    
   </head>
   <body>
     <a title="Classes  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">OAuth2 Docs</a> (51% documented)</p>
+        <p><a href="index.html">OAuth2 Docs</a> (52% documented)</p>
         <p class="header-right"><a href="https://github.com/p2/OAuth2"><img src="img/gh.png"/>View on GitHub</a></p>
         <p class="header-right"><a href="dash-feed://http%3A%2F%2Fp2%2Egithub%2Eio%2Fdocsets%2FOAuth2%2Exml"><img src="img/dash.png"/>Install in Dash</a></p>
       </div>
@@ -67,6 +68,12 @@
                 <a href="Classes.html#/s:C6OAuth223OAuth2CodeGrantFacebook">OAuth2CodeGrantFacebook</a>
               </li>
               <li class="nav-group-task">
+                <a href="Classes/OAuth2CodeGrantLinkedIn.html">OAuth2CodeGrantLinkedIn</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/OAuth2CodeGrantNoTokenType.html">OAuth2CodeGrantNoTokenType</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Classes/OAuth2DebugURLSessionDelegate.html">OAuth2DebugURLSessionDelegate</a>
               </li>
               <li class="nav-group-task">
@@ -80,6 +87,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Classes.html#/s:C6OAuth213OAuth2Request">OAuth2Request</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/OAuth2WebViewController.html">OAuth2WebViewController</a>
               </li>
             </ul>
           </li>
@@ -182,6 +192,37 @@
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:C6OAuth223OAuth2WebViewController"></a>
+                    <a name="//apple_ref/swift/Class/OAuth2WebViewController" class="dashAnchor"></a>
+                    <a class="token" href="#/s:C6OAuth223OAuth2WebViewController">OAuth2WebViewController</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                        <a href="Classes/OAuth2WebViewController.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2WebViewController</span><span class="p">:</span> <span class="kt">NSViewController</span><span class="p">,</span> <span class="kt">WKNavigationDelegate</span><span class="p">,</span> <span class="kt">NSWindowDelegate</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:C6OAuth218OAuth2ClientConfig"></a>
                     <a name="//apple_ref/swift/Class/OAuth2ClientConfig" class="dashAnchor"></a>
                     <a class="token" href="#/s:C6OAuth218OAuth2ClientConfig">OAuth2ClientConfig</a>
@@ -192,9 +233,17 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Client configuration object that holds on to client-server specific configurations such as client id, -secret and server URLs.</p>
 
                         <a href="Classes/OAuth2ClientConfig.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2ClientConfig</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -537,6 +586,38 @@ the client key will be embedded into the request body.</p>
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:C6OAuth226OAuth2CodeGrantNoTokenType"></a>
+                    <a name="//apple_ref/swift/Class/OAuth2CodeGrantNoTokenType" class="dashAnchor"></a>
+                    <a class="token" href="#/s:C6OAuth226OAuth2CodeGrantNoTokenType">OAuth2CodeGrantNoTokenType</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Subclass to deal with sites that don&rsquo;t return <code>token_type</code>, such as Instagram or Bitly.</p>
+
+                        <a href="Classes/OAuth2CodeGrantNoTokenType.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2CodeGrantNoTokenType</span><span class="p">:</span> <span class="kt">OAuth2CodeGrant</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:C6OAuth223OAuth2CodeGrantFacebook"></a>
                     <a name="//apple_ref/swift/Class/OAuth2CodeGrantFacebook" class="dashAnchor"></a>
                     <a class="token" href="#/s:C6OAuth223OAuth2CodeGrantFacebook">OAuth2CodeGrantFacebook</a>
@@ -556,6 +637,44 @@ and deal with the situation in a subclass.</p>
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2CodeGrantFacebook</span><span class="p">:</span> <span class="kt">OAuth2CodeGrant</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:C6OAuth223OAuth2CodeGrantLinkedIn"></a>
+                    <a name="//apple_ref/swift/Class/OAuth2CodeGrantLinkedIn" class="dashAnchor"></a>
+                    <a class="token" href="#/s:C6OAuth223OAuth2CodeGrantLinkedIn">OAuth2CodeGrantLinkedIn</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>LinkedIn-specific subclass to deal with LinkedIn peculiarities:</p>
+
+<ul>
+<li>Must have client-id/secret in request body</li>
+<li>Must use custom web view in order to be able to intercept http(s) redirects</li>
+<li>Will <strong>not</strong> return the <q>token_type</q> value, so must ignore it not being present</li>
+</ul>
+
+                        <a href="Classes/OAuth2CodeGrantLinkedIn.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2CodeGrantLinkedIn</span><span class="p">:</span> <span class="kt">OAuth2CodeGrant</span></code></pre>
 
                         </div>
                       </div>
@@ -649,7 +768,10 @@ this subclass if you need a different header (this is different to version 1.2.3
                       <div class="abstract">
                         <p>Class to handle OAuth2 Dynamic Client Registration.</p>
 
-<p>This class is WiP and not complete. For the full spec see <a href="https://tools.ietf.org/html/rfc7591">https://tools.ietf.org/html/rfc7591</a></p>
+<p>This is a lightweight class that uses a OAuth2 instance&rsquo;s settings when registering, only few settings are held by instances of this
+   class. Hence it&rsquo;s highly portable and can be instantiated when needed with ease.</p>
+
+<p>For the full OAuth2 Dynamic Client Registration spec see <a href="https://tools.ietf.org/html/rfc7591">https://tools.ietf.org/html/rfc7591</a></p>
 
                         <a href="Classes/OAuth2DynReg.html" class="slightly-smaller">See more</a>
                       </div>
@@ -657,7 +779,7 @@ this subclass if you need a different header (this is different to version 1.2.3
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2DynReg</span><span class="p">:</span> <span class="kt">OAuth2Base</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2DynReg</span></code></pre>
 
                         </div>
                       </div>
@@ -669,8 +791,8 @@ this subclass if you need a different header (this is different to version 1.2.3
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2015 <a class="link" href="http://www.github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2015-12-02)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.4.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2016 <a class="link" href="http://www.github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2016-01-27)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.5.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

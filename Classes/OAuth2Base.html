@@ -7,13 +7,14 @@
     <meta charset='utf-8'>
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
+    
   </head>
   <body>
     <a name="//apple_ref/swift/Class/OAuth2Base" class="dashAnchor"></a>
     <a title="OAuth2Base Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">OAuth2 Docs</a> (51% documented)</p>
+        <p><a href="../index.html">OAuth2 Docs</a> (52% documented)</p>
         <p class="header-right"><a href="https://github.com/p2/OAuth2"><img src="../img/gh.png"/>View on GitHub</a></p>
         <p class="header-right"><a href="dash-feed://http%3A%2F%2Fp2%2Egithub%2Eio%2Fdocsets%2FOAuth2%2Exml"><img src="../img/dash.png"/>Install in Dash</a></p>
       </div>
@@ -68,6 +69,12 @@
                 <a href="../Classes.html#/s:C6OAuth223OAuth2CodeGrantFacebook">OAuth2CodeGrantFacebook</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Classes/OAuth2CodeGrantLinkedIn.html">OAuth2CodeGrantLinkedIn</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/OAuth2CodeGrantNoTokenType.html">OAuth2CodeGrantNoTokenType</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Classes/OAuth2DebugURLSessionDelegate.html">OAuth2DebugURLSessionDelegate</a>
               </li>
               <li class="nav-group-task">
@@ -81,6 +88,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes.html#/s:C6OAuth213OAuth2Request">OAuth2Request</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/OAuth2WebViewController.html">OAuth2WebViewController</a>
               </li>
             </ul>
           </li>
@@ -402,6 +412,39 @@ converted into an error according to information supplied in the response JSON (
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>request</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The request to execute</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The callback to call when the request completes/fails; data and error are mutually exclusive</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -436,9 +479,47 @@ converted into an error according to information supplied in the response JSON (
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">assureNoErrorInResponse</span><span class="p">(</span><span class="nv">params</span><span class="p">:</span> <span class="kt">OAuth2JSON</span><span class="p">,</span> <span class="nv">fallback</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="n">throws</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">assureNoErrorInResponse</span><span class="p">(</span><span class="nv">params</span><span class="p">:</span> <span class="kt">OAuth2JSON</span><span class="p">,</span> <span class="nv">fallback</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="k">throws</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>params</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The URL parameters returned from the server</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>fallback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The message string to use in case no error description is found in the parameters</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>An OAuth2Error</p>
+
                       </div>
                     </section>
                   </div>
@@ -481,6 +562,31 @@ converted into an error according to information supplied in the response JSON (
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>params</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The parameters you want to have encoded</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>An URL-ready query string</p>
+
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -510,6 +616,31 @@ automatically perform percent decoding, potentially messing with your query stri
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">paramsFromQuery</span><span class="p">(</span><span class="nv">query</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">OAuth2StringDict</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>query</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The query string you want to have parsed</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A dictionary full of strings with the key-value pairs found in the query</p>
+
                       </div>
                     </section>
                   </div>
@@ -546,8 +677,8 @@ automatically perform percent decoding, potentially messing with your query stri
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2015 <a class="link" href="http://www.github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2015-12-02)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.4.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2016 <a class="link" href="http://www.github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2016-01-27)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.5.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>
