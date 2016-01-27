@@ -11,3 +11,6 @@ jazzy \
 	-r "http://p2.github.io/OAuth2" \
 	-o "docs" \
 	--module-version "2.2"
+
+mkdir docs/assets 2>/dev/null
+cp assets/* docs/assets/
