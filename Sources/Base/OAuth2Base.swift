@@ -19,7 +19,9 @@
 //
 
 import Foundation
-#if IMPORT_SWIFT_KEYCHAIN		// experimental for SwiftKeychain integration via CocoaPods (iOS only)
+#if IMPORT_SWIFT_KEYCHAIN       // experimental for SwiftKeychain integration via CocoaPods (iOS only)
+import SwiftKeychain
+#elseif !NO_KEYCHAIN_IMPORT     // needs to be imported when using `swift build`, not when building via Xcode
 import SwiftKeychain
 #endif
 
@@ -184,8 +186,14 @@ public class OAuth2Base
 	*/
 	public func performRequest(request: NSURLRequest, callback: ((data: NSData?, status: Int?, error: ErrorType?) -> Void)) {
 		let task = URLSession().dataTaskWithRequest(request) { sessData, sessResponse, error in
+			self.abortableTask = nil
 			if let error = error {
-				callback(data: nil, status: nil, error: error)
+				if NSURLErrorDomain == error.domain && -999 == error.code {		// request was cancelled
+					callback(data: nil, status: nil, error: OAuth2Error.RequestCancelled)
+				}
+				else {
+					callback(data: nil, status: nil, error: error)
+				}
 			}
 			else if let data = sessData, let http = sessResponse as? NSHTTPURLResponse {
 				callback(data: data, status: http.statusCode, error: nil)
@@ -195,6 +203,7 @@ public class OAuth2Base
 				callback(data: nil, status: nil, error: error)
 			}
 		}
+		abortableTask = task
 		task.resume()
 	}
 	
@@ -209,6 +218,23 @@ public class OAuth2Base
 			}
 		}
 		return session!
+	}
+	
+	/// Currently running abortable session task.
+	private var abortableTask: NSURLSessionTask?
+	
+	/**
+	Can be called to immediately abort the currently running authorization request, if it was started by `performRequest()`.
+	
+	- returns: A bool indicating whether a task was aborted or not
+	*/
+	func abortTask() -> Bool {
+		guard let task = abortableTask else {
+			return false
+		}
+		logIfVerbose("Aborting request")
+		task.cancel()
+		return true
 	}
 	
 	

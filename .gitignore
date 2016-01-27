@@ -5,6 +5,7 @@
 *.xccheckout
 *.xcscmblueprint
 build
+.build
 
 # Documentation
 docs

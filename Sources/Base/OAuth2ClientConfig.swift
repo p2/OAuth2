@@ -9,6 +9,9 @@
 import Foundation
 
 
+/**
+Client configuration object that holds on to client-server specific configurations such as client id, -secret and server URLs.
+*/
 public class OAuth2ClientConfig {
 	
 	/// The client id.

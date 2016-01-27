@@ -30,6 +30,7 @@ public enum OAuth2Error: ErrorType, CustomStringConvertible, Equatable {
 	case Generic(String)
 	case NSError(Foundation.NSError)
 	
+	// Client errors
 	case NoClientId
 	case NoClientSecret
 	case NoRedirectURL
@@ -42,6 +43,11 @@ public enum OAuth2Error: ErrorType, CustomStringConvertible, Equatable {
 	
 	case NoRegistrationURL
 	
+	// Request errors
+	case NotUsingTLS
+	case UnableToOpenAuthorizeURL
+	case InvalidRequest
+	case RequestCancelled
 	case NoTokenType
 	case UnsupportedTokenType(String)
 	case NoDataInResponse
@@ -49,9 +55,9 @@ public enum OAuth2Error: ErrorType, CustomStringConvertible, Equatable {
 	case InvalidState
 	case JSONParserError
 	case UTF8EncodeError
+	case UTF8DecodeError
 	
-	case NotUsingTLS
-	case InvalidRequest
+	// OAuth2 errors
 	case UnauthorizedClient
 	case AccessDenied
 	case UnsupportedResponseType
@@ -110,12 +116,20 @@ public enum OAuth2Error: ErrorType, CustomStringConvertible, Equatable {
 		case .NoRegistrationURL:
 			return "No registration URL defined"
 		
+		case .NotUsingTLS:
+			return "You MUST use HTTPS/SSL/TLS"
+		case .UnableToOpenAuthorizeURL:
+			return "Cannot open authorize URL"
+		case .InvalidRequest:
+			return "The request is missing a required parameter, includes an invalid parameter value, includes a parameter more than once, or is otherwise malformed."
+		case .RequestCancelled:
+			return "The request has been cancelled"
 		case NoTokenType:
 			return "No token type received, will not use the token"
 		case UnsupportedTokenType(let message):
 			return message
 		case NoDataInResponse:
-			return "No date in the response"
+			return "No data in the response"
 		case PrerequisiteFailed(let message):
 			return message
 		case InvalidState:
@@ -124,11 +138,9 @@ public enum OAuth2Error: ErrorType, CustomStringConvertible, Equatable {
 			return "Error parsing JSON"
 		case UTF8EncodeError:
 			return "Failed to UTF-8 encode the given string"
+		case UTF8DecodeError:
+			return "Failed to decode given data as a UTF-8 string"
 		
-		case .NotUsingTLS:
-			return "You MUST use HTTPS/SSL/TLS"
-		case .InvalidRequest:
-			return "The request is missing a required parameter, includes an invalid parameter value, includes a parameter more than once, or is otherwise malformed."
 		case .UnauthorizedClient:
 			return "The client is not authorized to request an access token using this method."
 		case .AccessDenied:
@@ -163,21 +175,26 @@ public func ==(lhs: OAuth2Error, rhs: OAuth2Error) -> Bool {
 	case (.InvalidRedirectURL(let lhu), .InvalidRedirectURL(let rhu)):       return lhu == rhu
 	case (.NoRefreshToken, .NoRefreshToken):			         return true
 	
+	case (.NotUsingTLS, .NotUsingTLS):                           return true
+	case (.UnableToOpenAuthorizeURL, .UnableToOpenAuthorizeURL): return true
+	case (.InvalidRequest, .InvalidRequest):                     return true
+	case (.RequestCancelled, .RequestCancelled):                 return true
 	case (.NoTokenType, .NoTokenType):                           return true
 	case (.UnsupportedTokenType(let lhm), .UnsupportedTokenType(let rhm)):   return lhm == rhm
 	case (.NoDataInResponse, .NoDataInResponse):                 return true
 	case (.PrerequisiteFailed(let lhm), .PrerequisiteFailed(let rhm)):       return lhm == rhm
 	case (.InvalidState, .InvalidState):                         return true
 	case (.JSONParserError, .JSONParserError):                   return true
-		
-	case (.ResponseError(let lhm), .ResponseError(let rhm)):     return lhm == rhm
-	case (.InvalidRequest, .InvalidRequest):                     return true
+	case (.UTF8EncodeError, .UTF8EncodeError):                   return true
+	case (.UTF8DecodeError, .UTF8DecodeError):                   return true
+	
 	case (.UnauthorizedClient, .UnauthorizedClient):             return true
 	case (.AccessDenied, .AccessDenied):                         return true
 	case (.UnsupportedResponseType, .UnsupportedResponseType):   return true
 	case (.InvalidScope, .InvalidScope):                         return true
 	case (.ServerError, .ServerError):                           return true
 	case (.TemporarilyUnavailable, .TemporarilyUnavailable):     return true
+	case (.ResponseError(let lhm), .ResponseError(let rhm)):     return lhm == rhm
 	default:                                                     return false
 	}
 }

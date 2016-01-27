@@ -34,7 +34,7 @@ public class OAuth2: OAuth2Base {
 		return nil
 	}
 	
-	/// Client setup
+	/// Settings related to the client-server relationship.
 	public let clientConfig: OAuth2ClientConfig
 	
 	/// Client-side authorization options.
@@ -197,11 +197,14 @@ public class OAuth2: OAuth2Base {
  
 	This method will first check if the client already has an unexpired access token (possibly from the keychain), if not and it's able to
 	use a refresh token it will try to use the refresh token. If this fails it will check whether the client has a client_id and show the
-	authorize screen if you have `authConfig` set up sufficiently. If `authConfig` is not set up sufficiently this method will end up calling the
-	`onFailure` callback. If client_id is not set but a "registration_uri" has been provided, a dynamic client registration will be
-	attempted and if it succees, an access token will be requested.
+	authorize screen if you have `authConfig` set up sufficiently. If `authConfig` is not set up sufficiently this method will end up
+	calling the `onFailure` callback. If client_id is not set but a "registration_uri" has been provided, a dynamic client registration will
+	be attempted and if it succees, an access token will be requested.
+	
+	- parameter params: Optional key/value pairs to pass during authorization
 	*/
-	public func authorize(params params: OAuth2StringDict? = nil, autoDismiss: Bool = true) {
+	public final func authorize(params params: OAuth2StringDict? = nil) {
+		isAuthorizing = true
 		tryToObtainAccessTokenIfNeeded() { success in
 			if success {
 				self.didAuthorize(OAuth2JSON())
@@ -212,22 +215,28 @@ public class OAuth2: OAuth2Base {
 						self.didFail(error)
 					}
 					else {
-						if self.authConfig.authorizeEmbedded {
-							callOnMainThread() {
-								if !self.authorizeEmbeddedWith(self.authConfig, params: params, autoDismiss: autoDismiss) {
-									self.didFail(nil == self.authConfig.authorizeContext ? OAuth2Error.NoAuthorizationContext : OAuth2Error.InvalidAuthorizationContext)
-								}
-							}
+						do {
+							assert(NSThread.isMainThread())
+							try self.doAuthorize(params: params)
 						}
-						else {
-							if !self.openAuthorizeURLInBrowser(params) {
-								fatalError("Cannot open authorize URL")
-							}
+						catch let error {
+							self.didFail(error)
 						}
 					}
 				}
 			}
 		}
+	}
+	
+	/**
+	Shortcut function to start embedded authorization from the given context (a UIViewController on iOS, an NSWindow on OS X).
+	
+	This method sets `authConfig.authorizeEmbedded = true` and `authConfig.authorizeContext = <# context #>`, then calls `authorize()`
+	*/
+	public func authorizeEmbeddedFrom(context: AnyObject, params: OAuth2StringDict? = nil) {
+		authConfig.authorizeEmbedded = true
+		authConfig.authorizeContext = context
+		authorize(params: params)
 	}
 	
 	/**
@@ -267,6 +276,23 @@ public class OAuth2: OAuth2Base {
 					callback(success: false)
 				}
 			})
+		}
+	}
+	
+	/**
+	Method to actually start authorization. The public `authorize()` method only proceeds to this method if there is no valid access token
+	and if optional client registration succeeds.
+	
+	Can be overridden in subclasses to perform an authorization dance different from directing the user to a website.
+	
+	- parameter params: Optional key/value pairs to pass during authorization
+	*/
+	func doAuthorize(params params: OAuth2StringDict? = nil) throws {
+		if self.authConfig.authorizeEmbedded {
+			try self.authorizeEmbeddedWith(self.authConfig, params: params)
+		}
+		else {
+			try self.openAuthorizeURLInBrowser(params)
 		}
 	}
 	
@@ -433,38 +459,50 @@ public class OAuth2: OAuth2Base {
 	// MARK: - Registration
 	
 	/**
+	Use OAuth2 dynamic client registration to register the client, if needed.
+	
 	Returns immediately if the receiver's `clientId` is nil (with error = nil) or if there is no registration URL (with error). Otherwise
 	calls `onBeforeDynamicClientRegistration()` -- if it is non-nil -- and uses the returned `OAuth2DynReg` instance -- if it is non-nil.
 	If both are nil, instantiates a blank `OAuth2DynReg` instead, then attempts client registration.
 	
-	- parameter callback: The callback to call; if both json and error is nil no registration was attempted; error is nil on success
+	- parameter callback: The callback to call on the main thread; if both json and error is nil no registration was attempted; error is nil
+	                      on success
 	*/
 	func registerClientIfNeeded(callback: ((json: OAuth2JSON?, error: ErrorType?) -> Void)) {
 		if nil != clientId {
-			callback(json: nil, error: nil)
+			callOnMainThread() {
+				callback(json: nil, error: nil)
+			}
 		}
 		else if let url = clientConfig.registrationURL {
 			let dynreg = onBeforeDynamicClientRegistration?(url) ?? OAuth2DynReg()
 			dynreg.registerClient(self) { json, error in
-				callback(json: json, error: error)
+				callOnMainThread() {
+					callback(json: json, error: error)
+				}
 			}
 		}
 		else {
-			callback(json: nil, error: OAuth2Error.NoRegistrationURL)
+			callOnMainThread() {
+				callback(json: nil, error: OAuth2Error.NoRegistrationURL)
+			}
 		}
 	}
 	
 	
 	// MARK: - Callbacks
 	
+	/// Flag used internally to determine whether authorization is going on at all and can be aborted.
+	private var isAuthorizing = false
+	
 	/**
 	Internally used on success. Calls the `onAuthorize` and `afterAuthorizeOrFailure` callbacks on the main thread.
 	*/
 	func didAuthorize(parameters: OAuth2JSON) {
+		isAuthorizing = false
 		if useKeychain {
 			storeTokensToKeychain()
 		}
-		
 		callOnMainThread() {
 			self.onAuthorize?(parameters: parameters)
 			self.internalAfterAuthorizeOrFailure?(wasFailure: false, error: nil)
@@ -476,11 +514,18 @@ public class OAuth2: OAuth2Base {
 	Internally used on error. Calls the `onFailure` and `afterAuthorizeOrFailure` callbacks on the main thread.
 	*/
 	func didFail(error: ErrorType?) {
-		if let err = error {
-			logIfVerbose("\(err)")
+		isAuthorizing = false
+		
+		var finalError = error
+		if let error = error {
+			logIfVerbose("\(error)")
+			if let oae = error as? OAuth2Error where .RequestCancelled == oae {
+				finalError = nil
+			}
 		}
+		
 		callOnMainThread() {
-			self.onFailure?(error: error)
+			self.onFailure?(error: finalError)
 			self.internalAfterAuthorizeOrFailure?(wasFailure: true, error: error)
 			self.afterAuthorizeOrFailure?(wasFailure: true, error: error)
 		}
@@ -500,6 +545,16 @@ public class OAuth2: OAuth2Base {
 	*/
 	public func request(forURL url: NSURL) -> OAuth2Request {
 		return OAuth2Request(URL: url, oauth: self, cachePolicy: .ReturnCacheDataElseLoad, timeoutInterval: 20)
+	}
+	
+	/**
+	Allows to abort authorization currently in progress.
+	*/
+	public func abortAuthorization() {
+		if !abortTask() && isAuthorizing {
+			logIfVerbose("Aborting authorization")
+			didFail(nil)
+		}
 	}
 	
 	

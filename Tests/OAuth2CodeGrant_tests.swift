@@ -192,20 +192,71 @@ class OAuth2CodeGrantTests: XCTestCase
 	}
 	
 	func testTokenResponse() {
-		let oauth = OAuth2CodeGrant(settings: [
+		let settings = [
 			"client_id": "abc",
 			"client_secret": "xyz",
 			"authorize_uri": "https://auth.ful.io",
 			"keychain": false,
-		])
-		let response = [
+		]
+		let oauth = OAuth2CodeGrant(settings: settings)
+		var response = [
 			"access_token": "2YotnFZFEjr1zCsicMWpAA",
-			"token_type": "bearer",
 			"expires_in": 3600,
 			"refresh_token": "tGzv3JOkF0XG5Qx2TlKWIA",
 			"foo": "bar & hat"
 		]
 		
+		// must throw when "token_type" is missing
+		do {
+			let _ = try oauth.parseAccessTokenResponse(response)
+			XCTAssertTrue(false, "Should not be here any more")
+		}
+		catch OAuth2Error.NoTokenType {
+		}
+		catch let error {
+			XCTAssertNil(error, "Should not throw wrong error")
+		}
+		
+		// LinkedIn on the other hand must not throw
+		let linkedin = OAuth2CodeGrantLinkedIn(settings: settings)
+		do {
+			let _ = try linkedin.parseAccessTokenResponse(response)
+		}
+		catch let error {
+			XCTAssertNil(error, "Should not throw")
+		}
+		
+		// Nor the generic no-token-type class
+		let noType = OAuth2CodeGrantNoTokenType(settings: settings)
+		do {
+			let _ = try noType.parseAccessTokenResponse(response)
+		}
+		catch let error {
+			XCTAssertNil(error, "Should not throw")
+		}
+		
+		// must throw when "token_type" is not known
+		response["token_type"] = "guardian"
+		do {
+			let _ = try oauth.parseAccessTokenResponse(response)
+			XCTAssertTrue(false, "Should not be here any more")
+		}
+		catch OAuth2Error.UnsupportedTokenType(_) {
+		}
+		catch let error {
+			XCTAssertNil(error, "Should not throw wrong error")
+		}
+		
+		// the no-token-type class must still ignore it
+		do {
+			let _ = try noType.parseAccessTokenResponse(response)
+		}
+		catch let error {
+			XCTAssertNil(error, "Should not throw")
+		}
+		
+		// add "token_type"
+		response["token_type"] = "bearer"
 		do {
 			let dict = try oauth.parseAccessTokenResponse(response)
 			XCTAssertEqual("bar & hat", dict["foo"] as? String)

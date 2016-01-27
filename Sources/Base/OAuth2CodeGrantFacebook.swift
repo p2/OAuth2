@@ -25,18 +25,18 @@ import Foundation
     Facebook only returns an "access_token=xyz&..." string, no true JSON, hence we override `parseTokenExchangeResponse`
     and deal with the situation in a subclass.
  */
-public class OAuth2CodeGrantFacebook: OAuth2CodeGrant
-{
+public class OAuth2CodeGrantFacebook: OAuth2CodeGrant {
+	
 	/**
-	    Facebook doesn't return JSON but a plain URL-query-like string. This override takes care of the situation and
-	    extracts the token from the response.
-	 */
+	Facebook doesn't return JSON but a plain URL-query-like string. This override takes care of the situation and extracts the token from
+	the response.
+	*/
 	override func parseAccessTokenResponse(data: NSData) throws -> OAuth2JSON {
-		if let str = NSString(data: data, encoding: NSUTF8StringEncoding) as? String {
-			let query = self.dynamicType.paramsFromQuery(str)
-			return try parseAccessTokenResponse(query)
+		guard let str = NSString(data: data, encoding: NSUTF8StringEncoding) as? String else {
+			throw OAuth2Error.UTF8DecodeError
 		}
-		throw OAuth2Error.ResponseError("Invalid response data from token request")
+		let query = self.dynamicType.paramsFromQuery(str)
+		return try parseAccessTokenResponse(query)
 	}
 }
 

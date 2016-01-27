@@ -35,6 +35,9 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 	/// Handle to the OAuth2 instance in play, only used for debug logging at this time.
 	var oauth: OAuth2?
 	
+	/// Configure the view to be shown as sheet, false by default; must be present before the view gets loaded.
+	var willBecomeSheet = false
+	
 	/// The URL to load on first show.
 	public var startURL: NSURL? {
 		didSet(oldURL) {
@@ -67,8 +70,8 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 	/// that you've intercepted the URL.
 	var onIntercept: ((url: NSURL) -> Bool)?
 	
-	/// Called when the web view is about to be dismissed.
-	var onWillDismiss: ((didCancel: Bool) -> Void)?
+	/// Called when the web view is about to be dismissed manually.
+	var onWillCancel: (Void -> Void)?
 	
 	/// Our web view; implicitly unwrapped so do not attempt to use it unless isViewLoaded() returns true.
 	var webView: WKWebView!
@@ -99,7 +102,7 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 	// MARK: - View Handling
 	
 	internal static let WebViewWindowWidth = CGFloat(600.0)
-	internal static let WebViewWindowHeight = CGFloat(400.0)
+	internal static let WebViewWindowHeight = CGFloat(500.0)
 	
 	override public func loadView() {
 		view = NSView(frame: NSMakeRect(0, 0, OAuth2WebViewController.WebViewWindowWidth, OAuth2WebViewController.WebViewWindowHeight))
@@ -115,6 +118,18 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 		view.addConstraint(NSLayoutConstraint(item: webView, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Bottom, multiplier: 1.0, constant: 0.0))
 		view.addConstraint(NSLayoutConstraint(item: webView, attribute: .Left, relatedBy: .Equal, toItem: view, attribute: .Left, multiplier: 1.0, constant: 0.0))
 		view.addConstraint(NSLayoutConstraint(item: webView, attribute: .Right, relatedBy: .Equal, toItem: view, attribute: .Right, multiplier: 1.0, constant: 0.0))
+		
+		// add a dismiss button
+		if willBecomeSheet {
+			let button = NSButton(frame: NSRect(x: 0, y: 0, width: 120, height: 20))
+			button.translatesAutoresizingMaskIntoConstraints = false
+			button.title = "Cancel"
+			button.target = self
+			button.action = "cancel:"
+			view.addSubview(button)
+			view.addConstraint(NSLayoutConstraint(item: button, attribute: .Trailing, relatedBy: .Equal, toItem: view, attribute: .Trailing, multiplier: 1.0, constant: -10.0))
+			view.addConstraint(NSLayoutConstraint(item: button, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Bottom, multiplier: 1.0, constant: -10.0))
+		}
 		
 		showLoadingIndicator()
 	}
@@ -175,18 +190,8 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 	}
 	
 	func cancel(sender: AnyObject?) {
-		dismiss(asCancel: true, animated: nil != sender ? true : false)
-	}
-	
-	func dismiss(animated animated: Bool) {
-		dismiss(asCancel: false, animated: animated)
-	}
-	
-	func dismiss(asCancel asCancel: Bool, animated: Bool) {
 		webView.stopLoading()
-		onWillDismiss?(didCancel: asCancel)
-		
-		dismissViewController(self)
+		onWillCancel?()
 	}
 	
 	
@@ -217,8 +222,6 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 		decisionHandler(.Allow)
 	}
 	
-	private var gotIntercepted = false
-	
 	public func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
 		if let scheme = interceptComponents?.scheme where "urn" == scheme {
 			if let path = interceptComponents?.path where path.hasPrefix("ietf:wg:oauth:2.0:oob") {
@@ -226,7 +229,6 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 					oauth?.logIfVerbose("Creating redirect URL from document.title")
 					let qry = title.stringByReplacingOccurrencesOfString("Success ", withString: "")
 					if let url = NSURL(string: "http://localhost/?\(qry)") {
-						gotIntercepted = true
 						onIntercept?(url: url)
 						return
 					}
@@ -250,11 +252,12 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 		showErrorMessage(error.localizedDescription, animated: true)
 	}
 	
+	
 	// MARK: - Window Delegate
 	
-	public func windowWillClose(notification: NSNotification) {
-		onWillDismiss?(didCancel: !gotIntercepted)
+	public func windowShouldClose(sender: AnyObject) -> Bool {
+		onWillCancel?()
+		return false
 	}
-	
 }
 

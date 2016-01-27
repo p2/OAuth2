@@ -19,14 +19,14 @@
 //
 
 #if os(OSX)
-    import Cocoa
+import Cocoa
 #endif
 
 /**
-    Simple struct to hold client-side authorization configuration variables.
+Simple struct to hold settings describing how authorization appears to the user.
 */
-public struct OAuth2AuthConfig
-{
+public struct OAuth2AuthConfig {
+	
 	public struct UI {
 		
 		/// Title to propagate to views handled by OAuth2, such as OAuth2WebViewController.
@@ -40,29 +40,31 @@ public struct OAuth2AuthConfig
 		public var useSafariView = true
 		
 		#if os(OSX)
-		/// Internally used to store default `NSWindowController` created to contain the web view controller
+		/// Internally used to store default `NSWindowController` created to contain the web view controller.
 		var windowController: NSWindowController?
-		#endif
 		
-		/// Internally used to store the `SFSafariViewControllerDelegate`
+		#elseif os(iOS)
+		/// Internally used to store the `SFSafariViewControllerDelegate`.
 		var safariViewDelegate: AnyObject?
+		#endif
 	}
 	
 	/// Whether the receiver should use the request body instead of the Authorization header for the client secret.
-	public var secretInBody: Bool = false
+	public var secretInBody = false
 	
-	/// Whether to use an embedded web view for authorization (true) or the OS browser (false, the default)
-	public var authorizeEmbedded: Bool = false
+	/// Whether to use an embedded web view for authorization (true) or the OS browser (false, the default).
+	public var authorizeEmbedded = false
 	
-	#if os(OSX)
-	/// The block responsible for presenting the web view controller (if not set, a new window will be opened automatically)
-	public var authorizeContext: ((webViewController: NSViewController) -> Void)?
-	#else
-	/// Context information for the authorization flow; e.g. the parent view controller to use on iOS.
+	/// Whether to automatically dismiss the auto-presented authorization screen.
+	public var authorizeEmbeddedAutoDismiss = true
+	
+	/// Context information for the authorization flow:
+	/// - iOS:  the parent view controller to present from
+	/// - OS X: An NSWindow from which to present a modal sheet _or_
+	/// - OS X: A `((webViewController: NSViewController) -> Void)` block to execute with the web view controller for you to present
 	public var authorizeContext: AnyObject? = nil
-	#endif
 	
-	/// UI-specific configuration
+	/// UI-specific configuration.
 	public var ui = UI()
 }
 

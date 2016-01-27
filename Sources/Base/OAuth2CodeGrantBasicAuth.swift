@@ -28,27 +28,26 @@ import Foundation
     override the superclasses automatic generation of an Authorization header if the client has a clientSecret, so you only need to use
     this subclass if you need a different header (this is different to version 1.2.3 and earlier of this framework).
  */
-public class OAuth2CodeGrantBasicAuth: OAuth2CodeGrant
-{
+public class OAuth2CodeGrantBasicAuth: OAuth2CodeGrant {
+	
 	/// The full token string to be used in the authorization header.
 	var basicToken: String?
 	
 	/**
-	    Adds support to override the basic Authorization header value by specifying:
+	Adds support to override the basic Authorization header value by specifying:
 	
-	    - basic: takes precedence over client_id and client_secret for the token request Authorization header
-	 */
+	- basic: takes precedence over client_id and client_secret for the token request Authorization header
+	*/
 	public override init(settings: OAuth2JSON) {
 		if let basic = settings["basic"] as? String {
 			basicToken = basic
 		}
-		
 		super.init(settings: settings)
 	}
 	
 	/**
-	    Calls super's implementation to obtain a token request, then adds the custom "Basic" authorization header.
-	 */
+	Calls super's implementation to obtain a token request, then adds the custom "Basic" authorization header.
+	*/
 	override func tokenRequestWithURL(url: NSURL) throws -> NSMutableURLRequest {
 		let req = try super.tokenRequestWithURL(url)
 		if let basic = basicToken {
@@ -58,7 +57,6 @@ public class OAuth2CodeGrantBasicAuth: OAuth2CodeGrant
 		else {
 			logIfVerbose("Using extended code grant, but \"basicToken\" is not actually specified. Using standard code grant.")
 		}
-		
 		return req
 	}
 }
