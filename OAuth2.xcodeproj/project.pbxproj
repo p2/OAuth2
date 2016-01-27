@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DD0CCBAD1C4DC83A0044C4E3 /* OAuth2WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0CCBAC1C4DC83A0044C4E3 /* OAuth2WebViewController.swift */; };
 		EA9758181B222CEA007744B1 /* OAuth2PasswordGrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA9758171B222CEA007744B1 /* OAuth2PasswordGrant.swift */; };
 		EA97581D1B223A5D007744B1 /* OAuth2PasswordGrant_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA97581B1B223932007744B1 /* OAuth2PasswordGrant_Tests.swift */; };
 		EA97581E1B2242F9007744B1 /* OAuth2PasswordGrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA9758171B222CEA007744B1 /* OAuth2PasswordGrant.swift */; };
@@ -110,6 +111,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		DD0CCBAC1C4DC83A0044C4E3 /* OAuth2WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2WebViewController.swift; sourceTree = "<group>"; };
 		EA9758171B222CEA007744B1 /* OAuth2PasswordGrant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2PasswordGrant.swift; sourceTree = "<group>"; };
 		EA97581B1B223932007744B1 /* OAuth2PasswordGrant_Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2PasswordGrant_Tests.swift; sourceTree = "<group>"; };
 		EE1391D91AC5B41A002C7B18 /* OAuth2CodeGrantBasicAuth.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2CodeGrantBasicAuth.swift; sourceTree = "<group>"; };
@@ -208,6 +210,7 @@
 			isa = PBXGroup;
 			children = (
 				EEC7A8C61AE46C33008C30E7 /* OAuth2+OSX.swift */,
+				DD0CCBAC1C4DC83A0044C4E3 /* OAuth2WebViewController.swift */,
 			);
 			name = OSX;
 			path = ../OSX;
@@ -487,6 +490,7 @@
 			files = (
 				EEACE1DC1A7E8DF6009BF3A7 /* extensions.swift in Sources */,
 				EEC7A8D81AE4851E008C30E7 /* Keychain.swift in Sources */,
+				DD0CCBAD1C4DC83A0044C4E3 /* OAuth2WebViewController.swift in Sources */,
 				EEC7A8DE1AE4851E008C30E7 /* KeychainService.swift in Sources */,
 				EE79F65A1BFAA36900746243 /* OAuth2Error.swift in Sources */,
 				EE79F6571BFA945C00746243 /* OAuth2ClientConfig.swift in Sources */,

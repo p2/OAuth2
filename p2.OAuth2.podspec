@@ -7,7 +7,7 @@
 
 Pod::Spec.new do |s|
   s.name         = "p2.OAuth2"
-  s.version      = "2.1.2"
+  s.version      = "2.x"
   s.summary      = "OAuth2 framework for OS X and iOS, written in Swift."
   s.description  = <<-DESC
                    OAuth2 frameworks for OS X and iOS written in Swift.
@@ -27,10 +27,11 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = "8.0"
   s.osx.deployment_target = "10.9"
   s.requires_arc = true
+  s.pod_target_xcconfig = { 'OTHER_SWIFT_FLAGS' => '-DNO_KEYCHAIN_IMPORT' }
   s.ios.pod_target_xcconfig = { 'OTHER_SWIFT_FLAGS' => '-DIMPORT_SWIFT_KEYCHAIN' }
   s.ios.dependency 'SwiftKeychain', '~> 0.1.5'
   
-  s.source_files = "OAuth2/*.swift"
-  s.ios.source_files = "OAuth2+iOS/*.swift"
-  s.osx.source_files = "OAuth2+OSX/*.swift", "SwiftKeychain/SwiftKeychain/Keychain/*.swift"
+  s.source_files = "Sources/Base/*.swift"
+  s.ios.source_files = "Sources/iOS/*.swift"
+  s.osx.source_files = "Sources/OSX/*.swift", "SwiftKeychain/SwiftKeychain/Keychain/*.swift"
 end

@@ -60,20 +60,20 @@ oauth2.onFailure = { error in        // `error` is nil on cancel
 ### 3. Authorize the User
 
 By default the OS browser will be used for authorization if there is no access token present in the keychain.
-To start authorization call **`authorize()`** or the convenience method `authorizeEmbeddedFrom(<# view controller #>)`.
+To start authorization call **`authorize()`** or the convenience method `authorizeEmbeddedFrom(<# UIViewController or NSWindow #>)`.
 
-The latter configures `authConfig` like so: changes `authorizeEmbedded` to `true` and sets a root view controller, from which to present the login screen, as `authorizeContext`.
+The latter configures `authConfig` like so: changes `authorizeEmbedded` to `true` and sets a root view controller/window, from which to present the login screen, as `authorizeContext`.
 See [_Advanced Settings_](#advanced-settings) for other options.
 
 **Starting with iOS 9**, `SFSafariViewController` will be used when enabling embedded authorization.
 
 ```swift
 oauth2.authConfig.authorizeEmbedded = true
-oauth2.authConfig.authorizeContext = <# presenting view controller #>
+oauth2.authConfig.authorizeContext = <# presenting view controller / window #>
 oauth2.authorize()
 
 // for embedded authorization you can just use:
-oauth2.authorizeEmbeddedFrom(<# presenting view controller #>)
+oauth2.authorizeEmbeddedFrom(<# presenting view controller / window #>)
 ```
 
 When using the OS browser or the iOS 9 Safari view controller, you will need to **intercept the callback** in your app delegate.
@@ -156,14 +156,33 @@ The `authorize()` method will:
 
 If you do **not wish this kind of automation**, the manual steps to show the authorize screens are:
 
-**Embedded (iOS only)**:
+**Embedded iOS**:
 
 ```swift
 let vc = <# presenting view controller #>
-let web = oauth2.authorizeEmbeddedFrom(vc, params: nil)
+let web = oauth2.authorizeEmbeddedFrom(vc)
 oauth2.afterAuthorizeOrFailure = { wasFailure, error in
     web.dismissViewControllerAnimated(true, completion: nil)
 }
+```
+
+**Modal Sheet on OS X**:
+
+```swift
+let win = <# window to present from #>
+// if `win` is nil, will open a new window
+oauth2.authorizeEmbeddedFrom(win)
+```
+
+**Present yourself on OS X**:
+
+```swift
+let vc = <# view controller #>
+let web = oauth2.presentableAuthorizeViewController()
+oauth2.afterAuthorizeOrFailure = { wasFailure, error in
+    vc.dismissViewController(web)
+}
+vc.presentViewController(web, animator: <# animator #>)
 ```
 
 **iOS/OS X browser**:
@@ -279,9 +298,9 @@ urlRequest.setValue("json", forHTTPHeaderField: "x-li-format")
 Some sites don't return the required `token_type` parameter in their token response.
 LinkedIn does the same, see above.
 You can tell if you're getting the error _“No token type received, will not use the token”_.
-
 There is a subclass for code grant flows that ignores the missing token type that you can use: [`OAuth2CodeGrantNoTokenType`](Sources/Base/OAuth2CodeGrantNoTokenType.swift).
-There currently is no such class for other flow types, but you can easily create a subclass with 7 lines of code yourself, just look at OAuth2CodeGrantNoTokenType.
+
+For _Instagram_ you also need to set `oauth2.authConfig.secretInBody = true` (or use `secret_in_body` in your settings dict) because it expects the client secret in the request body, not the _Authorization_ header.
 
 
 Usage with Alamofire
@@ -301,9 +320,10 @@ extension OAuth2 {
         headers: [String: String]? = nil)
         -> Alamofire.Request
     {
+        
         var hdrs = headers ?? [:]
-        if let access = accessToken {
-            hdrs["Authorization"] = "Bearer \(access)"
+        if let token = accessToken {
+            hdrs["Authorization"] = "Bearer \(token)"
         }
         return Alamofire.request(
             method,
