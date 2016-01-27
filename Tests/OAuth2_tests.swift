@@ -96,6 +96,7 @@ class OAuth2Tests: XCTestCase {
 		XCTAssertFalse(oa.authConfig.authorizeEmbedded)
 		
 		// embedded
+		oa.redirect = "myapp://oauth"
 		oa.onFailure = { error in
 			XCTAssertNotNil(error)
 			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.InvalidAuthorizationContext)
