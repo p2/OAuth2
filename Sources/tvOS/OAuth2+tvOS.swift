@@ -1,5 +1,6 @@
-extension OAuth2
-{
+import UIKit
+
+extension OAuth2 {
 	
     // no webview or webbrowser available on tvOS
     
