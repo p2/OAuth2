@@ -86,7 +86,7 @@ public class OAuth2Base
 	
 	// MARK: - Keychain Integration
 	
-	/** The service key under which to store keychain items. Returns the authorize URL by default. */
+	/** The service key under which to store keychain items. Returns "http://localhost", subclasses override to return the authorize URL. */
 	public func keychainServiceName() -> String {
 		return "http://localhost"
 	}
