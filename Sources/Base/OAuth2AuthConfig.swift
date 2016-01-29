@@ -20,8 +20,6 @@
 
 #if os(OSX)
 import Cocoa
-#elseif os(iOS)
-import UIKit
 #endif
 
 /**
@@ -48,7 +46,7 @@ public struct OAuth2AuthConfig {
 		
 		#elseif os(iOS)
 		/// Internally used to store the `SFSafariViewControllerDelegate`.
-		var safariViewDelegate: SFSafariViewControllerDelegate?
+		var safariViewDelegate: AnyObject?
 		#endif
 	}
 	
