@@ -1,6 +1,9 @@
 OAuth2
 ======
 
+[![Build Status](https://travis-ci.org/p2/OAuth2.svg?branch=master)](https://travis-ci.org/p2/OAuth2)
+[![License](https://img.shields.io/:license-apache-blue.svg)](LICENSE.txt)
+
 OAuth2 frameworks for **OS X** and **iOS** written in Swift 2.0.
 
 Technical documentation is available at [p2.github.io/OAuth2](https://p2.github.io/OAuth2).
