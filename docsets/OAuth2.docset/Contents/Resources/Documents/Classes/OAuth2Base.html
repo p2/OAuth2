@@ -14,9 +14,9 @@
     <a title="OAuth2Base Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">OAuth2 Docs</a> (52% documented)</p>
-        <p class="header-right"><a href="https://github.com/p2/OAuth2"><img src="../img/gh.png"/>View on GitHub</a></p>
-        <p class="header-right"><a href="dash-feed://http%3A%2F%2Fp2%2Egithub%2Eio%2Fdocsets%2FOAuth2%2Exml"><img src="../img/dash.png"/>Install in Dash</a></p>
+        <p><a href="../index.html">OAuth2 Docs</a> (70% documented)</p>
+        <p class="header-right"><a href="http://p2.github.io/OAuth2"><img src="../img/gh.png"/>View on GitHub</a></p>
+        <p class="header-right"><a href="dash-feed://http%3A%2F%2Fsmart%2Don%2Dfhir%2Egithub%2Eio%2Fdocsets%2FOAuth2%2Exml"><img src="../img/dash.png"/>Install in Dash</a></p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -279,7 +279,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The service key under which to store keychain items. Returns the authorize URL by default.</p>
+                        <p>The service key under which to store keychain items. Returns <q>http://localhost</q>, subclasses override to return the authorize URL.</p>
 
                       </div>
                       <div class="declaration">
@@ -361,6 +361,60 @@
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:vC6OAuth210OAuth2Base7sessionCSo12NSURLSession"></a>
+                    <a name="//apple_ref/swift/Property/session" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC6OAuth210OAuth2Base7sessionCSo12NSURLSession">session</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The instance&rsquo;s current session, creating one by the book if necessary.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">session</span><span class="p">:</span> <span class="kt">NSURLSession</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC6OAuth210OAuth2Base20sessionConfigurationGSqCSo25NSURLSessionConfiguration_"></a>
+                    <a name="//apple_ref/swift/Property/sessionConfiguration" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC6OAuth210OAuth2Base20sessionConfigurationGSqCSo25NSURLSessionConfiguration_">sessionConfiguration</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The configuration to use when creating <code><a href="../Classes/OAuth2Base.html#/s:vC6OAuth210OAuth2Base7sessionCSo12NSURLSession">session</a></code>. Uses <code>sharedSession</code> or one with <code>defaultSessionConfiguration</code> if nil.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">sessionConfiguration</span><span class="p">:</span> <span class="kt">NSURLSessionConfiguration</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:vC6OAuth210OAuth2Base15sessionDelegateGSqPSo20NSURLSessionDelegate__"></a>
                     <a name="//apple_ref/swift/Property/sessionDelegate" class="dashAnchor"></a>
                     <a class="token" href="#/s:vC6OAuth210OAuth2Base15sessionDelegateGSqPSo20NSURLSessionDelegate__">sessionDelegate</a>
@@ -371,14 +425,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>URL session delegate that should be used for the <code>NSURLSession</code> the instance uses for requests.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2Base</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">sessionDelegate</span><span class="p">:</span> <span class="kt">NSURLSessionDelegate</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -677,7 +731,7 @@ automatically perform percent decoding, potentially messing with your query stri
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="http://www.github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2016-01-27)</p>
+          <p>&copy; 2016 <a class="link" href="http://www.github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2016-02-09)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.5.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

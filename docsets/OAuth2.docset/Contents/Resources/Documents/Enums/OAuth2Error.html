@@ -14,9 +14,9 @@
     <a title="OAuth2Error Enum Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">OAuth2 Docs</a> (52% documented)</p>
-        <p class="header-right"><a href="https://github.com/p2/OAuth2"><img src="../img/gh.png"/>View on GitHub</a></p>
-        <p class="header-right"><a href="dash-feed://http%3A%2F%2Fp2%2Egithub%2Eio%2Fdocsets%2FOAuth2%2Exml"><img src="../img/dash.png"/>Install in Dash</a></p>
+        <p><a href="../index.html">OAuth2 Docs</a> (70% documented)</p>
+        <p class="header-right"><a href="http://p2.github.io/OAuth2"><img src="../img/gh.png"/>View on GitHub</a></p>
+        <p class="header-right"><a href="dash-feed://http%3A%2F%2Fsmart%2Don%2Dfhir%2Egithub%2Eio%2Fdocsets%2FOAuth2%2Exml"><img src="../img/dash.png"/>Install in Dash</a></p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -187,14 +187,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>An error for which we don&rsquo;t have a specific one.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OAuth2Error</span><span class="p">:</span> <span class="kt">ErrorType</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">Generic</span><span class="p">(</span><span class="kt">String</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -218,14 +218,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>An error holding on to an NSError.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OAuth2Error</span><span class="p">:</span> <span class="kt">ErrorType</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">NSError</span><span class="p">(</span><span class="kt">Foundation</span><span class="o">.</span><span class="kt">NSError</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -249,14 +249,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>There is no client id.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OAuth2Error</span><span class="p">:</span> <span class="kt">ErrorType</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">NoClientId</span></code></pre>
 
                         </div>
                       </div>
@@ -280,14 +280,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>There is no client secret.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OAuth2Error</span><span class="p">:</span> <span class="kt">ErrorType</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">NoClientSecret</span></code></pre>
 
                         </div>
                       </div>
@@ -311,14 +311,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>There is no redirect URL.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OAuth2Error</span><span class="p">:</span> <span class="kt">ErrorType</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">NoRedirectURL</span></code></pre>
 
                         </div>
                       </div>
@@ -342,14 +342,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>There is no username.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OAuth2Error</span><span class="p">:</span> <span class="kt">ErrorType</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">NoUsername</span></code></pre>
 
                         </div>
                       </div>
@@ -373,14 +373,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>There is no password.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OAuth2Error</span><span class="p">:</span> <span class="kt">ErrorType</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">NoPassword</span></code></pre>
 
                         </div>
                       </div>
@@ -404,14 +404,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>There is no authorization context.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OAuth2Error</span><span class="p">:</span> <span class="kt">ErrorType</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">NoAuthorizationContext</span></code></pre>
 
                         </div>
                       </div>
@@ -435,14 +435,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The authorization context is invalid.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OAuth2Error</span><span class="p">:</span> <span class="kt">ErrorType</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">InvalidAuthorizationContext</span></code></pre>
 
                         </div>
                       </div>
@@ -466,14 +466,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The redirect URL is invalid; with explanation.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OAuth2Error</span><span class="p">:</span> <span class="kt">ErrorType</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">InvalidRedirectURL</span><span class="p">(</span><span class="kt">String</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -497,14 +497,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>There is no refresh token.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OAuth2Error</span><span class="p">:</span> <span class="kt">ErrorType</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">NoRefreshToken</span></code></pre>
 
                         </div>
                       </div>
@@ -528,14 +528,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>There is no registration URL.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OAuth2Error</span><span class="p">:</span> <span class="kt">ErrorType</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">NoRegistrationURL</span></code></pre>
 
                         </div>
                       </div>
@@ -559,14 +559,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The request is not using SSL/TLS.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OAuth2Error</span><span class="p">:</span> <span class="kt">ErrorType</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">NotUsingTLS</span></code></pre>
 
                         </div>
                       </div>
@@ -590,14 +590,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Unable to open the authorize URL.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OAuth2Error</span><span class="p">:</span> <span class="kt">ErrorType</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">UnableToOpenAuthorizeURL</span></code></pre>
 
                         </div>
                       </div>
@@ -621,14 +621,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The request is invalid.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OAuth2Error</span><span class="p">:</span> <span class="kt">ErrorType</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">InvalidRequest</span></code></pre>
 
                         </div>
                       </div>
@@ -652,14 +652,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The request was cancelled.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OAuth2Error</span><span class="p">:</span> <span class="kt">ErrorType</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">RequestCancelled</span></code></pre>
 
                         </div>
                       </div>
@@ -683,14 +683,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>There was no token type in the response.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OAuth2Error</span><span class="p">:</span> <span class="kt">ErrorType</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">NoTokenType</span></code></pre>
 
                         </div>
                       </div>
@@ -714,14 +714,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The token type is not supported.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OAuth2Error</span><span class="p">:</span> <span class="kt">ErrorType</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">UnsupportedTokenType</span><span class="p">(</span><span class="kt">String</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -745,14 +745,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>There was no data in the response.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OAuth2Error</span><span class="p">:</span> <span class="kt">ErrorType</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">NoDataInResponse</span></code></pre>
 
                         </div>
                       </div>
@@ -776,14 +776,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Some prerequisite failed; with explanation.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OAuth2Error</span><span class="p">:</span> <span class="kt">ErrorType</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">PrerequisiteFailed</span><span class="p">(</span><span class="kt">String</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -807,14 +807,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The state parameter was invalid.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OAuth2Error</span><span class="p">:</span> <span class="kt">ErrorType</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">InvalidState</span></code></pre>
 
                         </div>
                       </div>
@@ -838,14 +838,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The JSON response could not be parsed.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OAuth2Error</span><span class="p">:</span> <span class="kt">ErrorType</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">JSONParserError</span></code></pre>
 
                         </div>
                       </div>
@@ -869,14 +869,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Unable to UTF-8 encode.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OAuth2Error</span><span class="p">:</span> <span class="kt">ErrorType</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">UTF8EncodeError</span></code></pre>
 
                         </div>
                       </div>
@@ -900,14 +900,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Unable to decode to UTF-8.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OAuth2Error</span><span class="p">:</span> <span class="kt">ErrorType</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">UTF8DecodeError</span></code></pre>
 
                         </div>
                       </div>
@@ -931,14 +931,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The client is unauthorized.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OAuth2Error</span><span class="p">:</span> <span class="kt">ErrorType</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">UnauthorizedClient</span></code></pre>
 
                         </div>
                       </div>
@@ -962,14 +962,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Access was denied.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OAuth2Error</span><span class="p">:</span> <span class="kt">ErrorType</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">AccessDenied</span></code></pre>
 
                         </div>
                       </div>
@@ -993,14 +993,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Response type is not supported.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OAuth2Error</span><span class="p">:</span> <span class="kt">ErrorType</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">UnsupportedResponseType</span></code></pre>
 
                         </div>
                       </div>
@@ -1024,14 +1024,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Scope was invalid.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OAuth2Error</span><span class="p">:</span> <span class="kt">ErrorType</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">InvalidScope</span></code></pre>
 
                         </div>
                       </div>
@@ -1055,14 +1055,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>A 500 was thrown.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OAuth2Error</span><span class="p">:</span> <span class="kt">ErrorType</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">ServerError</span></code></pre>
 
                         </div>
                       </div>
@@ -1086,14 +1086,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The service is temporarily unavailable.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OAuth2Error</span><span class="p">:</span> <span class="kt">ErrorType</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">TemporarilyUnavailable</span></code></pre>
 
                         </div>
                       </div>
@@ -1117,14 +1117,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Other response error, as defined in its String.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OAuth2Error</span><span class="p">:</span> <span class="kt">ErrorType</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">ResponseError</span><span class="p">(</span><span class="kt">String</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1134,6 +1134,13 @@
               </ul>
             </div>
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/OAuth2%20errors"></a>
+                <a name="//apple_ref/swift/Section/OAuth2 errors" class="dashAnchor"></a>
+                <a href="#/OAuth2%20errors">
+                  <h3 class="section-name">OAuth2 errors</h3>
+                </a>
+              </div>
               <ul>
                 <li class="item">
                   <div>
@@ -1148,16 +1155,54 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Instantiate the error corresponding to the OAuth2 response code, if it is known.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OAuth2Error</span><span class="p">:</span> <span class="kt">ErrorType</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">fromResponseError</span><span class="p">(</span><span class="nv">code</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">fallback</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">OAuth2Error</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>code</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The code, like <q>access_denied</q>, that should be interpreted</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>fallback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The error string to use in case the error code is not known</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>An appropriate OAuth2Error</p>
+
                       </div>
                     </section>
                   </div>
@@ -1175,14 +1220,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Human understandable error string.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OAuth2Error</span><span class="p">:</span> <span class="kt">ErrorType</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">description</span><span class="p">:</span> <span class="kt">String</span></code></pre>
 
                         </div>
                       </div>
@@ -1194,7 +1239,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="http://www.github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2016-01-27)</p>
+          <p>&copy; 2016 <a class="link" href="http://www.github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2016-02-09)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.5.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

@@ -13,9 +13,9 @@
     <a title="OAuth2  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">OAuth2 Docs</a> (52% documented)</p>
-        <p class="header-right"><a href="https://github.com/p2/OAuth2"><img src="img/gh.png"/>View on GitHub</a></p>
-        <p class="header-right"><a href="dash-feed://http%3A%2F%2Fp2%2Egithub%2Eio%2Fdocsets%2FOAuth2%2Exml"><img src="img/dash.png"/>Install in Dash</a></p>
+        <p><a href="index.html">OAuth2 Docs</a> (70% documented)</p>
+        <p class="header-right"><a href="http://p2.github.io/OAuth2"><img src="img/gh.png"/>View on GitHub</a></p>
+        <p class="header-right"><a href="dash-feed://http%3A%2F%2Fsmart%2Don%2Dfhir%2Egithub%2Eio%2Fdocsets%2FOAuth2%2Exml"><img src="img/dash.png"/>Install in Dash</a></p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -161,6 +161,9 @@
             
             <a href='#oauth2' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h1 id='oauth2'>OAuth2</h1>
 
+<p><a href="https://travis-ci.org/p2/OAuth2"><img src="https://travis-ci.org/p2/OAuth2.svg?branch=master" alt="Build Status"></a>
+<a href="LICENSE.txt"><img src="https://img.shields.io/:license-apache-blue.svg" alt="License"></a></p>
+
 <p>OAuth2 frameworks for <strong>OS X</strong> and <strong>iOS</strong> written in Swift 2.0.</p>
 
 <p>Technical documentation is available at <a href="https://p2.github.io/OAuth2">p2.github.io/OAuth2</a>.
@@ -215,6 +218,9 @@ To start authorization call <strong><code>authorize()</code></strong> or the con
 See <a href="#advanced-settings"><em>Advanced Settings</em></a> for other options.</p>
 
 <p><strong>Starting with iOS 9</strong>, <code>SFSafariViewController</code> will be used when enabling embedded authorization.</p>
+
+<p>Your <code>oauth2</code> instance will use <code>NSURLSession.defaultSession()</code> for requests, exposed on <code>oauth2.session</code>.
+You can set <code>oauth2.sessionConfiguration</code> if you wish to change things like timeout values, and you can set <code>oauth2.sessionDelegate</code> to your own session delegate if you like.</p>
 <pre class="highlight swift"><code><span class="n">oauth2</span><span class="o">.</span><span class="n">authConfig</span><span class="o">.</span><span class="n">authorizeEmbedded</span> <span class="o">=</span> <span class="kc">true</span>
 <span class="n">oauth2</span><span class="o">.</span><span class="n">authConfig</span><span class="o">.</span><span class="n">authorizeContext</span> <span class="o">=</span> <span class="o">&lt;</span><span class="err">#</span> <span class="n">presenting</span> <span class="n">view</span> <span class="n">controller</span> <span class="o">/</span> <span class="n">window</span> <span class="err">#</span><span class="o">&gt;</span>
 <span class="n">oauth2</span><span class="o">.</span><span class="nf">authorize</span><span class="p">()</span>
@@ -246,8 +252,7 @@ Hence, unless you have a reason to, you don&rsquo;t need to set all three callba
 <p>You can now obtain an <code>OAuth2Request</code>, which is an already signed <code>NSMutableURLRequest</code>, to retrieve data from your server.
 If you use <em>Alamofire</em> there&rsquo;s a <a href="#usage-with-alamofire">class extension</a> below that you can use.</p>
 <pre class="highlight swift"><code><span class="k">let</span> <span class="nv">req</span> <span class="o">=</span> <span class="n">oauth2</span><span class="o">.</span><span class="nf">request</span><span class="p">(</span><span class="nv">forURL</span><span class="p">:</span> <span class="o">&lt;</span><span class="err">#</span> <span class="n">resource</span> <span class="kt">URL</span> <span class="err">#</span><span class="o">&gt;</span><span class="p">)</span>
-<span class="k">let</span> <span class="nv">session</span> <span class="o">=</span> <span class="kt">NSURLSession</span><span class="o">.</span><span class="nf">sharedSession</span><span class="p">()</span>
-<span class="k">let</span> <span class="nv">task</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="nf">dataTaskWithRequest</span><span class="p">(</span><span class="n">req</span><span class="p">)</span> <span class="p">{</span> <span class="n">data</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="n">error</span> <span class="k">in</span>
+<span class="k">let</span> <span class="nv">task</span> <span class="o">=</span> <span class="n">oauth2</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="nf">dataTaskWithRequest</span><span class="p">(</span><span class="n">req</span><span class="p">)</span> <span class="p">{</span> <span class="n">data</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="n">error</span> <span class="k">in</span>
     <span class="k">if</span> <span class="k">let</span> <span class="nv">error</span> <span class="o">=</span> <span class="n">error</span> <span class="p">{</span>
         <span class="c1">// something went wrong, check the error</span>
     <span class="p">}</span>
@@ -258,6 +263,8 @@ If you use <em>Alamofire</em> there&rsquo;s a <a href="#usage-with-alamofire">cl
 <span class="p">}</span>
 <span class="n">task</span><span class="o">.</span><span class="nf">resume</span><span class="p">()</span>
 </code></pre>
+
+<p>Of course you can use your own <code>NSURLSession</code> with these requests, you don&rsquo;t have to use <code>oauth2.session</code>.</p>
 <a href='#6_cancel_authorization' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='6_cancel_authorization'>6. Cancel Authorization</h3>
 
 <p>You can cancel an ongoing authorization any time by calling <code>oauth2.abortAuthorization()</code>.
@@ -549,7 +556,7 @@ Since there is no <code>NOTICE</code> file there is nothing that you have to inc
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="http://www.github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2016-01-27)</p>
+          <p>&copy; 2016 <a class="link" href="http://www.github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2016-02-09)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.5.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
