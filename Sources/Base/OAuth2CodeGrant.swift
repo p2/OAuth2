@@ -142,7 +142,7 @@ public class OAuth2CodeGrant: OAuth2 {
 			throw OAuth2Error.NoRedirectURL
 		}
 		let comp = NSURLComponents(URL: redirect, resolvingAgainstBaseURL: true)
-		if !redirect.absoluteString.hasPrefix(expectRedirect) {
+		if !redirect.absoluteString.hasPrefix(expectRedirect) && (!redirect.absoluteString.hasPrefix("urn:ietf:wg:oauth:2.0:oob") && "localhost" != comp?.host) {
 			throw OAuth2Error.InvalidRedirectURL("Expecting «\(expectRedirect)» but received «\(redirect)»")
 		}
 		if let compQuery = comp?.query where compQuery.characters.count > 0 {

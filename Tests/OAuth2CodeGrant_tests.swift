@@ -149,6 +149,28 @@ class OAuth2CodeGrantTests: XCTestCase {
 		catch let error {
 			XCTAssertTrue(false, "Should not throw, but threw \(error)")
 		}
+		
+		// parse oob with invalid redirect
+		oauth.redirect = "urn:ietf:wg:oauth:2.0:oob"
+		oauth.context.redirectURL = oauth.redirect
+		redirect = NSURL(string: "oauth2://callback?code=C0D3&state=\(oauth.context.state)")!
+		do {
+			try oauth.validateRedirectURL(redirect)
+		}
+		catch OAuth2Error.InvalidRedirectURL {
+		}
+		catch let error {
+			XCTAssertTrue(false, "Must not end up here with \(error)")
+		}
+		
+		// oob with valid redirect
+		redirect = NSURL(string: "http://localhost?code=C0D3&state=\(oauth.context.state)")!
+		do {
+			try oauth.validateRedirectURL(redirect)
+		}
+		catch let error {
+			XCTAssertTrue(false, "Should not throw, but threw \(error)")
+		}
 	}
 	
 	func testTokenRequest() {
