@@ -24,16 +24,18 @@ import XCTest
 import OAuth2
 
 
-class OAuth2CodeGrantTests: XCTestCase
-{
+class OAuth2CodeGrantTests: XCTestCase {
+	
+	lazy var baseSettings: OAuth2JSON = [
+		"client_id": "abc",
+		"client_secret": "xyz",
+		"authorize_uri": "https://auth.ful.io",
+		"token_uri": "https://token.ful.io",
+		"keychain": false,
+	]
+	
 	func testInit() {
-		let oauth = OAuth2CodeGrant(settings: [
-			"client_id": "abc",
-			"client_secret": "xyz",
-			"authorize_uri": "https://auth.ful.io",
-			"token_uri": "https://token.ful.io",
-			"keychain": false,
-		])
+		let oauth = OAuth2CodeGrant(settings: baseSettings)
 		XCTAssertEqual(oauth.clientId, "abc", "Must init `client_id`")
 		XCTAssertEqual(oauth.clientSecret!, "xyz", "Must init `client_secret`")
 		XCTAssertFalse(oauth.useKeychain, "No keychain")
@@ -75,15 +77,9 @@ class OAuth2CodeGrantTests: XCTestCase
 	}
 	
 	func testAuthorizeURI() {
-		let oauth = OAuth2CodeGrant(settings: [
-			"client_id": "abc",
-			"client_secret": "xyz",
-			"authorize_uri": "https://auth.ful.io",
-			"token_uri": "https://token.ful.io",
-			"keychain": false,
-		])
-		
+		let oauth = OAuth2CodeGrant(settings: baseSettings)
 		XCTAssertNotNil(oauth.authURL, "Must init `authorize_uri`")
+		
 		let comp = NSURLComponents(URL: try! oauth.authorizeURLWithRedirect("oauth2://callback", scope: nil, params: nil), resolvingAgainstBaseURL: true)!
 		XCTAssertEqual(comp.host!, "auth.ful.io", "Correct host")
 		let query = OAuth2CodeGrant.paramsFromQuery(comp.percentEncodedQuery!)
@@ -92,6 +88,67 @@ class OAuth2CodeGrantTests: XCTestCase
 		XCTAssertEqual(query["response_type"]!, "code", "Expecting correct `response_type`")
 		XCTAssertEqual(query["redirect_uri"]!, "oauth2://callback", "Expecting correct `redirect_uri`")
 		XCTAssertTrue(8 == (query["state"]!).characters.count, "Expecting an auto-generated UUID for `state`")
+	}
+	
+	func testRedirectURI() {
+		let oauth = OAuth2CodeGrant(settings: baseSettings)
+		oauth.redirect = "oauth2://callback"
+		oauth.context.redirectURL = oauth.redirect
+		
+		// parse error
+		var redirect = NSURL(string: "oauth2://callback?error=invalid_scope")!
+		do {
+			try oauth.validateRedirectURL(redirect)
+			XCTAssertTrue(false, "Should not be here")
+		}
+		catch OAuth2Error.InvalidScope {
+		}
+		catch let error {
+			XCTAssertTrue(false, "Must not end up here with \(error)")
+		}
+		
+		// parse custom error
+		redirect = NSURL(string: "oauth2://callback?error=invalid_scope&error_description=BadScopeDude")!
+		do {
+			try oauth.validateRedirectURL(redirect)
+			XCTAssertTrue(false, "Should not be here")
+		}
+		catch let error {
+			XCTAssertEqual("BadScopeDude", "\(error)", "Must parse `error_description`")
+		}
+		
+		// parse wrong callback
+		redirect = NSURL(string: "oauth3://callback?error=invalid_scope")!
+		do {
+			try oauth.validateRedirectURL(redirect)
+			XCTAssertTrue(false, "Should not be here")
+		}
+		catch OAuth2Error.InvalidRedirectURL {
+		}
+		catch let error {
+			XCTAssertTrue(false, "Should have caught invalid redirect URL error, but got \(error)")
+		}
+		
+		// parse no state
+		redirect = NSURL(string: "oauth2://callback?code=C0D3")!
+		do {
+			try oauth.validateRedirectURL(redirect)
+			XCTAssertTrue(false, "Should not be here")
+		}
+		catch OAuth2Error.InvalidState {
+		}
+		catch let error {
+			XCTAssertTrue(false, "Must not end up here with \(error)")
+		}
+		
+		// parse all good
+		redirect = NSURL(string: "oauth2://callback?code=C0D3&state=\(oauth.context.state)")!
+		do {
+			try oauth.validateRedirectURL(redirect)
+		}
+		catch let error {
+			XCTAssertTrue(false, "Should not throw, but threw \(error)")
+		}
 	}
 	
 	func testTokenRequest() {
@@ -133,13 +190,7 @@ class OAuth2CodeGrantTests: XCTestCase
 	}
 	
 	func testTokenRequestWithSecret() {
-		let oauth = OAuth2CodeGrant(settings: [
-			"client_id": "abc",
-			"client_secret": "xyz",
-			"authorize_uri": "https://auth.ful.io",
-			"token_uri": "https://token.ful.io",
-			"keychain": false,
-		])
+		let oauth = OAuth2CodeGrant(settings: baseSettings)
 		oauth.redirect = "oauth2://callback"
 		oauth.context.redirectURL = "oauth2://callback"
 		

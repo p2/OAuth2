@@ -138,9 +138,16 @@ public class OAuth2CodeGrant: OAuth2 {
 	Validates the redirect URI: returns a tuple with the code and nil on success, nil and an error on failure.
 	*/
 	func validateRedirectURL(redirect: NSURL) throws -> String {
+		guard let expectRedirect = context.redirectURL else {
+			throw OAuth2Error.NoRedirectURL
+		}
 		let comp = NSURLComponents(URL: redirect, resolvingAgainstBaseURL: true)
+		if !redirect.absoluteString.hasPrefix(expectRedirect) {
+			throw OAuth2Error.InvalidRedirectURL("Expecting «\(expectRedirect)» but received «\(redirect)»")
+		}
 		if let compQuery = comp?.query where compQuery.characters.count > 0 {
 			let query = OAuth2CodeGrant.paramsFromQuery(comp!.percentEncodedQuery!)
+			try assureNoErrorInResponse(query)
 			if let cd = query["code"] {
 				
 				// we got a code, use it if state is correct (and reset state)
