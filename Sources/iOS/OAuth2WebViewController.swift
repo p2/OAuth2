@@ -76,9 +76,10 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 	
 	var cancelButton: UIBarButtonItem?
 	
-	/// Our web view; implicitly unwrapped so do not attempt to use it unless isViewLoaded() returns true.
-	var webView: UIWebView!
+	/// Our web view.
+	var webView: UIWebView?
 	
+	/// An overlay view containing a spinner.
 	var loadingView: UIView?
 	
 	init() {
@@ -104,26 +105,27 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 		navigationItem.rightBarButtonItem = cancelButton
 		
 		// create a web view
-		webView = UIWebView()
-		webView.translatesAutoresizingMaskIntoConstraints = false
-		webView.scrollView.decelerationRate = UIScrollViewDecelerationRateNormal
-		webView.delegate = self
+		let web = UIWebView()
+		web.translatesAutoresizingMaskIntoConstraints = false
+		web.scrollView.decelerationRate = UIScrollViewDecelerationRateNormal
+		web.delegate = self
 		
-		view.addSubview(webView)
-		let views = ["web": webView]
+		view.addSubview(web)
+		let views = ["web": web]
 		view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[web]|", options: [], metrics: nil, views: views))
 		view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[web]|", options: [], metrics: nil, views: views))
+		webView = web
 	}
 	
 	override public func viewWillAppear(animated: Bool) {
 		super.viewWillAppear(animated)
 		
-		if !webView.canGoBack {
+		if let web = webView where !web.canGoBack {
 			if nil != startURL {
 				loadURL(startURL!)
 			}
 			else {
-				webView.loadHTMLString("There is no `startURL`", baseURL: nil)
+				web.loadHTMLString("There is no `startURL`", baseURL: nil)
 			}
 		}
 	}
@@ -154,11 +156,11 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 	// MARK: - Actions
 	
 	public func loadURL(url: NSURL) {
-		webView.loadRequest(NSURLRequest(URL: url))
+		webView?.loadRequest(NSURLRequest(URL: url))
 	}
 	
 	func goBack(sender: AnyObject?) {
-		webView.goBack()
+		webView?.goBack()
 	}
 	
 	func cancel(sender: AnyObject?) {
@@ -170,7 +172,7 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 	}
 	
 	func dismiss(asCancel asCancel: Bool, animated: Bool) {
-		webView.stopLoading()
+		webView?.stopLoading()
 		
 		if nil != self.onWillDismiss {
 			self.onWillDismiss!(didCancel: asCancel)

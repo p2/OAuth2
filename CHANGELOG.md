@@ -8,6 +8,7 @@ You can also refer to commit logs to get details on what was implemented, fixed 
 ### 2.2.1
 
 - Better error parsing when handling redirect URL in code grants
+- Remove implicit web view unwrapping to fix issue #88
 
 
 ### 2.2
