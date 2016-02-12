@@ -309,6 +309,10 @@ There is a subclass for code grant flows that ignores the missing token type tha
 
 For _Instagram_ you also need to set `oauth2.authConfig.secretInBody = true` (or use `secret_in_body` in your settings dict) because it expects the client secret in the request body, not the _Authorization_ header.
 
+#### Uber
+
+When making repeated calls to Uber's ride status endpoint (/V1/REQUESTS/{REQUEST_ID}) it may return a cached response. To avoid this set a cache policy for your request. `request.cachePolicy = NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData`
+
 
 Usage with Alamofire
 --------------------
