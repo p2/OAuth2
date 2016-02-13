@@ -312,11 +312,11 @@ For _Instagram_ you also need to set `oauth2.authConfig.secretInBody = true` (or
 #### Uber
 
 When making repeated calls to Uber's ride status endpoint (`/V1/REQUESTS/{REQUEST_ID}`) it may return a cached response.
-To avoid this set a cache policy for your request.
-```
-let request = oauth2.request(forURL: NSURL(string:urlPath)!)
+To avoid this set a cache policy for your request:
+
+```swift
+let request = oauth2.request(forURL: <# resource URL #>)
 request.cachePolicy = NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData
-request.HTTPMethod = "GET"
 oauth2.session.dataTaskWithRequest(request) { data, resp, error in
     ...
 }
