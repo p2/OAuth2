@@ -58,7 +58,8 @@ public class OAuth2Base {
 			}
 		}
 	}
-	
+    
+    public var keychainAccessMode = kSecAttrAccessibleWhenUnlocked
 	
 	/**
 	Base initializer.
@@ -72,6 +73,9 @@ public class OAuth2Base {
 		if let keychain = settings["keychain"] as? Bool {
 			useKeychain = keychain
 		}
+        if let accessMode = settings["keychainAccessMode"] as? String {
+            keychainAccessMode = accessMode
+        }
 		if let verb = settings["verbose"] as? Bool {
 			verbose = verb
 		}
@@ -95,7 +99,7 @@ public class OAuth2Base {
 	private func updateFromKeychain() {
 		logIfVerbose("Looking for items in keychain")
 		
-		let keychain = Keychain(serviceName: keychainServiceName())
+		let keychain = Keychain(serviceName: keychainServiceName(), accessMode: keychainAccessMode)
 		let creds = ArchiveKey(keyName: OAuth2KeychainCredentialsKey)
 		if let items = keychain.get(creds).item?.object as? [String: NSCoding] {
 			updateFromKeychainItems(items)
@@ -119,7 +123,7 @@ public class OAuth2Base {
 	internal func storeClientToKeychain() {
 		if let items = storableCredentialItems() {
 			logIfVerbose("Storing client credentials to keychain")
-			let keychain = Keychain(serviceName: keychainServiceName())
+			let keychain = Keychain(serviceName: keychainServiceName(), accessMode: keychainAccessMode)
 			let key = ArchiveKey(keyName: OAuth2KeychainCredentialsKey, object: items)
 			if let error = keychain.update(key) {
 				NSLog("Failed to store to keychain: \(error.localizedDescription)")
@@ -136,7 +140,7 @@ public class OAuth2Base {
 	internal func storeTokensToKeychain() {
 		if let items = storableTokenItems() {
 			logIfVerbose("Storing tokens to keychain")
-			let keychain = Keychain(serviceName: keychainServiceName())
+			let keychain = Keychain(serviceName: keychainServiceName(), accessMode: keychainAccessMode)
 			let key = ArchiveKey(keyName: OAuth2KeychainTokenKey, object: items)
 			if let error = keychain.update(key) {
 				NSLog("Failed to store to keychain: \(error.localizedDescription)")
@@ -147,7 +151,7 @@ public class OAuth2Base {
 	/** Unsets the client credentials and deletes them from the keychain. */
 	public func forgetClient() {
 		logIfVerbose("Forgetting client credentials and removing them from keychain")
-		let keychain = Keychain(serviceName: keychainServiceName())
+		let keychain = Keychain(serviceName: keychainServiceName(), accessMode: keychainAccessMode)
 		let key = ArchiveKey(keyName: OAuth2KeychainCredentialsKey)
 		if let error = keychain.remove(key) {
 			NSLog("Failed to delete tokens from keychain: \(error.localizedDescription)")
@@ -157,7 +161,7 @@ public class OAuth2Base {
 	/** Unsets the tokens and deletes them from the keychain. */
 	public func forgetTokens() {
 		logIfVerbose("Forgetting tokens and removing them from keychain")
-		let keychain = Keychain(serviceName: keychainServiceName())
+		let keychain = Keychain(serviceName: keychainServiceName(), accessMode: keychainAccessMode)
 		let key = ArchiveKey(keyName: OAuth2KeychainTokenKey)
 		if let error = keychain.remove(key) {
 			NSLog("Failed to delete tokens from keychain: \(error.localizedDescription)")
