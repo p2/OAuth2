@@ -58,8 +58,8 @@ public class OAuth2Base {
 			}
 		}
 	}
-    
-    public var keychainAccessMode = kSecAttrAccessibleWhenUnlocked
+
+	public var keychainAccessMode = kSecAttrAccessibleWhenUnlocked
 	
 	/**
 	Base initializer.
@@ -73,9 +73,9 @@ public class OAuth2Base {
 		if let keychain = settings["keychain"] as? Bool {
 			useKeychain = keychain
 		}
-        if let accessMode = settings["keychainAccessMode"] as? String {
-            keychainAccessMode = accessMode
-        }
+		if let accessMode = settings["keychainAccessMode"] as? String {
+			keychainAccessMode = accessMode
+		}
 		if let verb = settings["verbose"] as? Bool {
 			verbose = verb
 		}
