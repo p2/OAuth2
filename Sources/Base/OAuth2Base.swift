@@ -73,7 +73,7 @@ public class OAuth2Base {
 		if let keychain = settings["keychain"] as? Bool {
 			useKeychain = keychain
 		}
-		if let accessMode = settings["keychainAccessMode"] as? String {
+		if let accessMode = settings["keychain_access_mode"] as? String {
 			keychainAccessMode = accessMode
 		}
 		if let verb = settings["verbose"] as? Bool {
