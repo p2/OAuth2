@@ -26,10 +26,12 @@ import Foundation
  */
 public class OAuth2: OAuth2Base {
 	
+	/// The grant type represented by the class, e.g. "authorization_code" for code grants.
 	public class var grantType: String {
 		return "__undefined"
 	}
 	
+	/// The response type expected from an authorize call, e.g. "code" for code grants.
 	public class var responseType: String? {
 		return nil
 	}
@@ -160,6 +162,7 @@ public class OAuth2: OAuth2Base {
 	
 	// MARK: - Keychain Integration
 	
+	/** Overrides base implementation to return the authorize URL. */
 	public override func keychainServiceName() -> String {
 		return authURL.description
 	}
@@ -699,14 +702,19 @@ public class OAuth2: OAuth2Base {
 }
 
 
+/**
+Class, internally used, to store current authorization context, such as state and redirect-url.
+*/
 class OAuth2ContextStore {
 	
 	/// Currently used redirect_url.
 	var redirectURL: String?
 	
+	/// The current state.
 	internal(set) var _state = ""
 	
-	/** The state sent to the server when requesting a token.
+	/**
+	The state sent to the server when requesting a token.
 	
 	We internally generate a UUID and use the first 8 chars if `_state` is empty.
 	*/
@@ -716,10 +724,6 @@ class OAuth2ContextStore {
 			_state = _state[_state.startIndex..<_state.startIndex.advancedBy(8)]		// only use the first 8 chars, should be enough
 		}
 		return _state
-	}
-	
-	func enforceState(state: String) {
-		_state = state
 	}
 	
 	/**
@@ -735,6 +739,9 @@ class OAuth2ContextStore {
 		return false
 	}
 	
+	/**
+	Resets current state so it gets regenerated next time it's needed.
+	*/
 	func resetState() {
 		_state = ""
 	}

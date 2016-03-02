@@ -67,6 +67,9 @@ See [_Advanced Settings_](#advanced-settings) for other options.
 
 **Starting with iOS 9**, `SFSafariViewController` will be used when enabling embedded authorization.
 
+Your `oauth2` instance will use `NSURLSession.defaultSession()` for requests, exposed on `oauth2.session`.
+You can set `oauth2.sessionConfiguration` if you wish to change things like timeout values, and you can set `oauth2.sessionDelegate` to your own session delegate if you like.
+
 ```swift
 oauth2.authConfig.authorizeEmbedded = true
 oauth2.authConfig.authorizeContext = <# presenting view controller / window #>
@@ -105,8 +108,7 @@ If you use _Alamofire_ there's a [class extension](#usage-with-alamofire) below 
 
 ```swift
 let req = oauth2.request(forURL: <# resource URL #>)
-let session = NSURLSession.sharedSession()
-let task = session.dataTaskWithRequest(req) { data, response, error in
+let task = oauth2.session.dataTaskWithRequest(req) { data, response, error in
     if let error = error {
         // something went wrong, check the error
     }
@@ -117,6 +119,8 @@ let task = session.dataTaskWithRequest(req) { data, response, error in
 }
 task.resume()
 ```
+
+Of course you can use your own `NSURLSession` with these requests, you don't have to use `oauth2.session`.
 
 ### 6. Cancel Authorization
 

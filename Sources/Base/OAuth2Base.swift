@@ -40,10 +40,10 @@ let OAuth2KeychainTokenKey = "currentTokens"
 
 
 /**
-    Abstract base class for OAuth2 authorization as well as client registration classes.
- */
-public class OAuth2Base
-{
+Abstract base class for OAuth2 authorization as well as client registration classes.
+*/
+public class OAuth2Base {
+	
 	/// Server-side settings, as set upon initialization.
 	final let settings: OAuth2JSON
 	
@@ -86,7 +86,7 @@ public class OAuth2Base
 	
 	// MARK: - Keychain Integration
 	
-	/** The service key under which to store keychain items. Returns the authorize URL by default. */
+	/** The service key under which to store keychain items. Returns "http://localhost", subclasses override to return the authorize URL. */
 	public func keychainServiceName() -> String {
 		return "http://localhost"
 	}
@@ -167,11 +167,37 @@ public class OAuth2Base
 	
 	// MARK: - Requests
 	
-	var session: NSURLSession?
+	/// The instance's current session, creating one by the book if necessary.
+	public var session: NSURLSession {
+		if nil == _session {
+			if let delegate = sessionDelegate {
+				let config = sessionConfiguration ?? NSURLSessionConfiguration.defaultSessionConfiguration()
+				_session = NSURLSession(configuration: config, delegate: delegate, delegateQueue: nil)
+			}
+			else if let config = sessionConfiguration {
+				_session = NSURLSession(configuration: config, delegate: nil, delegateQueue: nil)
+			}
+			else {
+				_session = NSURLSession.sharedSession()
+			}
+		}
+		return _session!
+	}
 	
+	/// The backing store for `session`.
+	private var _session: NSURLSession?
+	
+	/// The configuration to use when creating `session`. Uses `sharedSession` or one with `defaultSessionConfiguration` if nil.
+	public var sessionConfiguration: NSURLSessionConfiguration? {
+		didSet {
+			_session = nil
+		}
+	}
+	
+	/// URL session delegate that should be used for the `NSURLSession` the instance uses for requests.
 	public var sessionDelegate: NSURLSessionDelegate? {
 		didSet {
-			session = nil
+			_session = nil
 		}
 	}
 	
@@ -185,7 +211,7 @@ public class OAuth2Base
 	- parameter callback: The callback to call when the request completes/fails; data and error are mutually exclusive
 	*/
 	public func performRequest(request: NSURLRequest, callback: ((data: NSData?, status: Int?, error: ErrorType?) -> Void)) {
-		let task = URLSession().dataTaskWithRequest(request) { sessData, sessResponse, error in
+		let task = session.dataTaskWithRequest(request) { sessData, sessResponse, error in
 			self.abortableTask = nil
 			if let error = error {
 				if NSURLErrorDomain == error.domain && -999 == error.code {		// request was cancelled
@@ -205,19 +231,6 @@ public class OAuth2Base
 		}
 		abortableTask = task
 		task.resume()
-	}
-	
-	func URLSession() -> NSURLSession {
-		if nil == session {
-			if let delegate = sessionDelegate {
-				let config = NSURLSessionConfiguration.defaultSessionConfiguration()
-				session = NSURLSession(configuration: config, delegate: delegate, delegateQueue: nil)
-			}
-			else {
-				session = NSURLSession.sharedSession()
-			}
-		}
-		return session!
 	}
 	
 	/// Currently running abortable session task.
@@ -329,8 +342,8 @@ public class OAuth2Base
 
 
 /**
-    Helper function to ensure that the callback is executed on the main thread.
- */
+Helper function to ensure that the callback is executed on the main thread.
+*/
 func callOnMainThread(callback: (Void -> Void)) {
 	if NSThread.isMainThread() {
 		callback()

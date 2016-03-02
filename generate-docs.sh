@@ -10,4 +10,7 @@ jazzy \
 	-g "https://github.com/p2/OAuth2" \
 	-r "http://p2.github.io/OAuth2" \
 	-o "docs" \
-	--module-version "2.1.3"
+	--module-version "2.2"
+
+mkdir docs/assets 2>/dev/null
+cp assets/* docs/assets/

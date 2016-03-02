@@ -96,6 +96,7 @@ class OAuth2Tests: XCTestCase {
 		XCTAssertFalse(oa.authConfig.authorizeEmbedded)
 		
 		// embedded
+		oa.redirect = "myapp://oauth"
 		oa.onFailure = { error in
 			XCTAssertNotNil(error)
 			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.InvalidAuthorizationContext)
@@ -150,6 +151,24 @@ class OAuth2Tests: XCTestCase {
 		XCTAssertEqual(dict["uri"]!, "https://api.io", "Must correctly unpack `uri`")
 		XCTAssertEqual(dict["str"]!, "a string: cool!", "Must correctly unpack `str`")
 		XCTAssertEqual(dict["num"]!, "3.14159", "Must correctly unpack `num`")
+	}
+	
+	func testSessionConfiguration() {
+		let oauth = OAuth2(settings: [:])
+		XCTAssertEqual(NSURLSession.sharedSession(), oauth.session, "Expecting default session by default")
+		
+		// custom configuration
+		oauth.sessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
+		oauth.sessionConfiguration?.timeoutIntervalForRequest = 5.0
+		XCTAssertEqual(5, oauth.session.configuration.timeoutIntervalForRequest)
+		
+		// custom delegate
+		oauth.sessionDelegate = SessDelegate()
+		XCTAssertTrue(oauth.sessionDelegate === oauth.session.delegate)
+		XCTAssertEqual(5, oauth.session.configuration.timeoutIntervalForRequest)
+	}
+	
+	class SessDelegate: NSObject, NSURLSessionDelegate {
 	}
 }
 
