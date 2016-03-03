@@ -36,5 +36,5 @@ Pod::Spec.new do |s|
   s.tvos.source_files = "Sources/tvOS/*.swift"
 
   s.dependency 'SwiftKeychain'
-  s.framework = 'SafariServices'
+  s.ios.framework = 'SafariServices'
 end
