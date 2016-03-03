@@ -30,8 +30,11 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.pod_target_xcconfig = { 'OTHER_SWIFT_FLAGS' => '-DNO_KEYCHAIN_IMPORT' }
 
-  s.source_files = "Sources/Base/*.swift", "SwiftKeychain/SwiftKeychain/Keychain/*.swift"
+  s.source_files = "Sources/Base/*.swift"
   s.ios.source_files = "Sources/iOS/*.swift"
   s.osx.source_files = "Sources/OSX/*.swift"
   s.tvos.source_files = "Sources/tvOS/*.swift"
+
+  s.dependency 'SwiftKeychain'
+  s.framework = 'SafariServices'
 end

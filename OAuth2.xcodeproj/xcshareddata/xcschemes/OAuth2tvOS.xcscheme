@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "659854451C5B3BEA00237D39"
-               BuildableName = "OAuth2tvOS.framework"
+               BuildableName = "OAuth2.framework"
                BlueprintName = "OAuth2tvOS"
                ReferencedContainer = "container:OAuth2.xcodeproj">
             </BuildableReference>
@@ -43,7 +43,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "659854451C5B3BEA00237D39"
-            BuildableName = "OAuth2tvOS.framework"
+            BuildableName = "OAuth2.framework"
             BlueprintName = "OAuth2tvOS"
             ReferencedContainer = "container:OAuth2.xcodeproj">
          </BuildableReference>
@@ -65,7 +65,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "659854451C5B3BEA00237D39"
-            BuildableName = "OAuth2tvOS.framework"
+            BuildableName = "OAuth2.framework"
             BlueprintName = "OAuth2tvOS"
             ReferencedContainer = "container:OAuth2.xcodeproj">
          </BuildableReference>
@@ -83,7 +83,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "659854451C5B3BEA00237D39"
-            BuildableName = "OAuth2tvOS.framework"
+            BuildableName = "OAuth2.framework"
             BlueprintName = "OAuth2tvOS"
             ReferencedContainer = "container:OAuth2.xcodeproj">
          </BuildableReference>

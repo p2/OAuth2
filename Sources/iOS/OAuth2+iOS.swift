@@ -124,7 +124,7 @@ extension OAuth2 {
 		
 		let delegate = OAuth2SFViewControllerDelegate(oauth: self)
 		web.delegate = delegate
-		authConfig.ui.safariViewDelegate = delegate
+//		authConfig.ui.safariViewDelegate = delegate
 		
 		from.presentViewController(web, animated: true, completion: nil)
 		
@@ -137,7 +137,7 @@ extension OAuth2 {
 	*/
 	@available(iOS 9.0, *)
 	func safariViewControllerDidCancel(safari: SFSafariViewController) {
-		authConfig.ui.safariViewDelegate = nil
+//		authConfig.ui.safariViewDelegate = nil
 		didFail(nil)
 	}
 	
