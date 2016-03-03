@@ -1,6 +1,9 @@
 OAuth2
 ======
 
+[![Build Status](https://travis-ci.org/p2/OAuth2.svg?branch=master)](https://travis-ci.org/p2/OAuth2)
+[![License](https://img.shields.io/:license-apache-blue.svg)](LICENSE.txt)
+
 OAuth2 frameworks for **OS X** and **iOS** written in Swift 2.0.
 
 Technical documentation is available at [p2.github.io/OAuth2](https://p2.github.io/OAuth2).
@@ -305,6 +308,19 @@ You can tell if you're getting the error _“No token type received, will not us
 There is a subclass for code grant flows that ignores the missing token type that you can use: [`OAuth2CodeGrantNoTokenType`](Sources/Base/OAuth2CodeGrantNoTokenType.swift).
 
 For _Instagram_ you also need to set `oauth2.authConfig.secretInBody = true` (or use `secret_in_body` in your settings dict) because it expects the client secret in the request body, not the _Authorization_ header.
+
+#### Uber
+
+When making repeated calls to Uber's ride status endpoint (`/V1/REQUESTS/{REQUEST_ID}`) it may return a cached response.
+To avoid this set a cache policy for your request:
+
+```swift
+let request = oauth2.request(forURL: <# resource URL #>)
+request.cachePolicy = NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData
+oauth2.session.dataTaskWithRequest(request) { data, resp, error in
+    ...
+}
+```
 
 
 Usage with Alamofire
