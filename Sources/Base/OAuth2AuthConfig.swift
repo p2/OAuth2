@@ -28,7 +28,6 @@ Simple struct to hold settings describing how authorization appears to the user.
 public struct OAuth2AuthConfig {
 	
 	/// Sub-stuct holding configuration relevant to UI presentation.
-    
 	public struct UI {
 		
 		/// Title to propagate to views handled by OAuth2, such as OAuth2WebViewController.

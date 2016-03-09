@@ -86,7 +86,7 @@ public class OAuth2ClientCredentials: OAuth2 {
 		req.HTTPMethod = "POST"
 		req.setValue("application/x-www-form-urlencoded; charset=utf-8", forHTTPHeaderField: "Content-Type")
 		req.setValue("application/json", forHTTPHeaderField: "Accept")
-        
+		
 		// check if scope is set
 		var body = "grant_type=client_credentials"
 		if let scope = clientConfig.scope {
