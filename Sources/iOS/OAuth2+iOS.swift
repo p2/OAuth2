@@ -124,7 +124,7 @@ extension OAuth2 {
 		
 		let delegate = OAuth2SFViewControllerDelegate(oauth: self)
 		web.delegate = delegate
-//		authConfig.ui.safariViewDelegate = delegate
+		authConfig.ui.safariViewDelegate = delegate
 		
 		from.presentViewController(web, animated: true, completion: nil)
 		
