@@ -95,7 +95,7 @@ public class OAuth2Base {
 		logIfVerbose("Looking for items in keychain")
 
 		do {
-			var creds = OAuth2Account(serviceName: keychainServiceName(), name: OAuth2KeychainCredentialsKey)
+			var creds = OAuth2KeychainAccount(serviceName: keychainServiceName(), name: OAuth2KeychainCredentialsKey)
 			try creds.fetchFromKeychain()
 
 			if let creds_data = creds.data as? [String: NSCoding] {
@@ -106,7 +106,7 @@ public class OAuth2Base {
 		}
 
 		do {
-			var toks = OAuth2Account(serviceName: keychainServiceName(), name: OAuth2KeychainTokenKey)
+			var toks = OAuth2KeychainAccount(serviceName: keychainServiceName(), name: OAuth2KeychainTokenKey)
 			try toks.fetchFromKeychain()
 
 			if let toks_data = toks.data as? [String: NSCoding] {
