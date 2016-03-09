@@ -38,29 +38,6 @@ let OAuth2KeychainCredentialsKey = "clientCredentials"
 /// We store the current tokens under this keychain key name.
 let OAuth2KeychainTokenKey = "currentTokens"
 
-
-struct OAuth2Account: KeychainGenericPasswordType {
-    let accountName: String
-    let internalServiceName: String
-    
-    var data = [String: AnyObject]()
-    
-    var dataToStore: [String: AnyObject] {
-        return data
-    }
-    
-    var serviceName: String {
-        return internalServiceName
-    }
-    
-    init(serviceName: String, name: String, data: [String: AnyObject] = [:]) {
-        self.internalServiceName = serviceName
-        self.accountName = name
-        self.data = data
-    }
-}
-
-
 /**
 Abstract base class for OAuth2 authorization as well as client registration classes.
 */
