@@ -130,7 +130,7 @@ public class OAuth2Base {
 	internal func storeClientToKeychain() {
 		if let items = storableCredentialItems() {
 			logIfVerbose("Storing client credentials to keychain")
-			let keychain = OAuth2Account(serviceName: keychainServiceName(), name: OAuth2KeychainCredentialsKey, data: items)
+			let keychain = OAuth2KeychainAccount(serviceName: keychainServiceName(), name: OAuth2KeychainCredentialsKey, data: items)
 			do {
 				try keychain.saveInKeychain()
 			} catch {
@@ -148,7 +148,7 @@ public class OAuth2Base {
 	internal func storeTokensToKeychain() {
 		if let items = storableTokenItems() {
 			logIfVerbose("Storing tokens to keychain")
-			let keychain = OAuth2Account(serviceName: keychainServiceName(), name: OAuth2KeychainTokenKey, data: items)
+			let keychain = OAuth2KeychainAccount(serviceName: keychainServiceName(), name: OAuth2KeychainTokenKey, data: items)
 			do {
 				try keychain.saveInKeychain()
 			} catch {
@@ -160,7 +160,7 @@ public class OAuth2Base {
 	/** Unsets the client credentials and deletes them from the keychain. */
 	public func forgetClient() {
 		logIfVerbose("Forgetting client credentials and removing them from keychain")
-		let keychain = OAuth2Account(serviceName: keychainServiceName(), name: OAuth2KeychainCredentialsKey)
+		let keychain = OAuth2KeychainAccount(serviceName: keychainServiceName(), name: OAuth2KeychainCredentialsKey)
 		do {
 			try keychain.removeFromKeychain()
 		} catch {
@@ -172,7 +172,7 @@ public class OAuth2Base {
 	public func forgetTokens() {
 		logIfVerbose("Forgetting tokens and removing them from keychain")
 
-		let keychain = OAuth2Account(serviceName: keychainServiceName(), name: OAuth2KeychainTokenKey)
+		let keychain = OAuth2KeychainAccount(serviceName: keychainServiceName(), name: OAuth2KeychainTokenKey)
 		do {
 			try keychain.removeFromKeychain()
 		} catch {
