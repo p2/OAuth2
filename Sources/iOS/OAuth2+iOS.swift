@@ -137,7 +137,7 @@ extension OAuth2 {
 	*/
 	@available(iOS 9.0, *)
 	func safariViewControllerDidCancel(safari: SFSafariViewController) {
-		authConfig.ui.safariViewDelegate = nil
+//		authConfig.ui.safariViewDelegate = nil
 		didFail(nil)
 	}
 	
