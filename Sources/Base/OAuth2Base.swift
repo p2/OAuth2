@@ -19,10 +19,8 @@
 //
 
 import Foundation
-#if IMPORT_SWIFT_KEYCHAIN       // experimental for SwiftKeychain integration via CocoaPods (iOS only)
-    import SwiftKeychain
-#elseif !NO_KEYCHAIN_IMPORT     // needs to be imported when using `swift build`, not when building via Xcode
-    import SwiftKeychain
+#if !NO_KEYCHAIN_IMPORT     // needs to be imported when using `swift build` or with CocoaPods, not when building via Xcode
+import SwiftKeychain
 #endif
 
 
@@ -156,7 +154,7 @@ public class OAuth2Base {
 			}
 		}
 	}
-
+	
 	/** Unsets the client credentials and deletes them from the keychain. */
 	public func forgetClient() {
 		logIfVerbose("Forgetting client credentials and removing them from keychain")

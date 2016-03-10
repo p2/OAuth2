@@ -279,11 +279,11 @@
 		EEDB8626193FAAE500C4EEA1 /* OAuth2 */ = {
 			isa = PBXGroup;
 			children = (
-				65EC05DF1C9050CB00DE9186 /* OAuth2KeychainAccount.swift */,
 				EEDB8640193FAB9200C4EEA1 /* OAuth2.swift */,
 				EEF47D2A1B1E3FDD0057D838 /* OAuth2Base.swift */,
 				EE79F6561BFA945C00746243 /* OAuth2ClientConfig.swift */,
 				EE79F6531BFA93D900746243 /* OAuth2AuthConfig.swift */,
+				65EC05DF1C9050CB00DE9186 /* OAuth2KeychainAccount.swift */,
 				EE79F65C1BFBDFFF00746243 /* Flows */,
 				EE507A371B1E15E000AE02E9 /* OAuth2DynReg.swift */,
 				EE29EABB195A0DB2008882C8 /* OAuth2Request.swift */,
