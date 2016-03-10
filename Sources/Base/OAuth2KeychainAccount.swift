@@ -24,27 +24,56 @@ import SwiftKeychain
 #endif
 
 
+/// We store the client's credentials (id and secret) under this keychain key name.
+let OAuth2KeychainCredentialsKey = "clientCredentials"
+
+/// We store the current tokens under this keychain key name.
+let OAuth2KeychainTokenKey = "currentTokens"
+
+
 /**
-Base keychain integration handler for OAuth2.
+Keychain integration handler for OAuth2.
 */
 struct OAuth2KeychainAccount: KeychainGenericPasswordType {
-    let accountName: String
-    let internalServiceName: String
-    
-    var data = [String: AnyObject]()
-    
-    var dataToStore: [String: AnyObject] {
-        return data
-    }
-    
-    var serviceName: String {
-        return internalServiceName
-    }
-    
-    init(serviceName: String, name: String, data: [String: AnyObject] = [:]) {
-        self.internalServiceName = serviceName
-        self.accountName = name
-        self.data = data
-    }
+	
+	let serviceName: String
+	
+	let accountName: String
+	
+	var data = [String: AnyObject]()
+	
+	let accessMode: String
+	
+	
+	init(oauth2: OAuth2Base, account: String, data inData: [String: AnyObject] = [:]) {
+		serviceName = oauth2.keychainServiceName()
+		accountName = account
+		accessMode = String(oauth2.keychainAccessMode)
+		data = inData
+	}
+}
+
+
+extension KeychainGenericPasswordType {
+	
+	var dataToStore: [String: AnyObject] {
+		return data
+	}
+	
+	/**
+	Attempts to read data from the keychain, will ignore `errSecItemNotFound` but throw others.
+	*/
+	mutating func fetchedFromKeychain() throws -> [String: NSCoding] {
+		do {
+			try fetchFromKeychain()
+			if let creds_data = data as? [String: NSCoding] {
+				return creds_data
+			}
+			throw OAuth2Error.Generic("Keychain data for \(serviceName) > \(accountName) is in wrong format. Got: “\(data)”")
+		}
+		catch let error as NSError where error.domain == "swift.keychain.error" && error.code == Int(errSecItemNotFound) {
+			return [:]
+		}
+	}
 }
 

@@ -9,6 +9,7 @@ You can also refer to commit logs to get details on what was implemented, fixed 
 
 - Add tvOS build (thanks @davidkraus and @ddengler !)
 - Update SwiftKeychain integration (thanks @davidkraus and @ddengler !)
+- Expose `keychainAccessMode` (`keychain_access_mode` in settings; thanks @tompson !)
 
 
 ### 2.2.1

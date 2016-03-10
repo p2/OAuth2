@@ -21,14 +21,14 @@
 
 extension OAuth2 {
 	
-    // no webview or webbrowser available on tvOS
-    
+	// no webview or webbrowser available on tvOS
+	
 	public final func openAuthorizeURLInBrowser(params: OAuth2StringDict? = nil) throws {
 		throw OAuth2Error.Generic("Not implemented")
 	}
 	
 	public func authorizeEmbeddedWith(config: OAuth2AuthConfig, params: OAuth2StringDict? = nil) throws {
-        throw OAuth2Error.Generic("Not implemented")
+		throw OAuth2Error.Generic("Not implemented")
 	}
 }
 
