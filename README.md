@@ -4,13 +4,14 @@ OAuth2
 [![Build Status](https://travis-ci.org/p2/OAuth2.svg?branch=master)](https://travis-ci.org/p2/OAuth2)
 [![License](https://img.shields.io/:license-apache-blue.svg)](LICENSE.txt)
 
-OAuth2 frameworks for **OS X** and **iOS** written in Swift 2.0.
+OAuth2 frameworks for **OS X**, **iOS** and **tvOS** written in Swift 2.0.
 
 Technical documentation is available at [p2.github.io/OAuth2](https://p2.github.io/OAuth2).
 Take a look at the [OS X sample app][sample] for basic usage of this framework.
 
 The code in this repo requires Xcode 7, the built framework can be used on **OS X 10.9** or **iOS 8** and later.
 To use on **iOS 7** you'll have to include the source files in your main project.
+Happy to accept pull requests, please see [CONTRIBUTING.md](./CONTRIBUTING.md)
 
 #### Swift Version
 

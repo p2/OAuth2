@@ -5,6 +5,13 @@ Version numbering represents the Swift version, plus a running number representi
 You can also refer to commit logs to get details on what was implemented, fixed and improved.
 
 
+### 2.2.2
+
+- Add tvOS build (thanks @davidkraus and @ddengler !)
+- Update SwiftKeychain integration (thanks @davidkraus and @ddengler !)
+- Expose `keychainAccessMode` (`keychain_access_mode` in settings; thanks @tompson !)
+
+
 ### 2.2.1
 
 - Better error parsing when handling redirect URL in code grants

@@ -78,7 +78,7 @@ extension NSURLRequest {
 	/** Print the requests's headers and body to stdout. */
 	public func oauth2_print() {
 		print("---")
-		print("HTTP/1.1 \(HTTPMethod) \(URL?.description ?? "/")")
+		print("HTTP/1.1 \(HTTPMethod ?? "METHOD") \(URL?.description ?? "/")")
 		allHTTPHeaderFields?.forEach() { print("\($0): \($1)") }
 		print("")
 		if let data = HTTPBody, let body = NSString(data: data, encoding: NSUTF8StringEncoding) {

@@ -50,7 +50,7 @@ public struct OAuth2AuthConfig {
 		#endif
 	}
 	
-	/// Whether the receiver should use the request body instead of the Authorization header for the client secret.
+	/// Whether the receiver should use the request body instead of the Authorization header for the client secret; defaults to `false`.
 	public var secretInBody = false
 	
 	/// Whether to use an embedded web view for authorization (true) or the OS browser (false, the default).
