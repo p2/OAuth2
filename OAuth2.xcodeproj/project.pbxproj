@@ -475,8 +475,8 @@
 			targets = (
 				EEE209461942772800736F1A /* OAuth2OSX */,
 				EEDB8623193FAAE500C4EEA1 /* OAuth2iOS */,
-				EEE209A119427DFE00736F1A /* OAuth2Tests */,
 				659854451C5B3BEA00237D39 /* OAuth2tvOS */,
+				EEE209A119427DFE00736F1A /* OAuth2Tests */,
 			);
 		};
 /* End PBXProject section */
