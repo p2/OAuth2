@@ -13,7 +13,7 @@
     <a title="Protocols  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">OAuth2 Docs</a> (70% documented)</p>
+        <p><a href="index.html">OAuth2 Docs</a> (72% documented)</p>
         <p class="header-right"><a href="http://p2.github.io/OAuth2"><img src="img/gh.png"/>View on GitHub</a></p>
         <p class="header-right"><a href="dash-feed://http%3A%2F%2Fsmart%2Don%2Dfhir%2Egithub%2Eio%2Fdocsets%2FOAuth2%2Exml"><img src="img/dash.png"/>Install in Dash</a></p>
       </div>
@@ -32,22 +32,7 @@
             <a href="Classes.html">Classes</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Classes/ArchiveKey.html">ArchiveKey</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Classes/BaseKey.html">BaseKey</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Classes/GenericKey.html">GenericKey</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Classes/Keychain.html">Keychain</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Classes/KeychainQuery.html">KeychainQuery</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Classes/OAuth2.html">OAuth2</a>
+                <a href="Classes/OAuth2WebViewController.html">OAuth2WebViewController</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/OAuth2Base.html">OAuth2Base</a>
@@ -89,7 +74,7 @@
                 <a href="Classes.html#/s:C6OAuth213OAuth2Request">OAuth2Request</a>
               </li>
               <li class="nav-group-task">
-                <a href="Classes/OAuth2WebViewController.html">OAuth2WebViewController</a>
+                <a href="Classes/OAuth2.html">OAuth2</a>
               </li>
             </ul>
           </li>
@@ -127,16 +112,22 @@
             <a href="Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Protocols/KeychainItem.html">KeychainItem</a>
+                <a href="Protocols/KeychainGenericPasswordType.html">KeychainGenericPasswordType</a>
               </li>
               <li class="nav-group-task">
-                <a href="Protocols/KeychainService.html">KeychainService</a>
+                <a href="Protocols/KeychainItemType.html">KeychainItemType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/KeychainServiceType.html">KeychainServiceType</a>
               </li>
             </ul>
           </li>
           <li class="nav-group-name">
             <a href="Structs.html">Structs</a>
             <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Structs/Keychain.html">Keychain</a>
+              </li>
               <li class="nav-group-task">
                 <a href="Structs/OAuth2AuthConfig.html">OAuth2AuthConfig</a>
               </li>
@@ -164,13 +155,20 @@
           </section>
           <section class="section task-group-section">
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/KeychainServiceType"></a>
+                <a name="//apple_ref/swift/Section/KeychainServiceType" class="dashAnchor"></a>
+                <a href="#/KeychainServiceType">
+                  <h3 class="section-name">KeychainServiceType</h3>
+                </a>
+              </div>
               <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:P6OAuth215KeychainService"></a>
-                    <a name="//apple_ref/swift/Protocol/KeychainService" class="dashAnchor"></a>
-                    <a class="token" href="#/s:P6OAuth215KeychainService">KeychainService</a>
+                    <a name="/s:P6OAuth219KeychainServiceType"></a>
+                    <a name="//apple_ref/swift/Protocol/KeychainServiceType" class="dashAnchor"></a>
+                    <a class="token" href="#/s:P6OAuth219KeychainServiceType">KeychainServiceType</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -180,7 +178,7 @@
                       <div class="abstract">
                         <p>Undocumented</p>
 
-                        <a href="Protocols/KeychainService.html" class="slightly-smaller">See more</a>
+                        <a href="Protocols/KeychainServiceType.html" class="slightly-smaller">See more</a>
                       </div>
                     </section>
                   </div>
@@ -188,13 +186,20 @@
               </ul>
             </div>
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/KeychainItemType"></a>
+                <a name="//apple_ref/swift/Section/KeychainItemType" class="dashAnchor"></a>
+                <a href="#/KeychainItemType">
+                  <h3 class="section-name">KeychainItemType</h3>
+                </a>
+              </div>
               <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:P6OAuth212KeychainItem"></a>
-                    <a name="//apple_ref/swift/Protocol/KeychainItem" class="dashAnchor"></a>
-                    <a class="token" href="#/s:P6OAuth212KeychainItem">KeychainItem</a>
+                    <a name="/s:P6OAuth216KeychainItemType"></a>
+                    <a name="//apple_ref/swift/Protocol/KeychainItemType" class="dashAnchor"></a>
+                    <a class="token" href="#/s:P6OAuth216KeychainItemType">KeychainItemType</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -204,7 +209,38 @@
                       <div class="abstract">
                         <p>Undocumented</p>
 
-                        <a href="Protocols/KeychainItem.html" class="slightly-smaller">See more</a>
+                        <a href="Protocols/KeychainItemType.html" class="slightly-smaller">See more</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/KeychainGenericPasswordType"></a>
+                <a name="//apple_ref/swift/Section/KeychainGenericPasswordType" class="dashAnchor"></a>
+                <a href="#/KeychainGenericPasswordType">
+                  <h3 class="section-name">KeychainGenericPasswordType</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:P6OAuth227KeychainGenericPasswordType"></a>
+                    <a name="//apple_ref/swift/Protocol/KeychainGenericPasswordType" class="dashAnchor"></a>
+                    <a class="token" href="#/s:P6OAuth227KeychainGenericPasswordType">KeychainGenericPasswordType</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Protocols/KeychainGenericPasswordType.html" class="slightly-smaller">See more</a>
                       </div>
                     </section>
                   </div>
@@ -214,7 +250,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="http://www.github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2016-02-09)</p>
+          <p>&copy; 2016 <a class="link" href="http://www.github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2016-03-11)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.5.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

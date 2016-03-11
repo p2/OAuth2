@@ -13,7 +13,7 @@
     <a title="OAuth2  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">OAuth2 Docs</a> (70% documented)</p>
+        <p><a href="index.html">OAuth2 Docs</a> (72% documented)</p>
         <p class="header-right"><a href="http://p2.github.io/OAuth2"><img src="img/gh.png"/>View on GitHub</a></p>
         <p class="header-right"><a href="dash-feed://http%3A%2F%2Fsmart%2Don%2Dfhir%2Egithub%2Eio%2Fdocsets%2FOAuth2%2Exml"><img src="img/dash.png"/>Install in Dash</a></p>
       </div>
@@ -32,22 +32,7 @@
             <a href="Classes.html">Classes</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Classes/ArchiveKey.html">ArchiveKey</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Classes/BaseKey.html">BaseKey</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Classes/GenericKey.html">GenericKey</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Classes/Keychain.html">Keychain</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Classes/KeychainQuery.html">KeychainQuery</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Classes/OAuth2.html">OAuth2</a>
+                <a href="Classes/OAuth2WebViewController.html">OAuth2WebViewController</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/OAuth2Base.html">OAuth2Base</a>
@@ -89,7 +74,7 @@
                 <a href="Classes.html#/s:C6OAuth213OAuth2Request">OAuth2Request</a>
               </li>
               <li class="nav-group-task">
-                <a href="Classes/OAuth2WebViewController.html">OAuth2WebViewController</a>
+                <a href="Classes/OAuth2.html">OAuth2</a>
               </li>
             </ul>
           </li>
@@ -127,16 +112,22 @@
             <a href="Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Protocols/KeychainItem.html">KeychainItem</a>
+                <a href="Protocols/KeychainGenericPasswordType.html">KeychainGenericPasswordType</a>
               </li>
               <li class="nav-group-task">
-                <a href="Protocols/KeychainService.html">KeychainService</a>
+                <a href="Protocols/KeychainItemType.html">KeychainItemType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/KeychainServiceType.html">KeychainServiceType</a>
               </li>
             </ul>
           </li>
           <li class="nav-group-name">
             <a href="Structs.html">Structs</a>
             <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Structs/Keychain.html">Keychain</a>
+              </li>
               <li class="nav-group-task">
                 <a href="Structs/OAuth2AuthConfig.html">OAuth2AuthConfig</a>
               </li>
@@ -164,13 +155,14 @@
 <p><a href="https://travis-ci.org/p2/OAuth2"><img src="https://travis-ci.org/p2/OAuth2.svg?branch=master" alt="Build Status"></a>
 <a href="LICENSE.txt"><img src="https://img.shields.io/:license-apache-blue.svg" alt="License"></a></p>
 
-<p>OAuth2 frameworks for <strong>OS X</strong> and <strong>iOS</strong> written in Swift 2.0.</p>
+<p>OAuth2 frameworks for <strong>OS X</strong>, <strong>iOS</strong> and <strong>tvOS</strong> written in Swift 2.0.</p>
 
 <p>Technical documentation is available at <a href="https://p2.github.io/OAuth2">p2.github.io/OAuth2</a>.
 Take a look at the <a href="https://github.com/p2/OAuth2App">OS X sample app</a> for basic usage of this framework.</p>
 
 <p>The code in this repo requires Xcode 7, the built framework can be used on <strong>OS X 10.9</strong> or <strong>iOS 8</strong> and later.
-To use on <strong>iOS 7</strong> you&rsquo;ll have to include the source files in your main project.</p>
+To use on <strong>iOS 7</strong> you&rsquo;ll have to include the source files in your main project.
+Happy to accept pull requests, please see <a href="./CONTRIBUTING.md">CONTRIBUTING.md</a></p>
 <a href='#swift_version' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='swift_version'>Swift Version</h4>
 
 <p>Since the Swift language is constantly evolving I have adopted a versioning scheme mirroring Swift versions:
@@ -412,6 +404,16 @@ You can tell if you&rsquo;re getting the error <em>“No token type received, wi
 There is a subclass for code grant flows that ignores the missing token type that you can use: <a href="Sources/Base/OAuth2CodeGrantNoTokenType.swift"><code>OAuth2CodeGrantNoTokenType</code></a>.</p>
 
 <p>For <em>Instagram</em> you also need to set <code>oauth2.authConfig.secretInBody = true</code> (or use <code>secret_in_body</code> in your settings dict) because it expects the client secret in the request body, not the <em>Authorization</em> header.</p>
+<a href='#uber' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='uber'>Uber</h4>
+
+<p>When making repeated calls to Uber&rsquo;s ride status endpoint (<code>/V1/REQUESTS/{REQUEST_ID}</code>) it may return a cached response.
+To avoid this set a cache policy for your request:</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">request</span> <span class="o">=</span> <span class="n">oauth2</span><span class="o">.</span><span class="nf">request</span><span class="p">(</span><span class="nv">forURL</span><span class="p">:</span> <span class="o">&lt;</span><span class="err">#</span> <span class="n">resource</span> <span class="kt">URL</span> <span class="err">#</span><span class="o">&gt;</span><span class="p">)</span>
+<span class="n">request</span><span class="o">.</span><span class="n">cachePolicy</span> <span class="o">=</span> <span class="kt">NSURLRequestCachePolicy</span><span class="o">.</span><span class="kt">ReloadIgnoringLocalCacheData</span>
+<span class="n">oauth2</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="nf">dataTaskWithRequest</span><span class="p">(</span><span class="n">request</span><span class="p">)</span> <span class="p">{</span> <span class="n">data</span><span class="p">,</span> <span class="n">resp</span><span class="p">,</span> <span class="n">error</span> <span class="k">in</span>
+    <span class="o">...</span>
+<span class="p">}</span>
+</code></pre>
 <a href='#usage_with_alamofire' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='usage_with_alamofire'>Usage with Alamofire</h2>
 
 <p>Here&rsquo;s an extension that can be used with Alamofire:</p>
@@ -556,7 +558,7 @@ Since there is no <code>NOTICE</code> file there is nothing that you have to inc
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="http://www.github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2016-02-09)</p>
+          <p>&copy; 2016 <a class="link" href="http://www.github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2016-03-11)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.5.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
