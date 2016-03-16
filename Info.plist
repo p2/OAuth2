@@ -15,13 +15,13 @@
 	<key>CFBundlePackageType</key>
 	<string>FMWK</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.2</string>
+	<string>2.2.2</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>${CURRENT_PROJECT_VERSION}</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2014 Pascal Pfiffner.</string>
+	<string>Copyright © 2016 Pascal Pfiffner.</string>
 	<key>NSPrincipalClass</key>
 	<string></string>
 </dict>

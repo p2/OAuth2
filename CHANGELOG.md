@@ -5,14 +5,28 @@ Version numbering represents the Swift version, plus a running number representi
 You can also refer to commit logs to get details on what was implemented, fixed and improved.
 
 
-### x.x
+### 2.2.2
+
+- Add tvOS build (thanks @davidkraus and @ddengler !)
+- Update SwiftKeychain integration (thanks @davidkraus and @ddengler !)
+- Expose `keychainAccessMode` (`keychain_access_mode` in settings; thanks @tompson !)
+
+
+### 2.2.1
+
+- Better error parsing when handling redirect URL in code grants
+- Remove implicit web view unwrapping to fix issue #88
+
+
+### 2.2
 
 - Add capability to abort ongoing authorization with `abortAuthorization()`
+- Implement embedded auth for OS X 10.10 and newer (thanks @insidegui !)
+- Move `autoDismiss` param from `authorize()` into the `authConfig` struct
+- Change `openAuthorizeURLInBrowser()` to throw instead of returning a Bool (throwing `UnableToOpenAuthorizeURL` instead of returning false)
 - Add `RequestCancelled` Error
 - Add `OAuth2CodeGrantLinkedIn` to deal with LinkedIn
 - Add `OAuth2CodeGrantNoTokenType` to deal with Instagram, Bitly and all others not returning `token_type`
-- Move `autoDismiss` param from `authorize()` into the `authConfig` struct
-- Change `openAuthorizeURLInBrowser()` to throw instead of returning a Bool (throwing `UnableToOpenAuthorizeURL` instead of returning false)
 - Add `UTF8DecodeError`
 
 

@@ -1,13 +1,17 @@
 OAuth2
 ======
 
-OAuth2 frameworks for **OS X** and **iOS** written in Swift 2.0.
+[![Build Status](https://travis-ci.org/p2/OAuth2.svg?branch=master)](https://travis-ci.org/p2/OAuth2)
+[![License](https://img.shields.io/:license-apache-blue.svg)](LICENSE.txt)
+
+OAuth2 frameworks for **OS X**, **iOS** and **tvOS** written in Swift 2.0.
 
 Technical documentation is available at [p2.github.io/OAuth2](https://p2.github.io/OAuth2).
 Take a look at the [OS X sample app][sample] for basic usage of this framework.
 
 The code in this repo requires Xcode 7, the built framework can be used on **OS X 10.9** or **iOS 8** and later.
 To use on **iOS 7** you'll have to include the source files in your main project.
+Happy to accept pull requests, please see [CONTRIBUTING.md](./CONTRIBUTING.md)
 
 #### Swift Version
 
@@ -67,6 +71,9 @@ See [_Advanced Settings_](#advanced-settings) for other options.
 
 **Starting with iOS 9**, `SFSafariViewController` will be used when enabling embedded authorization.
 
+Your `oauth2` instance will use `NSURLSession.defaultSession()` for requests, exposed on `oauth2.session`.
+You can set `oauth2.sessionConfiguration` if you wish to change things like timeout values, and you can set `oauth2.sessionDelegate` to your own session delegate if you like.
+
 ```swift
 oauth2.authConfig.authorizeEmbedded = true
 oauth2.authConfig.authorizeContext = <# presenting view controller / window #>
@@ -105,8 +112,7 @@ If you use _Alamofire_ there's a [class extension](#usage-with-alamofire) below 
 
 ```swift
 let req = oauth2.request(forURL: <# resource URL #>)
-let session = NSURLSession.sharedSession()
-let task = session.dataTaskWithRequest(req) { data, response, error in
+let task = oauth2.session.dataTaskWithRequest(req) { data, response, error in
     if let error = error {
         // something went wrong, check the error
     }
@@ -117,6 +123,8 @@ let task = session.dataTaskWithRequest(req) { data, response, error in
 }
 task.resume()
 ```
+
+Of course you can use your own `NSURLSession` with these requests, you don't have to use `oauth2.session`.
 
 ### 6. Cancel Authorization
 
@@ -301,6 +309,19 @@ You can tell if you're getting the error _“No token type received, will not us
 There is a subclass for code grant flows that ignores the missing token type that you can use: [`OAuth2CodeGrantNoTokenType`](Sources/Base/OAuth2CodeGrantNoTokenType.swift).
 
 For _Instagram_ you also need to set `oauth2.authConfig.secretInBody = true` (or use `secret_in_body` in your settings dict) because it expects the client secret in the request body, not the _Authorization_ header.
+
+#### Uber
+
+When making repeated calls to Uber's ride status endpoint (`/V1/REQUESTS/{REQUEST_ID}`) it may return a cached response.
+To avoid this set a cache policy for your request:
+
+```swift
+let request = oauth2.request(forURL: <# resource URL #>)
+request.cachePolicy = NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData
+oauth2.session.dataTaskWithRequest(request) { data, resp, error in
+    ...
+}
+```
 
 
 Usage with Alamofire

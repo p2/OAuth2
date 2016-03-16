@@ -1,0 +1,5 @@
+language:      objective-c   # well "swift" actually
+osx_image:     xcode7.2
+xcode_project: OAuth2.xcodeproj
+xcode_scheme:  OAuth2OSX
+xcode_sdk:     macosx10.11

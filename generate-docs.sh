@@ -4,10 +4,10 @@
 #    [sudo] gem install jazzy
 
 jazzy \
-	-a "Pascal Pfiffner" \
-	-u "http://www.github.com/p2" \
 	-m "OAuth2" \
-	-g "https://github.com/p2/OAuth2" \
-	-r "http://p2.github.io/OAuth2" \
+	-a "Pascal Pfiffner" \
 	-o "docs" \
-	--module-version "2.1.3"
+	--module-version "2.2.2"
+
+mkdir docs/assets 2>/dev/null
+cp assets/* docs/assets/

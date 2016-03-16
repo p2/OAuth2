@@ -27,45 +27,120 @@ All errors that might occur.
 The response errors return a description as defined in the spec: http://tools.ietf.org/html/rfc6749#section-4.1.2.1
 */
 public enum OAuth2Error: ErrorType, CustomStringConvertible, Equatable {
+	
+	/// An error for which we don't have a specific one.
 	case Generic(String)
+	
+	/// An error holding on to an NSError.
 	case NSError(Foundation.NSError)
 	
-	// Client errors
+	
+	// MARK: - Client errors
+	
+	/// There is no client id.
 	case NoClientId
+	
+	/// There is no client secret.
 	case NoClientSecret
+	
+	/// There is no redirect URL.
 	case NoRedirectURL
+	
+	/// There is no username.
 	case NoUsername
+	
+	/// There is no password.
 	case NoPassword
+	
+	/// There is no authorization context.
 	case NoAuthorizationContext
+	
+	/// The authorization context is invalid.
 	case InvalidAuthorizationContext
+	
+	/// The redirect URL is invalid; with explanation.
 	case InvalidRedirectURL(String)
+	
+	/// There is no refresh token.
 	case NoRefreshToken
 	
+	/// There is no registration URL.
 	case NoRegistrationURL
 	
-	// Request errors
+	
+	// MARK: - Request errors
+	
+	/// The request is not using SSL/TLS.
 	case NotUsingTLS
+	
+	/// Unable to open the authorize URL.
 	case UnableToOpenAuthorizeURL
+	
+	/// The request is invalid.
 	case InvalidRequest
+	
+	/// The request was cancelled.
 	case RequestCancelled
+	
+	
+	// MARK: - Response Errors
+	
+	/// There was no token type in the response.
 	case NoTokenType
+	
+	/// The token type is not supported.
 	case UnsupportedTokenType(String)
+	
+	/// There was no data in the response.
 	case NoDataInResponse
+	
+	/// Some prerequisite failed; with explanation.
 	case PrerequisiteFailed(String)
+	
+	/// The state parameter was invalid.
 	case InvalidState
+	
+	/// The JSON response could not be parsed.
 	case JSONParserError
+	
+	/// Unable to UTF-8 encode.
 	case UTF8EncodeError
+	
+	/// Unable to decode to UTF-8.
 	case UTF8DecodeError
 	
-	// OAuth2 errors
+	
+	// MARK: - OAuth2 errors
+	
+	/// The client is unauthorized.
 	case UnauthorizedClient
+	
+	/// Access was denied.
 	case AccessDenied
+	
+	/// Response type is not supported.
 	case UnsupportedResponseType
+	
+	/// Scope was invalid.
 	case InvalidScope
+	
+	/// A 500 was thrown.
 	case ServerError
+	
+	/// The service is temporarily unavailable.
 	case TemporarilyUnavailable
+	
+	/// Other response error, as defined in its String.
 	case ResponseError(String)
 	
+	
+	/**
+	Instantiate the error corresponding to the OAuth2 response code, if it is known.
+	
+	- parameter code: The code, like "access_denied", that should be interpreted
+	- parameter fallback: The error string to use in case the error code is not known
+	- returns: An appropriate OAuth2Error
+	*/
 	public static func fromResponseError(code: String, fallback: String? = nil) -> OAuth2Error {
 		switch code {
 		case "invalid_request":
@@ -87,6 +162,7 @@ public enum OAuth2Error: ErrorType, CustomStringConvertible, Equatable {
 		}
 	}
 	
+	/// Human understandable error string.
 	public var description: String {
 		switch self {
 		case .Generic(let message):

@@ -27,6 +27,7 @@ Simple struct to hold settings describing how authorization appears to the user.
 */
 public struct OAuth2AuthConfig {
 	
+	/// Sub-stuct holding configuration relevant to UI presentation.
 	public struct UI {
 		
 		/// Title to propagate to views handled by OAuth2, such as OAuth2WebViewController.
@@ -49,7 +50,7 @@ public struct OAuth2AuthConfig {
 		#endif
 	}
 	
-	/// Whether the receiver should use the request body instead of the Authorization header for the client secret.
+	/// Whether the receiver should use the request body instead of the Authorization header for the client secret; defaults to `false`.
 	public var secretInBody = false
 	
 	/// Whether to use an embedded web view for authorization (true) or the OS browser (false, the default).
