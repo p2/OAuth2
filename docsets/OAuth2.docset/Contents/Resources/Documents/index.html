@@ -196,8 +196,8 @@ Optionally, set the <code>onAuthorize</code> and <code>onFailure</code> closures
     <span class="nf">print</span><span class="p">(</span><span class="s">"Did authorize with parameters: </span><span class="se">\(</span><span class="n">parameters</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
 <span class="p">}</span>
 <span class="n">oauth2</span><span class="o">.</span><span class="n">onFailure</span> <span class="o">=</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>        <span class="c1">// `error` is nil on cancel</span>
-    <span class="k">if</span> <span class="kc">nil</span> <span class="o">!=</span> <span class="n">error</span> <span class="p">{</span>
-        <span class="nf">print</span><span class="p">(</span><span class="s">"Authorization went wrong: </span><span class="se">\(</span><span class="n">error</span><span class="o">!.</span><span class="n">localizedDescription</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="k">let</span> <span class="nv">error</span> <span class="o">=</span> <span class="n">error</span> <span class="p">{</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"Authorization went wrong: </span><span class="se">\(</span><span class="n">error</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </code></pre>
