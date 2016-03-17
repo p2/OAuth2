@@ -55,8 +55,8 @@ oauth2.onAuthorize = { parameters in
     print("Did authorize with parameters: \(parameters)")
 }
 oauth2.onFailure = { error in        // `error` is nil on cancel
-    if nil != error {
-        print("Authorization went wrong: \(error!.localizedDescription)")
+    if let error = error {
+        print("Authorization went wrong: \(error)")
     }
 }
 ```
