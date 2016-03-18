@@ -83,7 +83,7 @@ public class OAuth2ClientCredentials: OAuth2 {
 		}
 		
 		let req = OAuth2AuthRequest(url: (clientConfig.tokenURL ?? clientConfig.authorizeURL))
-		req.params["grant_type"] = "client_credentials"
+		req.params["grant_type"] = self.dynamicType.grantType
 		if let scope = clientConfig.scope {
 			req.params["scope"] = scope
 		}

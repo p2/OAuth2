@@ -107,7 +107,7 @@ public class OAuth2PasswordGrant: OAuth2 {
 		}
 		
 		let req = OAuth2AuthRequest(url: (clientConfig.tokenURL ?? clientConfig.authorizeURL))
-		req.params["grant_type"] = "password"
+		req.params["grant_type"] = self.dynamicType.grantType
 		req.params["username"] = username
 		req.params["password"] = password
 		if let scope = clientConfig.scope {
