@@ -66,7 +66,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 		}
 		
 		do {
-			try oauth.tokenURLWithCode("pp")
+			try oauth.tokenRequestWithCode("pp").asURL()
 			XCTAssertTrue(false, "Should no longer be here")
 		}
 		catch OAuth2Error.NotUsingTLS {
@@ -197,7 +197,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 		// with redirect in context - success
 		oauth.context.redirectURL = "oauth2://callback"
 		
-		let req = try! oauth.tokenRequestWithCode("pp")
+		let req = try! oauth.tokenRequestWithCode("pp").asURLRequestFor(oauth)
 		let comp = NSURLComponents(URL: req.URL!, resolvingAgainstBaseURL: true)!
 		XCTAssertEqual(comp.host!, "token.ful.io", "Correct host")
 		
@@ -217,7 +217,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 		oauth.context.redirectURL = "oauth2://callback"
 		
 		// not in body
-		let req = try! oauth.tokenRequestWithCode("pp")
+		let req = try! oauth.tokenRequestWithCode("pp").asURLRequestFor(oauth)
 		let comp = NSURLComponents(URL: req.URL!, resolvingAgainstBaseURL: true)!
 		XCTAssertEqual(comp.host!, "token.ful.io", "Correct host")
 		
@@ -233,7 +233,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 		// in body
 		oauth.authConfig.secretInBody = true
 		
-		let req2 = try! oauth.tokenRequestWithCode("pp")
+		let req2 = try! oauth.tokenRequestWithCode("pp").asURLRequestFor(oauth)
 		let comp2 = NSURLComponents(URL: req2.URL!, resolvingAgainstBaseURL: true)!
 		XCTAssertEqual(comp2.host!, "token.ful.io", "Correct host")
 		
@@ -259,7 +259,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 		oauth.redirect = "oauth2://callback"
 		oauth.context.redirectURL = "oauth2://callback"
 		
-		let req = try! oauth.tokenRequestWithCode("pp")
+		let req = try! oauth.tokenRequestWithCode("pp").asURLRequestFor(oauth)
 		let comp = NSURLComponents(URL: req.URL!, resolvingAgainstBaseURL: true)!
 		XCTAssertEqual(comp.host!, "auth.ful.io", "Correct host")
 	}

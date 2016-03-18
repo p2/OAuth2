@@ -5,6 +5,11 @@ Version numbering represents the Swift version, plus a running number representi
 You can also refer to commit logs to get details on what was implemented, fixed and improved.
 
 
+### 2.2.x
+
+- Refactor authentication request creation
+
+
 ### 2.2.2
 
 - Add tvOS build (thanks @davidkraus and @ddengler !)

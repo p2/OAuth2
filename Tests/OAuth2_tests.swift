@@ -67,16 +67,18 @@ class OAuth2Tests: XCTestCase {
 		XCTAssertNotNil(params["state"], "Expecting `state` in query")
 	}
 	
-	func testTokenURL() {
+	func testTokenRequest() {
 		let oa = genericOAuth2()
 		oa.verbose = false
-		let auth = try! oa.authorizeURLWithParams([:], asTokenURL: true)
+		oa.clientConfig.refreshToken = "abc"
+		let req = try! oa.tokenRequestForTokenRefresh().asURLRequestFor(oa)
+		let auth = req.URL!
 		
 		let comp = NSURLComponents(URL: auth, resolvingAgainstBaseURL: true)!
 		XCTAssertEqual("https", comp.scheme!, "Need correct scheme")
 		XCTAssertEqual("token.ful.io", comp.host!, "Need correct host")
 		
-		let params = OAuth2.paramsFromQuery(comp.percentEncodedQuery!)
+		let params = OAuth2.paramsFromQuery(comp.percentEncodedQuery ?? "")
 		//XCTAssertEqual(params["redirect_uri"]!, "oauth2app://callback", "Expecting correct `redirect_uri` in query")
 		XCTAssertNil(params["state"], "Expecting no `state` in query")
 	}
@@ -134,7 +136,7 @@ class OAuth2Tests: XCTestCase {
 	}
 	
 	func testQueryParamConversion() {
-		let qry = OAuth2.queryStringFor(["a": "AA", "b": "BB", "x": "yz"])
+		let qry = OAuth2AuthRequestParams.formEncodedQueryStringFor(["a": "AA", "b": "BB", "x": "yz"])
 		XCTAssertEqual(14, qry.characters.count, "Expecting a 14 character string")
 		
 		let dict = OAuth2.paramsFromQuery(qry)
@@ -144,7 +146,7 @@ class OAuth2Tests: XCTestCase {
 	}
 	
 	func testQueryParamEncoding() {
-		let qry = OAuth2.queryStringFor(["uri": "https://api.io", "str": "a string: cool!", "num": "3.14159"])
+		let qry = OAuth2AuthRequestParams.formEncodedQueryStringFor(["uri": "https://api.io", "str": "a string: cool!", "num": "3.14159"])
 		XCTAssertEqual(60, qry.characters.count, "Expecting a 60 character string")
 		
 		let dict = OAuth2.paramsFromQuery(qry)

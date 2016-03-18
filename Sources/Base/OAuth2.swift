@@ -301,34 +301,32 @@ public class OAuth2: OAuth2Base {
 	}
 	
 	/**
-	Constructs an authorize URL with the given parameters.
+	Method that creates the OAuth2AuthRequest instance used to create the authorize URL
 	
-	It is possible to use the `params` dictionary to override internally generated URL parameters, use it wisely.
-	Subclasses generally provide shortcut methods to receive an appropriate authorize (or token) URL.
-	
-	- parameter redirect:     The redirect URI string to supply. If it is nil, the first value of the settings' `redirect_uris` entries is
-	                          used. Must be present in the end!
-	- parameter params:       Any additional parameters as dictionary with string keys and values that will be added to the query part
-	- parameter asTokenURL:   Whether this will go to the token_uri endpoint, not the authorize_uri
-	- returns:                NSURL to be used to start or continue the OAuth dance
+	- parameter redirect:  The redirect URI string to supply. If it is nil, the first value of the settings' `redirect_uris` entries is
+	                       used. Must be present in the end!
+	- parameter scope:     The scope to request
+	- parameter params:    Any additional parameters as dictionary with string keys and values that will be added to the
+	                       query part
+	- returns: OAuth2AuthRequest to be used to call to the authorize endpoint
 	*/
-	func authorizeURLWithParams(params: OAuth2StringDict, asTokenURL: Bool = false) throws -> NSURL {
-		
-		// compose URL base
-		let base = asTokenURL ? (clientConfig.tokenURL ?? clientConfig.authorizeURL) : clientConfig.authorizeURL
-		let comp = NSURLComponents(URL: base, resolvingAgainstBaseURL: true)
-		if nil == comp || "https" != comp!.scheme {
-			throw OAuth2Error.NotUsingTLS
+	func authorizeRequestWithRedirect(redirect: String, scope: String?, params: OAuth2StringDict?) throws -> OAuth2AuthRequest {
+		guard let clientId = clientConfig.clientId where !clientId.isEmpty else {
+			throw OAuth2Error.NoClientId
 		}
 		
-		// compose the URL query component
-		comp!.percentEncodedQuery = OAuth2.queryStringFor(params)
-		
-		if let final = comp!.URL {
-			logIfVerbose("Authorizing against \(final.description)")
-			return final
+		let req = OAuth2AuthRequest(url: clientConfig.authorizeURL, method: .GET)
+		req.params["redirect_uri"] = redirect
+		req.params["client_id"] = clientId
+		req.params["state"] = context.state
+		if let scope = scope ?? clientConfig.scope {
+			req.params["scope"] = scope
 		}
-		throw OAuth2Error.Generic("Failed to create authorize URL from components: \(comp)")
+		if let responseType = self.dynamicType.responseType {
+			req.params["response_type"] = responseType
+		}
+		
+		return req
 	}
 	
 	/**
@@ -355,21 +353,9 @@ public class OAuth2: OAuth2Base {
 		guard let redirect = (redirect ?? clientConfig.redirect) else {
 			throw OAuth2Error.NoRedirectURL
 		}
-		guard let clientId = clientId where !clientId.isEmpty else {
-			throw OAuth2Error.NoClientId
-		}
-		var prms = params ?? OAuth2StringDict()
-		prms["redirect_uri"] = redirect
-		prms["client_id"] = clientId
-		prms["state"] = context.state
-		if let scope = scope ?? clientConfig.scope {
-			prms["scope"] = scope
-		}
-		if let responseType = self.dynamicType.responseType {
-			prms["response_type"] = responseType
-		}
+		let req = try authorizeRequestWithRedirect(redirect, scope: scope, params: params)
 		context.redirectURL = redirect
-		return try authorizeURLWithParams(prms, asTokenURL: false)
+		return try req.asURL()
 	}
 	
 	/**
@@ -383,14 +369,13 @@ public class OAuth2: OAuth2Base {
 	// MARK: - Refresh Token
 	
 	/**
-	Generate the URL to be used for the token request when we have a refresh token.
+	Generate the request to be used for token refresh when we have a refresh token.
 	
-	This will set "grant_type" to "refresh_token", add the refresh token, then forward to `authorizeURLWithParams()` to fill the remaining
-	parameters.
+	This will set "grant_type" to "refresh_token", add the refresh token, and take care of the remaining parameters.
 	
 	- parameter params: Additional parameters to pass during token refresh
 	*/
-	func tokenURLForTokenRefresh(params: OAuth2StringDict? = nil) throws -> NSURL {
+	func tokenRequestForTokenRefresh(params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
 		guard let clientId = clientId where !clientId.isEmpty else {
 			throw OAuth2Error.NoClientId
 		}
@@ -398,27 +383,13 @@ public class OAuth2: OAuth2Base {
 			throw OAuth2Error.NoRefreshToken
 		}
 		
-		var urlParams = params ?? OAuth2StringDict()
-		urlParams["grant_type"] = "refresh_token"
-		urlParams["refresh_token"] = refreshToken
-		urlParams["client_id"] = clientId
-		if let secret = clientConfig.clientSecret {
-			if authConfig.secretInBody {
-				urlParams["client_secret"] = secret
-			}
-			else {
-				urlParams.removeValueForKey("client_id")		// will be in the Authorization header
-			}
-		}
-		return try authorizeURLWithParams(urlParams, asTokenURL: true)
-	}
-	
-	/**
-	Create a request for token refresh.
-	*/
-	func tokenRequestForTokenRefresh() throws -> NSMutableURLRequest {
-		let url = try tokenURLForTokenRefresh()
-		return try tokenRequestWithURL(url)
+		let req = OAuth2AuthRequest(url: (clientConfig.tokenURL ?? clientConfig.authorizeURL))
+		req.params["grant_type"] = "refresh_token"
+		req.params["refresh_token"] = refreshToken
+		req.params["client_id"] = clientId
+		req.addParams(params: params)
+		
+		return req
 	}
 	
 	/**
@@ -428,7 +399,7 @@ public class OAuth2: OAuth2Base {
 	*/
 	public func doRefreshToken(callback: ((successParams: OAuth2JSON?, error: ErrorType?) -> Void)) {
 		do {
-			let post = try tokenRequestForTokenRefresh()
+			let post = try tokenRequestForTokenRefresh().asURLRequestFor(self)
 			logIfVerbose("Using refresh token to receive access token from \(post.URL?.description ?? "nil")")
 			
 			performRequest(post) { data, status, error in
@@ -559,42 +530,6 @@ public class OAuth2: OAuth2Base {
 			logIfVerbose("Aborting authorization")
 			didFail(nil)
 		}
-	}
-	
-	
-	// MARK: - Utilities
-	
-	/**
-	    Creates a POST request with x-www-form-urlencoded body created from the supplied URL's query part.
-	 */
-	func tokenRequestWithURL(url: NSURL) throws -> NSMutableURLRequest {
-		guard let clientId = clientId where !clientId.isEmpty else {
-			throw OAuth2Error.NoClientId
-		}
-		
-		let comp = NSURLComponents(URL: url, resolvingAgainstBaseURL: true)
-		assert(comp != nil, "It seems NSURLComponents cannot parse \(url)");
-		let body = comp!.percentEncodedQuery
-		comp!.query = nil
-		
-		let req = NSMutableURLRequest(URL: comp!.URL!)
-		req.HTTPMethod = "POST"
-		req.setValue("application/x-www-form-urlencoded; charset=utf-8", forHTTPHeaderField: "Content-Type")
-		req.setValue("application/json", forHTTPHeaderField: "Accept")
-		req.HTTPBody = body?.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
-		
-		// add Authorization header if we have a client secret (even if it's empty)
-		if let secret = clientSecret where !authConfig.secretInBody {
-			logIfVerbose("Adding “Authorization” header as “Basic client-key:client-secret”")
-			let pw = "\(clientId.wwwFormURLEncodedString):\(secret.wwwFormURLEncodedString)"
-			if let utf8 = pw.dataUsingEncoding(NSUTF8StringEncoding) {
-				req.setValue("Basic \(utf8.base64EncodedStringWithOptions([]))", forHTTPHeaderField: "Authorization")
-			}
-			else {
-				throw OAuth2Error.UTF8EncodeError
-			}
-		}
-		return req
 	}
 	
 	

@@ -34,6 +34,9 @@ public enum OAuth2Error: ErrorType, CustomStringConvertible, Equatable {
 	/// An error holding on to an NSError.
 	case NSError(Foundation.NSError)
 	
+	/// Invalid URL components, failed to create a URL
+	case InvalidURLComponents(NSURLComponents)
+	
 	
 	// MARK: - Client errors
 	
@@ -169,6 +172,8 @@ public enum OAuth2Error: ErrorType, CustomStringConvertible, Equatable {
 			return message
 		case .NSError(let error):
 			return error.localizedDescription
+		case .InvalidURLComponents(let components):
+			return "Failed to create URL from components: \(components)"
 		
 		case NoClientId:
 			return "Client id not set"
@@ -240,6 +245,7 @@ public func ==(lhs: OAuth2Error, rhs: OAuth2Error) -> Bool {
 	switch (lhs, rhs) {
 	case (.Generic(let lhm), .Generic(let rhm)):    return lhm == rhm
 	case (.NSError(let lhe), .NSError(let rhe)):    return lhe.isEqual(rhe)
+	case (.InvalidURLComponents(let lhe), .InvalidURLComponents(let rhe)):   return lhe.isEqual(rhe)
 	
 	case (.NoClientId, .NoClientId):                             return true
 	case (.NoClientSecret, .NoClientSecret):                     return true

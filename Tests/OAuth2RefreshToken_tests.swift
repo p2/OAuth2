@@ -41,7 +41,7 @@ class OAuth2RefreshTokenTests: XCTestCase {
 	func testCannotRefresh() {
 		let oauth = genericOAuth2()
 		do {
-			let _ = try oauth.tokenRequestForTokenRefresh()
+			let _ = try oauth.tokenRequestForTokenRefresh().asURLRequestFor(oauth)
 			XCTAssertTrue(false, "Should throw when trying to create refresh token request without refresh token")
 		}
 		catch OAuth2Error.NoRefreshToken {
@@ -55,7 +55,7 @@ class OAuth2RefreshTokenTests: XCTestCase {
 		let oauth = genericOAuth2()
 		oauth.clientConfig.refreshToken = "pov"
 		
-		let req = try? oauth.tokenRequestForTokenRefresh()
+		let req = try? oauth.tokenRequestForTokenRefresh().asURLRequestFor(oauth)
 		XCTAssertNotNil(req)
 		XCTAssertNotNil(req?.URL)
 		XCTAssertNotNil(req?.HTTPBody)
@@ -78,7 +78,7 @@ class OAuth2RefreshTokenTests: XCTestCase {
 		oauth.clientConfig.refreshToken = "pov"
 		oauth.clientConfig.clientSecret = "uvw"
 		
-		let req = try? oauth.tokenRequestForTokenRefresh()
+		let req = try? oauth.tokenRequestForTokenRefresh().asURLRequestFor(oauth)
 		XCTAssertNotNil(req)
 		XCTAssertNotNil(req?.HTTPBody)
 		let body = NSString(data: req!.HTTPBody!, encoding: NSUTF8StringEncoding) as? String
@@ -97,7 +97,7 @@ class OAuth2RefreshTokenTests: XCTestCase {
 		oauth.clientConfig.clientSecret = "uvw"
 		oauth.authConfig.secretInBody = true
 		
-		let req = try? oauth.tokenRequestForTokenRefresh()
+		let req = try? oauth.tokenRequestForTokenRefresh().asURLRequestFor(oauth)
 		XCTAssertNotNil(req)
 		XCTAssertNotNil(req?.HTTPBody)
 		let body = NSString(data: req!.HTTPBody!, encoding: NSUTF8StringEncoding) as? String

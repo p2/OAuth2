@@ -61,9 +61,9 @@ public class OAuth2PasswordGrant: OAuth2 {
 	
 	- parameter callback: The callback to call after the request has returned
 	*/
-	func obtainAccessToken(params params: [String : String]? = nil, callback: ((params: OAuth2JSON?, error: ErrorType?) -> Void)) {
+	func obtainAccessToken(params params: OAuth2StringDict? = nil, callback: ((params: OAuth2JSON?, error: ErrorType?) -> Void)) {
 		do {
-			let post = try tokenRequest(params: params)
+			let post = try tokenRequest(params: params).asURLRequestFor(self)
 			logIfVerbose("Requesting new access token from \(post.URL?.description)")
 			
 			performRequest(post) { data, status, error in
@@ -95,7 +95,7 @@ public class OAuth2PasswordGrant: OAuth2 {
 	/**
 	Creates a POST request with x-www-form-urlencoded body created from the supplied URL's query part.
 	*/
-	func tokenRequest(params params: [String : String]? = nil) throws -> NSMutableURLRequest {
+	func tokenRequest(params params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
 		if username.isEmpty{
 			throw OAuth2Error.NoUsername
 		}
@@ -106,36 +106,14 @@ public class OAuth2PasswordGrant: OAuth2 {
 			throw OAuth2Error.NoClientId
 		}
 		
-		let req = NSMutableURLRequest(URL: clientConfig.tokenURL ?? clientConfig.authorizeURL)
-		req.HTTPMethod = "POST"
-		req.setValue("application/x-www-form-urlencoded; charset=utf-8", forHTTPHeaderField: "Content-Type")
-		req.setValue("application/json", forHTTPHeaderField: "Accept")
-		
-		// create body string
-		var body = "grant_type=password&username=\(username.wwwFormURLEncodedString)&password=\(password.wwwFormURLEncodedString)"
+		let req = OAuth2AuthRequest(url: (clientConfig.tokenURL ?? clientConfig.authorizeURL))
+		req.params["grant_type"] = "password"
+		req.params["username"] = username
+		req.params["password"] = password
 		if let scope = clientConfig.scope {
-			body += "&scope=\(scope.wwwFormURLEncodedString)"
+			req.params["scope"] = scope
 		}
-		if let params = params {
-			body += "&" + self.dynamicType.queryStringFor(params)
-		}
-		if let secret = clientConfig.clientSecret where authConfig.secretInBody {
-			logIfVerbose("Adding “client_id” and “client_secret” to request body")
-			body += "&client_id=\(clientId.wwwFormURLEncodedString)&client_secret=\(secret.wwwFormURLEncodedString)"
-		}
-		
-		// add Authorization header (if not in body)
-		else if let secret = clientSecret {
-			logIfVerbose("Adding “Authorization” header as “Basic client-key:client-secret”")
-			let pw = "\(clientId.wwwFormURLEncodedString):\(secret.wwwFormURLEncodedString)"
-			if let utf8 = pw.dataUsingEncoding(NSUTF8StringEncoding) {
-				req.setValue("Basic \(utf8.base64EncodedStringWithOptions([]))", forHTTPHeaderField: "Authorization")
-			}
-			else {
-				throw OAuth2Error.UTF8EncodeError
-			}
-		}
-		req.HTTPBody = body.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+		req.addParams(params: params)
 		
 		return req
 	}

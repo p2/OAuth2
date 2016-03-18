@@ -305,23 +305,6 @@ public class OAuth2Base {
 	}
 	
 	/**
-	Create a query string from a dictionary of string: string pairs.
-	
-	This method does **form encode** the value part. If you're using NSURLComponents you want to assign the return value to
-	`percentEncodedQuery`, NOT `query` as this would double-encode the value.
-	
-	- parameter params: The parameters you want to have encoded
-	- returns: An URL-ready query string
-	*/
-	public final class func queryStringFor(params: OAuth2StringDict) -> String {
-		var arr: [String] = []
-		for (key, val) in params {
-			arr.append("\(key)=\(val.wwwFormURLEncodedString)")
-		}
-		return arr.joinWithSeparator("&")
-	}
-	
-	/**
 	Parse a query string into a dictionary of String: String pairs.
 	
 	If you're retrieving a query or fragment from NSURLComponents, use the `percentEncoded##` variant as the others

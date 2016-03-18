@@ -22,12 +22,12 @@ import Foundation
 
 
 /**
-    A class to handle authorization for confidential clients via the authorization code grant method.
+A class to handle authorization for confidential clients via the authorization code grant method.
 
-    This auth flow is designed for clients that are capable of protecting their client secret but can be used from installed apps. During
-    code exchange and token refresh flows, **if** the client has a secret, a "Basic key:secret" Authorization header will be used. If not
-    the client key will be embedded into the request body.
- */
+This auth flow is designed for clients that are capable of protecting their client secret but can be used from installed apps. During code
+exchange and token refresh flows, **if** the client has a secret, a "Basic key:secret" Authorization header will be used. If not the client
+key will be embedded into the request body.
+*/
 public class OAuth2CodeGrant: OAuth2 {
 	
 	public override class var grantType: String {
@@ -42,42 +42,30 @@ public class OAuth2CodeGrant: OAuth2 {
 	// MARK: - Token Request
 	
 	/**
-	Generate the URL to be used for the token request from known instance variables and supplied parameters.
+	Generate the request to be used for the token request from known instance variables and supplied parameters.
 	
-	This will set "grant_type" to "authorization_code", add the "code" provided and forward to `authorizeURLWithBase()` to fill the
-	remaining parameters. The "client_id" is only added if there is no secret (public client) or if the request body is used for id and
-	secret.
+	This will set "grant_type" to "authorization_code", add the "code" provided and fill the remaining parameters. The "client_id" is only
+	added if there is no secret (public client) or if the request body is used for id and secret.
 	
 	- parameter code: The code you want to exchange for an access token
 	- parameter params: Optional additional params to add as URL parameters
-	- returns: The URL you can use to exchange the code for an access token
+	- returns: A request you can use to create a URL request to exchange the code for an access token
 	*/
-	func tokenURLWithCode(code: String, params: OAuth2StringDict? = nil) throws -> NSURL {
+	func tokenRequestWithCode(code: String, params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
+		guard let clientId = clientConfig.clientId where !clientId.isEmpty else {
+			throw OAuth2Error.NoClientId
+		}
 		guard let redirect = context.redirectURL else {
 			throw OAuth2Error.NoRedirectURL
 		}
-		var urlParams = params ?? OAuth2StringDict()
-		urlParams["code"] = code
-		urlParams["grant_type"] = self.dynamicType.grantType
-		urlParams["redirect_uri"] = redirect
-		if let secret = clientConfig.clientSecret {
-			if authConfig.secretInBody {
-				urlParams["client_secret"] = secret
-				urlParams["client_id"] = clientConfig.clientId
-			}
-		}
-		else {
-			urlParams["client_id"] = clientConfig.clientId
-		}
-		return try authorizeURLWithParams(urlParams, asTokenURL: true)
-	}
-	
-	/**
-	Create a request for token exchange.
-	*/
-	func tokenRequestWithCode(code: String) throws -> NSMutableURLRequest {
-		let url = try tokenURLWithCode(code)
-		return try tokenRequestWithURL(url)
+		
+		let req = OAuth2AuthRequest(url: (clientConfig.tokenURL ?? clientConfig.authorizeURL))
+		req.params["code"] = code
+		req.params["grant_type"] = self.dynamicType.grantType
+		req.params["redirect_uri"] = redirect
+		req.params["client_id"] = clientConfig.clientId
+		
+		return req
 	}
 	
 	/**
@@ -103,7 +91,7 @@ public class OAuth2CodeGrant: OAuth2 {
 				throw OAuth2Error.PrerequisiteFailed("I don't have a code to exchange, let the user authorize first")
 			}
 			
-			let post = try tokenRequestWithCode(code)
+			let post = try tokenRequestWithCode(code).asURLRequestFor(self)
 			logIfVerbose("Exchanging code \(code) for access token at \(post.URL!)")
 			
 			performRequest(post) { data, status, error in

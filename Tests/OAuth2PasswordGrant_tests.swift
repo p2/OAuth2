@@ -49,7 +49,7 @@ class OAuth2PasswordGrantTests: XCTestCase
 	
 	func testTokenRequest() {
 		let oauth = genericOAuth2Password()
-		let request = try! oauth.tokenRequest()
+		let request = try! oauth.tokenRequest().asURLRequestFor(oauth)
 		XCTAssertEqual("POST", request.HTTPMethod, "Must be a POST request")
 		
 		let authHeader = request.allHTTPHeaderFields?["Authorization"]
@@ -58,7 +58,7 @@ class OAuth2PasswordGrantTests: XCTestCase
 		
 		let body = NSString(data: request.HTTPBody!, encoding: NSUTF8StringEncoding)
 		XCTAssertNotNil(body, "Body data must be present")
-		XCTAssertEqual(body!, "grant_type=password&username=My+User&password=Here+is+my+password&scope=login+and+more", "Must create correct request body")
+		XCTAssertEqual(body!, "username=My+User&grant_type=password&scope=login+and+more&password=Here+is+my+password", "Must create correct request body")
 	}
 	
 	func testTokenResponse() {
@@ -91,11 +91,11 @@ class OAuth2PasswordGrantTests: XCTestCase
 			"password":"Here is my password",
 			"verbose": true
 		])
-		let request = try! oauth.tokenRequest(params: ["foo": "bar & hat"])
+		let request = try! oauth.tokenRequest(params: ["foo": "bar & hat"]).asURLRequestFor(oauth)
 		
 		let body = NSString(data: request.HTTPBody!, encoding: NSUTF8StringEncoding)
 		XCTAssertNotNil(body, "Body data must be present")
-		XCTAssertEqual(body!, "grant_type=password&username=My+User&password=Here+is+my+password&foo=bar+%26+hat", "Must create correct request body")
+		XCTAssertEqual(body!, "username=My+User&grant_type=password&foo=bar+%26+hat&password=Here+is+my+password", "Must create correct request body")
 	}
 }
 
