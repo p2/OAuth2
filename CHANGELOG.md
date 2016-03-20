@@ -8,6 +8,7 @@ You can also refer to commit logs to get details on what was implemented, fixed 
 ### 2.2.x
 
 - Refactor authentication request creation
+- Add `OAuth2ClientCredentialsReddit` to deal with Reddit installed apps special flow
 
 
 ### 2.2.2

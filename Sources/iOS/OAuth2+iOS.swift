@@ -56,7 +56,7 @@ extension OAuth2 {
 				}
 				return
 			}
-			let web = try authorizeEmbeddedFrom(controller, params: params)
+			let web = try authorizeEmbeddedFromViewController(controller, params: params)
 			if config.authorizeEmbeddedAutoDismiss {
 				internalAfterAuthorizeOrFailure = { wasFailure, error in
 					web.dismissViewControllerAnimated(true, completion: nil)
@@ -155,7 +155,7 @@ extension OAuth2 {
 	- parameter params: Optional additional URL parameters
 	- returns: OAuth2WebViewController, embedded in a UINavigationController being presented automatically
 	*/
-	public func authorizeEmbeddedFrom(controller: UIViewController, params: OAuth2StringDict? = nil) throws -> OAuth2WebViewController {
+	public func authorizeEmbeddedFromViewController(controller: UIViewController, params: OAuth2StringDict? = nil) throws -> OAuth2WebViewController {
 		let url = try authorizeURL(params)
 		return presentAuthorizeViewFor(url, intercept: redirect!, from: controller)
 	}
@@ -173,10 +173,10 @@ extension OAuth2 {
 	- parameter params: Optional additional URL parameters
 	- returns: OAuth2WebViewController, embedded in a UINavigationController being presented automatically
 	*/
-	public func authorizeEmbeddedFrom(controller: UIViewController,
-	                                    redirect: String,
-	                                       scope: String,
-		                                  params: OAuth2StringDict? = nil) throws -> OAuth2WebViewController {
+	public func authorizeEmbeddedFromViewController(controller: UIViewController,
+	                                                  redirect: String,
+	                                                     scope: String,
+		                                                params: OAuth2StringDict? = nil) throws -> OAuth2WebViewController {
 		let url = try authorizeURLWithRedirect(redirect, scope: scope, params: params)
 		return presentAuthorizeViewFor(url, intercept: redirect, from: controller)
 	}

@@ -51,7 +51,7 @@ extension OAuth2 {
 		
 		// present as sheet
 		if let window = config.authorizeContext as? NSWindow {
-			try authorizeEmbeddedFrom(window, config: config, params: params)
+			try authorizeEmbeddedFromWindow(window, config: config, params: params)
 		}
 		
 		// present in new window (or with custom block)
@@ -69,7 +69,7 @@ extension OAuth2 {
 	- returns: The sheet that is being queued for presentation
 	*/
 	@available(OSX 10.10, *)
-	public func authorizeEmbeddedFrom(window: NSWindow, config: OAuth2AuthConfig, params: OAuth2StringDict? = nil) throws -> NSWindow {
+	public func authorizeEmbeddedFromWindow(window: NSWindow, config: OAuth2AuthConfig, params: OAuth2StringDict? = nil) throws -> NSWindow {
 		let controller = try presentableAuthorizeViewController(params)
 		controller.willBecomeSheet = true
 		let sheet = windowControllerForViewController(controller, withConfiguration: config).window!
