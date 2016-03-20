@@ -78,6 +78,9 @@
 		EEE209A819427DFE00736F1A /* OAuth2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EEE209471942772800736F1A /* OAuth2.framework */; };
 		EEF47D2B1B1E3FDD0057D838 /* OAuth2Base.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF47D2A1B1E3FDD0057D838 /* OAuth2Base.swift */; };
 		EEF47D2C1B1E3FDD0057D838 /* OAuth2Base.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF47D2A1B1E3FDD0057D838 /* OAuth2Base.swift */; };
+		EEFD23511C9ED9E400727DCF /* OAuth2ClientCredentialsReddit.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFD23501C9ED9E400727DCF /* OAuth2ClientCredentialsReddit.swift */; };
+		EEFD23521C9ED9E400727DCF /* OAuth2ClientCredentialsReddit.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFD23501C9ED9E400727DCF /* OAuth2ClientCredentialsReddit.swift */; };
+		EEFD23531C9ED9E400727DCF /* OAuth2ClientCredentialsReddit.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFD23501C9ED9E400727DCF /* OAuth2ClientCredentialsReddit.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -169,6 +172,7 @@
 		EEE209A519427DFE00736F1A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EEE209A619427DFE00736F1A /* OAuth2_tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuth2_tests.swift; sourceTree = "<group>"; };
 		EEF47D2A1B1E3FDD0057D838 /* OAuth2Base.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2Base.swift; sourceTree = "<group>"; };
+		EEFD23501C9ED9E400727DCF /* OAuth2ClientCredentialsReddit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2ClientCredentialsReddit.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -232,6 +236,7 @@
 				EE1391D91AC5B41A002C7B18 /* OAuth2CodeGrantBasicAuth.swift */,
 				EE86C4641C48F6AC00B7D486 /* OAuth2CodeGrantNoTokenType.swift */,
 				EE5F4F851B19114D00DB38B3 /* OAuth2ClientCredentials.swift */,
+				EEFD23501C9ED9E400727DCF /* OAuth2ClientCredentialsReddit.swift */,
 				EA9758171B222CEA007744B1 /* OAuth2PasswordGrant.swift */,
 			);
 			name = Flows;
@@ -532,6 +537,7 @@
 				659854531C5B3CA700237D39 /* OAuth2ImplicitGrant.swift in Sources */,
 				659854501C5B3C9C00237D39 /* OAuth2Base.swift in Sources */,
 				6598544F1C5B3C9C00237D39 /* OAuth2.swift in Sources */,
+				EEFD23531C9ED9E400727DCF /* OAuth2ClientCredentialsReddit.swift in Sources */,
 				6598545A1C5B3CA700237D39 /* OAuth2PasswordGrant.swift in Sources */,
 				659854551C5B3CA700237D39 /* OAuth2CodeGrantFacebook.swift in Sources */,
 				659854611C5B3CB900237D39 /* Keychain.swift in Sources */,
@@ -566,6 +572,7 @@
 				EA97581E1B2242F9007744B1 /* OAuth2PasswordGrant.swift in Sources */,
 				EEACE1D71A7E8DEB009BF3A7 /* OAuth2ImplicitGrant.swift in Sources */,
 				EE5F4F871B19114D00DB38B3 /* OAuth2ClientCredentials.swift in Sources */,
+				EEFD23521C9ED9E400727DCF /* OAuth2ClientCredentialsReddit.swift in Sources */,
 				EEACE1D91A7E8DEE009BF3A7 /* OAuth2CodeGrant.swift in Sources */,
 				EEACE1E01A7E8FC5009BF3A7 /* OAuth2CodeGrantFacebook.swift in Sources */,
 				EE1391DB1AC5B41A002C7B18 /* OAuth2CodeGrantBasicAuth.swift in Sources */,
@@ -594,6 +601,7 @@
 				EEACE1DA1A7E8DF1009BF3A7 /* OAuth2Request.swift in Sources */,
 				EE5F4F861B19114D00DB38B3 /* OAuth2ClientCredentials.swift in Sources */,
 				EEACE1D61A7E8DEB009BF3A7 /* OAuth2ImplicitGrant.swift in Sources */,
+				EEFD23511C9ED9E400727DCF /* OAuth2ClientCredentialsReddit.swift in Sources */,
 				EEACE1D81A7E8DEE009BF3A7 /* OAuth2CodeGrant.swift in Sources */,
 				EE86C4651C48F6AC00B7D486 /* OAuth2CodeGrantNoTokenType.swift in Sources */,
 				EEACE1DF1A7E8FC1009BF3A7 /* OAuth2CodeGrantFacebook.swift in Sources */,

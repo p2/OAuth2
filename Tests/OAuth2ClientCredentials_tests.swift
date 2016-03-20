@@ -24,8 +24,8 @@ import XCTest
 import OAuth2
 
 
-class OAuth2ClientCredentialsTests: XCTestCase
-{
+class OAuth2ClientCredentialsTests: XCTestCase {
+	
 	func genericOAuth2() -> OAuth2ClientCredentials {
 		return OAuth2ClientCredentials(settings: [
 			"client_id": "abc",
@@ -95,6 +95,51 @@ class OAuth2ClientCredentialsTests: XCTestCase
 		let body = NSString(data: request.HTTPBody!, encoding: NSUTF8StringEncoding)
 		XCTAssertNotNil(body, "Body data must be present")
 		XCTAssertEqual(body!, "grant_type=client_credentials", "Must create correct request body")
+	}
+	
+	func testClientCredsReddit() {
+		var oauth = OAuth2ClientCredentialsReddit(settings: [
+			"client_id": "abc",
+			"authorize_uri": "https://auth.ful.io",
+			"scope": "profile",
+			"keychain": false,
+			])
+		
+		do {
+			try oauth.tokenRequest()
+			XCTAssertFalse(true, "`tokenRequest()` without device_id must throw .Generic")
+		}
+		catch OAuth2Error.Generic(let message) {
+			XCTAssertEqual("You must configure this flow with a `device_id` (via settings) or manually assign `deviceId`", message)
+		}
+		catch let err {
+			XCTAssertFalse(true, "`tokenRequest()` without device_id must throw .Generic, but threw \(err)")
+		}
+		
+		oauth.deviceId = "def"
+		do {
+			let req = try oauth.tokenRequest().asURLRequestFor(oauth)
+			XCTAssertEqual("Basic YWJjOg==", req.valueForHTTPHeaderField("Authorization"))
+		}
+		catch let err {
+			XCTAssertFalse(true, "`tokenRequest()` should not have thrown but threw \(err)")
+		}
+		
+		// initialize device_id via settings
+		oauth = OAuth2ClientCredentialsReddit(settings: [
+			"client_id": "abc",
+			"device_id": "def",
+			"authorize_uri": "https://auth.ful.io",
+			"scope": "profile",
+			"keychain": false,
+			])
+		
+		do {
+			try oauth.tokenRequest()
+		}
+		catch let err {
+			XCTAssertFalse(true, "`tokenRequest()` should not have thrown but threw \(err)")
+		}
 	}
 }
 
