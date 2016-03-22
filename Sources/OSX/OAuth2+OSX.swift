@@ -42,6 +42,11 @@ extension OAuth2 {
 	/**
 	Tries to use the given context, which on OS X should be a NSViewController, to present the authorization screen.
 	
+	You should use `authorizeEmbeddedFrom(<# NSWindow #>)` (to not use a sheet don't provide a window), use this method if you have specific
+	reasons.
+	
+	- parameter config: The configuration to be used; usually uses the instance's `authConfig`
+	- parameter params: Additional authorization parameters to supply during the OAuth dance
 	- throws: Can throw several OAuth2Error if the method is unable to show the authorize screen
 	*/
 	public func authorizeEmbeddedWith(config: OAuth2AuthConfig, params: OAuth2StringDict? = nil) throws {

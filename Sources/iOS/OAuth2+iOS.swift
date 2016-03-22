@@ -43,12 +43,16 @@ extension OAuth2 {
 	/**
 	Tries to use the current auth config context, which on iOS should be a UIViewController, to present the authorization screen.
 	
+	You should use `authorizeEmbeddedFrom(<# view controller #>)`; use this method if you have specific reasons.
+	
+	- parameter config: The configuration to be used; usually uses the instance's `authConfig`
+	- parameter params: Additional authorization parameters to supply during the OAuth dance
 	- throws: Can throw several OAuth2Error if the method is unable to show the authorize screen
 	*/
 	public func authorizeEmbeddedWith(config: OAuth2AuthConfig, params: OAuth2StringDict? = nil) throws {
 		if let controller = config.authorizeContext as? UIViewController {
 			if #available(iOS 9, *), config.ui.useSafariView {
-				let web = try authorizeSafariEmbeddedFrom(controller, params: params)
+				let web = try authorizeSafariEmbeddedFromViewController(controller, params: params)
 				if config.authorizeEmbeddedAutoDismiss {
 					internalAfterAuthorizeOrFailure = { wasFailure, error in
 						web.dismissViewControllerAnimated(true, completion: nil)
@@ -85,7 +89,7 @@ extension OAuth2 {
 	- returns: SFSafariViewController, being already presented automatically
 	*/
 	@available(iOS 9.0, *)
-	public func authorizeSafariEmbeddedFrom(controller: UIViewController, params: OAuth2StringDict? = nil) throws -> SFSafariViewController {
+	public func authorizeSafariEmbeddedFromViewController(controller: UIViewController, params: OAuth2StringDict? = nil) throws -> SFSafariViewController {
 		let url = try authorizeURL(params)
 		return presentSafariViewFor(url, from: controller)
 	}
@@ -107,7 +111,7 @@ extension OAuth2 {
 	- returns: SFSafariViewController, being already presented automatically
 	*/
 	@available(iOS 9.0, *)
-	public func authorizeSafariEmbeddedFrom(controller: UIViewController, redirect: String, scope: String, params: OAuth2StringDict? = nil) throws -> SFSafariViewController {
+	public func authorizeSafariEmbeddedFromViewController(controller: UIViewController, redirect: String, scope: String, params: OAuth2StringDict? = nil) throws -> SFSafariViewController {
 		let url = try authorizeURLWithRedirect(redirect, scope: scope, params: params)
 		return presentSafariViewFor(url, from: controller)
 	}

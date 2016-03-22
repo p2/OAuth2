@@ -9,6 +9,7 @@ You can also refer to commit logs to get details on what was implemented, fixed 
 
 - Refactor authentication request creation
 - Add `OAuth2ClientCredentialsReddit` to deal with Reddit installed apps special flow
+- Rename clashing method definitions to fix #99
 
 
 ### 2.2.2
