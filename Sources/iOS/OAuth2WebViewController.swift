@@ -69,7 +69,7 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 		didSet {
 			if let backButton = backButton {
 				backButton.target = self
-				backButton.action = "goBack:"
+				backButton.action = #selector(OAuth2WebViewController.goBack(_:))
 			}
 		}
 	}
@@ -101,7 +101,7 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 		super.loadView()
 		view.backgroundColor = UIColor.whiteColor()
 		
-		cancelButton = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "cancel:")
+		cancelButton = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: #selector(OAuth2WebViewController.cancel(_:)))
 		navigationItem.rightBarButtonItem = cancelButton
 		
 		// create a web view
@@ -132,7 +132,7 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 	
 	func showHideBackButton(show: Bool) {
 		if show {
-			let bb = backButton ?? UIBarButtonItem(barButtonSystemItem: .Rewind, target: self, action: "goBack:")
+			let bb = backButton ?? UIBarButtonItem(barButtonSystemItem: .Rewind, target: self, action: #selector(OAuth2WebViewController.goBack(_:)))
 			navigationItem.leftBarButtonItem = bb
 		}
 		else {

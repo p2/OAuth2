@@ -151,7 +151,7 @@ extension OAuth2 {
 	func windowControllerForViewController(controller: OAuth2WebViewController, withConfiguration config: OAuth2AuthConfig) -> NSWindowController {
 		let rect = NSMakeRect(0, 0, OAuth2WebViewController.WebViewWindowWidth, OAuth2WebViewController.WebViewWindowHeight)
 		let style = NSTitledWindowMask | NSClosableWindowMask | NSResizableWindowMask | NSFullSizeContentViewWindowMask
-		let window = NSWindow(contentRect: rect, styleMask: style, backing: .Buffered, `defer`: false)
+		let window = NSWindow(contentRect: rect, styleMask: style, backing: .Buffered, defer: false)
 		window.backgroundColor = NSColor.whiteColor()
 		window.movableByWindowBackground = true
 		window.titlebarAppearsTransparent = true

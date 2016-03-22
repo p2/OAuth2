@@ -125,7 +125,7 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 			button.translatesAutoresizingMaskIntoConstraints = false
 			button.title = "Cancel"
 			button.target = self
-			button.action = "cancel:"
+			button.action = #selector(OAuth2WebViewController.cancel(_:))
 			view.addSubview(button)
 			view.addConstraint(NSLayoutConstraint(item: button, attribute: .Trailing, relatedBy: .Equal, toItem: view, attribute: .Trailing, multiplier: 1.0, constant: -10.0))
 			view.addConstraint(NSLayoutConstraint(item: button, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Bottom, multiplier: 1.0, constant: -10.0))
