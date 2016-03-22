@@ -5,7 +5,7 @@ Version numbering represents the Swift version, plus a running number representi
 You can also refer to commit logs to get details on what was implemented, fixed and improved.
 
 
-### 2.2.x
+### 2.2.3
 
 - Refactor authentication request creation
 - Add `OAuth2ClientCredentialsReddit` to deal with Reddit installed apps special flow
