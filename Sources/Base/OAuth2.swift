@@ -325,6 +325,7 @@ public class OAuth2: OAuth2Base {
 		if let responseType = self.dynamicType.responseType {
 			req.params["response_type"] = responseType
 		}
+		req.addParams(params: params)
 		
 		return req
 	}

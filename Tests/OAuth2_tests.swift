@@ -55,7 +55,7 @@ class OAuth2Tests: XCTestCase {
 	func testAuthorizeURL() {
 		let oa = genericOAuth2()
 		oa.verbose = false
-		let auth = try! oa.authorizeURLWithRedirect("oauth2app://callback", scope: "launch", params: nil)
+		let auth = try! oa.authorizeURLWithRedirect("oauth2app://callback", scope: "launch", params: ["extra": "param"])
 		
 		let comp = NSURLComponents(URL: auth, resolvingAgainstBaseURL: true)!
 		XCTAssertEqual("https", comp.scheme!, "Need correct scheme")
@@ -65,6 +65,8 @@ class OAuth2Tests: XCTestCase {
 		XCTAssertEqual(params["redirect_uri"]!, "oauth2app://callback", "Expecting correct `redirect_uri` in query")
 		XCTAssertEqual(params["scope"]!, "launch", "Expecting `scope` in query")
 		XCTAssertNotNil(params["state"], "Expecting `state` in query")
+		XCTAssertNotNil(params["extra"], "Expecting `extra` parameter in query")
+		XCTAssertEqual("param", params["extra"])
 	}
 	
 	func testTokenRequest() {
