@@ -179,16 +179,12 @@ public class OAuth2Base {
 	
 	// MARK: - Requests
 	
-	/// The instance's current session, creating one by the book if necessary.
+	/// The instance's current session, creating one by the book if necessary. Defaults to using an ephemeral session, you can use
+	/// `sessionConfiguration` and/or `sessionDelegate` to affect how the session is configured.
 	public var session: NSURLSession {
 		if nil == _session {
 			let config = sessionConfiguration ?? NSURLSessionConfiguration.ephemeralSessionConfiguration()
-			if let delegate = sessionDelegate {
-				_session = NSURLSession(configuration: config, delegate: delegate, delegateQueue: nil)
-			}
-			else {
-				_session = NSURLSession(configuration: config, delegate: nil, delegateQueue: nil)
-			}
+			_session = NSURLSession(configuration: config, delegate: sessionDelegate, delegateQueue: nil)
 		}
 		return _session!
 	}
