@@ -192,7 +192,7 @@ public class OAuth2Base {
 	/// The backing store for `session`.
 	private var _session: NSURLSession?
 	
-	/// The configuration to use when creating `session`. Uses `sharedSession` or one with `defaultSessionConfiguration` if nil.
+	/// The configuration to use when creating `session`. Uses an `+ephemeralSessionConfiguration()` if nil.
 	public var sessionConfiguration: NSURLSessionConfiguration? {
 		didSet {
 			_session = nil

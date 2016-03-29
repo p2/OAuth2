@@ -36,12 +36,11 @@ let settings = [
     "client_id": "my_swift_app",
     "client_secret": "C7447242-A0CF-47C5-BAC7-B38BA91970A9",
     "authorize_uri": "https://authorize.smarthealthit.org/authorize",
-    "token_uri": "https://authorize.smarthealthit.org/token",   // code grant only!
+    "token_uri": "https://authorize.smarthealthit.org/token",   // code grant only
     "scope": "profile email",
     "redirect_uris": ["myapp://oauth/callback"],   // don't forget to register this scheme
     "keychain": false,     // if you DON'T want keychain integration
-    "title": "My Service"  // optional title to show in views
-] as OAuth2JSON            // the "as" part may or may not be needed
+] as OAuth2JSON
 ```
 
 ### 2. Instantiate OAuth2
@@ -66,13 +65,18 @@ oauth2.onFailure = { error in        // `error` is nil on cancel
 By default the OS browser will be used for authorization if there is no access token present in the keychain.
 To start authorization call **`authorize()`** or the convenience method `authorizeEmbeddedFrom(<# UIViewController or NSWindow #>)`.
 
-The latter configures `authConfig` like so: changes `authorizeEmbedded` to `true` and sets a root view controller/window, from which to present the login screen, as `authorizeContext`.
+The latter configures `authConfig` like so:
+
+- changes `authorizeEmbedded` to `true` and
+- sets a root view controller/window, from which to present the login screen, as `authorizeContext`.
+
 See [_Advanced Settings_](#advanced-settings) for other options.
 
 **Starting with iOS 9**, `SFSafariViewController` will be used when enabling embedded authorization.
 
-Your `oauth2` instance will use `NSURLSession.defaultSession()` for requests, exposed on `oauth2.session`.
-You can set `oauth2.sessionConfiguration` if you wish to change things like timeout values, and you can set `oauth2.sessionDelegate` to your own session delegate if you like.
+Your `oauth2` instance will use an automatically created `NSURLSession` using an `ephemeralSessionConfiguration()` configuration for its requests, exposed on `oauth2.session`.
+You can set `oauth2.sessionConfiguration` to your own configuration, for example if you'd like to change timeout values.
+You can also set `oauth2.sessionDelegate` to your own session delegate if you like.
 
 ```swift
 oauth2.authConfig.authorizeEmbedded = true
@@ -108,7 +112,7 @@ Hence, unless you have a reason to, you don't need to set all three callbacks, y
 ### 5. Make Requests
 
 You can now obtain an `OAuth2Request`, which is an already signed `NSMutableURLRequest`, to retrieve data from your server.
-If you use _Alamofire_ there's a [class extension](#usage-with-alamofire) below that you can use.
+If you use _Alamofire_ there's a [class extension below](#usage-with-alamofire) that you can use.
 
 ```swift
 let req = oauth2.request(forURL: <# resource URL #>)
@@ -434,27 +438,25 @@ The main configuration you'll use with `oauth2.authConfig` is whether or not to 
 
     oauth2.authConfig.authorizeEmbedded = true
 
+Some sites also want the client-id/secret combination in the request _body_, not in the _Authorization_ header:
+
+    oauth2.authConfig.secretInBody = true
 
 Starting with version 2.0.1 on iOS 9, `SFSafariViewController` will be used for embedded authorization.
 To revert to the old custom `OAuth2WebViewController`:
 
     oauth2.authConfig.ui.useSafariView = false
 
-
 To customize the _go back_ button when using `OAuth2WebViewController`:
 
     oauth2.authConfig.ui.backButton = <# UIBarButtonItem(...) #>
 
 
-Some sites also want the client-id/secret combination in the request _body_, not in the _Authorization_ header:
-
-    oauth2.authConfig.secretInBody = true
-
 
 Installation
 ------------
 
-You can use git or CocoaPods to install the framework.
+You can use _git_, _CocoaPods_ and possibly _Carthage_ to install the framework.
 
 #### CocoaPods
 
@@ -465,6 +467,14 @@ If you're unfamiliar with CocoaPods, read [using CocoaPods](http://guides.cocoap
 platform :ios, '8.0'      # or platform :osx, '10.9'
 pod 'p2.OAuth2'
 use_frameworks!
+```
+
+#### Carthage
+
+Install via Carthage is possibly working with this Cartfile:
+
+```ruby
+github "p2/OAuth2" ~> 2.2
 ```
 
 #### git
