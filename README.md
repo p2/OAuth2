@@ -326,6 +326,11 @@ oauth2.session.dataTaskWithRequest(request) { data, resp, error in
 }
 ```
 
+#### BitBucket
+
+BitBucket will prioritize any user session (cookies) over the "Authorization" header, hence code exchange will fail if a cookie with a user session is present.
+This is automatically addressed by OAuth2 using an ephemeral NSURLSession by default; keep this in mind if you configure OAuth2's session yourself.
+
 
 Usage with Alamofire
 --------------------

@@ -5,6 +5,12 @@ Version numbering represents the Swift version, plus a running number representi
 You can also refer to commit logs to get details on what was implemented, fixed and improved.
 
 
+### 2.2.5
+
+- Use ephemeral NSURLSession by default; fixes #96
+- Build fix to enable Carthage builds (thanks @davidpeckham !)
+
+
 ### 2.2.4
 
 - Fix: add optional auth parameters to the authorize URL

@@ -182,15 +182,12 @@ public class OAuth2Base {
 	/// The instance's current session, creating one by the book if necessary.
 	public var session: NSURLSession {
 		if nil == _session {
+			let config = sessionConfiguration ?? NSURLSessionConfiguration.ephemeralSessionConfiguration()
 			if let delegate = sessionDelegate {
-				let config = sessionConfiguration ?? NSURLSessionConfiguration.defaultSessionConfiguration()
 				_session = NSURLSession(configuration: config, delegate: delegate, delegateQueue: nil)
 			}
-			else if let config = sessionConfiguration {
-				_session = NSURLSession(configuration: config, delegate: nil, delegateQueue: nil)
-			}
 			else {
-				_session = NSURLSession.sharedSession()
+				_session = NSURLSession(configuration: config, delegate: nil, delegateQueue: nil)
 			}
 		}
 		return _session!

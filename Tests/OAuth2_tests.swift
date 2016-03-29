@@ -159,7 +159,7 @@ class OAuth2Tests: XCTestCase {
 	
 	func testSessionConfiguration() {
 		let oauth = OAuth2(settings: [:])
-		XCTAssertEqual(NSURLSession.sharedSession(), oauth.session, "Expecting default session by default")
+		XCTAssertEqual(0, oauth.session.configuration.HTTPCookieStorage?.cookies?.count ?? 0, "Expecting ephemeral session configuration by default")
 		
 		// custom configuration
 		oauth.sessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
