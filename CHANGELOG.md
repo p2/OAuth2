@@ -5,6 +5,24 @@ Version numbering represents the Swift version, plus a running number representi
 You can also refer to commit logs to get details on what was implemented, fixed and improved.
 
 
+### 2.2.5
+
+- Use ephemeral NSURLSession by default; fixes #96
+- Build fix to enable Carthage builds (thanks @davidpeckham !)
+
+
+### 2.2.4
+
+- Fix: add optional auth parameters to the authorize URL
+
+
+### 2.2.3
+
+- Refactor authentication request creation
+- Add `OAuth2ClientCredentialsReddit` to deal with Reddit installed apps special flow
+- Rename clashing method definitions to fix #99
+
+
 ### 2.2.2
 
 - Add tvOS build (thanks @davidkraus and @ddengler !)

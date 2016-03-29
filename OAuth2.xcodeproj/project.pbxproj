@@ -147,6 +147,8 @@
 		EE86C4641C48F6AC00B7D486 /* OAuth2CodeGrantNoTokenType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2CodeGrantNoTokenType.swift; sourceTree = "<group>"; };
 		EE8EE6DA1B12AB35005B90C5 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
 		EE92BE581C2700B600C8720B /* OAuth2RefreshToken_tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2RefreshToken_tests.swift; sourceTree = "<group>"; };
+		EEAC179F1CAA69110025F84B /* CONTRIBUTING.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CONTRIBUTING.md; sourceTree = "<group>"; };
+		EEAC17A01CAA69110025F84B /* CONTRIBUTORS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CONTRIBUTORS.md; sourceTree = "<group>"; };
 		EEACE1DE1A7E8FC1009BF3A7 /* OAuth2CodeGrantFacebook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2CodeGrantFacebook.swift; sourceTree = "<group>"; };
 		EEBA36AB1A8D030F00CF4230 /* OAuth2ImplicitGrant_tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2ImplicitGrant_tests.swift; sourceTree = "<group>"; };
 		EEC6D57B1C2837EA00FA9B1C /* OAuth2CodeGrantLinkedIn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2CodeGrantLinkedIn.swift; sourceTree = "<group>"; };
@@ -255,6 +257,8 @@
 			children = (
 				EE29EABE195B0813008882C8 /* README.md */,
 				EE8EE6DA1B12AB35005B90C5 /* CHANGELOG.md */,
+				EEAC179F1CAA69110025F84B /* CONTRIBUTING.md */,
+				EEAC17A01CAA69110025F84B /* CONTRIBUTORS.md */,
 				EE450CD31AD57578008AB6FC /* p2.OAuth2.podspec */,
 				EE01F96E1C58D5D6003AEA7E /* generate-docs.sh */,
 				EEDB8626193FAAE500C4EEA1 /* OAuth2 */,
