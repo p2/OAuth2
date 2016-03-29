@@ -7,7 +7,7 @@ jazzy \
 	-m "OAuth2" \
 	-a "Pascal Pfiffner" \
 	-o "docs" \
-	--module-version "2.2.4"
+	--module-version "2.2.5"
 
 mkdir docs/assets 2>/dev/null
 cp assets/* docs/assets/
