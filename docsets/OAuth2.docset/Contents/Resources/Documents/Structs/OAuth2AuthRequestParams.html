@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>OAuth2CodeGrant Class Reference</title>
+    <title>OAuth2AuthRequestParams Struct Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Class/OAuth2CodeGrant" class="dashAnchor"></a>
-    <a title="OAuth2CodeGrant Class Reference"></a>
+    <a name="//apple_ref/swift/Struct/OAuth2AuthRequestParams" class="dashAnchor"></a>
+    <a title="OAuth2AuthRequestParams Struct Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">OAuth2 Docs</a> (73% documented)</p>
@@ -23,7 +23,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">OAuth2 Reference</a>
         <img id="carat" src="../img/carat.png" />
-        OAuth2CodeGrant Class Reference
+        OAuth2AuthRequestParams Struct Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -165,18 +165,15 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>OAuth2CodeGrant</h1>
+            <h1>OAuth2AuthRequestParams</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2CodeGrant</span><span class="p">:</span> <span class="kt">OAuth2</span></code></pre>
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">OAuth2AuthRequestParams</span></code></pre>
 
                 </div>
               </div>
-            <p>A class to handle authorization for confidential clients via the authorization code grant method.</p>
-
-<p>This auth flow is designed for clients that are capable of protecting their client secret but can be used from installed apps. During code
-exchange and token refresh flows, <strong>if</strong> the client has a secret, a <q>Basic key:secret</q> Authorization header will be used. If not the client
-key will be embedded into the request body.</p>
+            <p>Struct to hold on to request parameters. Provides utility functions so the parameters can be correctly encoded for use in URLs and request
+bodies.</p>
 
           </section>
           <section class="section task-group-section">
@@ -185,9 +182,9 @@ key will be embedded into the request body.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ZvC6OAuth215OAuth2CodeGrant9grantTypeSS"></a>
-                    <a name="//apple_ref/swift/Variable/grantType" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZvC6OAuth215OAuth2CodeGrant9grantTypeSS">grantType</a>
+                    <a name="/s:FV6OAuth223OAuth2AuthRequestParamscFT_S0_"></a>
+                    <a name="//apple_ref/swift/Method/init()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FV6OAuth223OAuth2AuthRequestParamscFT_S0_">init()</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -202,7 +199,7 @@ key will be embedded into the request body.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2CodeGrant</span><span class="p">:</span> <span class="kt">OAuth2</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">OAuth2AuthRequestParams</span></code></pre>
 
                         </div>
                       </div>
@@ -212,9 +209,9 @@ key will be embedded into the request body.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ZvC6OAuth215OAuth2CodeGrant12responseTypeGSqSS_"></a>
-                    <a name="//apple_ref/swift/Variable/responseType" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZvC6OAuth215OAuth2CodeGrant12responseTypeGSqSS_">responseType</a>
+                    <a name="/s:FV6OAuth223OAuth2AuthRequestParams17removeValueForKeyFSSGSqSS_"></a>
+                    <a name="//apple_ref/swift/Method/removeValueForKey(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FV6OAuth223OAuth2AuthRequestParams17removeValueForKeyFSSGSqSS_">removeValueForKey(_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -222,14 +219,66 @@ key will be embedded into the request body.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Removes the given value from the receiver, if it is defined.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2CodeGrant</span><span class="p">:</span> <span class="kt">OAuth2</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">mutating</span> <span class="kd">func</span> <span class="nf">removeValueForKey</span><span class="p">(</span><span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>key</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The key for the value to be removed</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The value that was removed, if any</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vV6OAuth223OAuth2AuthRequestParams5countSi"></a>
+                    <a name="//apple_ref/swift/Property/count" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vV6OAuth223OAuth2AuthRequestParams5countSi">count</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The number of items in the receiver.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">count</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
 
                         </div>
                       </div>
@@ -240,19 +289,19 @@ key will be embedded into the request body.</p>
             </div>
             <div class="task-group">
               <div class="task-name-container">
-                <a name="/Token%20Request"></a>
-                <a name="//apple_ref/swift/Section/Token Request" class="dashAnchor"></a>
-                <a href="#/Token%20Request">
-                  <h3 class="section-name">Token Request</h3>
+                <a name="/Conversion"></a>
+                <a name="//apple_ref/swift/Section/Conversion" class="dashAnchor"></a>
+                <a href="#/Conversion">
+                  <h3 class="section-name">Conversion</h3>
                 </a>
               </div>
               <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth215OAuth2CodeGrant17handleRedirectURLFCSo5NSURLT_"></a>
-                    <a name="//apple_ref/swift/Method/handleRedirectURL(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth215OAuth2CodeGrant17handleRedirectURLFCSo5NSURLT_">handleRedirectURL(_:)</a>
+                    <a name="/s:FV6OAuth223OAuth2AuthRequestParams15utf8EncodedDataFzT_GSqCSo6NSData_"></a>
+                    <a name="//apple_ref/swift/Method/utf8EncodedData()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FV6OAuth223OAuth2AuthRequestParams15utf8EncodedDataFzT_GSqCSo6NSData_">utf8EncodedData()</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -260,16 +309,21 @@ key will be embedded into the request body.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Extracts the code from the redirect URL and exchanges it for a token.</p>
+                        <p>Creates a form encoded query string, then encodes it using UTF-8 to NSData.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">override</span> <span class="kd">public</span> <span class="kd">func</span> <span class="nf">handleRedirectURL</span><span class="p">(</span><span class="nv">redirect</span><span class="p">:</span> <span class="kt">NSURL</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">utf8EncodedData</span><span class="p">()</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">NSData</span><span class="p">?</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>NSData representing the receiver form-encoded</p>
+
                       </div>
                     </section>
                   </div>
@@ -277,9 +331,9 @@ key will be embedded into the request body.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth215OAuth2CodeGrant20exchangeCodeForTokenFSST_"></a>
-                    <a name="//apple_ref/swift/Method/exchangeCodeForToken(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth215OAuth2CodeGrant20exchangeCodeForTokenFSST_">exchangeCodeForToken(_:)</a>
+                    <a name="/s:FV6OAuth223OAuth2AuthRequestParams25percentEncodedQueryStringFT_SS"></a>
+                    <a name="//apple_ref/swift/Method/percentEncodedQueryString()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FV6OAuth223OAuth2AuthRequestParams25percentEncodedQueryStringFT_SS">percentEncodedQueryString()</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -287,16 +341,76 @@ key will be embedded into the request body.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Takes the received code and exchanges it for a token.</p>
+                        <p>Creates a parameter string in the form of <code>key1=value1&amp;key2=value2</code>, using form URL encoding.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">exchangeCodeForToken</span><span class="p">(</span><span class="nv">code</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">percentEncodedQueryString</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">String</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A form encoded string</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFV6OAuth223OAuth2AuthRequestParams25formEncodedQueryStringForFGVs10DictionarySSSS_SS"></a>
+                    <a name="//apple_ref/swift/Method/formEncodedQueryStringFor(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFV6OAuth223OAuth2AuthRequestParams25formEncodedQueryStringForFGVs10DictionarySSSS_SS">formEncodedQueryStringFor(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Create a query string from a dictionary of string: string pairs.</p>
+
+<p>This method does <strong>form encode</strong> the value part. If you&rsquo;re using NSURLComponents you want to assign the return value to
+<code>percentEncodedQuery</code>, NOT <code>query</code> as this would double-encode the value.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">formEncodedQueryStringFor</span><span class="p">(</span><span class="nv">params</span><span class="p">:</span> <span class="kt">OAuth2StringDict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>params</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The parameters you want to have encoded</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>An URL-ready query string</p>
+
                       </div>
                     </section>
                   </div>

@@ -14,7 +14,7 @@
     <a title="OAuth2Error Enum Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">OAuth2 Docs</a> (72% documented)</p>
+        <p><a href="../index.html">OAuth2 Docs</a> (73% documented)</p>
         <p class="header-right"><a href="http://p2.github.io/OAuth2"><img src="../img/gh.png"/>View on GitHub</a></p>
         <p class="header-right"><a href="dash-feed://http%3A%2F%2Fsmart%2Don%2Dfhir%2Egithub%2Eio%2Fdocsets%2FOAuth2%2Exml"><img src="../img/dash.png"/>Install in Dash</a></p>
       </div>
@@ -33,7 +33,10 @@
             <a href="../Classes.html">Classes</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Classes/OAuth2WebViewController.html">OAuth2WebViewController</a>
+                <a href="../Classes/OAuth2.html">OAuth2</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/OAuth2AuthRequest.html">OAuth2AuthRequest</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/OAuth2Base.html">OAuth2Base</a>
@@ -43,6 +46,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/OAuth2ClientCredentials.html">OAuth2ClientCredentials</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/OAuth2ClientCredentialsReddit.html">OAuth2ClientCredentialsReddit</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/OAuth2CodeGrant.html">OAuth2CodeGrant</a>
@@ -75,7 +81,7 @@
                 <a href="../Classes.html#/s:C6OAuth213OAuth2Request">OAuth2Request</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/OAuth2.html">OAuth2</a>
+                <a href="../Classes/OAuth2WebViewController.html">OAuth2WebViewController</a>
               </li>
             </ul>
           </li>
@@ -87,6 +93,12 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Enums/OAuth2Error.html">OAuth2Error</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/OAuth2HTTPContentType.html">OAuth2HTTPContentType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/OAuth2HTTPMethod.html">OAuth2HTTPMethod</a>
               </li>
             </ul>
           </li>
@@ -131,6 +143,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/OAuth2AuthConfig.html">OAuth2AuthConfig</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/OAuth2AuthRequestParams.html">OAuth2AuthRequestParams</a>
               </li>
             </ul>
           </li>
@@ -217,6 +232,37 @@
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="k">case</span> <span class="kt">NSError</span><span class="p">(</span><span class="kt">Foundation</span><span class="o">.</span><span class="kt">NSError</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FO6OAuth211OAuth2Error20InvalidURLComponentsFMS0_FCSo15NSURLComponentsS0_"></a>
+                    <a name="//apple_ref/swift/Element/InvalidURLComponents" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO6OAuth211OAuth2Error20InvalidURLComponentsFMS0_FCSo15NSURLComponentsS0_">InvalidURLComponents</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Invalid URL components, failed to create a URL</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">InvalidURLComponents</span><span class="p">(</span><span class="kt">NSURLComponents</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1136,9 +1182,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ZFO6OAuth211OAuth2Error17fromResponseErrorFMS0_FTSS8fallbackGSqSS__S0_"></a>
+                    <a name="/s:ZFO6OAuth211OAuth2Error17fromResponseErrorFTSS8fallbackGSqSS__S0_"></a>
                     <a name="//apple_ref/swift/Method/fromResponseError(_:fallback:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFO6OAuth211OAuth2Error17fromResponseErrorFMS0_FTSS8fallbackGSqSS__S0_">fromResponseError(_:fallback:)</a>
+                    <a class="token" href="#/s:ZFO6OAuth211OAuth2Error17fromResponseErrorFTSS8fallbackGSqSS__S0_">fromResponseError(_:fallback:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1230,8 +1276,8 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="http://www.github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2016-03-11)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.5.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2016 <a class="link" href="http://www.github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2016-04-11)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.6.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

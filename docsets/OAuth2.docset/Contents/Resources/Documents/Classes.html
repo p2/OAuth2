@@ -13,7 +13,7 @@
     <a title="Classes  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">OAuth2 Docs</a> (72% documented)</p>
+        <p><a href="index.html">OAuth2 Docs</a> (73% documented)</p>
         <p class="header-right"><a href="http://p2.github.io/OAuth2"><img src="img/gh.png"/>View on GitHub</a></p>
         <p class="header-right"><a href="dash-feed://http%3A%2F%2Fsmart%2Don%2Dfhir%2Egithub%2Eio%2Fdocsets%2FOAuth2%2Exml"><img src="img/dash.png"/>Install in Dash</a></p>
       </div>
@@ -32,7 +32,10 @@
             <a href="Classes.html">Classes</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Classes/OAuth2WebViewController.html">OAuth2WebViewController</a>
+                <a href="Classes/OAuth2.html">OAuth2</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/OAuth2AuthRequest.html">OAuth2AuthRequest</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/OAuth2Base.html">OAuth2Base</a>
@@ -42,6 +45,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Classes/OAuth2ClientCredentials.html">OAuth2ClientCredentials</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/OAuth2ClientCredentialsReddit.html">OAuth2ClientCredentialsReddit</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/OAuth2CodeGrant.html">OAuth2CodeGrant</a>
@@ -74,7 +80,7 @@
                 <a href="Classes.html#/s:C6OAuth213OAuth2Request">OAuth2Request</a>
               </li>
               <li class="nav-group-task">
-                <a href="Classes/OAuth2.html">OAuth2</a>
+                <a href="Classes/OAuth2WebViewController.html">OAuth2WebViewController</a>
               </li>
             </ul>
           </li>
@@ -86,6 +92,12 @@
               </li>
               <li class="nav-group-task">
                 <a href="Enums/OAuth2Error.html">OAuth2Error</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Enums/OAuth2HTTPContentType.html">OAuth2HTTPContentType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Enums/OAuth2HTTPMethod.html">OAuth2HTTPMethod</a>
               </li>
             </ul>
           </li>
@@ -131,6 +143,9 @@
               <li class="nav-group-task">
                 <a href="Structs/OAuth2AuthConfig.html">OAuth2AuthConfig</a>
               </li>
+              <li class="nav-group-task">
+                <a href="Structs/OAuth2AuthRequestParams.html">OAuth2AuthRequestParams</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -169,7 +184,8 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        
+                        <p>A view controller that allows you to display the login/authorization screen.</p>
+
                         <a href="Classes/OAuth2WebViewController.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
@@ -177,6 +193,38 @@
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2WebViewController</span><span class="p">:</span> <span class="kt">NSViewController</span><span class="p">,</span> <span class="kt">WKNavigationDelegate</span><span class="p">,</span> <span class="kt">NSWindowDelegate</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:C6OAuth217OAuth2AuthRequest"></a>
+                    <a name="//apple_ref/swift/Class/OAuth2AuthRequest" class="dashAnchor"></a>
+                    <a class="token" href="#/s:C6OAuth217OAuth2AuthRequest">OAuth2AuthRequest</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Class representing an OAuth2 authorization request that can be used to create NSURLRequest instances.</p>
+
+                        <a href="Classes/OAuth2AuthRequest.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2AuthRequest</span></code></pre>
 
                         </div>
                       </div>
@@ -413,6 +461,43 @@ Store. You have been warned!</p>
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:C6OAuth229OAuth2ClientCredentialsReddit"></a>
+                    <a name="//apple_ref/swift/Class/OAuth2ClientCredentialsReddit" class="dashAnchor"></a>
+                    <a class="token" href="#/s:C6OAuth229OAuth2ClientCredentialsReddit">OAuth2ClientCredentialsReddit</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Enables Reddit&rsquo;s special client credentials flow for installed apps.</p>
+
+<p>This flow will specify <code>https://oauth.reddit.com/grants/installed_client</code> as grant type and also supply a <code>device_id</code>, which you must set
+during configuration or by setting the <code>deviceId</code> property.</p>
+
+<p><a href="https://github.com/reddit/reddit/wiki/OAuth2#application-only-oauth">https://github.com/reddit/reddit/wiki/OAuth2#application-only-oauth</a></p>
+
+                        <a href="Classes/OAuth2ClientCredentialsReddit.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2ClientCredentialsReddit</span><span class="p">:</span> <span class="kt">OAuth2ClientCredentials</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:C6OAuth215OAuth2CodeGrant"></a>
                     <a name="//apple_ref/swift/Class/OAuth2CodeGrant" class="dashAnchor"></a>
                     <a class="token" href="#/s:C6OAuth215OAuth2CodeGrant">OAuth2CodeGrant</a>
@@ -425,9 +510,9 @@ Store. You have been warned!</p>
                       <div class="abstract">
                         <p>A class to handle authorization for confidential clients via the authorization code grant method.</p>
 
-<p>This auth flow is designed for clients that are capable of protecting their client secret but can be used from installed apps. During
-code exchange and token refresh flows, <strong>if</strong> the client has a secret, a <q>Basic key:secret</q> Authorization header will be used. If not
-the client key will be embedded into the request body.</p>
+<p>This auth flow is designed for clients that are capable of protecting their client secret but can be used from installed apps. During code
+exchange and token refresh flows, <strong>if</strong> the client has a secret, a <q>Basic key:secret</q> Authorization header will be used. If not the client
+key will be embedded into the request body.</p>
 
                         <a href="Classes/OAuth2CodeGrant.html" class="slightly-smaller">See more</a>
                       </div>
@@ -654,8 +739,8 @@ this subclass if you need a different header (this is different to version 1.2.3
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="http://www.github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2016-03-11)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.5.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2016 <a class="link" href="http://www.github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2016-04-11)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.6.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

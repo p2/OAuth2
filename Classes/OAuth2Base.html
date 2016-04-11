@@ -14,7 +14,7 @@
     <a title="OAuth2Base Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">OAuth2 Docs</a> (72% documented)</p>
+        <p><a href="../index.html">OAuth2 Docs</a> (73% documented)</p>
         <p class="header-right"><a href="http://p2.github.io/OAuth2"><img src="../img/gh.png"/>View on GitHub</a></p>
         <p class="header-right"><a href="dash-feed://http%3A%2F%2Fsmart%2Don%2Dfhir%2Egithub%2Eio%2Fdocsets%2FOAuth2%2Exml"><img src="../img/dash.png"/>Install in Dash</a></p>
       </div>
@@ -33,7 +33,10 @@
             <a href="../Classes.html">Classes</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Classes/OAuth2WebViewController.html">OAuth2WebViewController</a>
+                <a href="../Classes/OAuth2.html">OAuth2</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/OAuth2AuthRequest.html">OAuth2AuthRequest</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/OAuth2Base.html">OAuth2Base</a>
@@ -43,6 +46,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/OAuth2ClientCredentials.html">OAuth2ClientCredentials</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/OAuth2ClientCredentialsReddit.html">OAuth2ClientCredentialsReddit</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/OAuth2CodeGrant.html">OAuth2CodeGrant</a>
@@ -75,7 +81,7 @@
                 <a href="../Classes.html#/s:C6OAuth213OAuth2Request">OAuth2Request</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/OAuth2.html">OAuth2</a>
+                <a href="../Classes/OAuth2WebViewController.html">OAuth2WebViewController</a>
               </li>
             </ul>
           </li>
@@ -87,6 +93,12 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Enums/OAuth2Error.html">OAuth2Error</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/OAuth2HTTPContentType.html">OAuth2HTTPContentType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/OAuth2HTTPMethod.html">OAuth2HTTPMethod</a>
               </li>
             </ul>
           </li>
@@ -131,6 +143,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/OAuth2AuthConfig.html">OAuth2AuthConfig</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/OAuth2AuthRequestParams.html">OAuth2AuthRequestParams</a>
               </li>
             </ul>
           </li>
@@ -247,9 +262,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth210OAuth2BasecFMS0_FT8settingsGVSs10DictionarySSPSs9AnyObject___S0_"></a>
+                    <a name="/s:FC6OAuth210OAuth2BasecFT8settingsGVs10DictionarySSPs9AnyObject___S0_"></a>
                     <a name="//apple_ref/swift/Method/init(settings:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth210OAuth2BasecFMS0_FT8settingsGVSs10DictionarySSPSs9AnyObject___S0_">init(settings:)</a>
+                    <a class="token" href="#/s:FC6OAuth210OAuth2BasecFT8settingsGVs10DictionarySSPs9AnyObject___S0_">init(settings:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -287,9 +302,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth210OAuth2Base19keychainServiceNameFS0_FT_SS"></a>
+                    <a name="/s:FC6OAuth210OAuth2Base19keychainServiceNameFT_SS"></a>
                     <a name="//apple_ref/swift/Method/keychainServiceName()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth210OAuth2Base19keychainServiceNameFS0_FT_SS">keychainServiceName()</a>
+                    <a class="token" href="#/s:FC6OAuth210OAuth2Base19keychainServiceNameFT_SS">keychainServiceName()</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -314,9 +329,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth210OAuth2Base12forgetClientFS0_FT_T_"></a>
+                    <a name="/s:FC6OAuth210OAuth2Base12forgetClientFT_T_"></a>
                     <a name="//apple_ref/swift/Method/forgetClient()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth210OAuth2Base12forgetClientFS0_FT_T_">forgetClient()</a>
+                    <a class="token" href="#/s:FC6OAuth210OAuth2Base12forgetClientFT_T_">forgetClient()</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -341,9 +356,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth210OAuth2Base12forgetTokensFS0_FT_T_"></a>
+                    <a name="/s:FC6OAuth210OAuth2Base12forgetTokensFT_T_"></a>
                     <a name="//apple_ref/swift/Method/forgetTokens()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth210OAuth2Base12forgetTokensFS0_FT_T_">forgetTokens()</a>
+                    <a class="token" href="#/s:FC6OAuth210OAuth2Base12forgetTokensFT_T_">forgetTokens()</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -389,7 +404,8 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The instance&rsquo;s current session, creating one by the book if necessary.</p>
+                        <p>The instance&rsquo;s current session, creating one by the book if necessary. Defaults to using an ephemeral session, you can use
+<code><a href="../Classes/OAuth2Base.html#/s:vC6OAuth210OAuth2Base20sessionConfigurationGSqCSo25NSURLSessionConfiguration_">sessionConfiguration</a></code> and/or <code><a href="../Classes/OAuth2Base.html#/s:vC6OAuth210OAuth2Base15sessionDelegateGSqPSo20NSURLSessionDelegate__">sessionDelegate</a></code> to affect how the session is configured.</p>
 
                       </div>
                       <div class="declaration">
@@ -416,7 +432,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The configuration to use when creating <code><a href="../Classes/OAuth2Base.html#/s:vC6OAuth210OAuth2Base7sessionCSo12NSURLSession">session</a></code>. Uses <code>sharedSession</code> or one with <code>defaultSessionConfiguration</code> if nil.</p>
+                        <p>The configuration to use when creating <code><a href="../Classes/OAuth2Base.html#/s:vC6OAuth210OAuth2Base7sessionCSo12NSURLSession">session</a></code>. Uses an <code>+ephemeralSessionConfiguration()</code> if nil.</p>
 
                       </div>
                       <div class="declaration">
@@ -460,9 +476,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth210OAuth2Base14performRequestFS0_FTCSo12NSURLRequest8callbackFT4dataGSqCSo6NSData_6statusGSqSi_5errorGSqPSs9ErrorType___T__T_"></a>
+                    <a name="/s:FC6OAuth210OAuth2Base14performRequestFTCSo12NSURLRequest8callbackFT4dataGSqCSo6NSData_6statusGSqSi_5errorGSqPs9ErrorType___T__T_"></a>
                     <a name="//apple_ref/swift/Method/performRequest(_:callback:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth210OAuth2Base14performRequestFS0_FTCSo12NSURLRequest8callbackFT4dataGSqCSo6NSData_6statusGSqSi_5errorGSqPSs9ErrorType___T__T_">performRequest(_:callback:)</a>
+                    <a class="token" href="#/s:FC6OAuth210OAuth2Base14performRequestFTCSo12NSURLRequest8callbackFT4dataGSqCSo6NSData_6statusGSqSi_5errorGSqPs9ErrorType___T__T_">performRequest(_:callback:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -534,9 +550,9 @@ converted into an error according to information supplied in the response JSON (
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth210OAuth2Base23assureNoErrorInResponseFS0_FzTGVSs10DictionarySSPSs9AnyObject__8fallbackGSqSS__T_"></a>
+                    <a name="/s:FC6OAuth210OAuth2Base23assureNoErrorInResponseFzTGVs10DictionarySSPs9AnyObject__8fallbackGSqSS__T_"></a>
                     <a name="//apple_ref/swift/Method/assureNoErrorInResponse(_:fallback:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth210OAuth2Base23assureNoErrorInResponseFS0_FzTGVSs10DictionarySSPSs9AnyObject__8fallbackGSqSS__T_">assureNoErrorInResponse(_:fallback:)</a>
+                    <a class="token" href="#/s:FC6OAuth210OAuth2Base23assureNoErrorInResponseFzTGVs10DictionarySSPs9AnyObject__8fallbackGSqSS__T_">assureNoErrorInResponse(_:fallback:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -610,64 +626,9 @@ converted into an error according to information supplied in the response JSON (
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ZFC6OAuth210OAuth2Base14queryStringForFMS0_FGVSs10DictionarySSSS_SS"></a>
-                    <a name="//apple_ref/swift/Method/queryStringFor(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFC6OAuth210OAuth2Base14queryStringForFMS0_FGVSs10DictionarySSSS_SS">queryStringFor(_:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Create a query string from a dictionary of string: string pairs.</p>
-
-<p>This method does <strong>form encode</strong> the value part. If you&rsquo;re using NSURLComponents you want to assign the return value to
-<code>percentEncodedQuery</code>, NOT <code>query</code> as this would double-encode the value.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">queryStringFor</span><span class="p">(</span><span class="nv">params</span><span class="p">:</span> <span class="kt">OAuth2StringDict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">String</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>params</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The parameters you want to have encoded</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>An URL-ready query string</p>
-
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:ZFC6OAuth210OAuth2Base15paramsFromQueryFMS0_FSSGVSs10DictionarySSSS_"></a>
+                    <a name="/s:ZFC6OAuth210OAuth2Base15paramsFromQueryFSSGVs10DictionarySSSS_"></a>
                     <a name="//apple_ref/swift/Method/paramsFromQuery(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFC6OAuth210OAuth2Base15paramsFromQueryFMS0_FSSGVSs10DictionarySSSS_">paramsFromQuery(_:)</a>
+                    <a class="token" href="#/s:ZFC6OAuth210OAuth2Base15paramsFromQueryFSSGVs10DictionarySSSS_">paramsFromQuery(_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -720,9 +681,9 @@ automatically perform percent decoding, potentially messing with your query stri
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth210OAuth2Base12logIfVerboseFS0_FSST_"></a>
+                    <a name="/s:FC6OAuth210OAuth2Base12logIfVerboseFSST_"></a>
                     <a name="//apple_ref/swift/Method/logIfVerbose(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth210OAuth2Base12logIfVerboseFS0_FSST_">logIfVerbose(_:)</a>
+                    <a class="token" href="#/s:FC6OAuth210OAuth2Base12logIfVerboseFSST_">logIfVerbose(_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -749,8 +710,8 @@ automatically perform percent decoding, potentially messing with your query stri
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="http://www.github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2016-03-11)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.5.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2016 <a class="link" href="http://www.github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2016-04-11)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.6.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

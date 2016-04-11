@@ -13,7 +13,7 @@
     <a title="OAuth2  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">OAuth2 Docs</a> (72% documented)</p>
+        <p><a href="index.html">OAuth2 Docs</a> (73% documented)</p>
         <p class="header-right"><a href="http://p2.github.io/OAuth2"><img src="img/gh.png"/>View on GitHub</a></p>
         <p class="header-right"><a href="dash-feed://http%3A%2F%2Fsmart%2Don%2Dfhir%2Egithub%2Eio%2Fdocsets%2FOAuth2%2Exml"><img src="img/dash.png"/>Install in Dash</a></p>
       </div>
@@ -32,7 +32,10 @@
             <a href="Classes.html">Classes</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Classes/OAuth2WebViewController.html">OAuth2WebViewController</a>
+                <a href="Classes/OAuth2.html">OAuth2</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/OAuth2AuthRequest.html">OAuth2AuthRequest</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/OAuth2Base.html">OAuth2Base</a>
@@ -42,6 +45,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Classes/OAuth2ClientCredentials.html">OAuth2ClientCredentials</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/OAuth2ClientCredentialsReddit.html">OAuth2ClientCredentialsReddit</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/OAuth2CodeGrant.html">OAuth2CodeGrant</a>
@@ -74,7 +80,7 @@
                 <a href="Classes.html#/s:C6OAuth213OAuth2Request">OAuth2Request</a>
               </li>
               <li class="nav-group-task">
-                <a href="Classes/OAuth2.html">OAuth2</a>
+                <a href="Classes/OAuth2WebViewController.html">OAuth2WebViewController</a>
               </li>
             </ul>
           </li>
@@ -86,6 +92,12 @@
               </li>
               <li class="nav-group-task">
                 <a href="Enums/OAuth2Error.html">OAuth2Error</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Enums/OAuth2HTTPContentType.html">OAuth2HTTPContentType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Enums/OAuth2HTTPMethod.html">OAuth2HTTPMethod</a>
               </li>
             </ul>
           </li>
@@ -131,6 +143,9 @@
               <li class="nav-group-task">
                 <a href="Structs/OAuth2AuthConfig.html">OAuth2AuthConfig</a>
               </li>
+              <li class="nav-group-task">
+                <a href="Structs/OAuth2AuthRequestParams.html">OAuth2AuthRequestParams</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -155,37 +170,36 @@
 <p><a href="https://travis-ci.org/p2/OAuth2"><img src="https://travis-ci.org/p2/OAuth2.svg?branch=master" alt="Build Status"></a>
 <a href="LICENSE.txt"><img src="https://img.shields.io/:license-apache-blue.svg" alt="License"></a></p>
 
-<p>OAuth2 frameworks for <strong>OS X</strong>, <strong>iOS</strong> and <strong>tvOS</strong> written in Swift 2.0.</p>
+<p>OAuth2 frameworks for <strong>OS X</strong>, <strong>iOS</strong> and <strong>tvOS</strong> written in Swift 2.2.</p>
 
 <p>Technical documentation is available at <a href="https://p2.github.io/OAuth2">p2.github.io/OAuth2</a>.
 Take a look at the <a href="https://github.com/p2/OAuth2App">OS X sample app</a> for basic usage of this framework.</p>
 
-<p>The code in this repo requires Xcode 7, the built framework can be used on <strong>OS X 10.9</strong> or <strong>iOS 8</strong> and later.
+<p>The code in this repo requires Xcode 7.3, the built framework can be used on <strong>OS X 10.9</strong> or <strong>iOS 8</strong> and later.
 To use on <strong>iOS 7</strong> you&rsquo;ll have to include the source files in your main project.
 Happy to accept pull requests, please see <a href="./CONTRIBUTING.md">CONTRIBUTING.md</a></p>
 <a href='#swift_version' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='swift_version'>Swift Version</h4>
 
 <p>Since the Swift language is constantly evolving I have adopted a versioning scheme mirroring Swift versions:
 the framework version&rsquo;s <strong>first two digits are always the Swift version</strong> the library is compatible with, see <a href="https://github.com/p2/OAuth2/releases">releases</a>.
-Code compatible with brand new Swift versions are to be found on a separate feature branch named after their swift version.</p>
+Code compatible with brand new Swift versions are to be found on a separate feature branch named appropriately.</p>
 <a href='#usage' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='usage'>Usage</h2>
 
 <p>To use OAuth2 in your own code, start with <code>import OAuth2</code> (use <code>p2_OAuth2</code> if you installed <em>p2.OAuth2</em> via CocoaPods) in your source files.</p>
 
 <p>For a typical code grant flow you want to perform the following steps.
 The steps for other flows are mostly the same short of instantiating a different subclass and using different client settings.
-If you need to provide additional parameters to the authorize URL take a look at <code>authorizeURLWithRedirect(redirect:scope:params:)</code>.</p>
+Most <em>authorize</em> methods take an additional <code>params</code> parameter that allows you to supply custom additional parameters to use during authorization.</p>
 <a href='#1_create_a_settings_dictionary' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='1_create_a_settings_dictionary'>1. Create a Settings Dictionary.</h3>
 <pre class="highlight swift"><code><span class="k">let</span> <span class="nv">settings</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s">"client_id"</span><span class="p">:</span> <span class="s">"my_swift_app"</span><span class="p">,</span>
     <span class="s">"client_secret"</span><span class="p">:</span> <span class="s">"C7447242-A0CF-47C5-BAC7-B38BA91970A9"</span><span class="p">,</span>
     <span class="s">"authorize_uri"</span><span class="p">:</span> <span class="s">"https://authorize.smarthealthit.org/authorize"</span><span class="p">,</span>
-    <span class="s">"token_uri"</span><span class="p">:</span> <span class="s">"https://authorize.smarthealthit.org/token"</span><span class="p">,</span>   <span class="c1">// code grant only!</span>
+    <span class="s">"token_uri"</span><span class="p">:</span> <span class="s">"https://authorize.smarthealthit.org/token"</span><span class="p">,</span>   <span class="c1">// code grant only</span>
     <span class="s">"scope"</span><span class="p">:</span> <span class="s">"profile email"</span><span class="p">,</span>
     <span class="s">"redirect_uris"</span><span class="p">:</span> <span class="p">[</span><span class="s">"myapp://oauth/callback"</span><span class="p">],</span>   <span class="c1">// don't forget to register this scheme</span>
     <span class="s">"keychain"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>     <span class="c1">// if you DON'T want keychain integration</span>
-    <span class="s">"title"</span><span class="p">:</span> <span class="s">"My Service"</span>  <span class="c1">// optional title to show in views</span>
-<span class="p">]</span> <span class="k">as</span> <span class="kt">OAuth2JSON</span>            <span class="c1">// the "as" part may or may not be needed</span>
+<span class="p">]</span> <span class="k">as</span> <span class="kt">OAuth2JSON</span>
 </code></pre>
 <a href='#2_instantiate_oauth2' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='2_instantiate_oauth2'>2. Instantiate OAuth2</h3>
 
@@ -204,15 +218,23 @@ Optionally, set the <code>onAuthorize</code> and <code>onFailure</code> closures
 <a href='#3_authorize_the_user' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='3_authorize_the_user'>3. Authorize the User</h3>
 
 <p>By default the OS browser will be used for authorization if there is no access token present in the keychain.
-To start authorization call <strong><code>authorize()</code></strong> or the convenience method <code>authorizeEmbeddedFrom(&lt;# UIViewController or NSWindow #&gt;)</code>.</p>
+To start authorization call <strong><code>authorize()</code></strong> or, to use embedded authorization, the convenience method <code>authorizeEmbeddedFrom(&lt;# UIViewController or NSWindow #&gt;)</code>.</p>
 
-<p>The latter configures <code>authConfig</code> like so: changes <code>authorizeEmbedded</code> to <code>true</code> and sets a root view controller/window, from which to present the login screen, as <code>authorizeContext</code>.
+<p>The latter configures <code>authConfig</code> like so:</p>
+
+<ul>
+<li>changes <code>authorizeEmbedded</code> to <code>true</code> and</li>
+<li>sets a root view controller/window, from which to present the login screen, as <code>authorizeContext</code>.</li>
+</ul>
+
+<p>The login screen will only be <strong>presented if needed</strong> (see <a href="#manually-performing-authentication"><em>Manually Performing Authentication</em></a> below for details) and will automatically <strong>dismiss</strong> the login screen on success.
 See <a href="#advanced-settings"><em>Advanced Settings</em></a> for other options.</p>
 
 <p><strong>Starting with iOS 9</strong>, <code>SFSafariViewController</code> will be used when enabling embedded authorization.</p>
 
-<p>Your <code>oauth2</code> instance will use <code>NSURLSession.defaultSession()</code> for requests, exposed on <code>oauth2.session</code>.
-You can set <code>oauth2.sessionConfiguration</code> if you wish to change things like timeout values, and you can set <code>oauth2.sessionDelegate</code> to your own session delegate if you like.</p>
+<p>Your <code>oauth2</code> instance will use an automatically created <code>NSURLSession</code> using an <code>ephemeralSessionConfiguration()</code> configuration for its requests, exposed on <code>oauth2.session</code>.
+You can set <code>oauth2.sessionConfiguration</code> to your own configuration, for example if you&rsquo;d like to change timeout values.
+You can also set <code>oauth2.sessionDelegate</code> to your own session delegate if you like.</p>
 <pre class="highlight swift"><code><span class="n">oauth2</span><span class="o">.</span><span class="n">authConfig</span><span class="o">.</span><span class="n">authorizeEmbedded</span> <span class="o">=</span> <span class="kc">true</span>
 <span class="n">oauth2</span><span class="o">.</span><span class="n">authConfig</span><span class="o">.</span><span class="n">authorizeContext</span> <span class="o">=</span> <span class="o">&lt;</span><span class="err">#</span> <span class="n">presenting</span> <span class="n">view</span> <span class="n">controller</span> <span class="o">/</span> <span class="n">window</span> <span class="err">#</span><span class="o">&gt;</span>
 <span class="n">oauth2</span><span class="o">.</span><span class="nf">authorize</span><span class="p">()</span>
@@ -242,7 +264,7 @@ Hence, unless you have a reason to, you don&rsquo;t need to set all three callba
 <a href='#5_make_requests' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='5_make_requests'>5. Make Requests</h3>
 
 <p>You can now obtain an <code>OAuth2Request</code>, which is an already signed <code>NSMutableURLRequest</code>, to retrieve data from your server.
-If you use <em>Alamofire</em> there&rsquo;s a <a href="#usage-with-alamofire">class extension</a> below that you can use.</p>
+If you use <em>Alamofire</em> there&rsquo;s a <a href="#usage-with-alamofire">class extension below</a> that you can use.</p>
 <pre class="highlight swift"><code><span class="k">let</span> <span class="nv">req</span> <span class="o">=</span> <span class="n">oauth2</span><span class="o">.</span><span class="nf">request</span><span class="p">(</span><span class="nv">forURL</span><span class="p">:</span> <span class="o">&lt;</span><span class="err">#</span> <span class="n">resource</span> <span class="kt">URL</span> <span class="err">#</span><span class="o">&gt;</span><span class="p">)</span>
 <span class="k">let</span> <span class="nv">task</span> <span class="o">=</span> <span class="n">oauth2</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="nf">dataTaskWithRequest</span><span class="p">(</span><span class="n">req</span><span class="p">)</span> <span class="p">{</span> <span class="n">data</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="n">error</span> <span class="k">in</span>
     <span class="k">if</span> <span class="k">let</span> <span class="nv">error</span> <span class="o">=</span> <span class="n">error</span> <span class="p">{</span>
@@ -288,11 +310,11 @@ With the newer <code>SFSafariViewController</code>, or logins performed in the b
 <li>Start the OAuth2 dance by using the <code>authConfig</code> settings to determine how to display an authorize screen to the user</li>
 </ol>
 
-<p>If you do <strong>not wish this kind of automation</strong>, the manual steps to show the authorize screens are:</p>
+<p>If you do <strong>not wish this kind of automation</strong>, the manual steps to show and hide the authorize screens are:</p>
 
 <p><strong>Embedded iOS</strong>:</p>
-<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">vc</span> <span class="o">=</span> <span class="o">&lt;</span><span class="err">#</span> <span class="n">presenting</span> <span class="n">view</span> <span class="n">controller</span> <span class="err">#</span><span class="o">&gt;</span>
-<span class="k">let</span> <span class="nv">web</span> <span class="o">=</span> <span class="n">oauth2</span><span class="o">.</span><span class="nf">authorizeEmbeddedFrom</span><span class="p">(</span><span class="n">vc</span><span class="p">)</span>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">web</span> <span class="o">=</span> <span class="n">oauth2</span><span class="o">.</span><span class="nf">authorizeEmbeddedWith</span><span class="p">(</span><span class="o">&lt;</span><span class="err">#</span> <span class="n">presenting</span> <span class="n">view</span> <span class="n">controller</span> <span class="err">#</span><span class="o">&gt;</span><span class="p">)</span>
+<span class="n">oauth2</span><span class="o">.</span><span class="n">authConfig</span><span class="o">.</span><span class="n">authorizeEmbeddedAutoDismiss</span> <span class="o">=</span> <span class="kc">false</span>
 <span class="n">oauth2</span><span class="o">.</span><span class="n">afterAuthorizeOrFailure</span> <span class="o">=</span> <span class="p">{</span> <span class="n">wasFailure</span><span class="p">,</span> <span class="n">error</span> <span class="k">in</span>
     <span class="n">web</span><span class="o">.</span><span class="nf">dismissViewControllerAnimated</span><span class="p">(</span><span class="kc">true</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span>
 <span class="p">}</span>
@@ -382,6 +404,9 @@ GitHub however needs those two in the POSTed body; you need to set the <code>aut
 <p><code>OAuth2CodeGrant</code> automatically adds a <em>Basic</em> authorization header when a client secret is set.
 This means that you <strong>must</strong> specify a client_secret; if there is none (like for <a href="https://github.com/reddit/reddit/wiki/OAuth2#token-retrieval-code-flow">Reddit</a>) specify the empty string.
 There is a <a href="https://github.com/p2/OAuth2App/blob/master/OAuth2App/RedditLoader.swift">RedditLoader</a> example in the <a href="https://github.com/p2/OAuth2App">OAuth2App sample app</a> for a basic usage example.</p>
+
+<p>For Reddit&rsquo;s <a href="https://github.com/reddit/reddit/wiki/OAuth2#application-only-oauth">Application Only OAuth</a>, you don&rsquo;t get a secret for installed apps, which is why you can&rsquo;t use a standard client credentials flow.
+Use the supplied <code>OAuth2ClientCredentialsReddit</code> class and don&rsquo;t forget to add a <code>device_id</code>.</p>
 <a href='#google' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='google'>Google</h4>
 
 <p>If you authorize against Google with a <code>OAuth2CodeGrant</code>, the built-in iOS web view will intercept the <code>http://localhost</code> as well as the <code>urn:ietf:wg:oauth:2.0:oob</code> (with or without <code>:auto</code>) callbacks.
@@ -414,6 +439,10 @@ To avoid this set a cache policy for your request:</p>
     <span class="o">...</span>
 <span class="p">}</span>
 </code></pre>
+<a href='#bitbucket' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='bitbucket'>BitBucket</h4>
+
+<p>BitBucket will prioritize any user session (cookies) over the <q>Authorization</q> header, hence code exchange will fail if a cookie with a user session is present.
+This is automatically addressed by OAuth2 using an ephemeral NSURLSession by default; keep this in mind if you configure OAuth2&rsquo;s session yourself.</p>
 <a href='#usage_with_alamofire' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='usage_with_alamofire'>Usage with Alamofire</h2>
 
 <p>Here&rsquo;s an extension that can be used with Alamofire:</p>
@@ -498,6 +527,14 @@ This behavior can be turned off by supplying <q>token_assume_unexpired</q>: fals
 <pre class="highlight plaintext"><code>oauth2.authConfig.authorizeEmbedded = true
 </code></pre>
 
+<p>Similarly, if you want to take care of dismissing the login screen yourself:</p>
+<pre class="highlight plaintext"><code>oauth2.authConfig.authorizeEmbeddedAutoDismiss = false
+</code></pre>
+
+<p>Some sites also want the client-id/secret combination in the request <em>body</em>, not in the <em>Authorization</em> header:</p>
+<pre class="highlight plaintext"><code>oauth2.authConfig.secretInBody = true
+</code></pre>
+
 <p>Starting with version 2.0.1 on iOS 9, <code>SFSafariViewController</code> will be used for embedded authorization.
 To revert to the old custom <code>OAuth2WebViewController</code>:</p>
 <pre class="highlight plaintext"><code>oauth2.authConfig.ui.useSafariView = false
@@ -506,13 +543,9 @@ To revert to the old custom <code>OAuth2WebViewController</code>:</p>
 <p>To customize the <em>go back</em> button when using <code>OAuth2WebViewController</code>:</p>
 <pre class="highlight plaintext"><code>oauth2.authConfig.ui.backButton = &lt;# UIBarButtonItem(...) #&gt;
 </code></pre>
-
-<p>Some sites also want the client-id/secret combination in the request <em>body</em>, not in the <em>Authorization</em> header:</p>
-<pre class="highlight plaintext"><code>oauth2.authConfig.secretInBody = true
-</code></pre>
 <a href='#installation' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='installation'>Installation</h2>
 
-<p>You can use git or CocoaPods to install the framework.</p>
+<p>You can use <em>git</em>, <em>CocoaPods</em> and possibly <em>Carthage</em> to install the framework.</p>
 <a href='#cocoapods' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='cocoapods'>CocoaPods</h4>
 
 <p>Add a <code>Podfile</code> that contains at least the following information to the root of your app project, then do <code>pod install</code>.
@@ -520,6 +553,11 @@ If you&rsquo;re unfamiliar with CocoaPods, read <a href="http://guides.cocoapods
 <pre class="highlight ruby"><code><span class="n">platform</span> <span class="ss">:ios</span><span class="p">,</span> <span class="s1">'8.0'</span>      <span class="c1"># or platform :osx, '10.9'</span>
 <span class="n">pod</span> <span class="s1">'p2.OAuth2'</span>
 <span class="n">use_frameworks!</span>
+</code></pre>
+<a href='#carthage' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='carthage'>Carthage</h4>
+
+<p>Install via Carthage is possibly working with this Cartfile:</p>
+<pre class="highlight ruby"><code><span class="n">github</span> <span class="s2">"p2/OAuth2"</span> <span class="o">~&gt;</span> <span class="mi">2</span><span class="o">.</span><span class="mi">2</span>
 </code></pre>
 <a href='#git' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='git'>git</h4>
 
@@ -558,8 +596,8 @@ Since there is no <code>NOTICE</code> file there is nothing that you have to inc
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="http://www.github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2016-03-11)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.5.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2016 <a class="link" href="http://www.github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2016-04-11)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.6.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>
