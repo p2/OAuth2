@@ -45,9 +45,9 @@ extension OAuth2 {
 	
 	You should use `authorizeEmbeddedFrom(<# view controller #>)`; use this method if you have specific reasons.
 	
+	- throws: Can throw several OAuth2Error if the method is unable to show the authorize screen
 	- parameter config: The configuration to be used; usually uses the instance's `authConfig`
 	- parameter params: Additional authorization parameters to supply during the OAuth dance
-	- throws: Can throw several OAuth2Error if the method is unable to show the authorize screen
 	*/
 	public func authorizeEmbeddedWith(config: OAuth2AuthConfig, params: OAuth2StringDict? = nil) throws {
 		if let controller = config.authorizeContext as? UIViewController {

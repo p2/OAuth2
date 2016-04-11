@@ -27,7 +27,7 @@ To use OAuth2 in your own code, start with `import OAuth2` (use `p2_OAuth2` if y
 
 For a typical code grant flow you want to perform the following steps.
 The steps for other flows are mostly the same short of instantiating a different subclass and using different client settings.
-If you need to provide additional parameters to the authorize URL take a look at `authorizeURLWithRedirect(redirect:scope:params:)`.
+Most _authorize_ methods take an additional `params` parameter that allows you to supply custom additional parameters to use during authorization.
 
 ### 1. Create a Settings Dictionary.
 
@@ -63,13 +63,14 @@ oauth2.onFailure = { error in        // `error` is nil on cancel
 ### 3. Authorize the User
 
 By default the OS browser will be used for authorization if there is no access token present in the keychain.
-To start authorization call **`authorize()`** or the convenience method `authorizeEmbeddedFrom(<# UIViewController or NSWindow #>)`.
+To start authorization call **`authorize()`** or, to use embedded authorization, the convenience method `authorizeEmbeddedFrom(<# UIViewController or NSWindow #>)`.
 
 The latter configures `authConfig` like so:
 
 - changes `authorizeEmbedded` to `true` and
 - sets a root view controller/window, from which to present the login screen, as `authorizeContext`.
 
+The login screen will only be **presented if needed** (see [_Manually Performing Authentication_](#manually-performing-authentication) below for details) and will automatically **dismiss** the login screen on success.
 See [_Advanced Settings_](#advanced-settings) for other options.
 
 **Starting with iOS 9**, `SFSafariViewController` will be used when enabling embedded authorization.
@@ -166,13 +167,13 @@ The `authorize()` method will:
 3. Try to use the refresh token to get a new access token, if it fails
 4. Start the OAuth2 dance by using the `authConfig` settings to determine how to display an authorize screen to the user
 
-If you do **not wish this kind of automation**, the manual steps to show the authorize screens are:
+If you do **not wish this kind of automation**, the manual steps to show and hide the authorize screens are:
 
 **Embedded iOS**:
 
 ```swift
-let vc = <# presenting view controller #>
-let web = oauth2.authorizeEmbeddedFrom(vc)
+let web = oauth2.authorizeEmbeddedWith(<# presenting view controller #>)
+oauth2.authConfig.authorizeEmbeddedAutoDismiss = false
 oauth2.afterAuthorizeOrFailure = { wasFailure, error in
     web.dismissViewControllerAnimated(true, completion: nil)
 }
@@ -437,6 +438,10 @@ Advanced Settings
 The main configuration you'll use with `oauth2.authConfig` is whether or not to use an embedded login:
 
     oauth2.authConfig.authorizeEmbedded = true
+
+Similarly, if you want to take care of dismissing the login screen yourself:
+
+    oauth2.authConfig.authorizeEmbeddedAutoDismiss = false
 
 Some sites also want the client-id/secret combination in the request _body_, not in the _Authorization_ header:
 
