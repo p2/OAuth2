@@ -511,16 +511,17 @@ public class OAuth2: OAuth2Base {
 	// MARK: - Requests
 	
 	/**
-	Return an OAuth2Request, a NSMutableURLRequest subclass, that has already been signed and can be used against
-	your OAuth2 endpoint.
+	Return an OAuth2Request, a NSMutableURLRequest subclass, that has already been signed and can be used against your OAuth2 endpoint.
 	
-	This method prefers cached data and specifies a timeout interval of 20 seconds.
+	This method by default ignores locally cached data and specifies a timeout interval of 20 seconds. This should be ideal for small JSON
+	data requests, but you probably don't want to disable cache for binary data like avatars.
 	
 	- parameter forURL: The URL to create a request for
+	- parameter cachePolicy: The cache policy to use, defaults to `NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData`
 	- returns: OAuth2Request for the given URL
 	*/
-	public func request(forURL url: NSURL) -> OAuth2Request {
-		return OAuth2Request(URL: url, oauth: self, cachePolicy: .ReturnCacheDataElseLoad, timeoutInterval: 20)
+	public func request(forURL url: NSURL, cachePolicy: NSURLRequestCachePolicy = .ReloadIgnoringLocalCacheData) -> OAuth2Request {
+		return OAuth2Request(URL: url, oauth: self, cachePolicy: cachePolicy, timeoutInterval: 20)
 	}
 	
 	/**

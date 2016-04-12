@@ -38,7 +38,7 @@ let settings = [
     "authorize_uri": "https://authorize.smarthealthit.org/authorize",
     "token_uri": "https://authorize.smarthealthit.org/token",   // code grant only
     "scope": "profile email",
-    "redirect_uris": ["myapp://oauth/callback"],   // don't forget to register this scheme
+    "redirect_uris": ["myapp://oauth/callback"],   // register the "myapp" scheme in Info.plist
     "keychain": false,     // if you DON'T want keychain integration
 ] as OAuth2JSON
 ```
@@ -245,7 +245,9 @@ For a full OAuth 2 code grant flow (`response_type=code`) you want to use the `O
 This flow is typically used by applications that can guard their secrets, like server-side apps, and not in distributed binaries.
 In case an application cannot guard its secret, such as a distributed iOS app, you would use the _implicit grant_ or, in some cases, still a _code grant_ but omitting the client secret.
 It has however become common practice to still use code grants from mobile devices, including a client secret.
-This class fully supports those flows, it automatically creates a “Basic” Authorization header if the client has a client secret.
+
+This class fully supports those flows, it automatically creates a “Basic” Authorization header if the client has a non-nil client secret.
+This means that you likely **must** specify `client_secret` in your settings; if there is none (like for [Reddit](https://github.com/reddit/reddit/wiki/OAuth2#token-retrieval-code-flow)) specify the empty string.
 If the site requires client credentials in the request body, set `secretInBody` to true, as explained below.
 
 #### Implicit Grant
@@ -266,75 +268,20 @@ The _Resource Owner Password Credentials Grant_ is supported with the `OAuth2Pas
 Create an instance as shown above, set its `username` and `password` properties, then call `authorize()`.
 
 
-### Site-Specific Peculiarities
+Site-Specific Peculiarities
+---------------------------
 
 Some sites might not strictly adhere to the OAuth2 flow.
-The framework deals with those deviations by creating site-specific subclasses.
+The framework deals with those deviations by creating site-specific subclasses and/or configuration details.
 
-#### Facebook
-
-Use `OAuth2CodeGrantFacebook` to deal with the [URL-query-style response](https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow/v2.2) instead of the expected JSON dictionary.
-
-#### GitHub
-
-`OAuth2CodeGrant` automatically puts the client-key/client-secret into an “Authorization: Basic” header.
-GitHub however needs those two in the POSTed body; you need to set the `authConfig.secretInBody` setting to true, either directly in code or via the `secret_in_body` key in the settings dictionary.
-
-#### Reddit
-
-`OAuth2CodeGrant` automatically adds a _Basic_ authorization header when a client secret is set.
-This means that you **must** specify a client_secret; if there is none (like for [Reddit](https://github.com/reddit/reddit/wiki/OAuth2#token-retrieval-code-flow)) specify the empty string.
-There is a [RedditLoader](https://github.com/p2/OAuth2App/blob/master/OAuth2App/RedditLoader.swift) example in the [OAuth2App sample app][sample] for a basic usage example.
-
-For Reddit's [Application Only OAuth](https://github.com/reddit/reddit/wiki/OAuth2#application-only-oauth), you don't get a secret for installed apps, which is why you can't use a standard client credentials flow.
-Use the supplied `OAuth2ClientCredentialsReddit` class and don't forget to add a `device_id`.
-
-#### Google
-
-If you authorize against Google with a `OAuth2CodeGrant`, the built-in iOS web view will intercept the `http://localhost` as well as the `urn:ietf:wg:oauth:2.0:oob` (with or without `:auto`) callbacks.
-This means you must disable the Safari view controller and – for now – this only works on iOS.
-
-```swift
-oauth2.authConfig.authorizeEmbedded = true
-oauth2.authConfig.ui.useSafariView = false
-```
-
-#### LinkedIn
-
-There are a couple of peculiarities with LinkedIn's OAuth2 implementation.
-You can use `OAuth2CodeGrantLinkedIn` which deals with those, but since it needs the custom embedded web view this will only work on iOS for now.
-To receive _JSON_ you will also need to use their special header `x-li-format` and set it to `json`:
-
-```swift
-urlRequest.setValue("json", forHTTPHeaderField: "x-li-format")
-```
-
-#### Instagram, Bitly, ...
-
-Some sites don't return the required `token_type` parameter in their token response.
-LinkedIn does the same, see above.
-You can tell if you're getting the error _“No token type received, will not use the token”_.
-There is a subclass for code grant flows that ignores the missing token type that you can use: [`OAuth2CodeGrantNoTokenType`](Sources/Base/OAuth2CodeGrantNoTokenType.swift).
-
-For _Instagram_ you also need to set `oauth2.authConfig.secretInBody = true` (or use `secret_in_body` in your settings dict) because it expects the client secret in the request body, not the _Authorization_ header.
-
-#### Uber
-
-When making repeated calls to Uber's ride status endpoint (`/V1/REQUESTS/{REQUEST_ID}`) it may return a cached response.
-To avoid this set a cache policy for your request:
-
-```swift
-let request = oauth2.request(forURL: <# resource URL #>)
-request.cachePolicy = NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData
-oauth2.session.dataTaskWithRequest(request) { data, resp, error in
-    ...
-}
-```
-
-#### BitBucket
-
-BitBucket will prioritize any user session (cookies) over the "Authorization" header, hence code exchange will fail if a cookie with a user session is present.
-This is automatically addressed by OAuth2 using an ephemeral NSURLSession by default; keep this in mind if you configure OAuth2's session yourself.
+- [GitHub](https://github.com/p2/OAuth2/wiki/GitHub)
+- [Facebook](https://github.com/p2/OAuth2/wiki/Facebook)
+- [Reddit](https://github.com/p2/OAuth2/wiki/Reddit)
+- [Google](https://github.com/p2/OAuth2/wiki/Google)
+- [LinkedIn](https://github.com/p2/OAuth2/wiki/LinkedIn)
+- [Instagram, Bitly, ...](https://github.com/p2/OAuth2/wiki/Instagram)
+- [Uber](https://github.com/p2/OAuth2/wiki/Uber)
+- [BitBucket](https://github.com/p2/OAuth2/wiki/BitBucket)
 
 
 Usage with Alamofire
