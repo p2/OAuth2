@@ -97,7 +97,7 @@ class OAuth2RefreshTokenTests: XCTestCase {
 		oauth.clientConfig.clientSecret = "uvw"
 		oauth.authConfig.secretInBody = true
 		
-		let req = try? oauth.tokenRequestForTokenRefresh().asURLRequestFor(oauth)
+		let req = try? oauth.tokenRequestForTokenRefresh(params: ["param": "fool"]).asURLRequestFor(oauth)
 		XCTAssertNotNil(req)
 		XCTAssertNotNil(req?.HTTPBody)
 		let body = NSString(data: req!.HTTPBody!, encoding: NSUTF8StringEncoding) as? String
@@ -105,6 +105,7 @@ class OAuth2RefreshTokenTests: XCTestCase {
 		let dict = OAuth2.paramsFromQuery(body!)
 		XCTAssertEqual(dict["client_id"], "abc")
 		XCTAssertEqual(dict["client_secret"], "uvw")
+		XCTAssertEqual(dict["param"], "fool")
 		XCTAssertNil(req!.allHTTPHeaderFields?["Authorization"])
 	}
 }

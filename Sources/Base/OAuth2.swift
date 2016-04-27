@@ -205,11 +205,11 @@ public class OAuth2: OAuth2Base {
 	calling the `onFailure` callback. If client_id is not set but a "registration_uri" has been provided, a dynamic client registration will
 	be attempted and if it succees, an access token will be requested.
 	
-	- parameter params: Optional key/value pairs to pass during authorization
+	- parameter params: Optional key/value pairs to pass during authorization and token refresh
 	*/
 	public final func authorize(params params: OAuth2StringDict? = nil) {
 		isAuthorizing = true
-		tryToObtainAccessTokenIfNeeded() { success in
+		tryToObtainAccessTokenIfNeeded(params: params) { success in
 			if success {
 				self.didAuthorize(OAuth2JSON())
 			}
@@ -236,6 +236,9 @@ public class OAuth2: OAuth2Base {
 	Shortcut function to start embedded authorization from the given context (a UIViewController on iOS, an NSWindow on OS X).
 	
 	This method sets `authConfig.authorizeEmbedded = true` and `authConfig.authorizeContext = <# context #>`, then calls `authorize()`
+	
+	- parameter context: The context to start authorization from, depends on platform (UIViewController or NSWindow, see `authorizeContext`)
+	- parameter params:  Optional key/value pairs to pass during authorization
 	*/
 	public func authorizeEmbeddedFrom(context: AnyObject, params: OAuth2StringDict? = nil) {
 		authConfig.authorizeEmbedded = true
@@ -246,6 +249,8 @@ public class OAuth2: OAuth2Base {
 	/**
 	If the instance has an accessToken, checks if its expiry time has not yet passed. If we don't have an expiry date we assume the token
 	is still valid.
+	
+	- returns: A Bool indicating whether a probably valid access token exists
 	*/
 	public func hasUnexpiredAccessToken() -> Bool {
 		if let access = accessToken where !access.isEmpty {
@@ -261,15 +266,16 @@ public class OAuth2: OAuth2Base {
 	Indicates, in the callback, whether the client has been able to obtain an access token that is likely to still
 	work (but there is no guarantee).
 	
+	- parameter params:   Optional key/value pairs to pass during authorization
 	- parameter callback: The callback to call once the client knows whether it has an access token or not
 	*/
-	func tryToObtainAccessTokenIfNeeded(callback: ((success: Bool) -> Void)) {
+	func tryToObtainAccessTokenIfNeeded(params params: OAuth2StringDict? = nil, callback: ((success: Bool) -> Void)) {
 		if hasUnexpiredAccessToken() {
 			callback(success: true)
 		}
 		else {
 			logIfVerbose("No access token, maybe I can refresh")
-			doRefreshToken({ successParams, error in
+			doRefreshToken(params: params) { successParams, error in
 				if nil != successParams {
 					callback(success: true)
 				}
@@ -279,7 +285,7 @@ public class OAuth2: OAuth2Base {
 					}
 					callback(success: false)
 				}
-			})
+			}
 		}
 	}
 	
@@ -303,12 +309,11 @@ public class OAuth2: OAuth2Base {
 	/**
 	Method that creates the OAuth2AuthRequest instance used to create the authorize URL
 	
-	- parameter redirect:  The redirect URI string to supply. If it is nil, the first value of the settings' `redirect_uris` entries is
-	                       used. Must be present in the end!
-	- parameter scope:     The scope to request
-	- parameter params:    Any additional parameters as dictionary with string keys and values that will be added to the
-	                       query part
-	- returns: OAuth2AuthRequest to be used to call to the authorize endpoint
+	- parameter redirect: The redirect URI string to supply. If it is nil, the first value of the settings' `redirect_uris` entries is
+                          used. Must be present in the end!
+	- parameter scope:    The scope to request
+	- parameter params:   Any additional parameters as dictionary with string keys and values that will be added to the query part
+	- returns:            OAuth2AuthRequest to be used to call to the authorize endpoint
 	*/
 	func authorizeRequestWithRedirect(redirect: String, scope: String?, params: OAuth2StringDict?) throws -> OAuth2AuthRequest {
 		guard let clientId = clientConfig.clientId where !clientId.isEmpty else {
@@ -334,7 +339,7 @@ public class OAuth2: OAuth2Base {
 	Most convenient method if you want the authorize URL to be created as defined in your settings dictionary.
 	
 	- parameter params: Optional, additional URL params to supply to the request
-	- returns: NSURL to be used to start the OAuth dance
+	- returns:          NSURL to be used to start the OAuth dance
 	*/
 	public func authorizeURL(params: OAuth2StringDict? = nil) throws -> NSURL {
 		return try authorizeURLWithRedirect(nil, scope: nil, params: params)
@@ -343,12 +348,11 @@ public class OAuth2: OAuth2Base {
 	/**
 	Convenience method to be overridden by and used from subclasses.
 	
-	- parameter redirect:  The redirect URI string to supply. If it is nil, the first value of the settings' `redirect_uris` entries is
-	                       used. Must be present in the end!
-	- parameter scope:     The scope to request
-	- parameter params:    Any additional parameters as dictionary with string keys and values that will be added to the
-	query part
-	- returns: NSURL to be used to start the OAuth dance
+	- parameter redirect: The redirect URI string to supply. If it is nil, the first value of the settings' `redirect_uris` entries is
+                          used. Must be present in the end!
+	- parameter scope:    The scope to request
+	- parameter params:   Any additional parameters as dictionary with string keys and values that will be added to the query part
+	- returns:            NSURL to be used to start the OAuth dance
 	*/
 	public func authorizeURLWithRedirect(redirect: String?, scope: String?, params: OAuth2StringDict?) throws -> NSURL {
 		guard let redirect = (redirect ?? clientConfig.redirect) else {
@@ -361,6 +365,8 @@ public class OAuth2: OAuth2Base {
 	
 	/**
 	Subclasses override this method to extract information from the supplied redirect URL.
+	
+	- parameter redirect: The redirect URL returned by the server that you want to handle
 	*/
 	public func handleRedirectURL(redirect: NSURL) throws {
 		throw OAuth2Error.Generic("Abstract class use")
@@ -375,8 +381,9 @@ public class OAuth2: OAuth2Base {
 	This will set "grant_type" to "refresh_token", add the refresh token, and take care of the remaining parameters.
 	
 	- parameter params: Additional parameters to pass during token refresh
+	- returns:          An `OAuth2AuthRequest` instance that is configured for token refresh
 	*/
-	func tokenRequestForTokenRefresh(params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
+	func tokenRequestForTokenRefresh(params params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
 		guard let clientId = clientId where !clientId.isEmpty else {
 			throw OAuth2Error.NoClientId
 		}
@@ -396,11 +403,12 @@ public class OAuth2: OAuth2Base {
 	/**
 	If there is a refresh token, use it to receive a fresh access token.
 	
+	- parameter params:   Optional key/value pairs to pass during token refresh
 	- parameter callback: The callback to call after the refresh token exchange has finished
 	*/
-	public func doRefreshToken(callback: ((successParams: OAuth2JSON?, error: ErrorType?) -> Void)) {
+	public func doRefreshToken(params params: OAuth2StringDict? = nil, callback: ((successParams: OAuth2JSON?, error: ErrorType?) -> Void)) {
 		do {
-			let post = try tokenRequestForTokenRefresh().asURLRequestFor(self)
+			let post = try tokenRequestForTokenRefresh(params: params).asURLRequestFor(self)
 			logIfVerbose("Using refresh token to receive access token from \(post.URL?.description ?? "nil")")
 			
 			performRequest(post) { data, status, error in
