@@ -5,8 +5,9 @@ Version numbering represents the Swift version, plus a running number representi
 You can also refer to commit logs to get details on what was implemented, fixed and improved.
 
 
-### #.#
+### 2.2.6
 
+- Make sure extra params are passed to refresh token requests (fixes #105)
 - The convenience `request(forURL:)` method by default no longer uses locally cached data
 
 
