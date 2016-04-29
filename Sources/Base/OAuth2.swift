@@ -170,7 +170,7 @@ public class OAuth2: OAuth2Base {
 	
 	override func updateFromKeychainItems(items: [String : NSCoding]) {
 		for message in clientConfig.updateFromStorableItems(items) {
-			logIfVerbose(message)
+			logIfDebug(message)
 		}
 		authConfig.secretInBody = (clientConfig.endpointAuthMethod == OAuth2EndpointAuthMethod.ClientSecretPost)
 	}
@@ -274,14 +274,14 @@ public class OAuth2: OAuth2Base {
 			callback(success: true)
 		}
 		else {
-			logIfVerbose("No access token, maybe I can refresh")
+			logIfDebug("No access token, maybe I can refresh")
 			doRefreshToken(params: params) { successParams, error in
 				if nil != successParams {
 					callback(success: true)
 				}
 				else {
 					if let err = error {
-						self.logIfVerbose("\(err)")
+						self.logIfDebug("\(err)")
 					}
 					callback(success: false)
 				}
@@ -409,7 +409,7 @@ public class OAuth2: OAuth2Base {
 	public func doRefreshToken(params params: OAuth2StringDict? = nil, callback: ((successParams: OAuth2JSON?, error: ErrorType?) -> Void)) {
 		do {
 			let post = try tokenRequestForTokenRefresh(params: params).asURLRequestFor(self)
-			logIfVerbose("Using refresh token to receive access token from \(post.URL?.description ?? "nil")")
+			logIfDebug("Using refresh token to receive access token from \(post.URL?.description ?? "nil")")
 			
 			performRequest(post) { data, status, error in
 				do {
@@ -418,7 +418,7 @@ public class OAuth2: OAuth2Base {
 					}
 					let json = try self.parseRefreshTokenResponse(data)
 					if status < 400 {
-						self.logIfVerbose("Did use refresh token for access token [\(nil != self.clientConfig.accessToken)]")
+						self.logIfDebug("Did use refresh token for access token [\(nil != self.clientConfig.accessToken)]")
 						if self.useKeychain {
 							self.storeTokensToKeychain()
 						}
@@ -429,7 +429,7 @@ public class OAuth2: OAuth2Base {
 					}
 				}
 				catch let error {
-					self.logIfVerbose("Error parsing refreshed access token: \(error)")
+					self.logIfDebug("Error parsing refreshed access token: \(error)")
 					callback(successParams: nil, error: error)
 				}
 			}
@@ -502,7 +502,7 @@ public class OAuth2: OAuth2Base {
 		
 		var finalError = error
 		if let error = error {
-			logIfVerbose("\(error)")
+			logIfDebug("\(error)")
 			if let oae = error as? OAuth2Error where .RequestCancelled == oae {
 				finalError = nil
 			}
@@ -537,7 +537,7 @@ public class OAuth2: OAuth2Base {
 	*/
 	public func abortAuthorization() {
 		if !abortTask() && isAuthorizing {
-			logIfVerbose("Aborting authorization")
+			logIfDebug("Aborting authorization")
 			didFail(nil)
 		}
 	}

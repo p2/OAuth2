@@ -35,7 +35,7 @@ public class OAuth2ImplicitGrant: OAuth2 {
 	}
 	
 	override public func handleRedirectURL(redirect: NSURL) {
-		logIfVerbose("Handling redirect URL \(redirect.description)")
+		logIfDebug("Handling redirect URL \(redirect.description)")
 		do {
 			// token should be in the URL fragment
 			let comp = NSURLComponents(URL: redirect, resolvingAgainstBaseURL: true)
@@ -45,7 +45,7 @@ public class OAuth2ImplicitGrant: OAuth2 {
 			
 			let params = self.dynamicType.paramsFromQuery(fragment)
 			let dict = try parseAccessTokenResponse(params)
-			logIfVerbose("Successfully extracted access token")
+			logIfDebug("Successfully extracted access token")
 			didAuthorize(dict)
 		}
 		catch let error {

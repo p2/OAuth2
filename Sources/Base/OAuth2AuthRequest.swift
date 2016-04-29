@@ -145,14 +145,14 @@ public class OAuth2AuthRequest {
 			
 			// add to request body
 			if oauth2.authConfig.secretInBody {
-				oauth2.logIfVerbose("Adding “client_id” and “client_secret” to request body")
+				oauth2.logIfDebug("Adding “client_id” and “client_secret” to request body")
 				finalParams["client_id"] = clientId
 				finalParams["client_secret"] = secret
 			}
 			
 			// add Authorization header (if not in body)
 			else if nil == finalAuthHeader {
-				oauth2.logIfVerbose("Adding “Authorization” header as “Basic client-key:client-secret”")
+				oauth2.logIfDebug("Adding “Authorization” header as “Basic client-key:client-secret”")
 				let pw = "\(clientId.wwwFormURLEncodedString):\(secret.wwwFormURLEncodedString)"
 				if let utf8 = pw.dataUsingEncoding(NSUTF8StringEncoding) {
 					finalAuthHeader = "Basic \(utf8.base64EncodedStringWithOptions([]))"
