@@ -64,7 +64,7 @@ public class OAuth2PasswordGrant: OAuth2 {
 	func obtainAccessToken(params params: OAuth2StringDict? = nil, callback: ((params: OAuth2JSON?, error: ErrorType?) -> Void)) {
 		do {
 			let post = try tokenRequest(params: params).asURLRequestFor(self)
-			logIfVerbose("Requesting new access token from \(post.URL?.description)")
+			logIfDebug("Requesting new access token from \(post.URL?.description)")
 			
 			performRequest(post) { data, status, error in
 				do {
@@ -74,7 +74,7 @@ public class OAuth2PasswordGrant: OAuth2 {
 					
 					let dict = try self.parseAccessTokenResponse(data)
 					if status < 400 {
-						self.logIfVerbose("Did get access token [\(nil != self.clientConfig.accessToken)]")
+						self.logIfDebug("Did get access token [\(nil != self.clientConfig.accessToken)]")
 						callback(params: dict, error: nil)
 					}
 					else {
@@ -82,7 +82,7 @@ public class OAuth2PasswordGrant: OAuth2 {
 					}
 				}
 				catch let error {
-					self.logIfVerbose("Error parsing response: \(error)")
+					self.logIfDebug("Error parsing response: \(error)")
 					callback(params: nil, error: error)
 				}
 			}

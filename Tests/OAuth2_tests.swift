@@ -39,6 +39,11 @@ class OAuth2Tests: XCTestCase {
 			"keychain": false,
 		])
 	}
+  
+  override func setUp() {
+    OAuth2Base.logger = nil
+    super.setUp()
+  }
 	
 	func testInit() {
 		var oauth = OAuth2(settings: ["client_id": "def"])

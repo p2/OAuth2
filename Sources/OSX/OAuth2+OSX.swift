@@ -130,7 +130,7 @@ extension OAuth2 {
 				return true
 			}
 			catch let error {
-				self.logIfVerbose("Cannot intercept redirect URL: \(error)")
+				self.logIfDebug("Cannot intercept redirect URL: \(error)")
 			}
 			return false
 		}

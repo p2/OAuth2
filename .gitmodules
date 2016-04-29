@@ -1,3 +1,6 @@
 [submodule "SwiftKeychain"]
 	path = SwiftKeychain
 	url = https://github.com/yankodimitrov/SwiftKeychain
+[submodule "e2LoggerProtocol"]
+	path = e2LoggerProtocol
+	url = https://github.com/ChrisInIssaquah/e2LoggerProtocol.git
