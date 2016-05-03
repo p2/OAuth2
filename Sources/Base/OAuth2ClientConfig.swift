@@ -43,7 +43,10 @@ public class OAuth2ClientConfig {
 	
 	/// The receiver's access token.
 	public var accessToken: String?
-	
+
+	/// The receiver's id token.  Used by Google + and AWS Cognito
+	public var idToken: String?
+
 	/// The access token's expiry date.
 	public var accessTokenExpiry: NSDate?
 	
@@ -116,6 +119,9 @@ public class OAuth2ClientConfig {
 		if let access = json["access_token"] as? String {
 			accessToken = access
 		}
+		if let idtoken = json["id_token"] as? String {
+			idToken = idtoken
+		}
 		accessTokenExpiry = nil
 		if let expires = json["expires_in"] as? NSTimeInterval {
 			accessTokenExpiry = NSDate(timeIntervalSinceNow: expires)
@@ -159,6 +165,10 @@ public class OAuth2ClientConfig {
 		if let refresh = refreshToken where !refresh.isEmpty {
 			items["refreshToken"] = refresh
 		}
+		if let idtoken = idToken where !idtoken.isEmpty {
+			items["idToken"] = idtoken
+		}
+        
 		return items
 	}
 	
@@ -204,6 +214,10 @@ public class OAuth2ClientConfig {
 			messages.append("Found refresh token")
 			refreshToken = token
 		}
+		if let idtoken = items["idToken"] as? String where !idtoken.isEmpty {
+			messages.append("Found id token")
+			idToken = idtoken
+		}
 		return messages
 	}
 	
@@ -218,6 +232,7 @@ public class OAuth2ClientConfig {
 		accessToken = nil
 		accessTokenExpiry = nil
 		refreshToken = nil
+		idToken = nil
 	}
 }
 
