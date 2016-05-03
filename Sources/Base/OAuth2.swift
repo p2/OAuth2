@@ -89,6 +89,12 @@ public class OAuth2: OAuth2Base {
 		get { return clientConfig.accessToken }
 		set { clientConfig.accessToken = newValue }
 	}
+    
+    /// The receiver's id token.
+    public var idToken: String? {
+        get { return clientConfig.idToken }
+        set { clientConfig.idToken = newValue }
+    }
 	
 	/// The access token's expiry date.
 	public var accessTokenExpiry: NSDate? {
