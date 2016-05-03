@@ -3,6 +3,7 @@ Contributors
 
 Contributors to the codebase, in reverse chronological order:
 
+Andrew Schenk, @andrewschenk
 Thomas Einwaller, @tompson
 David Kraus, @davidkraus
 Daniel Dengler, @ddengler
