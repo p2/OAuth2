@@ -32,6 +32,7 @@ extension OAuth2 {
 	*/
 	public final func openAuthorizeURLInBrowser(params: OAuth2StringDict? = nil) throws {
 		let url = try authorizeURL(params)
+		logger?.debug("OAuth2", msg: "Opening authorize URL in system browser: \(url)")
 		if !UIApplication.sharedApplication().openURL(url) {
 			throw OAuth2Error.UnableToOpenAuthorizeURL
 		}
@@ -91,6 +92,7 @@ extension OAuth2 {
 	@available(iOS 9.0, *)
 	public func authorizeSafariEmbeddedFromViewController(controller: UIViewController, params: OAuth2StringDict? = nil) throws -> SFSafariViewController {
 		let url = try authorizeURL(params)
+		logger?.debug("OAuth2", msg: "Opening authorize URL in embedded Safari: \(url)")
 		return presentSafariViewFor(url, from: controller)
 	}
 	
@@ -161,6 +163,7 @@ extension OAuth2 {
 	*/
 	public func authorizeEmbeddedFromViewController(controller: UIViewController, params: OAuth2StringDict? = nil) throws -> OAuth2WebViewController {
 		let url = try authorizeURL(params)
+		logger?.debug("OAuth2", msg: "Opening authorize URL in embedded browser: \(url)")
 		return presentAuthorizeViewFor(url, intercept: redirect!, from: controller)
 	}
 	
