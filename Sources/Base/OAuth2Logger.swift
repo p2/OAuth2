@@ -80,7 +80,7 @@ extension OAuth2Logger {
 	*/
 	public func log(atLevel: OAuth2LogLevel, module: String?, filename: String?, line: Int?, function: String?, @autoclosure msg: () -> String) {
 		if level != .Off && atLevel.rawValue >= level.rawValue {
-			print("[\(atLevel)] \(module): \(msg())")
+			print("[\(atLevel)] \(module ?? ""): \(msg())")
 		}
 	}
 	
@@ -108,5 +108,9 @@ public class OAuth2DebugLogger: OAuth2Logger {
 	
 	/// The logger's logging level, set to `Debug` by default.
 	public var level = OAuth2LogLevel.Debug
+	
+	public init(_ level: OAuth2LogLevel = OAuth2LogLevel.Debug) {
+		self.level = level
+	}
 }
 

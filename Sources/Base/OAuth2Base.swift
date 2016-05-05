@@ -76,6 +76,9 @@ public class OAuth2Base {
 		}
 		if let verb = settings["verbose"] as? Bool {
 			verbose = verb
+			if verbose {
+				logger = OAuth2DebugLogger()
+			}
 		}
 		
 		// init from keychain
@@ -223,9 +226,10 @@ public class OAuth2Base {
 	- parameter callback: The callback to call when the request completes/fails; data and error are mutually exclusive
 	*/
 	public func performRequest(request: NSURLRequest, callback: ((data: NSData?, status: Int?, error: ErrorType?) -> Void)) {
+		self.logger?.trace("OAuth2", msg: "REQUEST\n\(request.debugDescription)\n---")
 		let task = session.dataTaskWithRequest(request) { sessData, sessResponse, error in
 			self.abortableTask = nil
-			self.logger?.trace("OAuth2", msg: "\n---\(sessResponse?.debugDescription)\n---")
+			self.logger?.trace("OAuth2", msg: "RESPONSE\n\(sessResponse?.debugDescription ?? "no response")\n\n\(NSString(data: sessData ?? NSData(), encoding: NSUTF8StringEncoding) ?? "no data")\n---")
 			if let error = error {
 				if NSURLErrorDomain == error.domain && -999 == error.code {		// request was cancelled
 					callback(data: nil, status: nil, error: OAuth2Error.RequestCancelled)

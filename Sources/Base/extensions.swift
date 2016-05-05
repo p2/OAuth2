@@ -86,3 +86,14 @@ extension NSURLRequest {
 	}
 }
 
+
+extension NSHTTPURLResponse {
+	
+	/** Format HTTP status and response headers as is customary. */
+	override public var debugDescription: String {
+		var msg = "HTTP/1.1 \(statusCode) \(statusString)"
+		allHeaderFields.forEach() { msg += "\n\($0): \($1)" }
+		return msg
+	}
+}
+
