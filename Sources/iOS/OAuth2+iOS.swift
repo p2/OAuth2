@@ -202,7 +202,7 @@ extension OAuth2 {
 				return true
 			}
 			catch let err {
-				self.logIfVerbose("Cannot intercept redirect URL: \(err)")
+				self.logger?.warn("OAuth2", msg: "Cannot intercept redirect URL: \(err)")
 			}
 			return false
 		}

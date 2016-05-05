@@ -72,7 +72,7 @@ public class OAuth2CodeGrant: OAuth2 {
 	Extracts the code from the redirect URL and exchanges it for a token.
 	*/
 	override public func handleRedirectURL(redirect: NSURL) {
-		logIfVerbose("Handling redirect URL \(redirect.description)")
+		logger?.debug("OAuth2", msg: "Handling redirect URL \(redirect.description)")
 		do {
 			let code = try validateRedirectURL(redirect)
 			exchangeCodeForToken(code)
@@ -92,7 +92,7 @@ public class OAuth2CodeGrant: OAuth2 {
 			}
 			
 			let post = try tokenRequestWithCode(code).asURLRequestFor(self)
-			logIfVerbose("Exchanging code \(code) for access token at \(post.URL!)")
+			logger?.debug("OAuth2", msg: "Exchanging code \(code) for access token at \(post.URL!)")
 			
 			performRequest(post) { data, status, error in
 				do {
@@ -102,7 +102,7 @@ public class OAuth2CodeGrant: OAuth2 {
 					
 					let params = try self.parseAccessTokenResponse(data)
 					if status < 400 {
-						self.logIfVerbose("Did exchange code for access [\(nil != self.clientConfig.accessToken)] and refresh [\(nil != self.clientConfig.refreshToken)] tokens")
+						self.logger?.debug("OAuth2", msg: "Did exchange code for access [\(nil != self.clientConfig.accessToken)] and refresh [\(nil != self.clientConfig.refreshToken)] tokens")
 						self.didAuthorize(params)
 					}
 					else {

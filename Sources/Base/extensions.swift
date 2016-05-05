@@ -21,8 +21,8 @@
 import Foundation
 
 
-extension NSHTTPURLResponse
-{
+extension NSHTTPURLResponse {
+	
 	/// A localized string explaining the current `statusCode`.
 	public var statusString: String {
 		get {
@@ -32,8 +32,8 @@ extension NSHTTPURLResponse
 }
 
 
-extension String
-{
+extension String {
+	
 	private static var wwwFormURLPlusSpaceCharacterSet: NSCharacterSet = NSMutableCharacterSet.wwwFormURLPlusSpaceCharacterSet()
 	
 	/// Encodes a string to become x-www-form-urlencoded; the space is encoded as plus sign (+).
@@ -50,8 +50,8 @@ extension String
 }
 
 
-extension NSMutableCharacterSet
-{
+extension NSMutableCharacterSet {
+	
 	/**
 	    Return the character set that does NOT need percent-encoding for x-www-form-urlencoded requests INCLUDING SPACE.
 	    YOU are responsible for replacing spaces " " with the plus sign "+".
@@ -75,16 +75,14 @@ extension NSMutableCharacterSet
 
 extension NSURLRequest {
 	
-	/** Print the requests's headers and body to stdout. */
-	public func oauth2_print() {
-		print("---")
-		print("HTTP/1.1 \(HTTPMethod ?? "METHOD") \(URL?.description ?? "/")")
-		allHTTPHeaderFields?.forEach() { print("\($0): \($1)") }
-		print("")
+	/** A string describing the request, including headers and body. */
+	override public var debugDescription: String {
+		var msg = "HTTP/1.1 \(HTTPMethod ?? "METHOD") \(URL?.description ?? "/")"
+		allHTTPHeaderFields?.forEach() { msg += "\n\($0): \($1)" }
 		if let data = HTTPBody, let body = NSString(data: data, encoding: NSUTF8StringEncoding) {
-			print(body as String)
+			msg += "\n\n\(body)"
 		}
-		print("---")
+		return msg
 	}
 }
 
