@@ -554,13 +554,13 @@ public class OAuth2: OAuth2Base {
 	/**
 	Parse response data returned while exchanging the code for a token.
 	
-	This method extracts token data and fills the receiver's properties accordingly. If the response contains an "error" key, will parse the
-	error and throw it.
+	This method expects token data to be JSON, decodes JSON and fills the receiver's properties accordingly. If the response contains an
+	"error" key, will parse the error and throw it.
 	
 	- parameter data: NSData returned from the call
 	- returns: An OAuth2JSON instance with token data; may contain additional information
 	*/
-	func parseAccessTokenResponse(data: NSData) throws -> OAuth2JSON {
+	public func parseAccessTokenResponseData(data: NSData) throws -> OAuth2JSON {
 		let dict = try parseJSON(data)
 		return try parseAccessTokenResponse(dict)
 	}

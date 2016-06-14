@@ -167,6 +167,7 @@ The `authorize()` method will:
 3. Try to use the refresh token to get a new access token, if it fails
 4. Start the OAuth2 dance by using the `authConfig` settings to determine how to display an authorize screen to the user
 
+The wiki has [the complete call graph](https://github.com/p2/OAuth2/wiki/Call-Graph) of the _authorize()_ method.
 If you do **not wish this kind of automation**, the manual steps to show and hide the authorize screens are:
 
 **Embedded iOS**:

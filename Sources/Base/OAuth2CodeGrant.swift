@@ -100,7 +100,7 @@ public class OAuth2CodeGrant: OAuth2 {
 						throw error ?? OAuth2Error.NoDataInResponse
 					}
 					
-					let params = try self.parseAccessTokenResponse(data)
+					let params = try self.parseAccessTokenResponseData(data)
 					if status < 400 {
 						self.logger?.debug("OAuth2", msg: "Did exchange code for access [\(nil != self.clientConfig.accessToken)] and refresh [\(nil != self.clientConfig.refreshToken)] tokens")
 						self.didAuthorize(params)

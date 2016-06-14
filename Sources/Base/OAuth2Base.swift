@@ -217,7 +217,8 @@ public class OAuth2Base {
 	}
 	
 	/**
-	Perform the supplied request and call the callback with the response JSON dict or an error.
+	Perform the supplied request and call the callback with the response JSON dict or an error. This method is intended for authorization
+	calls, not for data calls outside of the OAuth2 dance.
 	
 	This implementation uses the shared `NSURLSession` and executes a data task. If the server responds with an error, this will be
 	converted into an error according to information supplied in the response JSON (if availale).

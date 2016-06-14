@@ -72,7 +72,7 @@ public class OAuth2PasswordGrant: OAuth2 {
 						throw error ?? OAuth2Error.NoDataInResponse
 					}
 					
-					let dict = try self.parseAccessTokenResponse(data)
+					let dict = try self.parseAccessTokenResponseData(data)
 					if status < 400 {
 						self.logger?.debug("OAuth2", msg: "Did get access token [\(nil != self.clientConfig.accessToken)]")
 						callback(params: dict, error: nil)

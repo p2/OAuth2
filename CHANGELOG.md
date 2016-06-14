@@ -8,6 +8,7 @@ You can also refer to commit logs to get details on what was implemented, fixed 
 ### 2.2.7
 
 - Use a simple logger for logging purposes (inspired by @tompson and @ChrisInIssaquah)
+- Make `parseAccessTokenResponseData()` public for non-conformant OAuth2 providers (like Facebook)
 
 
 ### 2.2.6

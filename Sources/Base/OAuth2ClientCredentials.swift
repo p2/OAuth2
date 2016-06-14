@@ -57,7 +57,7 @@ public class OAuth2ClientCredentials: OAuth2 {
 						throw error ?? OAuth2Error.NoDataInResponse
 					}
 					
-					let params = try self.parseAccessTokenResponse(data)
+					let params = try self.parseAccessTokenResponseData(data)
 					self.logger?.debug("OAuth2", msg: "Did get access token [\(nil != self.clientConfig.accessToken)]")
 					callback(params: params, error: nil)
 				}
