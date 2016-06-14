@@ -113,6 +113,8 @@ public class OAuth2ClientConfig {
 	/**
 	Update properties from response data.
 	
+	This method assumes values are present with the standard names, such as `access_token`, and assigns them to its properties.
+	
 	- parameter json: JSON data returned from a request
 	*/
 	func updateFromResponse(json: OAuth2JSON) {

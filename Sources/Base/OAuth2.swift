@@ -422,7 +422,7 @@ public class OAuth2: OAuth2Base {
 					guard let data = data else {
 						throw error ?? OAuth2Error.NoDataInResponse
 					}
-					let json = try self.parseRefreshTokenResponse(data)
+					let json = try self.parseRefreshTokenResponseData(data)
 					if status < 400 {
 						self.logger?.debug("OAuth2", msg: "Did use refresh token for access token [\(nil != self.clientConfig.accessToken)]")
 						if self.useKeychain {
@@ -580,20 +580,31 @@ public class OAuth2: OAuth2Base {
 		try assureCorrectBearerType(params)
 		try assureAccessTokenParamsAreValid(params)
 		
-		clientConfig.updateFromResponse(params)
+		clientConfig.updateFromResponse(normalizeAccessTokenResponseKeys(params))
 		return params
+	}
+	
+	/**
+	This method does nothing, but allows subclasses to fix parameter names before passing the access token response to `OAuth2ClientConfig`s
+	`updateFromResponse()`.
+	
+	- parameter dict: The dictionary that was returned from an access token response
+	- returns: The dictionary with fixed key names
+	*/
+	public func normalizeAccessTokenResponseKeys(dict: OAuth2JSON) -> OAuth2JSON {
+		return dict
 	}
 	
 	/**
 	Parse response data returned while using a refresh token.
 	
-	This method extracts token data and fills the receiver's properties accordingly. If the response contains an "error" key, will parse the
-	error and throw it.
+	This method extracts token data, expected to be JSON, and fills the receiver's properties accordingly. If the response contains an
+	"error" key, will parse the error and throw it.
 	
 	- parameter data: NSData returned from the call
 	- returns: An OAuth2JSON instance with token data; may contain additional information
 	*/
-	func parseRefreshTokenResponse(data: NSData) throws -> OAuth2JSON {
+	public func parseRefreshTokenResponseData(data: NSData) throws -> OAuth2JSON {
 		let dict = try parseJSON(data)
 		return try parseRefreshTokenResponse(dict)
 	}
@@ -614,6 +625,17 @@ public class OAuth2: OAuth2Base {
 		try assureRefreshTokenParamsAreValid(dict)
 		
 		clientConfig.updateFromResponse(dict)
+		return dict
+	}
+	
+	/**
+	This method does nothing, but allows subclasses to fix parameter names before passing the refresh token response to
+	`OAuth2ClientConfig`s `updateFromResponse()`.
+	
+	- parameter dict: The dictionary that was returned from a refresh token response
+	- returns: The dictionary with fixed key names
+	*/
+	public func normalizeRefreshTokenResponseKeys(dict: OAuth2JSON) -> OAuth2JSON {
 		return dict
 	}
 	
