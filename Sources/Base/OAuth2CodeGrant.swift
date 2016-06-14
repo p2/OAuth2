@@ -51,12 +51,12 @@ public class OAuth2CodeGrant: OAuth2 {
 	- parameter params: Optional additional params to add as URL parameters
 	- returns: A request you can use to create a URL request to exchange the code for an access token
 	*/
-	func tokenRequestWithCode(code: String, params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
+	func tokenRequestWithCode(_ code: String, params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
 		guard let clientId = clientConfig.clientId where !clientId.isEmpty else {
-			throw OAuth2Error.NoClientId
+			throw OAuth2Error.noClientId
 		}
 		guard let redirect = context.redirectURL else {
-			throw OAuth2Error.NoRedirectURL
+			throw OAuth2Error.noRedirectURL
 		}
 		
 		let req = OAuth2AuthRequest(url: (clientConfig.tokenURL ?? clientConfig.authorizeURL))
@@ -71,7 +71,7 @@ public class OAuth2CodeGrant: OAuth2 {
 	/**
 	Extracts the code from the redirect URL and exchanges it for a token.
 	*/
-	override public func handleRedirectURL(redirect: NSURL) {
+	override public func handleRedirectURL(_ redirect: URL) {
 		logger?.debug("OAuth2", msg: "Handling redirect URL \(redirect.description)")
 		do {
 			let code = try validateRedirectURL(redirect)
@@ -85,19 +85,19 @@ public class OAuth2CodeGrant: OAuth2 {
 	/**
 	Takes the received code and exchanges it for a token.
 	*/
-	public func exchangeCodeForToken(code: String) {
+	public func exchangeCodeForToken(_ code: String) {
 		do {
 			guard !code.isEmpty else {
-				throw OAuth2Error.PrerequisiteFailed("I don't have a code to exchange, let the user authorize first")
+				throw OAuth2Error.prerequisiteFailed("I don't have a code to exchange, let the user authorize first")
 			}
 			
 			let post = try tokenRequestWithCode(code).asURLRequestFor(self)
-			logger?.debug("OAuth2", msg: "Exchanging code \(code) for access token at \(post.URL!)")
+			logger?.debug("OAuth2", msg: "Exchanging code \(code) for access token at \(post.url!)")
 			
 			performRequest(post) { data, status, error in
 				do {
 					guard let data = data else {
-						throw error ?? OAuth2Error.NoDataInResponse
+						throw error ?? OAuth2Error.noDataInResponse
 					}
 					
 					let params = try self.parseAccessTokenResponseData(data)
@@ -106,7 +106,7 @@ public class OAuth2CodeGrant: OAuth2 {
 						self.didAuthorize(params)
 					}
 					else {
-						throw OAuth2Error.Generic("\(status)")
+						throw OAuth2Error.generic("\(status)")
 					}
 				}
 				catch let error {
@@ -125,13 +125,13 @@ public class OAuth2CodeGrant: OAuth2 {
 	/**
 	Validates the redirect URI: returns a tuple with the code and nil on success, nil and an error on failure.
 	*/
-	func validateRedirectURL(redirect: NSURL) throws -> String {
+	func validateRedirectURL(_ redirect: URL) throws -> String {
 		guard let expectRedirect = context.redirectURL else {
-			throw OAuth2Error.NoRedirectURL
+			throw OAuth2Error.noRedirectURL
 		}
-		let comp = NSURLComponents(URL: redirect, resolvingAgainstBaseURL: true)
-		if !redirect.absoluteString.hasPrefix(expectRedirect) && (!redirect.absoluteString.hasPrefix("urn:ietf:wg:oauth:2.0:oob") && "localhost" != comp?.host) {
-			throw OAuth2Error.InvalidRedirectURL("Expecting «\(expectRedirect)» but received «\(redirect)»")
+		let comp = URLComponents(url: redirect, resolvingAgainstBaseURL: true)
+		if !(redirect.absoluteString?.hasPrefix(expectRedirect))! && (!(redirect.absoluteString?.hasPrefix("urn:ietf:wg:oauth:2.0:oob"))! && "localhost" != comp?.host) {
+			throw OAuth2Error.invalidRedirectURL("Expecting «\(expectRedirect)» but received «\(redirect)»")
 		}
 		if let compQuery = comp?.query where compQuery.characters.count > 0 {
 			let query = OAuth2CodeGrant.paramsFromQuery(comp!.percentEncodedQuery!)
@@ -142,9 +142,9 @@ public class OAuth2CodeGrant: OAuth2 {
 				try assureMatchesState(query)
 				return cd
 			}
-			throw OAuth2Error.ResponseError("No “code” received")
+			throw OAuth2Error.responseError("No “code” received")
 		}
-		throw OAuth2Error.PrerequisiteFailed("The redirect URL contains no query fragment")
+		throw OAuth2Error.prerequisiteFailed("The redirect URL contains no query fragment")
 	}
 }
 

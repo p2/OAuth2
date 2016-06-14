@@ -48,7 +48,7 @@ public class OAuth2CodeGrantBasicAuth: OAuth2CodeGrant {
 	/**
 	Calls super's implementation to obtain a token request, then adds the custom "Basic" authorization header.
 	*/
-	override func tokenRequestWithCode(code: String, params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
+	override func tokenRequestWithCode(_ code: String, params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
 		let req = try super.tokenRequestWithCode(code, params: params)
 		if let basic = basicToken {
 			logger?.debug("OAuth2", msg: "Overriding “Basic” authorization header, as specified during client initialization")

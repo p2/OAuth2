@@ -46,7 +46,7 @@ class OAuth2Tests: XCTestCase {
 		XCTAssertEqual(oauth.clientId, "def", "Must init `client_id`")
 		
 		oauth = genericOAuth2()
-		XCTAssertEqual(oauth.authURL, NSURL(string: "https://auth.ful.io")!, "Must init `authorize_uri`")
+		XCTAssertEqual(oauth.authURL, URL(string: "https://auth.ful.io")!, "Must init `authorize_uri`")
 		XCTAssertEqual(oauth.scope!, "login", "Must init `scope`")
 		XCTAssertTrue(oauth.verbose, "Must init `verbose`")
 		XCTAssertFalse(oauth.useKeychain, "Must not use keychain")
@@ -57,7 +57,7 @@ class OAuth2Tests: XCTestCase {
 		oa.verbose = false
 		let auth = try! oa.authorizeURLWithRedirect("oauth2app://callback", scope: "launch", params: ["extra": "param"])
 		
-		let comp = NSURLComponents(URL: auth, resolvingAgainstBaseURL: true)!
+		let comp = URLComponents(url: auth, resolvingAgainstBaseURL: true)!
 		XCTAssertEqual("https", comp.scheme!, "Need correct scheme")
 		XCTAssertEqual("auth.ful.io", comp.host!, "Need correct host")
 		
@@ -74,9 +74,9 @@ class OAuth2Tests: XCTestCase {
 		oa.verbose = false
 		oa.clientConfig.refreshToken = "abc"
 		let req = try! oa.tokenRequestForTokenRefresh().asURLRequestFor(oa)
-		let auth = req.URL!
+		let auth = req.url!
 		
-		let comp = NSURLComponents(URL: auth, resolvingAgainstBaseURL: true)!
+		let comp = URLComponents(url: auth, resolvingAgainstBaseURL: true)!
 		XCTAssertEqual("https", comp.scheme!, "Need correct scheme")
 		XCTAssertEqual("token.ful.io", comp.host!, "Need correct host")
 		
@@ -94,7 +94,7 @@ class OAuth2Tests: XCTestCase {
 		}
 		oa.onFailure = { error in
 			XCTAssertNotNil(error)
-			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.NoRedirectURL)
+			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.noRedirectURL)
 		}
 		oa.authorize()
 		XCTAssertFalse(oa.authConfig.authorizeEmbedded)
@@ -103,12 +103,12 @@ class OAuth2Tests: XCTestCase {
 		oa.redirect = "myapp://oauth"
 		oa.onFailure = { error in
 			XCTAssertNotNil(error)
-			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.InvalidAuthorizationContext)
+			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.invalidAuthorizationContext)
 		}
 		oa.afterAuthorizeOrFailure = { wasFailure, error in
 			XCTAssertTrue(wasFailure)
 			XCTAssertNotNil(error)
-			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.InvalidAuthorizationContext)
+			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.invalidAuthorizationContext)
 		}
 		oa.authorizeEmbeddedFrom("A string")
 		XCTAssertTrue(oa.authConfig.authorizeEmbedded)
@@ -159,10 +159,10 @@ class OAuth2Tests: XCTestCase {
 	
 	func testSessionConfiguration() {
 		let oauth = OAuth2(settings: [:])
-		XCTAssertEqual(0, oauth.session.configuration.HTTPCookieStorage?.cookies?.count ?? 0, "Expecting ephemeral session configuration by default")
+		XCTAssertEqual(0, oauth.session.configuration.httpCookieStorage?.cookies?.count ?? 0, "Expecting ephemeral session configuration by default")
 		
 		// custom configuration
-		oauth.sessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
+		oauth.sessionConfiguration = URLSessionConfiguration.default()
 		oauth.sessionConfiguration?.timeoutIntervalForRequest = 5.0
 		XCTAssertEqual(5, oauth.session.configuration.timeoutIntervalForRequest)
 		
@@ -172,7 +172,7 @@ class OAuth2Tests: XCTestCase {
 		XCTAssertEqual(5, oauth.session.configuration.timeoutIntervalForRequest)
 	}
 	
-	class SessDelegate: NSObject, NSURLSessionDelegate {
+	class SessDelegate: NSObject, URLSessionDelegate {
 	}
 }
 

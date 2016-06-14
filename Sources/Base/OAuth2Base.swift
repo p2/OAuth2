@@ -120,7 +120,7 @@ public class OAuth2Base {
 	}
 	
 	/** Updates instance properties according to the items found in the given dictionary, which was found in the keychain. */
-	func updateFromKeychainItems(items: [String: NSCoding]) {
+	func updateFromKeychainItems(_ items: [String: NSCoding]) {
 	}
 	
 	/** Items that should be stored when storing client credentials. */
@@ -191,26 +191,26 @@ public class OAuth2Base {
 	
 	/// The instance's current session, creating one by the book if necessary. Defaults to using an ephemeral session, you can use
 	/// `sessionConfiguration` and/or `sessionDelegate` to affect how the session is configured.
-	public var session: NSURLSession {
+	public var session: URLSession {
 		if nil == _session {
-			let config = sessionConfiguration ?? NSURLSessionConfiguration.ephemeralSessionConfiguration()
-			_session = NSURLSession(configuration: config, delegate: sessionDelegate, delegateQueue: nil)
+			let config = sessionConfiguration ?? URLSessionConfiguration.ephemeral()
+			_session = URLSession(configuration: config, delegate: sessionDelegate, delegateQueue: nil)
 		}
 		return _session!
 	}
 	
 	/// The backing store for `session`.
-	private var _session: NSURLSession?
+	private var _session: URLSession?
 	
 	/// The configuration to use when creating `session`. Uses an `+ephemeralSessionConfiguration()` if nil.
-	public var sessionConfiguration: NSURLSessionConfiguration? {
+	public var sessionConfiguration: URLSessionConfiguration? {
 		didSet {
 			_session = nil
 		}
 	}
 	
 	/// URL session delegate that should be used for the `NSURLSession` the instance uses for requests.
-	public var sessionDelegate: NSURLSessionDelegate? {
+	public var sessionDelegate: URLSessionDelegate? {
 		didSet {
 			_session = nil
 		}
@@ -226,24 +226,24 @@ public class OAuth2Base {
 	- parameter request: The request to execute
 	- parameter callback: The callback to call when the request completes/fails; data and error are mutually exclusive
 	*/
-	public func performRequest(request: NSURLRequest, callback: ((data: NSData?, status: Int?, error: ErrorType?) -> Void)) {
+	public func performRequest(_ request: URLRequest, callback: ((data: Data?, status: Int?, error: ErrorProtocol?) -> Void)) {
 		self.logger?.trace("OAuth2", msg: "REQUEST\n\(request.debugDescription)\n---")
-		let task = session.dataTaskWithRequest(request) { sessData, sessResponse, error in
+		let task = session.dataTask(with: request) { sessData, sessResponse, error in
 			self.abortableTask = nil
-			self.logger?.trace("OAuth2", msg: "RESPONSE\n\(sessResponse?.debugDescription ?? "no response")\n\n\(NSString(data: sessData ?? NSData(), encoding: NSUTF8StringEncoding) ?? "no data")\n---")
+			self.logger?.trace("OAuth2", msg: "RESPONSE\n\(sessResponse?.debugDescription ?? "no response")\n\n\(String(data: sessData ?? Data(), encoding: String.Encoding.utf8) ?? "no data")\n---")
 			if let error = error {
 				if NSURLErrorDomain == error.domain && -999 == error.code {		// request was cancelled
-					callback(data: nil, status: nil, error: OAuth2Error.RequestCancelled)
+					callback(data: nil, status: nil, error: OAuth2Error.requestCancelled)
 				}
 				else {
 					callback(data: nil, status: nil, error: error)
 				}
 			}
-			else if let data = sessData, let http = sessResponse as? NSHTTPURLResponse {
+			else if let data = sessData, let http = sessResponse as? HTTPURLResponse {
 				callback(data: data, status: http.statusCode, error: nil)
 			}
 			else {
-				let error = OAuth2Error.Generic("Unknown response \(sessResponse) with data “\(NSString(data: sessData!, encoding: NSUTF8StringEncoding))”")
+				let error = OAuth2Error.generic("Unknown response \(sessResponse) with data “\(String(data: sessData!, encoding: String.Encoding.utf8))”")
 				callback(data: nil, status: nil, error: error)
 			}
 		}
@@ -252,7 +252,7 @@ public class OAuth2Base {
 	}
 	
 	/// Currently running abortable session task.
-	private var abortableTask: NSURLSessionTask?
+	private var abortableTask: URLSessionTask?
 	
 	/**
 	Can be called to immediately abort the currently running authorization request, if it was started by `performRequest()`.
@@ -278,11 +278,11 @@ public class OAuth2Base {
 	- parameter fallback: The message string to use in case no error description is found in the parameters
 	- returns: An OAuth2Error
 	*/
-	public func assureNoErrorInResponse(params: OAuth2JSON, fallback: String? = nil) throws {
+	public func assureNoErrorInResponse(_ params: OAuth2JSON, fallback: String? = nil) throws {
 		
 		// "error_description" is optional, we prefer it if it's present
 		if let err_msg = params["error_description"] as? String {
-			throw OAuth2Error.ResponseError(err_msg)
+			throw OAuth2Error.responseError(err_msg)
 		}
 		
 		// the "error" response is required for error responses, so it should be present
@@ -300,14 +300,14 @@ public class OAuth2Base {
 	- parameter data: NSData returned from the call, assumed to be JSON with string-values only.
 	- returns: An OAuth2JSON instance
 	*/
-	func parseJSON(data: NSData) throws -> OAuth2JSON {
-		if let json = try NSJSONSerialization.JSONObjectWithData(data, options: []) as? OAuth2JSON {
+	func parseJSON(_ data: Data) throws -> OAuth2JSON {
+		if let json = try JSONSerialization.jsonObject(with: data, options: []) as? OAuth2JSON {
 			return json
 		}
-		if let str = NSString(data: data, encoding: NSUTF8StringEncoding) {
+		if let str = String(data: data, encoding: String.Encoding.utf8) {
 			logger?.warn("OAuth2", msg: "Unparsable JSON was: \(str)")
 		}
-		throw OAuth2Error.JSONParserError
+		throw OAuth2Error.jsonParserError
 	}
 	
 	/**
@@ -319,7 +319,7 @@ public class OAuth2Base {
 	- parameter query: The query string you want to have parsed
 	- returns: A dictionary full of strings with the key-value pairs found in the query
 	*/
-	public final class func paramsFromQuery(query: String) -> OAuth2StringDict {
+	public final class func paramsFromQuery(_ query: String) -> OAuth2StringDict {
 		let parts = query.characters.split() { $0 == "&" }.map() { String($0) }
 		var params = OAuth2StringDict(minimumCapacity: parts.count)
 		for part in parts {
@@ -336,12 +336,12 @@ public class OAuth2Base {
 /**
 Helper function to ensure that the callback is executed on the main thread.
 */
-func callOnMainThread(callback: (Void -> Void)) {
-	if NSThread.isMainThread() {
+func callOnMainThread(_ callback: ((Void) -> Void)) {
+	if Thread.isMainThread() {
 		callback()
 	}
 	else {
-		dispatch_sync(dispatch_get_main_queue(), callback)
+		DispatchQueue.main.sync(execute: callback)
 	}
 }
 

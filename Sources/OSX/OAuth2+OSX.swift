@@ -30,9 +30,9 @@ extension OAuth2 {
 	- throws: UnableToOpenAuthorizeURL on failure
 	*/
 	public final func openAuthorizeURLInBrowser(params: OAuth2StringDict? = nil) throws {
-		let url = try authorizeURL(params)
-		if !NSWorkspace.sharedWorkspace().openURL(url) {
-			throw OAuth2Error.UnableToOpenAuthorizeURL
+		let url = try authorizeURL(params: params)
+		if !NSWorkspace.shared().open(url) {
+			throw OAuth2Error.unableToOpenAuthorizeURL
 		}
 	}
 	
@@ -49,9 +49,9 @@ extension OAuth2 {
 	- parameter params: Additional authorization parameters to supply during the OAuth dance
 	- throws: Can throw several OAuth2Error if the method is unable to show the authorize screen
 	*/
-	public func authorizeEmbeddedWith(config: OAuth2AuthConfig, params: OAuth2StringDict? = nil) throws {
+	public func authorizeEmbeddedWith(_ config: OAuth2AuthConfig, params: OAuth2StringDict? = nil) throws {
 		guard #available(OSX 10.10, *) else {
-			throw OAuth2Error.Generic("Embedded authorizing is only available in OS X 10.10 and later")
+			throw OAuth2Error.generic("Embedded authorizing is only available in OS X 10.10 and later")
 		}
 		
 		// present as sheet
@@ -74,7 +74,7 @@ extension OAuth2 {
 	- returns: The sheet that is being queued for presentation
 	*/
 	@available(OSX 10.10, *)
-	public func authorizeEmbeddedFromWindow(window: NSWindow, config: OAuth2AuthConfig, params: OAuth2StringDict? = nil) throws -> NSWindow {
+	public func authorizeEmbeddedFromWindow(_ window: NSWindow, config: OAuth2AuthConfig, params: OAuth2StringDict? = nil) throws -> NSWindow {
 		let controller = try presentableAuthorizeViewController(params)
 		controller.willBecomeSheet = true
 		let sheet = windowControllerForViewController(controller, withConfiguration: config).window!
@@ -97,7 +97,7 @@ extension OAuth2 {
 	- parameter params: Additional parameters to pass to the authorize URL
 	*/
 	@available(OSX 10.10, *)
-	public func authorizeInNewWindow(config: OAuth2AuthConfig, params: OAuth2StringDict? = nil) throws {
+	public func authorizeInNewWindow(_ config: OAuth2AuthConfig, params: OAuth2StringDict? = nil) throws {
 		let controller = try presentableAuthorizeViewController(params)
 		let windowController = windowControllerForViewController(controller, withConfiguration: config)
 		authConfig.ui.windowController = windowController
@@ -119,8 +119,8 @@ extension OAuth2 {
 	- returns: A web view controller that you can present to the user for login
 	*/
 	@available(OSX 10.10, *)
-	public func presentableAuthorizeViewController(params: OAuth2StringDict? = nil) throws -> OAuth2WebViewController {
-		let url = try authorizeURL(params)
+	public func presentableAuthorizeViewController(_ params: OAuth2StringDict? = nil) throws -> OAuth2WebViewController {
+		let url = try authorizeURL(params: params)
 		let controller = OAuth2WebViewController()
 		controller.startURL = url
 		controller.interceptURLString = redirect!
@@ -148,15 +148,14 @@ extension OAuth2 {
 	- returns: A window controller, ready to be presented
 	*/
 	@available(OSX 10.10, *)
-	func windowControllerForViewController(controller: OAuth2WebViewController, withConfiguration config: OAuth2AuthConfig) -> NSWindowController {
+	func windowControllerForViewController(_ controller: OAuth2WebViewController, withConfiguration config: OAuth2AuthConfig) -> NSWindowController {
 		let rect = NSMakeRect(0, 0, OAuth2WebViewController.WebViewWindowWidth, OAuth2WebViewController.WebViewWindowHeight)
-		let style = NSTitledWindowMask | NSClosableWindowMask | NSResizableWindowMask | NSFullSizeContentViewWindowMask
-		let window = NSWindow(contentRect: rect, styleMask: style, backing: .Buffered, defer: false)
-		window.backgroundColor = NSColor.whiteColor()
-		window.movableByWindowBackground = true
+		let window = NSWindow(contentRect: rect, styleMask: [.titled, .closable, .resizable, .fullSizeContentView], backing: .buffered, defer: false)
+		window.backgroundColor = NSColor.white()
+		window.isMovableByWindowBackground = true
 		window.titlebarAppearsTransparent = true
-		window.titleVisibility = .Hidden
-		window.animationBehavior = .AlertPanel
+		window.titleVisibility = .hidden
+		window.animationBehavior = .alertPanel
 		if let title = config.ui.title {
 			window.title = title
 		}

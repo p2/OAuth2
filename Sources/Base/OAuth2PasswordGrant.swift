@@ -45,7 +45,7 @@ public class OAuth2PasswordGrant: OAuth2 {
 		super.init(settings: settings)
 	}
 	
-	override func doAuthorize(params params: [String : String]? = nil) {
+	override func doAuthorize(params: [String : String]? = nil) {
 		self.obtainAccessToken(params: params) { params, error in
 			if let error = error {
 				self.didFail(error)
@@ -61,15 +61,15 @@ public class OAuth2PasswordGrant: OAuth2 {
 	
 	- parameter callback: The callback to call after the request has returned
 	*/
-	func obtainAccessToken(params params: OAuth2StringDict? = nil, callback: ((params: OAuth2JSON?, error: ErrorType?) -> Void)) {
+	func obtainAccessToken(params: OAuth2StringDict? = nil, callback: ((params: OAuth2JSON?, error: ErrorProtocol?) -> Void)) {
 		do {
-			let post = try tokenRequest(params: params).asURLRequestFor(self)
-			logger?.debug("OAuth2", msg: "Requesting new access token from \(post.URL?.description)")
+			let post = try tokenRequest(params).asURLRequestFor(self)
+			logger?.debug("OAuth2", msg: "Requesting new access token from \(post.url?.description)")
 			
 			performRequest(post) { data, status, error in
 				do {
 					guard let data = data else {
-						throw error ?? OAuth2Error.NoDataInResponse
+						throw error ?? OAuth2Error.noDataInResponse
 					}
 					
 					let dict = try self.parseAccessTokenResponseData(data)
@@ -78,7 +78,7 @@ public class OAuth2PasswordGrant: OAuth2 {
 						callback(params: dict, error: nil)
 					}
 					else {
-						callback(params: dict, error: OAuth2Error.ResponseError("The username or password is incorrect"))
+						callback(params: dict, error: OAuth2Error.responseError("The username or password is incorrect"))
 					}
 				}
 				catch let error {
@@ -95,15 +95,15 @@ public class OAuth2PasswordGrant: OAuth2 {
 	/**
 	Creates a POST request with x-www-form-urlencoded body created from the supplied URL's query part.
 	*/
-	func tokenRequest(params params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
+	func tokenRequest(_ params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
 		if username.isEmpty{
-			throw OAuth2Error.NoUsername
+			throw OAuth2Error.noUsername
 		}
 		if password.isEmpty{
-			throw OAuth2Error.NoPassword
+			throw OAuth2Error.noPassword
 		}
 		guard let clientId = clientConfig.clientId where !clientId.isEmpty else {
-			throw OAuth2Error.NoClientId
+			throw OAuth2Error.noClientId
 		}
 		
 		let req = OAuth2AuthRequest(url: (clientConfig.tokenURL ?? clientConfig.authorizeURL))

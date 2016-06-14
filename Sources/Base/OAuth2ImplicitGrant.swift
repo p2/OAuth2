@@ -34,13 +34,13 @@ public class OAuth2ImplicitGrant: OAuth2 {
 		return "token"
 	}
 	
-	override public func handleRedirectURL(redirect: NSURL) {
+	override public func handleRedirectURL(_ redirect: URL) {
 		logger?.debug("OAuth2", msg: "Handling redirect URL \(redirect.description)")
 		do {
 			// token should be in the URL fragment
-			let comp = NSURLComponents(URL: redirect, resolvingAgainstBaseURL: true)
+			let comp = URLComponents(url: redirect, resolvingAgainstBaseURL: true)
 			guard let fragment = comp?.percentEncodedFragment where fragment.characters.count > 0 else {
-				throw OAuth2Error.InvalidRedirectURL(redirect.absoluteString)
+				throw OAuth2Error.invalidRedirectURL(redirect.description)
 			}
 			
 			let params = self.dynamicType.paramsFromQuery(fragment)
@@ -53,7 +53,7 @@ public class OAuth2ImplicitGrant: OAuth2 {
 		}
 	}
 	
-	override public func assureAccessTokenParamsAreValid(params: OAuth2JSON) throws {
+	override public func assureAccessTokenParamsAreValid(_ params: OAuth2JSON) throws {
 		try assureMatchesState(params)
 	}
 }

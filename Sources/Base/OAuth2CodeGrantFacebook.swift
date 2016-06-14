@@ -31,9 +31,9 @@ public class OAuth2CodeGrantFacebook: OAuth2CodeGrant {
 	Facebook doesn't return JSON but a plain URL-query-like string. This override takes care of the situation and extracts the token from
 	the response.
 	*/
-	override public func parseAccessTokenResponseData(data: NSData) throws -> OAuth2JSON {
-		guard let str = NSString(data: data, encoding: NSUTF8StringEncoding) as? String else {
-			throw OAuth2Error.UTF8DecodeError
+	override public func parseAccessTokenResponseData(_ data: Data) throws -> OAuth2JSON {
+		guard let str = String(data: data, encoding: String.Encoding.utf8) else {
+			throw OAuth2Error.utf8DecodeError
 		}
 		let query = self.dynamicType.paramsFromQuery(str)
 		return try parseAccessTokenResponse(query)

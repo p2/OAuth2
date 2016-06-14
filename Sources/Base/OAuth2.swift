@@ -60,12 +60,12 @@ public class OAuth2: OAuth2Base {
 	}
 	
 	/// The URL to authorize against.
-	public final var authURL: NSURL {
-		get { return clientConfig.authorizeURL }
+	public final var authURL: URL {
+		get { return clientConfig.authorizeURL as URL }
 	}
 
 	/// The URL string where we can exchange a code for a token; if nil `authURL` will be used.
-	public final var tokenURL: NSURL? {
+	public final var tokenURL: URL? {
 		get { return clientConfig.tokenURL }
 	}
 	
@@ -97,7 +97,7 @@ public class OAuth2: OAuth2Base {
 	}
 
 	/// The access token's expiry date.
-	public var accessTokenExpiry: NSDate? {
+	public var accessTokenExpiry: Date? {
 		get { return clientConfig.accessTokenExpiry }
 		set { clientConfig.accessTokenExpiry = newValue }
 	}
@@ -112,7 +112,7 @@ public class OAuth2: OAuth2Base {
 	public final var onAuthorize: ((parameters: OAuth2JSON) -> Void)?
 	
 	/// When authorization fails (if error is not nil) or is cancelled, this block is executed on the main thread.
-	public final var onFailure: ((error: ErrorType?) -> Void)?
+	public final var onFailure: ((error: ErrorProtocol?) -> Void)?
 	
 	/**
 	Closure called after onAuthorize OR onFailure, on the main thread; useful for cleanup operations.
@@ -121,13 +121,13 @@ public class OAuth2: OAuth2Base {
 	- parameter error: ErrorType describing the reason for failure, as supplied to the `onFailure` callback. If it is nil and `wasFailure`
 	is true, the process was aborted.
 	*/
-	public final var afterAuthorizeOrFailure: ((wasFailure: Bool, error: ErrorType?) -> Void)?
+	public final var afterAuthorizeOrFailure: ((wasFailure: Bool, error: ErrorProtocol?) -> Void)?
 	
 	/// Same as `afterAuthorizeOrFailure`, but only for internal use and called right BEFORE the public variant.
-	final var internalAfterAuthorizeOrFailure: ((wasFailure: Bool, error: ErrorType?) -> Void)?
+	final var internalAfterAuthorizeOrFailure: ((wasFailure: Bool, error: ErrorProtocol?) -> Void)?
 	
 	/// If non-nil, will be called before performing dynamic client registration, giving you a chance to instantiate your own registrar.
-	public final var onBeforeDynamicClientRegistration: (NSURL -> OAuth2DynReg?)?
+	public final var onBeforeDynamicClientRegistration: ((URL) -> OAuth2DynReg?)?
 	
 	
 	/**
@@ -174,7 +174,7 @@ public class OAuth2: OAuth2Base {
 		return authURL.description
 	}
 	
-	override func updateFromKeychainItems(items: [String : NSCoding]) {
+	override func updateFromKeychainItems(_ items: [String : NSCoding]) {
 		for message in clientConfig.updateFromStorableItems(items) {
 			logger?.debug("OAuth2", msg: message)
 		}
@@ -213,7 +213,7 @@ public class OAuth2: OAuth2Base {
 	
 	- parameter params: Optional key/value pairs to pass during authorization and token refresh
 	*/
-	public final func authorize(params params: OAuth2StringDict? = nil) {
+	public final func authorize(params: OAuth2StringDict? = nil) {
 		isAuthorizing = true
 		tryToObtainAccessTokenIfNeeded(params: params) { success in
 			if success {
@@ -226,7 +226,7 @@ public class OAuth2: OAuth2Base {
 					}
 					else {
 						do {
-							assert(NSThread.isMainThread())
+							assert(Thread.isMainThread())
 							try self.doAuthorize(params: params)
 						}
 						catch let error {
@@ -246,7 +246,7 @@ public class OAuth2: OAuth2Base {
 	- parameter context: The context to start authorization from, depends on platform (UIViewController or NSWindow, see `authorizeContext`)
 	- parameter params:  Optional key/value pairs to pass during authorization
 	*/
-	public func authorizeEmbeddedFrom(context: AnyObject, params: OAuth2StringDict? = nil) {
+	public func authorizeEmbeddedFrom(_ context: AnyObject, params: OAuth2StringDict? = nil) {
 		authConfig.authorizeEmbedded = true
 		authConfig.authorizeContext = context
 		authorize(params: params)
@@ -261,7 +261,7 @@ public class OAuth2: OAuth2Base {
 	public func hasUnexpiredAccessToken() -> Bool {
 		if let access = accessToken where !access.isEmpty {
 			if let expiry = accessTokenExpiry {
-				return expiry == expiry.laterDate(NSDate())
+				return expiry == (expiry as NSDate).laterDate(Date())
 			}
 			return clientConfig.accessTokenAssumeUnexpired
 		}
@@ -275,7 +275,7 @@ public class OAuth2: OAuth2Base {
 	- parameter params:   Optional key/value pairs to pass during authorization
 	- parameter callback: The callback to call once the client knows whether it has an access token or not
 	*/
-	func tryToObtainAccessTokenIfNeeded(params params: OAuth2StringDict? = nil, callback: ((success: Bool) -> Void)) {
+	func tryToObtainAccessTokenIfNeeded(params: OAuth2StringDict? = nil, callback: ((success: Bool) -> Void)) {
 		if hasUnexpiredAccessToken() {
 			callback(success: true)
 		}
@@ -303,12 +303,12 @@ public class OAuth2: OAuth2Base {
 	
 	- parameter params: Optional key/value pairs to pass during authorization
 	*/
-	func doAuthorize(params params: OAuth2StringDict? = nil) throws {
+	func doAuthorize(params: OAuth2StringDict? = nil) throws {
 		if self.authConfig.authorizeEmbedded {
 			try self.authorizeEmbeddedWith(self.authConfig, params: params)
 		}
 		else {
-			try self.openAuthorizeURLInBrowser(params)
+			try self.openAuthorizeURLInBrowser(params: params)
 		}
 	}
 	
@@ -321,9 +321,9 @@ public class OAuth2: OAuth2Base {
 	- parameter params:   Any additional parameters as dictionary with string keys and values that will be added to the query part
 	- returns:            OAuth2AuthRequest to be used to call to the authorize endpoint
 	*/
-	func authorizeRequestWithRedirect(redirect: String, scope: String?, params: OAuth2StringDict?) throws -> OAuth2AuthRequest {
+	func authorizeRequestWithRedirect(_ redirect: String, scope: String?, params: OAuth2StringDict?) throws -> OAuth2AuthRequest {
 		guard let clientId = clientConfig.clientId where !clientId.isEmpty else {
-			throw OAuth2Error.NoClientId
+			throw OAuth2Error.noClientId
 		}
 		
 		let req = OAuth2AuthRequest(url: clientConfig.authorizeURL, method: .GET)
@@ -347,7 +347,7 @@ public class OAuth2: OAuth2Base {
 	- parameter params: Optional, additional URL params to supply to the request
 	- returns:          NSURL to be used to start the OAuth dance
 	*/
-	public func authorizeURL(params: OAuth2StringDict? = nil) throws -> NSURL {
+	public func authorizeURL(params: OAuth2StringDict? = nil) throws -> URL {
 		return try authorizeURLWithRedirect(nil, scope: nil, params: params)
 	}
 	
@@ -360,9 +360,9 @@ public class OAuth2: OAuth2Base {
 	- parameter params:   Any additional parameters as dictionary with string keys and values that will be added to the query part
 	- returns:            NSURL to be used to start the OAuth dance
 	*/
-	public func authorizeURLWithRedirect(redirect: String?, scope: String?, params: OAuth2StringDict?) throws -> NSURL {
+	public func authorizeURLWithRedirect(_ redirect: String?, scope: String?, params: OAuth2StringDict?) throws -> URL {
 		guard let redirect = (redirect ?? clientConfig.redirect) else {
-			throw OAuth2Error.NoRedirectURL
+			throw OAuth2Error.noRedirectURL
 		}
 		let req = try authorizeRequestWithRedirect(redirect, scope: scope, params: params)
 		context.redirectURL = redirect
@@ -374,8 +374,8 @@ public class OAuth2: OAuth2Base {
 	
 	- parameter redirect: The redirect URL returned by the server that you want to handle
 	*/
-	public func handleRedirectURL(redirect: NSURL) throws {
-		throw OAuth2Error.Generic("Abstract class use")
+	public func handleRedirectURL(_ redirect: URL) throws {
+		throw OAuth2Error.generic("Abstract class use")
 	}
 	
 	
@@ -389,12 +389,12 @@ public class OAuth2: OAuth2Base {
 	- parameter params: Additional parameters to pass during token refresh
 	- returns:          An `OAuth2AuthRequest` instance that is configured for token refresh
 	*/
-	func tokenRequestForTokenRefresh(params params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
+	func tokenRequestForTokenRefresh(_ params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
 		guard let clientId = clientId where !clientId.isEmpty else {
-			throw OAuth2Error.NoClientId
+			throw OAuth2Error.noClientId
 		}
 		guard let refreshToken = clientConfig.refreshToken where !refreshToken.isEmpty else {
-			throw OAuth2Error.NoRefreshToken
+			throw OAuth2Error.noRefreshToken
 		}
 		
 		let req = OAuth2AuthRequest(url: (clientConfig.tokenURL ?? clientConfig.authorizeURL))
@@ -412,15 +412,15 @@ public class OAuth2: OAuth2Base {
 	- parameter params:   Optional key/value pairs to pass during token refresh
 	- parameter callback: The callback to call after the refresh token exchange has finished
 	*/
-	public func doRefreshToken(params params: OAuth2StringDict? = nil, callback: ((successParams: OAuth2JSON?, error: ErrorType?) -> Void)) {
+	public func doRefreshToken(params: OAuth2StringDict? = nil, callback: ((successParams: OAuth2JSON?, error: ErrorProtocol?) -> Void)) {
 		do {
-			let post = try tokenRequestForTokenRefresh(params: params).asURLRequestFor(self)
-			logger?.debug("OAuth2", msg: "Using refresh token to receive access token from \(post.URL?.description ?? "nil")")
+			let post = try tokenRequestForTokenRefresh(params).asURLRequestFor(self)
+			logger?.debug("OAuth2", msg: "Using refresh token to receive access token from \(post.url?.description ?? "nil")")
 			
 			performRequest(post) { data, status, error in
 				do {
 					guard let data = data else {
-						throw error ?? OAuth2Error.NoDataInResponse
+						throw error ?? OAuth2Error.noDataInResponse
 					}
 					let json = try self.parseRefreshTokenResponseData(data)
 					if status < 400 {
@@ -431,7 +431,7 @@ public class OAuth2: OAuth2Base {
 						callback(successParams: json, error: nil)
 					}
 					else {
-						throw OAuth2Error.Generic("\(status)")
+						throw OAuth2Error.generic("\(status)")
 					}
 				}
 				catch let error {
@@ -458,14 +458,14 @@ public class OAuth2: OAuth2Base {
 	- parameter callback: The callback to call on the main thread; if both json and error is nil no registration was attempted; error is nil
 	                      on success
 	*/
-	func registerClientIfNeeded(callback: ((json: OAuth2JSON?, error: ErrorType?) -> Void)) {
+	func registerClientIfNeeded(_ callback: ((json: OAuth2JSON?, error: ErrorProtocol?) -> Void)) {
 		if nil != clientId {
 			callOnMainThread() {
 				callback(json: nil, error: nil)
 			}
 		}
 		else if let url = clientConfig.registrationURL {
-			let dynreg = onBeforeDynamicClientRegistration?(url) ?? OAuth2DynReg()
+			let dynreg = onBeforeDynamicClientRegistration?(url as URL) ?? OAuth2DynReg()
 			dynreg.registerClient(self) { json, error in
 				callOnMainThread() {
 					callback(json: json, error: error)
@@ -474,7 +474,7 @@ public class OAuth2: OAuth2Base {
 		}
 		else {
 			callOnMainThread() {
-				callback(json: nil, error: OAuth2Error.NoRegistrationURL)
+				callback(json: nil, error: OAuth2Error.noRegistrationURL)
 			}
 		}
 	}
@@ -488,7 +488,7 @@ public class OAuth2: OAuth2Base {
 	/**
 	Internally used on success. Calls the `onAuthorize` and `afterAuthorizeOrFailure` callbacks on the main thread.
 	*/
-	func didAuthorize(parameters: OAuth2JSON) {
+	func didAuthorize(_ parameters: OAuth2JSON) {
 		isAuthorizing = false
 		if useKeychain {
 			storeTokensToKeychain()
@@ -503,13 +503,13 @@ public class OAuth2: OAuth2Base {
 	/**
 	Internally used on error. Calls the `onFailure` and `afterAuthorizeOrFailure` callbacks on the main thread.
 	*/
-	func didFail(error: ErrorType?) {
+	func didFail(_ error: ErrorProtocol?) {
 		isAuthorizing = false
 		
 		var finalError = error
 		if let error = error {
 			logger?.debug("OAuth2", msg: "\(error)")
-			if let oae = error as? OAuth2Error where .RequestCancelled == oae {
+			if let oae = error as? OAuth2Error where .requestCancelled == oae {
 				finalError = nil
 			}
 		}
@@ -534,8 +534,10 @@ public class OAuth2: OAuth2Base {
 	- parameter cachePolicy: The cache policy to use, defaults to `NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData`
 	- returns: OAuth2Request for the given URL
 	*/
-	public func request(forURL url: NSURL, cachePolicy: NSURLRequestCachePolicy = .ReloadIgnoringLocalCacheData) -> OAuth2Request {
-		return OAuth2Request(URL: url, oauth: self, cachePolicy: cachePolicy, timeoutInterval: 20)
+	public func request(forURL url: URL, cachePolicy: NSURLRequest.CachePolicy = .reloadIgnoringLocalCacheData) -> URLRequest {
+		var req = URLRequest(url: url, cachePolicy: cachePolicy, timeoutInterval: 20)
+		req.sign(self)
+		return req
 	}
 	
 	/**
@@ -560,7 +562,7 @@ public class OAuth2: OAuth2Base {
 	- parameter data: NSData returned from the call
 	- returns: An OAuth2JSON instance with token data; may contain additional information
 	*/
-	public func parseAccessTokenResponseData(data: NSData) throws -> OAuth2JSON {
+	public func parseAccessTokenResponseData(_ data: Data) throws -> OAuth2JSON {
 		let dict = try parseJSON(data)
 		return try parseAccessTokenResponse(dict)
 	}
@@ -575,7 +577,7 @@ public class OAuth2: OAuth2Base {
 	- parameter params: Dictionary data parsed from the response
 	- returns: An OAuth2JSON instance with token data; may contain additional information
 	*/
-	final func parseAccessTokenResponse(params: OAuth2JSON) throws -> OAuth2JSON {
+	final func parseAccessTokenResponse(_ params: OAuth2JSON) throws -> OAuth2JSON {
 		try assureNoErrorInResponse(params)
 		try assureCorrectBearerType(params)
 		try assureAccessTokenParamsAreValid(params)
@@ -591,7 +593,7 @@ public class OAuth2: OAuth2Base {
 	- parameter dict: The dictionary that was returned from an access token response
 	- returns: The dictionary with fixed key names
 	*/
-	public func normalizeAccessTokenResponseKeys(dict: OAuth2JSON) -> OAuth2JSON {
+	public func normalizeAccessTokenResponseKeys(_ dict: OAuth2JSON) -> OAuth2JSON {
 		return dict
 	}
 	
@@ -604,7 +606,7 @@ public class OAuth2: OAuth2Base {
 	- parameter data: NSData returned from the call
 	- returns: An OAuth2JSON instance with token data; may contain additional information
 	*/
-	public func parseRefreshTokenResponseData(data: NSData) throws -> OAuth2JSON {
+	public func parseRefreshTokenResponseData(_ data: Data) throws -> OAuth2JSON {
 		let dict = try parseJSON(data)
 		return try parseRefreshTokenResponse(dict)
 	}
@@ -619,7 +621,7 @@ public class OAuth2: OAuth2Base {
 	- parameter json: Dictionary data parsed from the response
 	- returns: An OAuth2JSON instance with token data; may contain additional information
 	*/
-	final func parseRefreshTokenResponse(dict: OAuth2JSON) throws -> OAuth2JSON {
+	final func parseRefreshTokenResponse(_ dict: OAuth2JSON) throws -> OAuth2JSON {
 		try assureNoErrorInResponse(dict)
 		try assureCorrectBearerType(dict)
 		try assureRefreshTokenParamsAreValid(dict)
@@ -635,16 +637,16 @@ public class OAuth2: OAuth2Base {
 	- parameter dict: The dictionary that was returned from a refresh token response
 	- returns: The dictionary with fixed key names
 	*/
-	public func normalizeRefreshTokenResponseKeys(dict: OAuth2JSON) -> OAuth2JSON {
+	public func normalizeRefreshTokenResponseKeys(_ dict: OAuth2JSON) -> OAuth2JSON {
 		return dict
 	}
 	
 	/**
 	This method checks `state`, throws `OAuth2Error.InvalidState` if it doesn't match. Resets state if it matches.
 	*/
-	func assureMatchesState(params: OAuth2JSON) throws {
+	func assureMatchesState(_ params: OAuth2JSON) throws {
 		if !context.matchesState(params["state"] as? String) {
-			throw OAuth2Error.InvalidState
+			throw OAuth2Error.invalidState
 		}
 		context.resetState()
 	}
@@ -652,26 +654,26 @@ public class OAuth2: OAuth2Base {
 	/**
 	Throws unless "token_type" is "bearer" (case-insensitive).
 	*/
-	func assureCorrectBearerType(params: OAuth2JSON) throws {
+	func assureCorrectBearerType(_ params: OAuth2JSON) throws {
 		if let tokType = params["token_type"] as? String {
-			if "bearer" == tokType.lowercaseString {
+			if "bearer" == tokType.lowercased() {
 				return
 			}
-			throw OAuth2Error.UnsupportedTokenType("Only “bearer” token is supported, but received “\(tokType)”")
+			throw OAuth2Error.unsupportedTokenType("Only “bearer” token is supported, but received “\(tokType)”")
 		}
-		throw OAuth2Error.NoTokenType
+		throw OAuth2Error.noTokenType
 	}
 	
 	/**
 	Called when parsing the access token response. Does nothing by default, implicit grant flows check state.
 	*/
-	public func assureAccessTokenParamsAreValid(params: OAuth2JSON) throws {
+	public func assureAccessTokenParamsAreValid(_ params: OAuth2JSON) throws {
 	}
 	
 	/**
 	Called when parsing the refresh token response. Does nothing by default.
 	*/
-	public func assureRefreshTokenParamsAreValid(params: OAuth2JSON) throws {
+	public func assureRefreshTokenParamsAreValid(_ params: OAuth2JSON) throws {
 	}
 }
 
@@ -694,8 +696,8 @@ class OAuth2ContextStore {
 	*/
 	var state: String {
 		if _state.isEmpty {
-			_state = NSUUID().UUIDString
-			_state = _state[_state.startIndex..<_state.startIndex.advancedBy(8)]		// only use the first 8 chars, should be enough
+			_state = UUID().uuidString
+			_state = _state[_state.startIndex..<_state.index(_state.startIndex, offsetBy: 8)]		// only use the first 8 chars, should be enough
 		}
 		return _state
 	}
@@ -706,7 +708,7 @@ class OAuth2ContextStore {
 	- parameter state: The state to check (may be nil)
 	- returns: true if state matches, false otherwise or if given state is nil.
 	*/
-	func matchesState(state: String?) -> Bool {
+	func matchesState(_ state: String?) -> Bool {
 		if let st = state {
 			return st == _state
 		}

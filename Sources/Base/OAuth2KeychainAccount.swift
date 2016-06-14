@@ -69,7 +69,7 @@ extension KeychainGenericPasswordType {
 			if let creds_data = data as? [String: NSCoding] {
 				return creds_data
 			}
-			throw OAuth2Error.Generic("Keychain data for \(serviceName) > \(accountName) is in wrong format. Got: “\(data)”")
+			throw OAuth2Error.generic("Keychain data for \(serviceName) > \(accountName) is in wrong format. Got: “\(data)”")
 		}
 		catch let error as NSError where error.domain == "swift.keychain.error" && error.code == Int(errSecItemNotFound) {
 			return [:]

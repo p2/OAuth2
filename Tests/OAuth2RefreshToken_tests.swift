@@ -44,7 +44,7 @@ class OAuth2RefreshTokenTests: XCTestCase {
 			let _ = try oauth.tokenRequestForTokenRefresh().asURLRequestFor(oauth)
 			XCTAssertTrue(false, "Should throw when trying to create refresh token request without refresh token")
 		}
-		catch OAuth2Error.NoRefreshToken {
+		catch OAuth2Error.noRefreshToken {
 		}
 		catch {
 			XCTAssertTrue(false, "Should have thrown `NoRefreshToken`")
@@ -57,13 +57,13 @@ class OAuth2RefreshTokenTests: XCTestCase {
 		
 		let req = try? oauth.tokenRequestForTokenRefresh().asURLRequestFor(oauth)
 		XCTAssertNotNil(req)
-		XCTAssertNotNil(req?.URL)
-		XCTAssertNotNil(req?.HTTPBody)
-		XCTAssertEqual("https://token.ful.io", req!.URL!.absoluteString)
-		let comp = NSURLComponents(URL: req!.URL!, resolvingAgainstBaseURL: true)
+		XCTAssertNotNil(req?.url)
+		XCTAssertNotNil(req?.httpBody)
+		XCTAssertEqual("https://token.ful.io", req!.url!.absoluteString)
+		let comp = URLComponents(url: req!.url!, resolvingAgainstBaseURL: true)
 		let params = comp?.percentEncodedQuery
 		XCTAssertNil(params)
-		let body = NSString(data: req!.HTTPBody!, encoding: NSUTF8StringEncoding) as? String
+		let body = String(data: req!.httpBody!, encoding: String.Encoding.utf8)
 		XCTAssertNotNil(body)
 		let dict = OAuth2.paramsFromQuery(body!)
 		XCTAssertEqual(dict["client_id"], "abc")
@@ -80,8 +80,8 @@ class OAuth2RefreshTokenTests: XCTestCase {
 		
 		let req = try? oauth.tokenRequestForTokenRefresh().asURLRequestFor(oauth)
 		XCTAssertNotNil(req)
-		XCTAssertNotNil(req?.HTTPBody)
-		let body = NSString(data: req!.HTTPBody!, encoding: NSUTF8StringEncoding) as? String
+		XCTAssertNotNil(req?.httpBody)
+		let body = String(data: req!.httpBody!, encoding: String.Encoding.utf8)
 		XCTAssertNotNil(body)
 		let dict = OAuth2.paramsFromQuery(body!)
 		XCTAssertNil(dict["client_id"])
@@ -99,8 +99,8 @@ class OAuth2RefreshTokenTests: XCTestCase {
 		
 		let req = try? oauth.tokenRequestForTokenRefresh(params: ["param": "fool"]).asURLRequestFor(oauth)
 		XCTAssertNotNil(req)
-		XCTAssertNotNil(req?.HTTPBody)
-		let body = NSString(data: req!.HTTPBody!, encoding: NSUTF8StringEncoding) as? String
+		XCTAssertNotNil(req?.httpBody)
+		let body = String(data: req!.httpBody!, encoding: String.Encoding.utf8)
 		XCTAssertNotNil(body)
 		let dict = OAuth2.paramsFromQuery(body!)
 		XCTAssertEqual(dict["client_id"], "abc")

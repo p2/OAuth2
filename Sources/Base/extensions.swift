@@ -21,12 +21,12 @@
 import Foundation
 
 
-extension NSHTTPURLResponse {
+extension HTTPURLResponse {
 	
 	/// A localized string explaining the current `statusCode`.
 	public var statusString: String {
 		get {
-			return NSHTTPURLResponse.localizedStringForStatusCode(self.statusCode)
+			return HTTPURLResponse.localizedString(forStatusCode: self.statusCode)
 		}
 	}
 }
@@ -34,23 +34,23 @@ extension NSHTTPURLResponse {
 
 extension String {
 	
-	private static var wwwFormURLPlusSpaceCharacterSet: NSCharacterSet = NSMutableCharacterSet.wwwFormURLPlusSpaceCharacterSet()
+	private static var wwwFormURLPlusSpaceCharacterSet: CharacterSet = CharacterSet.wwwFormURLPlusSpaceCharacterSet
 	
 	/// Encodes a string to become x-www-form-urlencoded; the space is encoded as plus sign (+).
 	var wwwFormURLEncodedString: String {
 		let characterSet = String.wwwFormURLPlusSpaceCharacterSet
-		return (stringByAddingPercentEncodingWithAllowedCharacters(characterSet) ?? "").stringByReplacingOccurrencesOfString(" ", withString: "+")
+		return (addingPercentEncoding(withAllowedCharacters: characterSet) ?? "").replacingOccurrences(of: " ", with: "+")
 	}
 	
 	/// Decodes a percent-encoded string and converts the plus sign into a space.
 	var wwwFormURLDecodedString: String {
-		let rep = stringByReplacingOccurrencesOfString("+", withString: " ")
-		return rep.stringByRemovingPercentEncoding ?? rep
+		let rep = replacingOccurrences(of: "+", with: " ")
+		return rep.removingPercentEncoding ?? rep
 	}
 }
 
 
-extension NSMutableCharacterSet {
+extension CharacterSet {
 	
 	/**
 	    Return the character set that does NOT need percent-encoding for x-www-form-urlencoded requests INCLUDING SPACE.
@@ -65,29 +65,43 @@ extension NSMutableCharacterSet {
 	    > 0x61 to 0x7A (a-z)
 	    > - Leave byte as-is
 	 */
-	class func wwwFormURLPlusSpaceCharacterSet() -> NSMutableCharacterSet {
-		let set = NSMutableCharacterSet.alphanumericCharacterSet()
-		set.addCharactersInString("-._* ")
+	static var wwwFormURLPlusSpaceCharacterSet: CharacterSet {
+		var set = CharacterSet.alphanumerics
+		set.insert(charactersIn: "-._* ")
 		return set
 	}
 }
 
 
-extension NSURLRequest {
+extension URLRequest {
 	
 	/** A string describing the request, including headers and body. */
-	override public var debugDescription: String {
-		var msg = "HTTP/1.1 \(HTTPMethod ?? "METHOD") \(URL?.description ?? "/")"
+	public var debugDescription: String {
+		var msg = "HTTP/1.1 \(httpMethod ?? "METHOD") \(url?.description ?? "/")"
 		allHTTPHeaderFields?.forEach() { msg += "\n\($0): \($1)" }
-		if let data = HTTPBody, let body = NSString(data: data, encoding: NSUTF8StringEncoding) {
+		if let data = httpBody, let body = String(data: data, encoding: String.Encoding.utf8) {
 			msg += "\n\n\(body)"
 		}
 		return msg
 	}
+	
+	/**
+	Signs the receiver by setting its "Authorization" header to "Bearer {token}".
+	
+	Will log an error if the OAuth2 instance does not have an access token!
+	*/
+	mutating func sign(_ oauth: OAuth2) {
+		if let access = oauth.clientConfig.accessToken where !access.isEmpty {
+			setValue("Bearer \(access)", forHTTPHeaderField: "Authorization")
+		}
+		else {
+			NSLog("Cannot sign request, access token is empty")
+		}
+	}
 }
 
 
-extension NSHTTPURLResponse {
+extension HTTPURLResponse {
 	
 	/** Format HTTP status and response headers as is customary. */
 	override public var debugDescription: String {

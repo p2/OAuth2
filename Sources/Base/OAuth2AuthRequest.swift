@@ -49,7 +49,7 @@ Class representing an OAuth2 authorization request that can be used to create NS
 public class OAuth2AuthRequest {
 	
 	/// The url of the receiver. Queries may by added by parameters specified on `params`.
-	public let url: NSURL
+	public let url: URL
 	
 	/// The HTTP method.
 	public let method: OAuth2HTTPMethod
@@ -66,7 +66,7 @@ public class OAuth2AuthRequest {
 	/**
 	Designated initializer. Neither URL nor method can later be changed.
 	*/
-	public init(url: NSURL, method: OAuth2HTTPMethod = .POST) {
+	public init(url: URL, method: OAuth2HTTPMethod = .POST) {
 		self.url = url
 		self.method = method
 	}
@@ -95,10 +95,10 @@ public class OAuth2AuthRequest {
 	
 	- returns: NSURLComponents representing the receiver
 	*/
-	func asURLComponents() throws -> NSURLComponents {
-		let comp = NSURLComponents(URL: url, resolvingAgainstBaseURL: false)
-		guard let components = comp where "https" == components.scheme else {
-			throw OAuth2Error.NotUsingTLS
+	func asURLComponents() throws -> URLComponents {
+		let comp = URLComponents(url: url, resolvingAgainstBaseURL: false)
+		guard var components = comp where "https" == components.scheme else {
+			throw OAuth2Error.notUsingTLS
 		}
 		if .GET == method && params.count > 0 {
 			components.percentEncodedQuery = params.percentEncodedQueryString()
@@ -111,12 +111,12 @@ public class OAuth2AuthRequest {
 	
 	- returns: An NSURL representing the receiver
 	*/
-	public func asURL() throws -> NSURL {
+	public func asURL() throws -> URL {
 		let comp = try asURLComponents()
-		if let finalURL = comp.URL {
+		if let finalURL = comp.url {
 			return finalURL
 		}
-		throw OAuth2Error.InvalidURLComponents(comp)
+		throw OAuth2Error.invalidURLComponents(comp)
 	}
 	
 	/**
@@ -125,9 +125,9 @@ public class OAuth2AuthRequest {
 	- parameter oauth2: The OAuth2 instance from which to take client and auth settings
 	- returns: A mutable NSURLRequest
 	*/
-	public func asURLRequestFor(oauth2: OAuth2) throws -> NSMutableURLRequest {
+	public func asURLRequestFor(_ oauth2: OAuth2) throws -> URLRequest {
 		guard let clientId = oauth2.clientId where !clientId.isEmpty else {
-			throw OAuth2Error.NoClientId
+			throw OAuth2Error.noClientId
 		}
 		
 		var finalParams = params
@@ -135,8 +135,8 @@ public class OAuth2AuthRequest {
 		
 		// base request
 		let finalURL = try asURL()
-		let req = NSMutableURLRequest(URL: finalURL)
-		req.HTTPMethod = method.rawValue
+		var req = URLRequest(url: finalURL)
+		req.httpMethod = method.rawValue
 		req.setValue(contentType.rawValue, forHTTPHeaderField: "Content-Type")
 		req.setValue("application/json", forHTTPHeaderField: "Accept")
 		
@@ -154,11 +154,11 @@ public class OAuth2AuthRequest {
 			else if nil == finalAuthHeader {
 				oauth2.logger?.debug("OAuth2", msg: "Adding “Authorization” header as “Basic client-key:client-secret”")
 				let pw = "\(clientId.wwwFormURLEncodedString):\(secret.wwwFormURLEncodedString)"
-				if let utf8 = pw.dataUsingEncoding(NSUTF8StringEncoding) {
-					finalAuthHeader = "Basic \(utf8.base64EncodedStringWithOptions([]))"
+				if let utf8 = pw.data(using: String.Encoding.utf8) {
+					finalAuthHeader = "Basic \(utf8.base64EncodedString([]))"
 				}
 				else {
-					throw OAuth2Error.UTF8EncodeError
+					throw OAuth2Error.utf8EncodeError
 				}
 				finalParams.removeValueForKey("client_id")
 				finalParams.removeValueForKey("client_secret")
@@ -172,7 +172,7 @@ public class OAuth2AuthRequest {
 		
 		// add a body to POST requests
 		if .POST == method && finalParams.count > 0 {
-			req.HTTPBody = try finalParams.utf8EncodedData()
+			req.httpBody = try finalParams.utf8EncodedData()
 		}
 		return req
 	}
@@ -206,8 +206,8 @@ public struct OAuth2AuthRequestParams {
 	- parameter key: The key for the value to be removed
 	- returns: The value that was removed, if any
 	*/
-	public mutating func removeValueForKey(key: String) -> String? {
-		return params?.removeValueForKey(key)
+	public mutating func removeValueForKey(_ key: String) -> String? {
+		return params?.removeValue(forKey: key)
 	}
 	
 	/// The number of items in the receiver.
@@ -223,16 +223,16 @@ public struct OAuth2AuthRequestParams {
 	
 	- returns: NSData representing the receiver form-encoded
 	*/
-	public func utf8EncodedData() throws -> NSData? {
+	public func utf8EncodedData() throws -> Data? {
 		guard nil != params else {
 			return nil
 		}
 		let body = percentEncodedQueryString()
-		if let encoded = body.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true) {
+		if let encoded = body.data(using: String.Encoding.utf8, allowLossyConversion: true) {
 			return encoded
 		}
 		else {
-			throw OAuth2Error.UTF8EncodeError
+			throw OAuth2Error.utf8EncodeError
 		}
 	}
 	
@@ -257,12 +257,12 @@ public struct OAuth2AuthRequestParams {
 	- parameter params: The parameters you want to have encoded
 	- returns: An URL-ready query string
 	*/
-	public static func formEncodedQueryStringFor(params: OAuth2StringDict) -> String {
+	public static func formEncodedQueryStringFor(_ params: OAuth2StringDict) -> String {
 		var arr: [String] = []
 		for (key, val) in params {
 			arr.append("\(key)=\(val.wwwFormURLEncodedString)")
 		}
-		return arr.joinWithSeparator("&")
+		return arr.joined(separator: "&")
 	}
 }
 

@@ -31,10 +31,10 @@ extension OAuth2 {
 	- throws: UnableToOpenAuthorizeURL on failure
 	*/
 	public final func openAuthorizeURLInBrowser(params: OAuth2StringDict? = nil) throws {
-		let url = try authorizeURL(params)
+		let url = try authorizeURL(params: params)
 		logger?.debug("OAuth2", msg: "Opening authorize URL in system browser: \(url)")
-		if !UIApplication.sharedApplication().openURL(url) {
-			throw OAuth2Error.UnableToOpenAuthorizeURL
+		if !UIApplication.shared().openURL(url) {
+			throw OAuth2Error.unableToOpenAuthorizeURL
 		}
 	}
 	
@@ -50,13 +50,13 @@ extension OAuth2 {
 	- parameter config: The configuration to be used; usually uses the instance's `authConfig`
 	- parameter params: Additional authorization parameters to supply during the OAuth dance
 	*/
-	public func authorizeEmbeddedWith(config: OAuth2AuthConfig, params: OAuth2StringDict? = nil) throws {
+	public func authorizeEmbeddedWith(_ config: OAuth2AuthConfig, params: OAuth2StringDict? = nil) throws {
 		if let controller = config.authorizeContext as? UIViewController {
 			if #available(iOS 9, *), config.ui.useSafariView {
 				let web = try authorizeSafariEmbeddedFromViewController(controller, params: params)
 				if config.authorizeEmbeddedAutoDismiss {
 					internalAfterAuthorizeOrFailure = { wasFailure, error in
-						web.dismissViewControllerAnimated(true, completion: nil)
+						web.dismiss(animated: true)
 					}
 				}
 				return
@@ -64,12 +64,12 @@ extension OAuth2 {
 			let web = try authorizeEmbeddedFromViewController(controller, params: params)
 			if config.authorizeEmbeddedAutoDismiss {
 				internalAfterAuthorizeOrFailure = { wasFailure, error in
-					web.dismissViewControllerAnimated(true, completion: nil)
+					web.dismiss(animated: true)
 				}
 			}
 			return
 		}
-		throw (nil == config.authorizeContext) ? OAuth2Error.NoAuthorizationContext : OAuth2Error.InvalidAuthorizationContext
+		throw (nil == config.authorizeContext) ? OAuth2Error.noAuthorizationContext : OAuth2Error.invalidAuthorizationContext
 	}
 	
 	
@@ -90,10 +90,10 @@ extension OAuth2 {
 	- returns: SFSafariViewController, being already presented automatically
 	*/
 	@available(iOS 9.0, *)
-	public func authorizeSafariEmbeddedFromViewController(controller: UIViewController, params: OAuth2StringDict? = nil) throws -> SFSafariViewController {
-		let url = try authorizeURL(params)
+	public func authorizeSafariEmbeddedFromViewController(_ controller: UIViewController, params: OAuth2StringDict? = nil) throws -> SFSafariViewController {
+		let url = try authorizeURL(params: params)
 		logger?.debug("OAuth2", msg: "Opening authorize URL in embedded Safari: \(url)")
-		return presentSafariViewFor(url, from: controller)
+		return presentSafariViewFor(url: url, from: controller)
 	}
 	
 	/**
@@ -113,9 +113,9 @@ extension OAuth2 {
 	- returns: SFSafariViewController, being already presented automatically
 	*/
 	@available(iOS 9.0, *)
-	public func authorizeSafariEmbeddedFromViewController(controller: UIViewController, redirect: String, scope: String, params: OAuth2StringDict? = nil) throws -> SFSafariViewController {
+	public func authorizeSafariEmbeddedFromViewController(_ controller: UIViewController, redirect: String, scope: String, params: OAuth2StringDict? = nil) throws -> SFSafariViewController {
 		let url = try authorizeURLWithRedirect(redirect, scope: scope, params: params)
-		return presentSafariViewFor(url, from: controller)
+		return presentSafariViewFor(url: url, from: controller)
 	}
 	
 	/**
@@ -124,15 +124,15 @@ extension OAuth2 {
 	- returns: SFSafariViewController, embedded in a UINavigationController being presented automatically
 	*/
 	@available(iOS 9.0, *)
-	final func presentSafariViewFor(url: NSURL, from: UIViewController) -> SFSafariViewController {
-		let web = SFSafariViewController(URL: url)
+	final func presentSafariViewFor(url: URL, from: UIViewController) -> SFSafariViewController {
+		let web = SFSafariViewController(url: url)
 		web.title = authConfig.ui.title
 		
 		let delegate = OAuth2SFViewControllerDelegate(oauth: self)
 		web.delegate = delegate
 		authConfig.ui.safariViewDelegate = delegate
 		
-		from.presentViewController(web, animated: true, completion: nil)
+		from.present(web, animated: true, completion: nil)
 		
 		return web
 	}
@@ -142,7 +142,7 @@ extension OAuth2 {
 	controller is dismissed automatically.
 	*/
 	@available(iOS 9.0, *)
-	func safariViewControllerDidCancel(safari: SFSafariViewController) {
+	func safariViewControllerDidCancel(_ safari: SFSafariViewController) {
 		authConfig.ui.safariViewDelegate = nil
 		didFail(nil)
 	}
@@ -161,8 +161,8 @@ extension OAuth2 {
 	- parameter params: Optional additional URL parameters
 	- returns: OAuth2WebViewController, embedded in a UINavigationController being presented automatically
 	*/
-	public func authorizeEmbeddedFromViewController(controller: UIViewController, params: OAuth2StringDict? = nil) throws -> OAuth2WebViewController {
-		let url = try authorizeURL(params)
+	public func authorizeEmbeddedFromViewController(_ controller: UIViewController, params: OAuth2StringDict? = nil) throws -> OAuth2WebViewController {
+		let url = try authorizeURL(params: params)
 		logger?.debug("OAuth2", msg: "Opening authorize URL in embedded browser: \(url)")
 		return presentAuthorizeViewFor(url, intercept: redirect!, from: controller)
 	}
@@ -180,7 +180,7 @@ extension OAuth2 {
 	- parameter params: Optional additional URL parameters
 	- returns: OAuth2WebViewController, embedded in a UINavigationController being presented automatically
 	*/
-	public func authorizeEmbeddedFromViewController(controller: UIViewController,
+	public func authorizeEmbeddedFromViewController(_ controller: UIViewController,
 	                                                  redirect: String,
 	                                                     scope: String,
 		                                                params: OAuth2StringDict? = nil) throws -> OAuth2WebViewController {
@@ -193,7 +193,7 @@ extension OAuth2 {
 	
 	- returns: OAuth2WebViewController, embedded in a UINavigationController being presented automatically
 	*/
-	final func presentAuthorizeViewFor(url: NSURL, intercept: String, from: UIViewController) -> OAuth2WebViewController {
+	final func presentAuthorizeViewFor(_ url: URL, intercept: String, from: UIViewController) -> OAuth2WebViewController {
 		let web = OAuth2WebViewController()
 		web.title = authConfig.ui.title
 		web.backButton = authConfig.ui.backButton as? UIBarButtonItem
@@ -201,7 +201,7 @@ extension OAuth2 {
 		web.interceptURLString = intercept
 		web.onIntercept = { url in
 			do {
-				try self.handleRedirectURL(url)
+				try self.handleRedirectURL(url as URL)
 				return true
 			}
 			catch let err {
@@ -216,7 +216,7 @@ extension OAuth2 {
 		}
 		
 		let navi = UINavigationController(rootViewController: web)
-		from.presentViewController(navi, animated: true, completion: nil)
+		from.present(navi, animated: true)
 		
 		return web
 	}
@@ -232,7 +232,7 @@ class OAuth2SFViewControllerDelegate: NSObject, SFSafariViewControllerDelegate {
 	}
 	
 	@available(iOS 9.0, *)
-	func safariViewControllerDidFinish(controller: SFSafariViewController) {
+	func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
 		oauth.safariViewControllerDidCancel(controller)
 	}
 }

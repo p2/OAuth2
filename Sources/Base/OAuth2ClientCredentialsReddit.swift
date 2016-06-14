@@ -52,10 +52,10 @@ public class OAuth2ClientCredentialsReddit: OAuth2ClientCredentials {
 	/** Add `device_id` parameter to the request created by the superclass. */
 	override func tokenRequest(params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
 		guard let device = deviceId else {
-			throw OAuth2Error.Generic("You must configure this flow with a `device_id` (via settings) or manually assign `deviceId`")
+			throw OAuth2Error.generic("You must configure this flow with a `device_id` (via settings) or manually assign `deviceId`")
 		}
 		
-		let req = try super.tokenRequest(params)
+		let req = try super.tokenRequest(params: params)
 		req.params["device_id"] = device
 		return req
 	}

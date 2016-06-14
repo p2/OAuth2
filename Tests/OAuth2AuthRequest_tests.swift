@@ -26,16 +26,18 @@ import OAuth2
 class OAuth2AuthRequest_Tests: XCTestCase {
 	
 	func testMethod() {
-		let req1 = OAuth2AuthRequest(url: NSURL())
+		let url = URL(string: "http://localhost")!
+		let req1 = OAuth2AuthRequest(url: url)
 		XCTAssertTrue(req1.method == .POST)
-		let req2 = OAuth2AuthRequest(url: NSURL(), method: .POST)
+		let req2 = OAuth2AuthRequest(url: url, method: .POST)
 		XCTAssertTrue(req2.method == .POST)
-		let req3 = OAuth2AuthRequest(url: NSURL(), method: .GET)
+		let req3 = OAuth2AuthRequest(url: url, method: .GET)
 		XCTAssertTrue(req3.method == .GET)
 	}
 	
 	func testContentType() {
-		let req = OAuth2AuthRequest(url: NSURL())
+		let url = URL(string: "http://localhost")!
+		let req = OAuth2AuthRequest(url: url)
 		XCTAssertTrue(req.contentType == .WWWForm)
 		XCTAssertEqual("application/x-www-form-urlencoded; charset=utf-8", req.contentType.rawValue)
 		
@@ -45,7 +47,8 @@ class OAuth2AuthRequest_Tests: XCTestCase {
 	}
 	
 	func testParams() {
-		let req = OAuth2AuthRequest(url: NSURL())
+		let url = URL(string: "http://localhost")!
+		let req = OAuth2AuthRequest(url: url)
 		XCTAssertTrue(0 == req.params.count)
 		
 		req.params["a"] = "A"
@@ -62,18 +65,18 @@ class OAuth2AuthRequest_Tests: XCTestCase {
 	}
 	
 	func testURLComponents() {
-		let reqNoTLS = OAuth2AuthRequest(url: NSURL(string: "http://not.tls.com")!)
+		let reqNoTLS = OAuth2AuthRequest(url: URL(string: "http://not.tls.com")!)
 		do {
 			try reqNoTLS.asURLComponents()
 			XCTAssertTrue(false, "Must no longer be here, must throw because we're not using TLS")
 		}
-		catch OAuth2Error.NotUsingTLS {
+		catch OAuth2Error.notUsingTLS {
 		}
 		catch let error {
 			XCTAssertTrue(false, "Must throw “.NotUsingTLS” but threw \(error)")
 		}
 		
-		let reqP = OAuth2AuthRequest(url: NSURL(string: "https://auth.io")!)
+		let reqP = OAuth2AuthRequest(url: URL(string: "https://auth.io")!)
 		reqP.params["a"] = "A"
 		do {
 			let comp = try reqP.asURLComponents()
@@ -85,7 +88,7 @@ class OAuth2AuthRequest_Tests: XCTestCase {
 			XCTAssertTrue(false, "Must not throw but threw \(error)")
 		}
 		
-		let reqG = OAuth2AuthRequest(url: NSURL(string: "https://auth.io")!, method: .GET)
+		let reqG = OAuth2AuthRequest(url: URL(string: "https://auth.io")!, method: .GET)
 		reqG.params["a"] = "A"
 		do {
 			let comp = try reqG.asURLComponents()
@@ -102,22 +105,22 @@ class OAuth2AuthRequest_Tests: XCTestCase {
 	func testRequests() {
 		let settings = ["client_id": "id", "client_secret": "secret"]
 		let oauth = OAuth2(settings: settings)
-		let reqH = OAuth2AuthRequest(url: NSURL(string: "https://auth.io")!)
+		let reqH = OAuth2AuthRequest(url: URL(string: "https://auth.io")!)
 		do {
 			let request = try reqH.asURLRequestFor(oauth)
-			XCTAssertEqual("Basic aWQ6c2VjcmV0", request.valueForHTTPHeaderField("Authorization"))
-			XCTAssertNil(request.HTTPBody)		// because no params are left
+			XCTAssertEqual("Basic aWQ6c2VjcmV0", request.value(forHTTPHeaderField: "Authorization"))
+			XCTAssertNil(request.httpBody)		// because no params are left
 		}
 		catch let error {
 			XCTAssertTrue(false, "Must not throw but threw \(error)")
 		}
 		
 		oauth.authConfig.secretInBody = true
-		let reqB = OAuth2AuthRequest(url: NSURL(string: "https://auth.io")!)
+		let reqB = OAuth2AuthRequest(url: URL(string: "https://auth.io")!)
 		do {
 			let request = try reqB.asURLRequestFor(oauth)
-			XCTAssertEqual("client_id=id&client_secret=secret", NSString(data: request.HTTPBody!, encoding: NSUTF8StringEncoding))
-			XCTAssertNil(request.valueForHTTPHeaderField("Authorization"))
+			XCTAssertEqual("client_id=id&client_secret=secret", String(data: request.httpBody!, encoding: String.Encoding.utf8))
+			XCTAssertNil(request.value(forHTTPHeaderField: "Authorization"))
 		}
 		catch let error {
 			XCTAssertTrue(false, "Must not throw but threw \(error)")
