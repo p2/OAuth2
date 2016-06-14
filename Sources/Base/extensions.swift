@@ -53,20 +53,20 @@ extension String {
 extension CharacterSet {
 	
 	/**
-	    Return the character set that does NOT need percent-encoding for x-www-form-urlencoded requests INCLUDING SPACE.
-	    YOU are responsible for replacing spaces " " with the plus sign "+".
-	    
-	    RFC3986 and the W3C spec are not entirely consistent, we're using W3C's spec which says:
-	    http://www.w3.org/TR/html5/forms.html#application/x-www-form-urlencoded-encoding-algorithm
+	Return the character set that does NOT need percent-encoding for x-www-form-urlencoded requests INCLUDING SPACE.
+	YOU are responsible for replacing spaces " " with the plus sign "+".
 	
-	    > If the byte is 0x20 (U+0020 SPACE if interpreted as ASCII):
-	    > - Replace the byte with a single 0x2B byte ("+" (U+002B) character if interpreted as ASCII).
-	    > If the byte is in the range 0x2A (*), 0x2D (-), 0x2E (.), 0x30 to 0x39 (0-9), 0x41 to 0x5A (A-Z), 0x5F (_),
-	    > 0x61 to 0x7A (a-z)
-	    > - Leave byte as-is
-	 */
+	RFC3986 and the W3C spec are not entirely consistent, we're using W3C's spec which says:
+	http://www.w3.org/TR/html5/forms.html#application/x-www-form-urlencoded-encoding-algorithm
+	
+	> If the byte is 0x20 (U+0020 SPACE if interpreted as ASCII):
+	> - Replace the byte with a single 0x2B byte ("+" (U+002B) character if interpreted as ASCII).
+	> If the byte is in the range 0x2A (*), 0x2D (-), 0x2E (.), 0x30 to 0x39 (0-9), 0x41 to 0x5A (A-Z), 0x5F (_),
+	> 0x61 to 0x7A (a-z)
+	> - Leave byte as-is
+	*/
 	static var wwwFormURLPlusSpaceCharacterSet: CharacterSet {
-		var set = CharacterSet.alphanumerics
+		var set = CharacterSet().union(CharacterSet.alphanumerics)
 		set.insert(charactersIn: "-._* ")
 		return set
 	}
