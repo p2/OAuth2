@@ -487,8 +487,13 @@ public class OAuth2: OAuth2Base {
 	
 	/**
 	Internally used on success. Calls the `onAuthorize` and `afterAuthorizeOrFailure` callbacks on the main thread.
+	
+	This method is only made public in case you want to create a subclass and call `didAuthorize(parameters:)` at an override point. If you
+	call this method yourself on standard classes you might screw things up badly.
+	
+	- parameter parameters: The parameters received during authorization
 	*/
-	func didAuthorize(_ parameters: OAuth2JSON) {
+	public final func didAuthorize(_ parameters: OAuth2JSON) {
 		isAuthorizing = false
 		if useKeychain {
 			storeTokensToKeychain()
@@ -502,8 +507,13 @@ public class OAuth2: OAuth2Base {
 	
 	/**
 	Internally used on error. Calls the `onFailure` and `afterAuthorizeOrFailure` callbacks on the main thread.
+	
+	This method is only made public in case you want to create a subclass and need to call `didFail(error:)` at an override point. If you
+	call this method yourself on standard classes you might screw things up royally.
+	
+	- parameter error: The error that led to authentication failure
 	*/
-	func didFail(_ error: ErrorProtocol?) {
+	public final func didFail(_ error: ErrorProtocol?) {
 		isAuthorizing = false
 		
 		var finalError = error
