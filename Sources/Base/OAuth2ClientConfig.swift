@@ -62,6 +62,9 @@ public class OAuth2ClientConfig {
 	/// How the client communicates the client secret with the server. Defaults to ".None" if there is no secret, ".ClientSecretPost" if
 	/// "secret_in_body" is `true` and ".ClientSecretBasic" otherwise. Interacts with the `authConfig.secretInBody` client setting.
 	public final var endpointAuthMethod = OAuth2EndpointAuthMethod.None
+    
+    /// No token required, return code
+    public var noTokenRequired: Bool = false
 	
 	
 	/**
@@ -107,6 +110,11 @@ public class OAuth2ClientConfig {
 		if let assume = settings["token_assume_unexpired"] as? Bool {
 			accessTokenAssumeUnexpired = assume
 		}
+        
+        // no token
+        if let noToken = settings["no_token"] as? Bool {
+            noTokenRequired = noToken
+        }
 	}
 	
 	
