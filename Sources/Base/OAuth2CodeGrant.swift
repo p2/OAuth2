@@ -75,7 +75,11 @@ public class OAuth2CodeGrant: OAuth2 {
 		logger?.debug("OAuth2", msg: "Handling redirect URL \(redirect.description)")
 		do {
 			let code = try validateRedirectURL(redirect)
-			exchangeCodeForToken(code)
+            if clientConfig.noTokenRequired {
+                self.didAuthorize(["code": code] as OAuth2JSON)
+            } else {
+                exchangeCodeForToken(code)
+            }
 		}
 		catch let error {
 			didFail(error)
