@@ -65,7 +65,7 @@ extension KeychainGenericPasswordType {
 	*/
 	mutating func fetchedFromKeychain() throws -> [String: NSCoding] {
 		do {
-			try fetchFromKeychain()
+			try _ = fetchFromKeychain()
 			if let creds_data = data as? [String: NSCoding] {
 				return creds_data
 			}

@@ -74,6 +74,7 @@ extension OAuth2 {
 	- returns: The sheet that is being queued for presentation
 	*/
 	@available(OSX 10.10, *)
+	@discardableResult
 	public func authorizeEmbeddedFromWindow(_ window: NSWindow, config: OAuth2AuthConfig, params: OAuth2StringDict? = nil) throws -> NSWindow {
 		let controller = try presentableAuthorizeViewController(params)
 		controller.willBecomeSheet = true

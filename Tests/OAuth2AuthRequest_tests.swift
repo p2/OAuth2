@@ -58,7 +58,7 @@ class OAuth2AuthRequest_Tests: XCTestCase {
 		XCTAssertEqual("AA", req.params["a"])
 		
 		req.params["c"] = "A complicated/surprising name & character=fun"
-		req.params.removeValueForKey("b")
+		req.params.removeValue(forKey: "b")
 		XCTAssertTrue(2 == req.params.count)
 		let str = req.params.percentEncodedQueryString()
 		XCTAssertEqual("a=AA&c=A+complicated%2Fsurprising+name+%26+character%3Dfun", str)

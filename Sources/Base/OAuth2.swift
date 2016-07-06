@@ -226,7 +226,7 @@ public class OAuth2: OAuth2Base {
 					}
 					else {
 						do {
-							assert(Thread.isMainThread())
+							assert(Thread.isMainThread)
 							try self.doAuthorize(params: params)
 						}
 						catch let error {

@@ -229,12 +229,11 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 					oauth?.logger?.debug("OAuth2", msg: "Creating redirect URL from document.title")
 					let qry = title.replacingOccurrences(of: "Success ", with: "")
 					if let url = URL(string: "http://localhost/?\(qry)") {
-						onIntercept?(url: url)
+						_ = onIntercept?(url: url)
 						return
 					}
-					else {
-						oauth?.logger?.warn("OAuth2", msg: "Failed to create a URL with query parts \"\(qry)\"")
-					}
+					
+					oauth?.logger?.warn("OAuth2", msg: "Failed to create a URL with query parts \"\(qry)\"")
 				}
 			}
 		}

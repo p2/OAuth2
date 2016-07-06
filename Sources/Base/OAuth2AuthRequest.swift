@@ -155,13 +155,13 @@ public class OAuth2AuthRequest {
 				oauth2.logger?.debug("OAuth2", msg: "Adding “Authorization” header as “Basic client-key:client-secret”")
 				let pw = "\(clientId.wwwFormURLEncodedString):\(secret.wwwFormURLEncodedString)"
 				if let utf8 = pw.data(using: String.Encoding.utf8) {
-					finalAuthHeader = "Basic \(utf8.base64EncodedString([]))"
+					finalAuthHeader = "Basic \(utf8.base64EncodedString())"
 				}
 				else {
 					throw OAuth2Error.utf8EncodeError
 				}
-				finalParams.removeValueForKey("client_id")
-				finalParams.removeValueForKey("client_secret")
+				finalParams.removeValue(forKey: "client_id")
+				finalParams.removeValue(forKey: "client_secret")
 			}
 		}
 		
@@ -203,10 +203,10 @@ public struct OAuth2AuthRequestParams {
 	/**
 	Removes the given value from the receiver, if it is defined.
 	
-	- parameter key: The key for the value to be removed
+	- parameter forKey: The key for the value to be removed
 	- returns: The value that was removed, if any
 	*/
-	public mutating func removeValueForKey(_ key: String) -> String? {
+	@discardableResult public mutating func removeValue(forKey key: String) -> String? {
 		return params?.removeValue(forKey: key)
 	}
 	

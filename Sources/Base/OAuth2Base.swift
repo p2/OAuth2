@@ -201,7 +201,7 @@ public class OAuth2Base {
 	/// `sessionConfiguration` and/or `sessionDelegate` to affect how the session is configured.
 	public var session: URLSession {
 		if nil == _session {
-			let config = sessionConfiguration ?? URLSessionConfiguration.ephemeral()
+			let config = sessionConfiguration ?? URLSessionConfiguration.ephemeral
 			_session = URLSession(configuration: config, delegate: sessionDelegate, delegateQueue: nil)
 		}
 		return _session!
@@ -345,7 +345,7 @@ public class OAuth2Base {
 Helper function to ensure that the callback is executed on the main thread.
 */
 func callOnMainThread(_ callback: ((Void) -> Void)) {
-	if Thread.isMainThread() {
+	if Thread.isMainThread {
 		callback()
 	}
 	else {
