@@ -30,7 +30,7 @@ public class OAuth2ClientCredentials: OAuth2 {
 		return "client_credentials"
 	}
 	
-	override func doAuthorize(params inParams: OAuth2StringDict? = nil) {
+	public override func doAuthorize(params inParams: OAuth2StringDict? = nil) {
 		self.obtainAccessToken(inParams) { params, error in
 			if let error = error {
 				self.didFail(error)

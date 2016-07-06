@@ -123,8 +123,12 @@ public class OAuth2Base {
 	func updateFromKeychainItems(items: [String: NSCoding]) {
 	}
 	
-	/** Items that should be stored when storing client credentials. */
-	func storableCredentialItems() -> [String: NSCoding]? {
+	/**
+	Items that should be stored when storing client credentials.
+	
+	- returns: A dictionary with `String` keys and `NSCoding` adopting items
+	*/
+	public func storableCredentialItems() -> [String: NSCoding]? {
 		return nil
 	}
 	
@@ -142,8 +146,12 @@ public class OAuth2Base {
 		}
 	}
 	
-	/** Items that should be stored when tokens are stored to the keychain. */
-	func storableTokenItems() -> [String: NSCoding]? {
+	/**
+	Items that should be stored when tokens are stored to the keychain.
+	
+	- returns: A dictionary with `String` keys and `NSCoding` adopting items
+	*/
+	public func storableTokenItems() -> [String: NSCoding]? {
 		return nil
 	}
 	
