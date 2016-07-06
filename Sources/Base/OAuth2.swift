@@ -181,11 +181,11 @@ public class OAuth2: OAuth2Base {
 		authConfig.secretInBody = (clientConfig.endpointAuthMethod == OAuth2EndpointAuthMethod.ClientSecretPost)
 	}
 	
-	override func storableCredentialItems() -> [String : NSCoding]? {
+	public override func storableCredentialItems() -> [String : NSCoding]? {
 		return clientConfig.storableCredentialItems()
 	}
 	
-	override func storableTokenItems() -> [String : NSCoding]? {
+	public override func storableTokenItems() -> [String : NSCoding]? {
 		return clientConfig.storableTokenItems()
 	}
 	
@@ -269,13 +269,19 @@ public class OAuth2: OAuth2Base {
 	}
 	
 	/**
-	Indicates, in the callback, whether the client has been able to obtain an access token that is likely to still
-	work (but there is no guarantee).
+	Attempts to receive a new access token by:
+	
+	1. checking if there still is an unexpired token
+	2. attempting to use a refresh token
+	
+	Indicates, in the callback, whether the client has been able to obtain an access token that is likely to still work (but there is no
+	guarantee!) or not.
 	
 	- parameter params:   Optional key/value pairs to pass during authorization
-	- parameter callback: The callback to call once the client knows whether it has an access token or not
+	- parameter callback: The callback to call once the client knows whether it has an access token or not; if `success` is true an
+	                      access token is present
 	*/
-	func tryToObtainAccessTokenIfNeeded(params params: OAuth2StringDict? = nil, callback: ((success: Bool) -> Void)) {
+	public func tryToObtainAccessTokenIfNeeded(params params: OAuth2StringDict? = nil, callback: ((success: Bool) -> Void)) {
 		if hasUnexpiredAccessToken() {
 			callback(success: true)
 		}
@@ -303,7 +309,7 @@ public class OAuth2: OAuth2Base {
 	
 	- parameter params: Optional key/value pairs to pass during authorization
 	*/
-	func doAuthorize(params params: OAuth2StringDict? = nil) throws {
+	public func doAuthorize(params params: OAuth2StringDict? = nil) throws {
 		if self.authConfig.authorizeEmbedded {
 			try self.authorizeEmbeddedWith(self.authConfig, params: params)
 		}

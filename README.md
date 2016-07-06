@@ -113,10 +113,11 @@ Hence, unless you have a reason to, you don't need to set all three callbacks, y
 ### 5. Make Requests
 
 You can now obtain an `OAuth2Request`, which is an already signed `NSMutableURLRequest`, to retrieve data from your server.
-If you use _Alamofire_ there's a [class extension below](#usage-with-alamofire) that you can use.
+This request sets the _Authorization_ header using the access token like so: `Authorization: Bearer {your access token}`
 
 ```swift
 let req = oauth2.request(forURL: <# resource URL #>)
+// set up your request, e.g. `req.HTTPMethod = "POST"`
 let task = oauth2.session.dataTaskWithRequest(req) { data, response, error in
     if let error = error {
         // something went wrong, check the error
@@ -130,6 +131,7 @@ task.resume()
 ```
 
 Of course you can use your own `NSURLSession` with these requests, you don't have to use `oauth2.session`.
+If you use _Alamofire_ there's a [class extension below](#usage-with-alamofire) that you can use.
 
 ### 6. Cancel Authorization
 
