@@ -45,7 +45,7 @@ public class OAuth2PasswordGrant: OAuth2 {
 		super.init(settings: settings)
 	}
 	
-	override func doAuthorize(params: [String : String]? = nil) {
+	public override func doAuthorize(params: [String : String]? = nil) {
 		self.obtainAccessToken(params: params) { params, error in
 			if let error = error {
 				self.didFail(error)
