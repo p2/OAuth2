@@ -7,7 +7,7 @@
 
 Pod::Spec.new do |s|
   s.name         = "p2.OAuth2"
-  s.version      = "2.2.7"
+  s.version      = "2.2.8"
   s.summary      = "OAuth2 framework for OS X, iOS and tvOS, written in Swift."
   s.description  = <<-DESC
                    OAuth2 frameworks for OS X, iOS and tvOS written in Swift.
