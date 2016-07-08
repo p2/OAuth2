@@ -22,9 +22,9 @@ import Foundation
 
 
 public enum OAuth2EndpointAuthMethod: String {
-	case None = "none"
-	case ClientSecretPost = "client_secret_post"
-	case ClientSecretBasic = "client_secret_basic"
+	case none = "none"
+	case clientSecretPost = "client_secret_post"
+	case clientSecretBasic = "client_secret_basic"
 }
 
 

@@ -36,10 +36,10 @@ Content types that will be specified in the request header under "Content-type".
 public enum OAuth2HTTPContentType: String {
 	
 	/// JSON content: `application/json`
-	case JSON = "application/json"
+	case json = "application/json"
 	
 	/// Form encoded content, using UTF-8: `application/x-www-form-urlencoded; charset=utf-8`
-	case WWWForm = "application/x-www-form-urlencoded; charset=utf-8"
+	case wwwForm = "application/x-www-form-urlencoded; charset=utf-8"
 }
 
 
@@ -54,8 +54,8 @@ public class OAuth2AuthRequest {
 	/// The HTTP method.
 	public let method: OAuth2HTTPMethod
 	
-	/// The content type that will be specified. Defaults to `WWWForm`.
-	public var contentType = OAuth2HTTPContentType.WWWForm
+	/// The content type that will be specified. Defaults to `wwwForm`.
+	public var contentType = OAuth2HTTPContentType.wwwForm
 	
 	/// If set will take preference over any "Authorize" header that would otherwise be set.
 	public var headerAuthorize: String?

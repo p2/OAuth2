@@ -178,7 +178,7 @@ public class OAuth2: OAuth2Base {
 		for message in clientConfig.updateFromStorableItems(items) {
 			logger?.debug("OAuth2", msg: message)
 		}
-		authConfig.secretInBody = (clientConfig.endpointAuthMethod == OAuth2EndpointAuthMethod.ClientSecretPost)
+		authConfig.secretInBody = (clientConfig.endpointAuthMethod == OAuth2EndpointAuthMethod.clientSecretPost)
 	}
 	
 	public override func storableCredentialItems() -> [String : NSCoding]? {

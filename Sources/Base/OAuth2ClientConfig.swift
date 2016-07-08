@@ -61,7 +61,7 @@ public class OAuth2ClientConfig {
 	
 	/// How the client communicates the client secret with the server. Defaults to ".None" if there is no secret, ".ClientSecretPost" if
 	/// "secret_in_body" is `true` and ".ClientSecretBasic" otherwise. Interacts with the `authConfig.secretInBody` client setting.
-	public final var endpointAuthMethod = OAuth2EndpointAuthMethod.None
+	public final var endpointAuthMethod = OAuth2EndpointAuthMethod.none
 	
 	
 	/**
@@ -97,10 +97,10 @@ public class OAuth2ClientConfig {
 			redirect = redirs.first
 		}
 		if let inBody = settings["secret_in_body"] as? Bool where inBody {
-			endpointAuthMethod = .ClientSecretPost
+			endpointAuthMethod = .clientSecretPost
 		}
 		else if nil != clientSecret {
-			endpointAuthMethod = .ClientSecretBasic
+			endpointAuthMethod = .clientSecretBasic
 		}
 		
 		// access token options
