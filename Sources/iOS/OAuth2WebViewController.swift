@@ -33,7 +33,7 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 	public var startURL: URL? {
 		didSet(oldURL) {
 			if nil != startURL && nil == oldURL && isViewLoaded() {
-				loadURL(startURL!)
+				load(url: startURL!)
 			}
 		}
 	}
@@ -122,7 +122,7 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 		
 		if let web = webView where !web.canGoBack {
 			if nil != startURL {
-				loadURL(startURL!)
+				load(url: startURL!)
 			}
 			else {
 				web.loadHTMLString("There is no `startURL`", baseURL: nil)
@@ -155,7 +155,7 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 	
 	// MARK: - Actions
 	
-	public func loadURL(_ url: URL) {
+	public func load(url: URL) {
 		webView?.loadRequest(URLRequest(url: url))
 	}
 	
@@ -214,7 +214,7 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 					oauth?.logger?.debug("OAuth2", msg: "Creating redirect URL from document.title")
 					let qry = title.replacingOccurrences(of: "Success ", with: "")
 					if let url = URL(string: "http://localhost/?\(qry)") {
-						onIntercept?(url: url)
+						_ = onIntercept?(url: url)
 						return
 					}
 					else {
