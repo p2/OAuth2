@@ -58,7 +58,10 @@ class OAuth2PasswordGrantTests: XCTestCase
 		
 		let body = String(data: request.httpBody!, encoding: String.Encoding.utf8)
 		XCTAssertNotNil(body, "Body data must be present")
-		XCTAssertEqual(body!, "username=My+User&grant_type=password&scope=login+and+more&password=Here+is+my+password", "Must create correct request body")
+		XCTAssertTrue(body!.contains("username=My+User"), "Must create correct request body")
+		XCTAssertTrue(body!.contains("grant_type=password"), "Must create correct request body")
+		XCTAssertTrue(body!.contains("scope=login+and+more"), "Must create correct request body")
+		XCTAssertTrue(body!.contains("password=Here+is+my+password"), "Must create correct request body")
 	}
 	
 	func testTokenResponse() {
@@ -95,7 +98,10 @@ class OAuth2PasswordGrantTests: XCTestCase
 		
 		let body = String(data: request.httpBody!, encoding: String.Encoding.utf8)
 		XCTAssertNotNil(body, "Body data must be present")
-		XCTAssertEqual(body!, "username=My+User&grant_type=password&foo=bar+%26+hat&password=Here+is+my+password", "Must create correct request body")
+		XCTAssertTrue(body!.contains("username=My+User"), "Must create correct request body")
+		XCTAssertTrue(body!.contains("grant_type=password"), "Must create correct request body")
+		XCTAssertTrue(body!.contains("foo=bar+%26+hat"), "Must create correct request body")
+		XCTAssertTrue(body!.contains("password=Here+is+my+password"), "Must create correct request body")
 	}
 }
 

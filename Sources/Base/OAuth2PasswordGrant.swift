@@ -63,7 +63,7 @@ public class OAuth2PasswordGrant: OAuth2 {
 	*/
 	func obtainAccessToken(params: OAuth2StringDict? = nil, callback: ((params: OAuth2JSON?, error: ErrorProtocol?) -> Void)) {
 		do {
-			let post = try tokenRequest(params).asURLRequestFor(self)
+			let post = try tokenRequest(params: params).asURLRequestFor(self)
 			logger?.debug("OAuth2", msg: "Requesting new access token from \(post.url?.description)")
 			
 			performRequest(post) { data, status, error in
@@ -95,7 +95,7 @@ public class OAuth2PasswordGrant: OAuth2 {
 	/**
 	Creates a POST request with x-www-form-urlencoded body created from the supplied URL's query part.
 	*/
-	func tokenRequest(_ params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
+	func tokenRequest(params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
 		if username.isEmpty{
 			throw OAuth2Error.noUsername
 		}

@@ -259,13 +259,13 @@ public class OAuth2: OAuth2Base {
 	- returns: A Bool indicating whether a probably valid access token exists
 	*/
 	public func hasUnexpiredAccessToken() -> Bool {
-		if let access = accessToken where !access.isEmpty {
-			if let expiry = accessTokenExpiry {
-				return expiry == (expiry as NSDate).laterDate(Date())
-			}
-			return clientConfig.accessTokenAssumeUnexpired
+		guard let access = accessToken where !access.isEmpty else {
+			return false
 		}
-		return false
+		if let expiry = accessTokenExpiry {
+			return (.orderedDescending == expiry.compare(Date()))
+		}
+		return clientConfig.accessTokenAssumeUnexpired
 	}
 	
 	/**
@@ -395,7 +395,7 @@ public class OAuth2: OAuth2Base {
 	- parameter params: Additional parameters to pass during token refresh
 	- returns:          An `OAuth2AuthRequest` instance that is configured for token refresh
 	*/
-	func tokenRequestForTokenRefresh(_ params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
+	func tokenRequestForTokenRefresh(params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
 		guard let clientId = clientId where !clientId.isEmpty else {
 			throw OAuth2Error.noClientId
 		}
@@ -420,7 +420,7 @@ public class OAuth2: OAuth2Base {
 	*/
 	public func doRefreshToken(params: OAuth2StringDict? = nil, callback: ((successParams: OAuth2JSON?, error: ErrorProtocol?) -> Void)) {
 		do {
-			let post = try tokenRequestForTokenRefresh(params).asURLRequestFor(self)
+			let post = try tokenRequestForTokenRefresh(params: params).asURLRequestFor(self)
 			logger?.debug("OAuth2", msg: "Using refresh token to receive access token from \(post.url?.description ?? "nil")")
 			
 			performRequest(post) { data, status, error in

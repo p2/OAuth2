@@ -162,7 +162,7 @@ class OAuth2Tests: XCTestCase {
 		XCTAssertEqual(0, oauth.session.configuration.httpCookieStorage?.cookies?.count ?? 0, "Expecting ephemeral session configuration by default")
 		
 		// custom configuration
-		oauth.sessionConfiguration = URLSessionConfiguration.default()
+		oauth.sessionConfiguration = URLSessionConfiguration.default
 		oauth.sessionConfiguration?.timeoutIntervalForRequest = 5.0
 		XCTAssertEqual(5, oauth.session.configuration.timeoutIntervalForRequest)
 		

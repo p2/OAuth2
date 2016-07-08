@@ -67,7 +67,7 @@ class OAuth2AuthRequest_Tests: XCTestCase {
 	func testURLComponents() {
 		let reqNoTLS = OAuth2AuthRequest(url: URL(string: "http://not.tls.com")!)
 		do {
-			try reqNoTLS.asURLComponents()
+			_ = try reqNoTLS.asURLComponents()
 			XCTAssertTrue(false, "Must no longer be here, must throw because we're not using TLS")
 		}
 		catch OAuth2Error.notUsingTLS {
@@ -119,7 +119,9 @@ class OAuth2AuthRequest_Tests: XCTestCase {
 		let reqB = OAuth2AuthRequest(url: URL(string: "https://auth.io")!)
 		do {
 			let request = try reqB.asURLRequestFor(oauth)
-			XCTAssertEqual("client_id=id&client_secret=secret", String(data: request.httpBody!, encoding: String.Encoding.utf8))
+			let response = String(data: request.httpBody!, encoding: String.Encoding.utf8) ?? ""
+			XCTAssertTrue(response.contains("client_id=id"))
+			XCTAssertTrue(response.contains("client_secret=secret"))
 			XCTAssertNil(request.value(forHTTPHeaderField: "Authorization"))
 		}
 		catch let error {

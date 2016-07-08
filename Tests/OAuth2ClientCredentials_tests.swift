@@ -77,7 +77,7 @@ class OAuth2ClientCredentialsTests: XCTestCase {
 		])
 		
 		do {
-			try oauth.tokenRequest()
+			_ = try oauth.tokenRequest()
 			XCTAssertFalse(true, "`tokenRequest()` without client secret must throw .NoClientSecret")
 		}
 		catch OAuth2Error.noClientSecret {
@@ -106,7 +106,7 @@ class OAuth2ClientCredentialsTests: XCTestCase {
 			])
 		
 		do {
-			try oauth.tokenRequest()
+			_ = try oauth.tokenRequest()
 			XCTAssertFalse(true, "`tokenRequest()` without device_id must throw .Generic")
 		}
 		catch OAuth2Error.generic(let message) {
@@ -135,7 +135,7 @@ class OAuth2ClientCredentialsTests: XCTestCase {
 			])
 		
 		do {
-			try oauth.tokenRequest()
+			_ = try oauth.tokenRequest()
 		}
 		catch let err {
 			XCTAssertFalse(true, "`tokenRequest()` should not have thrown but threw \(err)")

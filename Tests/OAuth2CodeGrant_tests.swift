@@ -56,7 +56,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 		
 		XCTAssertNotNil(oauth.authURL, "Must init `authorize_uri`")
 		do {
-			try oauth.authorizeURLWithRedirect("oauth2://callback", scope: nil, params: nil)
+			_ = try oauth.authorizeURLWithRedirect("oauth2://callback", scope: nil, params: nil)
 			XCTAssertTrue(false, "Should no longer be here")
 		}
 		catch OAuth2Error.notUsingTLS {
@@ -66,7 +66,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 		}
 		
 		do {
-			try oauth.tokenRequestWithCode("pp").asURL()
+			_ = try oauth.tokenRequestWithCode("pp").asURL()
 			XCTAssertTrue(false, "Should no longer be here")
 		}
 		catch OAuth2Error.notUsingTLS {
@@ -98,7 +98,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 		// parse error
 		var redirect = URL(string: "oauth2://callback?error=invalid_scope")!
 		do {
-			try oauth.validateRedirectURL(redirect)
+			_ = try oauth.validateRedirectURL(redirect)
 			XCTAssertTrue(false, "Should not be here")
 		}
 		catch OAuth2Error.invalidScope {
@@ -110,7 +110,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 		// parse custom error
 		redirect = URL(string: "oauth2://callback?error=invalid_scope&error_description=BadScopeDude")!
 		do {
-			try oauth.validateRedirectURL(redirect)
+			_ = try oauth.validateRedirectURL(redirect)
 			XCTAssertTrue(false, "Should not be here")
 		}
 		catch let error {
@@ -120,7 +120,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 		// parse wrong callback
 		redirect = URL(string: "oauth3://callback?error=invalid_scope")!
 		do {
-			try oauth.validateRedirectURL(redirect)
+			_ = try oauth.validateRedirectURL(redirect)
 			XCTAssertTrue(false, "Should not be here")
 		}
 		catch OAuth2Error.invalidRedirectURL {
@@ -132,7 +132,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 		// parse no state
 		redirect = URL(string: "oauth2://callback?code=C0D3")!
 		do {
-			try oauth.validateRedirectURL(redirect)
+			_ = try oauth.validateRedirectURL(redirect)
 			XCTAssertTrue(false, "Should not be here")
 		}
 		catch OAuth2Error.invalidState {
@@ -144,7 +144,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 		// parse all good
 		redirect = URL(string: "oauth2://callback?code=C0D3&state=\(oauth.context.state)")!
 		do {
-			try oauth.validateRedirectURL(redirect)
+			_ = try oauth.validateRedirectURL(redirect)
 		}
 		catch let error {
 			XCTAssertTrue(false, "Should not throw, but threw \(error)")
@@ -155,7 +155,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 		oauth.context.redirectURL = oauth.redirect
 		redirect = URL(string: "oauth2://callback?code=C0D3&state=\(oauth.context.state)")!
 		do {
-			try oauth.validateRedirectURL(redirect)
+			_ = try oauth.validateRedirectURL(redirect)
 		}
 		catch OAuth2Error.invalidRedirectURL {
 		}
@@ -166,7 +166,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 		// oob with valid redirect
 		redirect = URL(string: "http://localhost?code=C0D3&state=\(oauth.context.state)")!
 		do {
-			try oauth.validateRedirectURL(redirect)
+			_ = try oauth.validateRedirectURL(redirect)
 		}
 		catch let error {
 			XCTAssertTrue(false, "Should not throw, but threw \(error)")
@@ -184,7 +184,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 		
 		// no redirect in context - fail
 		do {
-			try oauth.tokenRequestWithCode("pp")
+			_ = try oauth.tokenRequestWithCode("pp")
 			XCTAssertTrue(false, "Should not be here any more")
 		}
 		catch OAuth2Error.noRedirectURL {
@@ -351,7 +351,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 		]
 		
 		do {
-			try oauth.parseAccessTokenResponse(response2)
+			_ = try oauth.parseAccessTokenResponse(response2)
 			XCTAssertTrue(false, "Should not be here any more")
 		}
 		catch OAuth2Error.unsupportedTokenType {
