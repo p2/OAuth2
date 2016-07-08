@@ -24,24 +24,21 @@ import SwiftKeychain
 #endif
 
 
-/// We store the client's credentials (id and secret) under this keychain key name.
-let OAuth2KeychainCredentialsKey = "clientCredentials"
-
-/// We store the current tokens under this keychain key name.
-let OAuth2KeychainTokenKey = "currentTokens"
-
-
 /**
 Keychain integration handler for OAuth2.
 */
 struct OAuth2KeychainAccount: KeychainGenericPasswordType {
 	
+	/// The service name to use.
 	let serviceName: String
 	
+	/// The account name to use.
 	let accountName: String
 	
+	/// Data that ends up in the keychain.
 	var data = [String: AnyObject]()
 	
+	/// Keychain access mode.
 	let accessMode: String
 	
 	
@@ -62,6 +59,8 @@ extension KeychainGenericPasswordType {
 	
 	/**
 	Attempts to read data from the keychain, will ignore `errSecItemNotFound` but throw others.
+	
+	- returns: A [String: NSCoding] dictionary of data fetched from the keychain
 	*/
 	mutating func fetchedFromKeychain() throws -> [String: NSCoding] {
 		do {

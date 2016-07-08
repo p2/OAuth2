@@ -55,6 +55,20 @@ public class OAuth2Base {
 		}
 	}
 	
+	/// The keychain account to use to store tokens. Defaults to "currentTokens".
+	public var keychainAccountForTokens = "currentTokens" {
+		didSet {
+			assert(!keychainAccountForTokens.isEmpty)
+		}
+	}
+	
+	/// The keychain account name to use to store client credentials. Defaults to "clientCredentials".
+	public var keychainAccountForClientCredentials = "clientCredentials" {
+		didSet {
+			assert(!keychainAccountForClientCredentials.isEmpty)
+		}
+	}
+	
 	/// Defaults to `kSecAttrAccessibleWhenUnlocked`
 	public internal(set) var keychainAccessMode = kSecAttrAccessibleWhenUnlocked
 	
@@ -101,7 +115,7 @@ public class OAuth2Base {
 		logger?.debug("OAuth2", msg: "Looking for items in keychain")
 		
 		do {
-			var creds = OAuth2KeychainAccount(oauth2: self, account: OAuth2KeychainTokenKey)
+			var creds = OAuth2KeychainAccount(oauth2: self, account: keychainAccountForClientCredentials)
 			let creds_data = try creds.fetchedFromKeychain()
 			updateFromKeychainItems(creds_data)
 		}
@@ -110,7 +124,7 @@ public class OAuth2Base {
 		}
 		
 		do {
-			var toks = OAuth2KeychainAccount(oauth2: self, account: OAuth2KeychainCredentialsKey)
+			var toks = OAuth2KeychainAccount(oauth2: self, account: keychainAccountForTokens)
 			let toks_data = try toks.fetchedFromKeychain()
 			updateFromKeychainItems(toks_data)
 		}
@@ -136,7 +150,7 @@ public class OAuth2Base {
 	internal func storeClientToKeychain() {
 		if let items = storableCredentialItems() {
 			logger?.debug("OAuth2", msg: "Storing client credentials to keychain")
-			let keychain = OAuth2KeychainAccount(oauth2: self, account: OAuth2KeychainTokenKey, data: items)
+			let keychain = OAuth2KeychainAccount(oauth2: self, account: keychainAccountForClientCredentials, data: items)
 			do {
 				try keychain.saveInKeychain()
 			}
@@ -159,7 +173,7 @@ public class OAuth2Base {
 	internal func storeTokensToKeychain() {
 		if let items = storableTokenItems() {
 			logger?.debug("OAuth2", msg: "Storing tokens to keychain")
-			let keychain = OAuth2KeychainAccount(oauth2: self, account: OAuth2KeychainCredentialsKey, data: items)
+			let keychain = OAuth2KeychainAccount(oauth2: self, account: keychainAccountForTokens, data: items)
 			do {
 				try keychain.saveInKeychain()
 			}
@@ -172,7 +186,7 @@ public class OAuth2Base {
 	/** Unsets the client credentials and deletes them from the keychain. */
 	public func forgetClient() {
 		logger?.debug("OAuth2", msg: "Forgetting client credentials and removing them from keychain")
-		let keychain = OAuth2KeychainAccount(oauth2: self, account: OAuth2KeychainTokenKey)
+		let keychain = OAuth2KeychainAccount(oauth2: self, account: keychainAccountForClientCredentials)
 		do {
 			try keychain.removeFromKeychain()
 		}
@@ -185,7 +199,7 @@ public class OAuth2Base {
 	public func forgetTokens() {
 		logger?.debug("OAuth2", msg: "Forgetting tokens and removing them from keychain")
 
-		let keychain = OAuth2KeychainAccount(oauth2: self, account: OAuth2KeychainCredentialsKey)
+		let keychain = OAuth2KeychainAccount(oauth2: self, account: keychainAccountForTokens)
 		do {
 			try keychain.removeFromKeychain()
 		}

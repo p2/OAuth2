@@ -5,6 +5,12 @@ Version numbering represents the Swift version, plus a running number representi
 You can also refer to commit logs to get details on what was implemented, fixed and improved.
 
 
+### 2.2.8
+
+- Make keychain store name programmer-settable (fixes #111 and #119)
+- More public methods to support subclassing
+
+
 ### 2.2.7
 
 - Use a simple logger for logging purposes (inspired by @tompson and @ChrisInIssaquah)
