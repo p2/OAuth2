@@ -38,11 +38,11 @@ class OAuth2AuthRequest_Tests: XCTestCase {
 	func testContentType() {
 		let url = URL(string: "http://localhost")!
 		let req = OAuth2AuthRequest(url: url)
-		XCTAssertTrue(req.contentType == .WWWForm)
+		XCTAssertTrue(req.contentType == .wwwForm)
 		XCTAssertEqual("application/x-www-form-urlencoded; charset=utf-8", req.contentType.rawValue)
 		
-		req.contentType = .JSON
-		XCTAssertTrue(req.contentType == .JSON)
+		req.contentType = .json
+		XCTAssertTrue(req.contentType == .json)
 		XCTAssertEqual("application/json", req.contentType.rawValue)
 	}
 	

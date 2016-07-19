@@ -22,8 +22,8 @@ import Foundation
 
 
 /**
-    A class to handle authorization for clients via password grant.
- */
+A class to handle authorization for clients via password grant.
+*/
 public class OAuth2PasswordGrant: OAuth2 {
 	
 	public override class var grantType: String {
@@ -102,14 +102,14 @@ public class OAuth2PasswordGrant: OAuth2 {
 		if password.isEmpty{
 			throw OAuth2Error.noPassword
 		}
-		guard let clientId = clientConfig.clientId where !clientId.isEmpty else {
-			throw OAuth2Error.noClientId
-		}
 		
 		let req = OAuth2AuthRequest(url: (clientConfig.tokenURL ?? clientConfig.authorizeURL))
 		req.params["grant_type"] = self.dynamicType.grantType
 		req.params["username"] = username
 		req.params["password"] = password
+		if let clientId = clientConfig.clientId {
+			req.params["client_id"] = clientId
+		}
 		if let scope = clientConfig.scope {
 			req.params["scope"] = scope
 		}

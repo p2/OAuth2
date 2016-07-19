@@ -63,7 +63,7 @@ public class OAuth2CodeGrant: OAuth2 {
 		req.params["code"] = code
 		req.params["grant_type"] = self.dynamicType.grantType
 		req.params["redirect_uri"] = redirect
-		req.params["client_id"] = clientConfig.clientId
+		req.params["client_id"] = clientId
 		
 		return req
 	}
