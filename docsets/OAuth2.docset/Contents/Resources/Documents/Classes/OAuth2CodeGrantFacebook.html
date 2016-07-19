@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Keychain Struct Reference</title>
+    <title>OAuth2CodeGrantFacebook Class Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Struct/Keychain" class="dashAnchor"></a>
-    <a title="Keychain Struct Reference"></a>
+    <a name="//apple_ref/swift/Class/OAuth2CodeGrantFacebook" class="dashAnchor"></a>
+    <a title="OAuth2CodeGrantFacebook Class Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">OAuth2 Docs</a> (74% documented)</p>
@@ -23,7 +23,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">OAuth2 Reference</a>
         <img id="carat" src="../img/carat.png" />
-        Keychain Struct Reference
+        OAuth2CodeGrantFacebook Class Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -180,8 +180,15 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>Keychain</h1>
-            <p>Undocumented</p>
+            <h1>OAuth2CodeGrantFacebook</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2CodeGrantFacebook</span><span class="p">:</span> <span class="kt"><a href="../Classes/OAuth2CodeGrant.html">OAuth2CodeGrant</a></span></code></pre>
+
+                </div>
+              </div>
+            <p>Facebook only returns an <q>access_token=xyz&&hellip;</q> string, no true JSON, hence we override <code>parseTokenExchangeResponse</code>
+and deal with the situation in a subclass.</p>
 
           </section>
           <section class="section task-group-section">
@@ -190,9 +197,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FV6OAuth28Keychain24insertItemWithAttributesFzGVs10DictionarySSPs9AnyObject__T_"></a>
-                    <a name="//apple_ref/swift/Method/insertItemWithAttributes(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FV6OAuth28Keychain24insertItemWithAttributesFzGVs10DictionarySSPs9AnyObject__T_">insertItemWithAttributes(_:)</a>
+                    <a name="/s:FC6OAuth223OAuth2CodeGrantFacebook28parseAccessTokenResponseDataFzCSo6NSDataGVs10DictionarySSPs9AnyObject__"></a>
+                    <a name="//apple_ref/swift/Method/parseAccessTokenResponseData(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth223OAuth2CodeGrantFacebook28parseAccessTokenResponseDataFzCSo6NSDataGVs10DictionarySSPs9AnyObject__">parseAccessTokenResponseData(_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -200,46 +207,17 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Facebook doesn&rsquo;t return JSON but a plain URL-query-like string. This override takes care of the situation and extracts the token from
+the response.</p>
 
                       </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FV6OAuth28Keychain24removeItemWithAttributesFzGVs10DictionarySSPs9AnyObject__T_"></a>
-                    <a name="//apple_ref/swift/Method/removeItemWithAttributes(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FV6OAuth28Keychain24removeItemWithAttributesFzGVs10DictionarySSPs9AnyObject__T_">removeItemWithAttributes(_:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">override</span> <span class="kd">public</span> <span class="kd">func</span> <span class="nf">parseAccessTokenResponseData</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="kt">NSData</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Typealiases.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a></span></code></pre>
 
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FV6OAuth28Keychain23fetchItemWithAttributesFzGVs10DictionarySSPs9AnyObject__GSqGS1_SSPS2____"></a>
-                    <a name="//apple_ref/swift/Method/fetchItemWithAttributes(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FV6OAuth28Keychain23fetchItemWithAttributesFzGVs10DictionarySSPs9AnyObject__GSqGS1_SSPS2____">fetchItemWithAttributes(_:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
+                        </div>
                       </div>
                     </section>
                   </div>

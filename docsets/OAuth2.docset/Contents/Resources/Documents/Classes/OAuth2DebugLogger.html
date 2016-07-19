@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Keychain Struct Reference</title>
+    <title>OAuth2DebugLogger Class Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Struct/Keychain" class="dashAnchor"></a>
-    <a title="Keychain Struct Reference"></a>
+    <a name="//apple_ref/swift/Class/OAuth2DebugLogger" class="dashAnchor"></a>
+    <a title="OAuth2DebugLogger Class Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">OAuth2 Docs</a> (74% documented)</p>
@@ -23,7 +23,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">OAuth2 Reference</a>
         <img id="carat" src="../img/carat.png" />
-        Keychain Struct Reference
+        OAuth2DebugLogger Class Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -180,8 +180,14 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>Keychain</h1>
-            <p>Undocumented</p>
+            <h1>OAuth2DebugLogger</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2DebugLogger</span><span class="p">:</span> <span class="kt"><a href="../Protocols/OAuth2Logger.html">OAuth2Logger</a></span></code></pre>
+
+                </div>
+              </div>
+            <p>Basic logger that just prints to stdout.</p>
 
           </section>
           <section class="section task-group-section">
@@ -190,9 +196,36 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FV6OAuth28Keychain24insertItemWithAttributesFzGVs10DictionarySSPs9AnyObject__T_"></a>
-                    <a name="//apple_ref/swift/Method/insertItemWithAttributes(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FV6OAuth28Keychain24insertItemWithAttributesFzGVs10DictionarySSPs9AnyObject__T_">insertItemWithAttributes(_:)</a>
+                    <a name="/s:vC6OAuth217OAuth2DebugLogger5levelOS_14OAuth2LogLevel"></a>
+                    <a name="//apple_ref/swift/Property/level" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC6OAuth217OAuth2DebugLogger5levelOS_14OAuth2LogLevel">level</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The logger&rsquo;s logging level, set to <code>Debug</code> by default.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">level</span> <span class="o">=</span> <span class="kt"><a href="../Enums/OAuth2LogLevel.html">OAuth2LogLevel</a></span><span class="o">.</span><span class="kt">Debug</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6OAuth217OAuth2DebugLoggercFTOS_14OAuth2LogLevel_S0_"></a>
+                    <a name="//apple_ref/swift/Method/init(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth217OAuth2DebugLoggercFTOS_14OAuth2LogLevel_S0_">init(_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -203,43 +236,13 @@
                         <p>Undocumented</p>
 
                       </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FV6OAuth28Keychain24removeItemWithAttributesFzGVs10DictionarySSPs9AnyObject__T_"></a>
-                    <a name="//apple_ref/swift/Method/removeItemWithAttributes(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FV6OAuth28Keychain24removeItemWithAttributesFzGVs10DictionarySSPs9AnyObject__T_">removeItemWithAttributes(_:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2DebugLogger</span><span class="p">:</span> <span class="kt"><a href="../Protocols/OAuth2Logger.html">OAuth2Logger</a></span></code></pre>
 
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FV6OAuth28Keychain23fetchItemWithAttributesFzGVs10DictionarySSPs9AnyObject__GSqGS1_SSPS2____"></a>
-                    <a name="//apple_ref/swift/Method/fetchItemWithAttributes(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FV6OAuth28Keychain23fetchItemWithAttributesFzGVs10DictionarySSPs9AnyObject__GSqGS1_SSPS2____">fetchItemWithAttributes(_:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
+                        </div>
                       </div>
                     </section>
                   </div>

@@ -13,7 +13,7 @@
     <a title="Protocols  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">OAuth2 Docs</a> (73% documented)</p>
+        <p><a href="index.html">OAuth2 Docs</a> (74% documented)</p>
         <p class="header-right"><a href="http://p2.github.io/OAuth2"><img src="img/gh.png"/>View on GitHub</a></p>
         <p class="header-right"><a href="dash-feed://http%3A%2F%2Fsmart%2Don%2Dfhir%2Egithub%2Eio%2Fdocsets%2FOAuth2%2Exml"><img src="img/dash.png"/>Install in Dash</a></p>
       </div>
@@ -56,13 +56,16 @@
                 <a href="Classes/OAuth2CodeGrantBasicAuth.html">OAuth2CodeGrantBasicAuth</a>
               </li>
               <li class="nav-group-task">
-                <a href="Classes.html#/s:C6OAuth223OAuth2CodeGrantFacebook">OAuth2CodeGrantFacebook</a>
+                <a href="Classes/OAuth2CodeGrantFacebook.html">OAuth2CodeGrantFacebook</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/OAuth2CodeGrantLinkedIn.html">OAuth2CodeGrantLinkedIn</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/OAuth2CodeGrantNoTokenType.html">OAuth2CodeGrantNoTokenType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/OAuth2DebugLogger.html">OAuth2DebugLogger</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/OAuth2DebugURLSessionDelegate.html">OAuth2DebugURLSessionDelegate</a>
@@ -99,6 +102,9 @@
               <li class="nav-group-task">
                 <a href="Enums/OAuth2HTTPMethod.html">OAuth2HTTPMethod</a>
               </li>
+              <li class="nav-group-task">
+                <a href="Enums/OAuth2LogLevel.html">OAuth2LogLevel</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -116,6 +122,9 @@
             <a href="Functions.html">Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a href="Functions.html#/s:ZF6OAuth2oi1lFTOS_14OAuth2LogLevelS0__Sb">&lt;(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Functions.html#/s:ZF6OAuth2oi2eeFTOS_11OAuth2ErrorS0__Sb">==(_:_:)</a>
               </li>
             </ul>
@@ -132,6 +141,9 @@
               <li class="nav-group-task">
                 <a href="Protocols/KeychainServiceType.html">KeychainServiceType</a>
               </li>
+              <li class="nav-group-task">
+                <a href="Protocols/OAuth2Logger.html">OAuth2Logger</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -142,6 +154,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Structs/OAuth2AuthConfig.html">OAuth2AuthConfig</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/OAuth2AuthConfig/UI.html">– UI</a>
               </li>
               <li class="nav-group-task">
                 <a href="Structs/OAuth2AuthRequestParams.html">OAuth2AuthRequestParams</a>
@@ -262,11 +277,46 @@
                 </li>
               </ul>
             </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:P6OAuth212OAuth2Logger"></a>
+                    <a name="//apple_ref/swift/Protocol/OAuth2Logger" class="dashAnchor"></a>
+                    <a class="token" href="#/s:P6OAuth212OAuth2Logger">OAuth2Logger</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A simple protocol for loggers used in OAuth2.</p>
+
+<p>The <code><a href="Classes/OAuth2DebugLogger.html">OAuth2DebugLogger</a></code> is a simple implementation that logs to stdout. If you need more sophisticated logging, just adapt this protocol
+and set your logger on the <code><a href="Classes/OAuth2.html">OAuth2</a></code> instance you&rsquo;re using.</p>
+
+                        <a href="Protocols/OAuth2Logger.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">OAuth2Logger</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="http://www.github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2016-04-11)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.6.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2016 <a class="link" href="http://www.github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2016-07-19)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

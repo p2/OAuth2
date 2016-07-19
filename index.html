@@ -13,7 +13,7 @@
     <a title="OAuth2  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">OAuth2 Docs</a> (73% documented)</p>
+        <p><a href="index.html">OAuth2 Docs</a> (74% documented)</p>
         <p class="header-right"><a href="http://p2.github.io/OAuth2"><img src="img/gh.png"/>View on GitHub</a></p>
         <p class="header-right"><a href="dash-feed://http%3A%2F%2Fsmart%2Don%2Dfhir%2Egithub%2Eio%2Fdocsets%2FOAuth2%2Exml"><img src="img/dash.png"/>Install in Dash</a></p>
       </div>
@@ -56,13 +56,16 @@
                 <a href="Classes/OAuth2CodeGrantBasicAuth.html">OAuth2CodeGrantBasicAuth</a>
               </li>
               <li class="nav-group-task">
-                <a href="Classes.html#/s:C6OAuth223OAuth2CodeGrantFacebook">OAuth2CodeGrantFacebook</a>
+                <a href="Classes/OAuth2CodeGrantFacebook.html">OAuth2CodeGrantFacebook</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/OAuth2CodeGrantLinkedIn.html">OAuth2CodeGrantLinkedIn</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/OAuth2CodeGrantNoTokenType.html">OAuth2CodeGrantNoTokenType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/OAuth2DebugLogger.html">OAuth2DebugLogger</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/OAuth2DebugURLSessionDelegate.html">OAuth2DebugURLSessionDelegate</a>
@@ -99,6 +102,9 @@
               <li class="nav-group-task">
                 <a href="Enums/OAuth2HTTPMethod.html">OAuth2HTTPMethod</a>
               </li>
+              <li class="nav-group-task">
+                <a href="Enums/OAuth2LogLevel.html">OAuth2LogLevel</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -116,6 +122,9 @@
             <a href="Functions.html">Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a href="Functions.html#/s:ZF6OAuth2oi1lFTOS_14OAuth2LogLevelS0__Sb">&lt;(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Functions.html#/s:ZF6OAuth2oi2eeFTOS_11OAuth2ErrorS0__Sb">==(_:_:)</a>
               </li>
             </ul>
@@ -132,6 +141,9 @@
               <li class="nav-group-task">
                 <a href="Protocols/KeychainServiceType.html">KeychainServiceType</a>
               </li>
+              <li class="nav-group-task">
+                <a href="Protocols/OAuth2Logger.html">OAuth2Logger</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -142,6 +154,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Structs/OAuth2AuthConfig.html">OAuth2AuthConfig</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/OAuth2AuthConfig/UI.html">– UI</a>
               </li>
               <li class="nav-group-task">
                 <a href="Structs/OAuth2AuthRequestParams.html">OAuth2AuthRequestParams</a>
@@ -178,7 +193,7 @@ Take a look at the <a href="https://github.com/p2/OAuth2App">OS X sample app</a>
 <p>The code in this repo requires Xcode 7.3, the built framework can be used on <strong>OS X 10.9</strong> or <strong>iOS 8</strong> and later.
 To use on <strong>iOS 7</strong> you&rsquo;ll have to include the source files in your main project.
 Happy to accept pull requests, please see <a href="./CONTRIBUTING.md">CONTRIBUTING.md</a></p>
-<a href='#swift_version' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='swift_version'>Swift Version</h4>
+<a href='#swift-version' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='swift-version'>Swift Version</h4>
 
 <p>Since the Swift language is constantly evolving I have adopted a versioning scheme mirroring Swift versions:
 the framework version&rsquo;s <strong>first two digits are always the Swift version</strong> the library is compatible with, see <a href="https://github.com/p2/OAuth2/releases">releases</a>.
@@ -190,18 +205,18 @@ Code compatible with brand new Swift versions are to be found on a separate feat
 <p>For a typical code grant flow you want to perform the following steps.
 The steps for other flows are mostly the same short of instantiating a different subclass and using different client settings.
 Most <em>authorize</em> methods take an additional <code>params</code> parameter that allows you to supply custom additional parameters to use during authorization.</p>
-<a href='#1_create_a_settings_dictionary' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='1_create_a_settings_dictionary'>1. Create a Settings Dictionary.</h3>
+<a href='#1-create-a-settings-dictionary' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='1-create-a-settings-dictionary'>1. Create a Settings Dictionary.</h3>
 <pre class="highlight swift"><code><span class="k">let</span> <span class="nv">settings</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s">"client_id"</span><span class="p">:</span> <span class="s">"my_swift_app"</span><span class="p">,</span>
     <span class="s">"client_secret"</span><span class="p">:</span> <span class="s">"C7447242-A0CF-47C5-BAC7-B38BA91970A9"</span><span class="p">,</span>
     <span class="s">"authorize_uri"</span><span class="p">:</span> <span class="s">"https://authorize.smarthealthit.org/authorize"</span><span class="p">,</span>
     <span class="s">"token_uri"</span><span class="p">:</span> <span class="s">"https://authorize.smarthealthit.org/token"</span><span class="p">,</span>   <span class="c1">// code grant only</span>
     <span class="s">"scope"</span><span class="p">:</span> <span class="s">"profile email"</span><span class="p">,</span>
-    <span class="s">"redirect_uris"</span><span class="p">:</span> <span class="p">[</span><span class="s">"myapp://oauth/callback"</span><span class="p">],</span>   <span class="c1">// don't forget to register this scheme</span>
+    <span class="s">"redirect_uris"</span><span class="p">:</span> <span class="p">[</span><span class="s">"myapp://oauth/callback"</span><span class="p">],</span>   <span class="c1">// register the "myapp" scheme in Info.plist</span>
     <span class="s">"keychain"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>     <span class="c1">// if you DON'T want keychain integration</span>
 <span class="p">]</span> <span class="k">as</span> <span class="kt">OAuth2JSON</span>
 </code></pre>
-<a href='#2_instantiate_oauth2' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='2_instantiate_oauth2'>2. Instantiate OAuth2</h3>
+<a href='#2-instantiate-oauth2' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='2-instantiate-oauth2'>2. Instantiate OAuth2</h3>
 
 <p>Create an <code>OAuth2CodeGrant</code> Instance.
 Optionally, set the <code>onAuthorize</code> and <code>onFailure</code> closures <strong>or</strong> the <code>afterAuthorizeOrFailure</code> closure to keep informed about the status.</p>
@@ -215,7 +230,7 @@ Optionally, set the <code>onAuthorize</code> and <code>onFailure</code> closures
     <span class="p">}</span>
 <span class="p">}</span>
 </code></pre>
-<a href='#3_authorize_the_user' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='3_authorize_the_user'>3. Authorize the User</h3>
+<a href='#3-authorize-the-user' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='3-authorize-the-user'>3. Authorize the User</h3>
 
 <p>By default the OS browser will be used for authorization if there is no access token present in the keychain.
 To start authorization call <strong><code>authorize()</code></strong> or, to use embedded authorization, the convenience method <code>authorizeEmbeddedFrom(&lt;# UIViewController or NSWindow #&gt;)</code>.</p>
@@ -257,15 +272,16 @@ Let the OAuth2 instance handle the full URL:</p>
 </code></pre>
 
 <p>See <a href="#manually-performing-authentication"><em>Manually Performing Authentication</em></a> below for details on how to do this on the Mac.</p>
-<a href='#4_receive_callback' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='4_receive_callback'>4. Receive Callback</h3>
+<a href='#4-receive-callback' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='4-receive-callback'>4. Receive Callback</h3>
 
 <p>After everything completes either the <code>onAuthorize</code> or the <code>onFailure</code> closure will be called, and after that the <code>afterAuthorizeOrFailure</code> closure if it has been set.
 Hence, unless you have a reason to, you don&rsquo;t need to set all three callbacks, you can use any of those.</p>
-<a href='#5_make_requests' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='5_make_requests'>5. Make Requests</h3>
+<a href='#5-make-requests' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='5-make-requests'>5. Make Requests</h3>
 
 <p>You can now obtain an <code>OAuth2Request</code>, which is an already signed <code>NSMutableURLRequest</code>, to retrieve data from your server.
-If you use <em>Alamofire</em> there&rsquo;s a <a href="#usage-with-alamofire">class extension below</a> that you can use.</p>
+This request sets the <em>Authorization</em> header using the access token like so: <code>Authorization: Bearer {your access token}</code></p>
 <pre class="highlight swift"><code><span class="k">let</span> <span class="nv">req</span> <span class="o">=</span> <span class="n">oauth2</span><span class="o">.</span><span class="nf">request</span><span class="p">(</span><span class="nv">forURL</span><span class="p">:</span> <span class="o">&lt;</span><span class="err">#</span> <span class="n">resource</span> <span class="kt">URL</span> <span class="err">#</span><span class="o">&gt;</span><span class="p">)</span>
+<span class="c1">// set up your request, e.g. `req.HTTPMethod = "POST"`</span>
 <span class="k">let</span> <span class="nv">task</span> <span class="o">=</span> <span class="n">oauth2</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="nf">dataTaskWithRequest</span><span class="p">(</span><span class="n">req</span><span class="p">)</span> <span class="p">{</span> <span class="n">data</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="n">error</span> <span class="k">in</span>
     <span class="k">if</span> <span class="k">let</span> <span class="nv">error</span> <span class="o">=</span> <span class="n">error</span> <span class="p">{</span>
         <span class="c1">// something went wrong, check the error</span>
@@ -278,18 +294,19 @@ If you use <em>Alamofire</em> there&rsquo;s a <a href="#usage-with-alamofire">cl
 <span class="n">task</span><span class="o">.</span><span class="nf">resume</span><span class="p">()</span>
 </code></pre>
 
-<p>Of course you can use your own <code>NSURLSession</code> with these requests, you don&rsquo;t have to use <code>oauth2.session</code>.</p>
-<a href='#6_cancel_authorization' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='6_cancel_authorization'>6. Cancel Authorization</h3>
+<p>Of course you can use your own <code>NSURLSession</code> with these requests, you don&rsquo;t have to use <code>oauth2.session</code>.
+If you use <em>Alamofire</em> there&rsquo;s a <a href="#usage-with-alamofire">class extension below</a> that you can use.</p>
+<a href='#6-cancel-authorization' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='6-cancel-authorization'>6. Cancel Authorization</h3>
 
 <p>You can cancel an ongoing authorization any time by calling <code>oauth2.abortAuthorization()</code>.
 This will cancel ongoing requests (like a code exchange request) or call the callback while you&rsquo;re waiting for a user to login on a webpage.
 The latter will dismiss embedded login screens or redirect the user back to the app.</p>
-<a href='#7_re_authorize' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='7_re_authorize'>7. Re-Authorize</h3>
+<a href='#7-re-authorize' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='7-re-authorize'>7. Re-Authorize</h3>
 
 <p>It is safe to always call <code>oauth2.authorize()</code> before performing a request.
 You can also perform the authorization before the first request after your app became active again.
 Or you can always intercept 401s in your requests and call authorize again before re-attempting the request.</p>
-<a href='#8_logout' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='8_logout'>8. Logout</h3>
+<a href='#8-logout' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='8-logout'>8. Logout</h3>
 
 <p>If you&rsquo;re storing tokens to the keychain, you can call <code>forgetTokens()</code> to throw them away.</p>
 
@@ -299,7 +316,7 @@ With the newer <code>SFSafariViewController</code>, or logins performed in the b
 <pre class="highlight swift"><code><span class="k">let</span> <span class="nv">storage</span> <span class="o">=</span> <span class="kt">NSHTTPCookieStorage</span><span class="o">.</span><span class="nf">sharedHTTPCookieStorage</span><span class="p">()</span>
 <span class="n">storage</span><span class="o">.</span><span class="n">cookies</span><span class="p">?</span><span class="o">.</span><span class="nf">forEach</span><span class="p">()</span> <span class="p">{</span> <span class="n">storage</span><span class="o">.</span><span class="nf">deleteCookie</span><span class="p">(</span><span class="nv">$0</span><span class="p">)</span> <span class="p">}</span>
 </code></pre>
-<a href='#manually_performing_authentication' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='manually_performing_authentication'>Manually Performing Authentication</h2>
+<a href='#manually-performing-authentication' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='manually-performing-authentication'>Manually Performing Authentication</h2>
 
 <p>The <code>authorize()</code> method will:</p>
 
@@ -310,7 +327,8 @@ With the newer <code>SFSafariViewController</code>, or logins performed in the b
 <li>Start the OAuth2 dance by using the <code>authConfig</code> settings to determine how to display an authorize screen to the user</li>
 </ol>
 
-<p>If you do <strong>not wish this kind of automation</strong>, the manual steps to show and hide the authorize screens are:</p>
+<p>The wiki has <a href="https://github.com/p2/OAuth2/wiki/Call-Graph">the complete call graph</a> of the <em>authorize()</em> method.
+If you do <strong>not wish this kind of automation</strong>, the manual steps to show and hide the authorize screens are:</p>
 
 <p><strong>Embedded iOS</strong>:</p>
 <pre class="highlight swift"><code><span class="k">let</span> <span class="nv">web</span> <span class="o">=</span> <span class="n">oauth2</span><span class="o">.</span><span class="nf">authorizeEmbeddedWith</span><span class="p">(</span><span class="o">&lt;</span><span class="err">#</span> <span class="n">presenting</span> <span class="n">view</span> <span class="n">controller</span> <span class="err">#</span><span class="o">&gt;</span><span class="p">)</span>
@@ -366,84 +384,46 @@ If the authentication displays the code to the user, e.g. with Google&rsquo;s <c
 
 <p>Based on which OAuth2 flow that you need you will want to use the correct subclass.
 For a very nice explanation of OAuth&rsquo;s basics: <a href="http://oauthbible.com/#oauth-2-three-legged">The OAuth Bible</a>.</p>
-<a href='#code_grant' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='code_grant'>Code Grant</h4>
+<a href='#code-grant' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='code-grant'>Code Grant</h4>
 
 <p>For a full OAuth 2 code grant flow (<code>response_type=code</code>) you want to use the <code>OAuth2CodeGrant</code> class.
 This flow is typically used by applications that can guard their secrets, like server-side apps, and not in distributed binaries.
 In case an application cannot guard its secret, such as a distributed iOS app, you would use the <em>implicit grant</em> or, in some cases, still a <em>code grant</em> but omitting the client secret.
-It has however become common practice to still use code grants from mobile devices, including a client secret.
-This class fully supports those flows, it automatically creates a “Basic” Authorization header if the client has a client secret.
+It has however become common practice to still use code grants from mobile devices, including a client secret.</p>
+
+<p>This class fully supports those flows, it automatically creates a “Basic” Authorization header if the client has a non-nil client secret.
+This means that you likely <strong>must</strong> specify <code>client_secret</code> in your settings; if there is none (like for <a href="https://github.com/reddit/reddit/wiki/OAuth2#token-retrieval-code-flow">Reddit</a>) specify the empty string.
 If the site requires client credentials in the request body, set <code>secretInBody</code> to true, as explained below.</p>
-<a href='#implicit_grant' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='implicit_grant'>Implicit Grant</h4>
+<a href='#implicit-grant' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='implicit-grant'>Implicit Grant</h4>
 
 <p>An implicit grant (<code>response_type=token</code>) is suitable for apps that are not capable of guarding their secret, such as distributed binaries or client-side web apps.
 Use the <code>OAuth2ImplicitGrant</code> class to receive a token and perform requests.</p>
 
 <p>Would be nice to add another code example here, but it&rsquo;s pretty much the same as for the <em>code grant</em>.</p>
-<a href='#client_credentials' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='client_credentials'>Client Credentials</h4>
+<a href='#client-credentials' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='client-credentials'>Client Credentials</h4>
 
 <p>A 2-legged flow that lets an app authenticate itself via its client id and secret.
 Instantiate <code>OAuth2ClientCredentials</code>, as usual supplying <code>client_id</code> but also a <code>client_secret</code> – plus your other configurations – in the settings dict, and you should be good to go.</p>
-<a href='#username_and_password' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='username_and_password'>Username and Password</h4>
+<a href='#username-and-password' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='username-and-password'>Username and Password</h4>
 
 <p>The <em>Resource Owner Password Credentials Grant</em> is supported with the <code>OAuth2PasswordGrant</code> subclass.
 Create an instance as shown above, set its <code>username</code> and <code>password</code> properties, then call <code>authorize()</code>.</p>
-<a href='#site_specific_peculiarities' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='site_specific_peculiarities'>Site-Specific Peculiarities</h3>
+<a href='#site-specific-peculiarities' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='site-specific-peculiarities'>Site-Specific Peculiarities</h2>
 
 <p>Some sites might not strictly adhere to the OAuth2 flow.
-The framework deals with those deviations by creating site-specific subclasses.</p>
-<a href='#facebook' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='facebook'>Facebook</h4>
+The framework deals with those deviations by creating site-specific subclasses and/or configuration details.</p>
 
-<p>Use <code>OAuth2CodeGrantFacebook</code> to deal with the <a href="https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow/v2.2">URL-query-style response</a> instead of the expected JSON dictionary.</p>
-<a href='#github' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='github'>GitHub</h4>
-
-<p><code>OAuth2CodeGrant</code> automatically puts the client-key/client-secret into an “Authorization: Basic” header.
-GitHub however needs those two in the POSTed body; you need to set the <code>authConfig.secretInBody</code> setting to true, either directly in code or via the <code>secret_in_body</code> key in the settings dictionary.</p>
-<a href='#reddit' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='reddit'>Reddit</h4>
-
-<p><code>OAuth2CodeGrant</code> automatically adds a <em>Basic</em> authorization header when a client secret is set.
-This means that you <strong>must</strong> specify a client_secret; if there is none (like for <a href="https://github.com/reddit/reddit/wiki/OAuth2#token-retrieval-code-flow">Reddit</a>) specify the empty string.
-There is a <a href="https://github.com/p2/OAuth2App/blob/master/OAuth2App/RedditLoader.swift">RedditLoader</a> example in the <a href="https://github.com/p2/OAuth2App">OAuth2App sample app</a> for a basic usage example.</p>
-
-<p>For Reddit&rsquo;s <a href="https://github.com/reddit/reddit/wiki/OAuth2#application-only-oauth">Application Only OAuth</a>, you don&rsquo;t get a secret for installed apps, which is why you can&rsquo;t use a standard client credentials flow.
-Use the supplied <code>OAuth2ClientCredentialsReddit</code> class and don&rsquo;t forget to add a <code>device_id</code>.</p>
-<a href='#google' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='google'>Google</h4>
-
-<p>If you authorize against Google with a <code>OAuth2CodeGrant</code>, the built-in iOS web view will intercept the <code>http://localhost</code> as well as the <code>urn:ietf:wg:oauth:2.0:oob</code> (with or without <code>:auto</code>) callbacks.
-This means you must disable the Safari view controller and – for now – this only works on iOS.</p>
-<pre class="highlight swift"><code><span class="n">oauth2</span><span class="o">.</span><span class="n">authConfig</span><span class="o">.</span><span class="n">authorizeEmbedded</span> <span class="o">=</span> <span class="kc">true</span>
-<span class="n">oauth2</span><span class="o">.</span><span class="n">authConfig</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">useSafariView</span> <span class="o">=</span> <span class="kc">false</span>
-</code></pre>
-<a href='#linkedin' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='linkedin'>LinkedIn</h4>
-
-<p>There are a couple of peculiarities with LinkedIn&rsquo;s OAuth2 implementation.
-You can use <code>OAuth2CodeGrantLinkedIn</code> which deals with those, but since it needs the custom embedded web view this will only work on iOS for now.
-To receive <em>JSON</em> you will also need to use their special header <code>x-li-format</code> and set it to <code>json</code>:</p>
-<pre class="highlight swift"><code><span class="n">urlRequest</span><span class="o">.</span><span class="nf">setValue</span><span class="p">(</span><span class="s">"json"</span><span class="p">,</span> <span class="nv">forHTTPHeaderField</span><span class="p">:</span> <span class="s">"x-li-format"</span><span class="p">)</span>
-</code></pre>
-<a href='#instagram_bitly' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='instagram_bitly'>Instagram, Bitly, &hellip;</h4>
-
-<p>Some sites don&rsquo;t return the required <code>token_type</code> parameter in their token response.
-LinkedIn does the same, see above.
-You can tell if you&rsquo;re getting the error <em>“No token type received, will not use the token”</em>.
-There is a subclass for code grant flows that ignores the missing token type that you can use: <a href="Sources/Base/OAuth2CodeGrantNoTokenType.swift"><code>OAuth2CodeGrantNoTokenType</code></a>.</p>
-
-<p>For <em>Instagram</em> you also need to set <code>oauth2.authConfig.secretInBody = true</code> (or use <code>secret_in_body</code> in your settings dict) because it expects the client secret in the request body, not the <em>Authorization</em> header.</p>
-<a href='#uber' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='uber'>Uber</h4>
-
-<p>When making repeated calls to Uber&rsquo;s ride status endpoint (<code>/V1/REQUESTS/{REQUEST_ID}</code>) it may return a cached response.
-To avoid this set a cache policy for your request:</p>
-<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">request</span> <span class="o">=</span> <span class="n">oauth2</span><span class="o">.</span><span class="nf">request</span><span class="p">(</span><span class="nv">forURL</span><span class="p">:</span> <span class="o">&lt;</span><span class="err">#</span> <span class="n">resource</span> <span class="kt">URL</span> <span class="err">#</span><span class="o">&gt;</span><span class="p">)</span>
-<span class="n">request</span><span class="o">.</span><span class="n">cachePolicy</span> <span class="o">=</span> <span class="kt">NSURLRequestCachePolicy</span><span class="o">.</span><span class="kt">ReloadIgnoringLocalCacheData</span>
-<span class="n">oauth2</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="nf">dataTaskWithRequest</span><span class="p">(</span><span class="n">request</span><span class="p">)</span> <span class="p">{</span> <span class="n">data</span><span class="p">,</span> <span class="n">resp</span><span class="p">,</span> <span class="n">error</span> <span class="k">in</span>
-    <span class="o">...</span>
-<span class="p">}</span>
-</code></pre>
-<a href='#bitbucket' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='bitbucket'>BitBucket</h4>
-
-<p>BitBucket will prioritize any user session (cookies) over the <q>Authorization</q> header, hence code exchange will fail if a cookie with a user session is present.
-This is automatically addressed by OAuth2 using an ephemeral NSURLSession by default; keep this in mind if you configure OAuth2&rsquo;s session yourself.</p>
-<a href='#usage_with_alamofire' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='usage_with_alamofire'>Usage with Alamofire</h2>
+<ul>
+<li><a href="https://github.com/p2/OAuth2/wiki/GitHub">GitHub</a></li>
+<li><a href="https://github.com/p2/OAuth2/wiki/Facebook">Facebook</a></li>
+<li><a href="https://github.com/p2/OAuth2/wiki/Reddit">Reddit</a></li>
+<li><a href="https://github.com/p2/OAuth2/wiki/Google">Google</a></li>
+<li><a href="https://github.com/p2/OAuth2/wiki/LinkedIn">LinkedIn</a></li>
+<li><a href="https://github.com/p2/OAuth2/wiki/Instagram">Instagram, Bitly, &hellip;</a></li>
+<li><a href="https://github.com/p2/OAuth2/wiki/Uber">Uber</a></li>
+<li><a href="https://github.com/p2/OAuth2/wiki/BitBucket">BitBucket</a></li>
+</ul>
+<a href='#usage-with-alamofire' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='usage-with-alamofire'>Usage with Alamofire</h2>
 
 <p>Here&rsquo;s an extension that can be used with Alamofire:</p>
 <pre class="highlight swift"><code><span class="kd">import</span> <span class="kt">Alamofire</span>
@@ -477,7 +457,7 @@ Of course this will only work once you have an access token.
 You can use <code>hasUnexpiredAccessToken()</code> to check for one or just always call <code>authorize()</code> first; it will call your callback immediately if you have a token.</p>
 <pre class="highlight swift"><code><span class="n">oauth2</span><span class="o">.</span><span class="nf">request</span><span class="p">(</span><span class="o">.</span><span class="kt">GET</span><span class="p">,</span> <span class="s">"http://httpbin.org/get"</span><span class="p">)</span>
 </code></pre>
-<a href='#dynamic_client_registration' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='dynamic_client_registration'>Dynamic Client Registration</h2>
+<a href='#dynamic-client-registration' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='dynamic-client-registration'>Dynamic Client Registration</h2>
 
 <p>There is support for <a href="https://tools.ietf.org/html/rfc7591">dynamic client registration</a>.
 If during setup <code>registration_url</code> is set but <code>client_id</code> is not, the <code>authorize()</code> call automatically attempts to register the client before continuing to the actual authorization.
@@ -521,7 +501,7 @@ If you have dynamically registered your client and want to start anew, you can c
 If it is missing the framework will still use those tokens if one is found in the keychain and not re-perform the OAuth dance.
 You will need to intercept 401s and re-authenticate if an access token has expired but the framework has still pulled it from the keychain.
 This behavior can be turned off by supplying <q>token_assume_unexpired</q>: false in settings or setting <code>clientConfig.accessTokenAssumeUnexpired</code> to false.</p>
-<a href='#advanced_settings' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='advanced_settings'>Advanced Settings</h2>
+<a href='#advanced-settings' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='advanced-settings'>Advanced Settings</h2>
 
 <p>The main configuration you&rsquo;ll use with <code>oauth2.authConfig</code> is whether or not to use an embedded login:</p>
 <pre class="highlight plaintext"><code>oauth2.authConfig.authorizeEmbedded = true
@@ -596,8 +576,8 @@ Since there is no <code>NOTICE</code> file there is nothing that you have to inc
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="http://www.github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2016-04-11)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.6.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2016 <a class="link" href="http://www.github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2016-07-19)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

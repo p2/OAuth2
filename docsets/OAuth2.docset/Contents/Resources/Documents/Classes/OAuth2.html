@@ -14,7 +14,7 @@
     <a title="OAuth2 Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">OAuth2 Docs</a> (73% documented)</p>
+        <p><a href="../index.html">OAuth2 Docs</a> (74% documented)</p>
         <p class="header-right"><a href="http://p2.github.io/OAuth2"><img src="../img/gh.png"/>View on GitHub</a></p>
         <p class="header-right"><a href="dash-feed://http%3A%2F%2Fsmart%2Don%2Dfhir%2Egithub%2Eio%2Fdocsets%2FOAuth2%2Exml"><img src="../img/dash.png"/>Install in Dash</a></p>
       </div>
@@ -57,13 +57,16 @@
                 <a href="../Classes/OAuth2CodeGrantBasicAuth.html">OAuth2CodeGrantBasicAuth</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes.html#/s:C6OAuth223OAuth2CodeGrantFacebook">OAuth2CodeGrantFacebook</a>
+                <a href="../Classes/OAuth2CodeGrantFacebook.html">OAuth2CodeGrantFacebook</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/OAuth2CodeGrantLinkedIn.html">OAuth2CodeGrantLinkedIn</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/OAuth2CodeGrantNoTokenType.html">OAuth2CodeGrantNoTokenType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/OAuth2DebugLogger.html">OAuth2DebugLogger</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/OAuth2DebugURLSessionDelegate.html">OAuth2DebugURLSessionDelegate</a>
@@ -100,6 +103,9 @@
               <li class="nav-group-task">
                 <a href="../Enums/OAuth2HTTPMethod.html">OAuth2HTTPMethod</a>
               </li>
+              <li class="nav-group-task">
+                <a href="../Enums/OAuth2LogLevel.html">OAuth2LogLevel</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -117,6 +123,9 @@
             <a href="../Functions.html">Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a href="../Functions.html#/s:ZF6OAuth2oi1lFTOS_14OAuth2LogLevelS0__Sb">&lt;(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Functions.html#/s:ZF6OAuth2oi2eeFTOS_11OAuth2ErrorS0__Sb">==(_:_:)</a>
               </li>
             </ul>
@@ -133,6 +142,9 @@
               <li class="nav-group-task">
                 <a href="../Protocols/KeychainServiceType.html">KeychainServiceType</a>
               </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/OAuth2Logger.html">OAuth2Logger</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -143,6 +155,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/OAuth2AuthConfig.html">OAuth2AuthConfig</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/OAuth2AuthConfig/UI.html">– UI</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/OAuth2AuthRequestParams.html">OAuth2AuthRequestParams</a>
@@ -168,7 +183,7 @@
             <h1>OAuth2</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2</span><span class="p">:</span> <span class="kt">OAuth2Base</span></code></pre>
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2</span><span class="p">:</span> <span class="kt"><a href="../Classes/OAuth2Base.html">OAuth2Base</a></span></code></pre>
 
                 </div>
               </div>
@@ -252,7 +267,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">clientConfig</span><span class="p">:</span> <span class="kt">OAuth2ClientConfig</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">clientConfig</span><span class="p">:</span> <span class="kt"><a href="../Classes/OAuth2ClientConfig.html">OAuth2ClientConfig</a></span></code></pre>
 
                         </div>
                       </div>
@@ -279,7 +294,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">authConfig</span> <span class="o">=</span> <span class="kt">OAuth2AuthConfig</span><span class="p">()</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">authConfig</span> <span class="o">=</span> <span class="kt"><a href="../Structs/OAuth2AuthConfig.html">OAuth2AuthConfig</a></span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -505,6 +520,33 @@
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:vC6OAuth26OAuth27idTokenGSqSS_"></a>
+                    <a name="//apple_ref/swift/Property/idToken" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC6OAuth26OAuth27idTokenGSqSS_">idToken</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The receiver&rsquo;s id token.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">idToken</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:vC6OAuth26OAuth217accessTokenExpiryGSqCSo6NSDate_"></a>
                     <a name="//apple_ref/swift/Property/accessTokenExpiry" class="dashAnchor"></a>
                     <a class="token" href="#/s:vC6OAuth26OAuth217accessTokenExpiryGSqCSo6NSDate_">accessTokenExpiry</a>
@@ -576,7 +618,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">onAuthorize</span><span class="p">:</span> <span class="p">((</span><span class="nv">parameters</span><span class="p">:</span> <span class="kt">OAuth2JSON</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">onAuthorize</span><span class="p">:</span> <span class="p">((</span><span class="nv">parameters</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span></code></pre>
 
                         </div>
                       </div>
@@ -690,7 +732,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">onBeforeDynamicClientRegistration</span><span class="p">:</span> <span class="p">(</span><span class="kt">NSURL</span> <span class="o">-&gt;</span> <span class="kt">OAuth2DynReg</span><span class="p">?)?</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">onBeforeDynamicClientRegistration</span><span class="p">:</span> <span class="p">(</span><span class="kt">NSURL</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/OAuth2DynReg.html">OAuth2DynReg</a></span><span class="p">?)?</span></code></pre>
 
                         </div>
                       </div>
@@ -737,7 +779,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">override</span> <span class="nf">init</span><span class="p">(</span><span class="nv">settings</span><span class="p">:</span> <span class="kt">OAuth2JSON</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">override</span> <span class="nf">init</span><span class="p">(</span><span class="nv">settings</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -785,6 +827,60 @@
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:FC6OAuth26OAuth223storableCredentialItemsFT_GSqGVs10DictionarySSPSo8NSCoding___"></a>
+                    <a name="//apple_ref/swift/Method/storableCredentialItems()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth26OAuth223storableCredentialItemsFT_GSqGVs10DictionarySSPSo8NSCoding___">storableCredentialItems()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2</span><span class="p">:</span> <span class="kt"><a href="../Classes/OAuth2Base.html">OAuth2Base</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6OAuth26OAuth218storableTokenItemsFT_GSqGVs10DictionarySSPSo8NSCoding___"></a>
+                    <a name="//apple_ref/swift/Method/storableTokenItems()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth26OAuth218storableTokenItemsFT_GSqGVs10DictionarySSPSo8NSCoding___">storableTokenItems()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2</span><span class="p">:</span> <span class="kt"><a href="../Classes/OAuth2Base.html">OAuth2Base</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:FC6OAuth26OAuth212forgetClientFT_T_"></a>
                     <a name="//apple_ref/swift/Method/forgetClient()" class="dashAnchor"></a>
                     <a class="token" href="#/s:FC6OAuth26OAuth212forgetClientFT_T_">forgetClient()</a>
@@ -802,7 +898,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2</span><span class="p">:</span> <span class="kt">OAuth2Base</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2</span><span class="p">:</span> <span class="kt"><a href="../Classes/OAuth2Base.html">OAuth2Base</a></span></code></pre>
 
                         </div>
                       </div>
@@ -829,7 +925,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2</span><span class="p">:</span> <span class="kt">OAuth2Base</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2</span><span class="p">:</span> <span class="kt"><a href="../Classes/OAuth2Base.html">OAuth2Base</a></span></code></pre>
 
                         </div>
                       </div>
@@ -873,7 +969,7 @@ be attempted and if it succees, an access token will be requested.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">func</span> <span class="nf">authorize</span><span class="p">(</span><span class="n">params</span> <span class="nv">params</span><span class="p">:</span> <span class="kt">OAuth2StringDict</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">func</span> <span class="nf">authorize</span><span class="p">(</span><span class="n">params</span> <span class="nv">params</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:6OAuth216OAuth2StringDict">OAuth2StringDict</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -889,7 +985,7 @@ be attempted and if it succees, an access token will be requested.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>Optional key/value pairs to pass during authorization</p>
+                                  <p>Optional key/value pairs to pass during authorization and token refresh</p>
 
                                 </div>
                               </td>
@@ -922,9 +1018,42 @@ be attempted and if it succees, an access token will be requested.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">authorizeEmbeddedFrom</span><span class="p">(</span><span class="nv">context</span><span class="p">:</span> <span class="kt">AnyObject</span><span class="p">,</span> <span class="nv">params</span><span class="p">:</span> <span class="kt">OAuth2StringDict</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">authorizeEmbeddedFrom</span><span class="p">(</span><span class="nv">context</span><span class="p">:</span> <span class="kt">AnyObject</span><span class="p">,</span> <span class="nv">params</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:6OAuth216OAuth2StringDict">OAuth2StringDict</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>context</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The context to start authorization from, depends on platform (UIViewController or NSWindow, see <code>authorizeContext</code>)</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>params</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Optional key/value pairs to pass during authorization</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -954,6 +1083,129 @@ is still valid.</p>
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A Bool indicating whether a probably valid access token exists</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6OAuth26OAuth230tryToObtainAccessTokenIfNeededFT6paramsGSqGVs10DictionarySSSS__8callbackFT7successSb_T__T_"></a>
+                    <a name="//apple_ref/swift/Method/tryToObtainAccessTokenIfNeeded(params:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth26OAuth230tryToObtainAccessTokenIfNeededFT6paramsGSqGVs10DictionarySSSS__8callbackFT7successSb_T__T_">tryToObtainAccessTokenIfNeeded(params:callback:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Attempts to receive a new access token by:</p>
+
+<ol>
+<li>checking if there still is an unexpired token</li>
+<li>attempting to use a refresh token</li>
+</ol>
+
+<p>Indicates, in the callback, whether the client has been able to obtain an access token that is likely to still work (but there is no
+guarantee!) or not.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">tryToObtainAccessTokenIfNeeded</span><span class="p">(</span><span class="n">params</span> <span class="nv">params</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:6OAuth216OAuth2StringDict">OAuth2StringDict</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="nv">success</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">))</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>params</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Optional key/value pairs to pass during authorization</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The callback to call once the client knows whether it has an access token or not; if <code>success</code> is true an access token is present</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6OAuth26OAuth211doAuthorizeFzT6paramsGSqGVs10DictionarySSSS___T_"></a>
+                    <a name="//apple_ref/swift/Method/doAuthorize(params:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth26OAuth211doAuthorizeFzT6paramsGSqGVs10DictionarySSSS___T_">doAuthorize(params:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Method to actually start authorization. The public <code>authorize()</code> method only proceeds to this method if there is no valid access token
+and if optional client registration succeeds.</p>
+
+<p>Can be overridden in subclasses to perform an authorization dance different from directing the user to a website.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">doAuthorize</span><span class="p">(</span><span class="n">params</span> <span class="nv">params</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:6OAuth216OAuth2StringDict">OAuth2StringDict</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>params</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Optional key/value pairs to pass during authorization</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -977,7 +1229,7 @@ is still valid.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">authorizeURL</span><span class="p">(</span><span class="nv">params</span><span class="p">:</span> <span class="kt">OAuth2StringDict</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">NSURL</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">authorizeURL</span><span class="p">(</span><span class="nv">params</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:6OAuth216OAuth2StringDict">OAuth2StringDict</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">NSURL</span></code></pre>
 
                         </div>
                       </div>
@@ -1029,7 +1281,7 @@ is still valid.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">authorizeURLWithRedirect</span><span class="p">(</span><span class="nv">redirect</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">scope</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">params</span><span class="p">:</span> <span class="kt">OAuth2StringDict</span><span class="p">?)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">NSURL</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">authorizeURLWithRedirect</span><span class="p">(</span><span class="nv">redirect</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">scope</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">params</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:6OAuth216OAuth2StringDict">OAuth2StringDict</a></span><span class="p">?)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">NSURL</span></code></pre>
 
                         </div>
                       </div>
@@ -1111,6 +1363,26 @@ is still valid.</p>
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>redirect</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The redirect URL returned by the server that you want to handle</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -1128,9 +1400,9 @@ is still valid.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth26OAuth214doRefreshTokenFFT13successParamsGSqGVs10DictionarySSPs9AnyObject___5errorGSqPs9ErrorType___T_T_"></a>
-                    <a name="//apple_ref/swift/Method/doRefreshToken(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth26OAuth214doRefreshTokenFFT13successParamsGSqGVs10DictionarySSPs9AnyObject___5errorGSqPs9ErrorType___T_T_">doRefreshToken(_:)</a>
+                    <a name="/s:FC6OAuth26OAuth214doRefreshTokenFT6paramsGSqGVs10DictionarySSSS__8callbackFT13successParamsGSqGS1_SSPs9AnyObject___5errorGSqPs9ErrorType___T__T_"></a>
+                    <a name="//apple_ref/swift/Method/doRefreshToken(params:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth26OAuth214doRefreshTokenFT6paramsGSqGVs10DictionarySSSS__8callbackFT13successParamsGSqGS1_SSPs9AnyObject___5errorGSqPs9ErrorType___T__T_">doRefreshToken(params:callback:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1145,7 +1417,7 @@ is still valid.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">doRefreshToken</span><span class="p">(</span><span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="nv">successParams</span><span class="p">:</span> <span class="kt">OAuth2JSON</span><span class="p">?,</span> <span class="nv">error</span><span class="p">:</span> <span class="kt">ErrorType</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">))</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">doRefreshToken</span><span class="p">(</span><span class="n">params</span> <span class="nv">params</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:6OAuth216OAuth2StringDict">OAuth2StringDict</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="nv">successParams</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a></span><span class="p">?,</span> <span class="nv">error</span><span class="p">:</span> <span class="kt">ErrorType</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">))</span></code></pre>
 
                         </div>
                       </div>
@@ -1156,12 +1428,136 @@ is still valid.</p>
                             <tr>
                               <td>
                                 <code>
+                                <em>params</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Optional key/value pairs to pass during token refresh</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
                                 <em>callback</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
                                   <p>The callback to call after the refresh token exchange has finished</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Callbacks"></a>
+                <a name="//apple_ref/swift/Section/Callbacks" class="dashAnchor"></a>
+                <a href="#/Callbacks">
+                  <h3 class="section-name">Callbacks</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6OAuth26OAuth212didAuthorizeFGVs10DictionarySSPs9AnyObject__T_"></a>
+                    <a name="//apple_ref/swift/Method/didAuthorize(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth26OAuth212didAuthorizeFGVs10DictionarySSPs9AnyObject__T_">didAuthorize(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Internally used on success. Calls the <code><a href="../Classes/OAuth2.html#/s:vC6OAuth26OAuth211onAuthorizeGSqFT10parametersGVs10DictionarySSPs9AnyObject___T__">onAuthorize</a></code> and <code><a href="../Classes/OAuth2.html#/s:vC6OAuth26OAuth223afterAuthorizeOrFailureGSqFT10wasFailureSb5errorGSqPs9ErrorType___T__">afterAuthorizeOrFailure</a></code> callbacks on the main thread.</p>
+
+<p>This method is only made public in case you want to create a subclass and call <code>didAuthorize(parameters:)</code> at an override point. If you
+call this method yourself on standard classes you might screw things up badly.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">func</span> <span class="nf">didAuthorize</span><span class="p">(</span><span class="nv">parameters</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>parameters</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The parameters received during authorization</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6OAuth26OAuth27didFailFGSqPs9ErrorType__T_"></a>
+                    <a name="//apple_ref/swift/Method/didFail(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth26OAuth27didFailFGSqPs9ErrorType__T_">didFail(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Internally used on error. Calls the <code><a href="../Classes/OAuth2.html#/s:vC6OAuth26OAuth29onFailureGSqFT5errorGSqPs9ErrorType___T__">onFailure</a></code> and <code><a href="../Classes/OAuth2.html#/s:vC6OAuth26OAuth223afterAuthorizeOrFailureGSqFT10wasFailureSb5errorGSqPs9ErrorType___T__">afterAuthorizeOrFailure</a></code> callbacks on the main thread.</p>
+
+<p>This method is only made public in case you want to create a subclass and need to call <code>didFail(error:)</code> at an override point. If you
+call this method yourself on standard classes you might screw things up royally.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">func</span> <span class="nf">didFail</span><span class="p">(</span><span class="nv">error</span><span class="p">:</span> <span class="kt">ErrorType</span><span class="p">?)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>error</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The error that led to authentication failure</p>
 
                                 </div>
                               </td>
@@ -1186,9 +1582,9 @@ is still valid.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth26OAuth27requestFT6forURLCSo5NSURL_CS_13OAuth2Request"></a>
-                    <a name="//apple_ref/swift/Method/request(forURL:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth26OAuth27requestFT6forURLCSo5NSURL_CS_13OAuth2Request">request(forURL:)</a>
+                    <a name="/s:FC6OAuth26OAuth27requestFT6forURLCSo5NSURL11cachePolicyOSC23NSURLRequestCachePolicy_CS_13OAuth2Request"></a>
+                    <a name="//apple_ref/swift/Method/request(forURL:cachePolicy:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth26OAuth27requestFT6forURLCSo5NSURL11cachePolicyOSC23NSURLRequestCachePolicy_CS_13OAuth2Request">request(forURL:cachePolicy:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1196,17 +1592,17 @@ is still valid.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Return an OAuth2Request, a NSMutableURLRequest subclass, that has already been signed and can be used against
-your OAuth2 endpoint.</p>
+                        <p>Return an OAuth2Request, a NSMutableURLRequest subclass, that has already been signed and can be used against your OAuth2 endpoint.</p>
 
-<p>This method prefers cached data and specifies a timeout interval of 20 seconds.</p>
+<p>This method by default ignores locally cached data and specifies a timeout interval of 20 seconds. This should be ideal for small JSON
+data requests, but you probably don&rsquo;t want to disable cache for binary data like avatars.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">request</span><span class="p">(</span><span class="n">forURL</span> <span class="nv">url</span><span class="p">:</span> <span class="kt">NSURL</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">OAuth2Request</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">request</span><span class="p">(</span><span class="n">forURL</span> <span class="nv">url</span><span class="p">:</span> <span class="kt">NSURL</span><span class="p">,</span> <span class="nv">cachePolicy</span><span class="p">:</span> <span class="kt">NSURLRequestCachePolicy</span> <span class="o">=</span> <span class="o">.</span><span class="kt">ReloadIgnoringLocalCacheData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes.html#/s:C6OAuth213OAuth2Request">OAuth2Request</a></span></code></pre>
 
                         </div>
                       </div>
@@ -1223,6 +1619,19 @@ your OAuth2 endpoint.</p>
                               <td>
                                 <div>
                                   <p>The URL to create a request for</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>cachePolicy</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The cache policy to use, defaults to <code>NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData</code></p>
 
                                 </div>
                               </td>
@@ -1279,6 +1688,222 @@ your OAuth2 endpoint.</p>
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:FC6OAuth26OAuth228parseAccessTokenResponseDataFzCSo6NSDataGVs10DictionarySSPs9AnyObject__"></a>
+                    <a name="//apple_ref/swift/Method/parseAccessTokenResponseData(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth26OAuth228parseAccessTokenResponseDataFzCSo6NSDataGVs10DictionarySSPs9AnyObject__">parseAccessTokenResponseData(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Parse response data returned while exchanging the code for a token.</p>
+
+<p>This method expects token data to be JSON, decodes JSON and fills the receiver&rsquo;s properties accordingly. If the response contains an
+<q>error</q> key, will parse the error and throw it.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">parseAccessTokenResponseData</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="kt">NSData</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Typealiases.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>NSData returned from the call</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>An OAuth2JSON instance with token data; may contain additional information</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6OAuth26OAuth232normalizeAccessTokenResponseKeysFGVs10DictionarySSPs9AnyObject__GS1_SSPS2___"></a>
+                    <a name="//apple_ref/swift/Method/normalizeAccessTokenResponseKeys(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth26OAuth232normalizeAccessTokenResponseKeysFGVs10DictionarySSPs9AnyObject__GS1_SSPS2___">normalizeAccessTokenResponseKeys(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>This method does nothing, but allows subclasses to fix parameter names before passing the access token response to <code><a href="../Classes/OAuth2ClientConfig.html">OAuth2ClientConfig</a></code>s
+<code>updateFromResponse()</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">normalizeAccessTokenResponseKeys</span><span class="p">(</span><span class="nv">dict</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Typealiases.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>dict</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The dictionary that was returned from an access token response</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The dictionary with fixed key names</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6OAuth26OAuth229parseRefreshTokenResponseDataFzCSo6NSDataGVs10DictionarySSPs9AnyObject__"></a>
+                    <a name="//apple_ref/swift/Method/parseRefreshTokenResponseData(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth26OAuth229parseRefreshTokenResponseDataFzCSo6NSDataGVs10DictionarySSPs9AnyObject__">parseRefreshTokenResponseData(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Parse response data returned while using a refresh token.</p>
+
+<p>This method extracts token data, expected to be JSON, and fills the receiver&rsquo;s properties accordingly. If the response contains an
+<q>error</q> key, will parse the error and throw it.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">parseRefreshTokenResponseData</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="kt">NSData</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Typealiases.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>NSData returned from the call</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>An OAuth2JSON instance with token data; may contain additional information</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6OAuth26OAuth233normalizeRefreshTokenResponseKeysFGVs10DictionarySSPs9AnyObject__GS1_SSPS2___"></a>
+                    <a name="//apple_ref/swift/Method/normalizeRefreshTokenResponseKeys(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth26OAuth233normalizeRefreshTokenResponseKeysFGVs10DictionarySSPs9AnyObject__GS1_SSPS2___">normalizeRefreshTokenResponseKeys(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>This method does nothing, but allows subclasses to fix parameter names before passing the refresh token response to
+<code><a href="../Classes/OAuth2ClientConfig.html">OAuth2ClientConfig</a></code>s <code>updateFromResponse()</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">normalizeRefreshTokenResponseKeys</span><span class="p">(</span><span class="nv">dict</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Typealiases.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>dict</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The dictionary that was returned from a refresh token response</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The dictionary with fixed key names</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:FC6OAuth26OAuth231assureAccessTokenParamsAreValidFzGVs10DictionarySSPs9AnyObject__T_"></a>
                     <a name="//apple_ref/swift/Method/assureAccessTokenParamsAreValid(_:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:FC6OAuth26OAuth231assureAccessTokenParamsAreValidFzGVs10DictionarySSPs9AnyObject__T_">assureAccessTokenParamsAreValid(_:)</a>
@@ -1296,7 +1921,7 @@ your OAuth2 endpoint.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">assureAccessTokenParamsAreValid</span><span class="p">(</span><span class="nv">params</span><span class="p">:</span> <span class="kt">OAuth2JSON</span><span class="p">)</span> <span class="k">throws</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">assureAccessTokenParamsAreValid</span><span class="p">(</span><span class="nv">params</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a></span><span class="p">)</span> <span class="k">throws</span></code></pre>
 
                         </div>
                       </div>
@@ -1323,7 +1948,7 @@ your OAuth2 endpoint.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">assureRefreshTokenParamsAreValid</span><span class="p">(</span><span class="nv">params</span><span class="p">:</span> <span class="kt">OAuth2JSON</span><span class="p">)</span> <span class="k">throws</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">assureRefreshTokenParamsAreValid</span><span class="p">(</span><span class="nv">params</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a></span><span class="p">)</span> <span class="k">throws</span></code></pre>
 
                         </div>
                       </div>
@@ -1360,7 +1985,7 @@ your OAuth2 endpoint.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">func</span> <span class="nf">openAuthorizeURLInBrowser</span><span class="p">(</span><span class="nv">params</span><span class="p">:</span> <span class="kt">OAuth2StringDict</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="k">throws</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">func</span> <span class="nf">openAuthorizeURLInBrowser</span><span class="p">(</span><span class="nv">params</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:6OAuth216OAuth2StringDict">OAuth2StringDict</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="k">throws</span></code></pre>
 
                         </div>
                       </div>
@@ -1427,7 +2052,7 @@ reasons.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">authorizeEmbeddedWith</span><span class="p">(</span><span class="nv">config</span><span class="p">:</span> <span class="kt">OAuth2AuthConfig</span><span class="p">,</span> <span class="nv">params</span><span class="p">:</span> <span class="kt">OAuth2StringDict</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="k">throws</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">authorizeEmbeddedWith</span><span class="p">(</span><span class="nv">config</span><span class="p">:</span> <span class="kt"><a href="../Structs/OAuth2AuthConfig.html">OAuth2AuthConfig</a></span><span class="p">,</span> <span class="nv">params</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:6OAuth216OAuth2StringDict">OAuth2StringDict</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="k">throws</span></code></pre>
 
                         </div>
                       </div>
@@ -1487,7 +2112,7 @@ reasons.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">authorizeEmbeddedFromWindow</span><span class="p">(</span><span class="nv">window</span><span class="p">:</span> <span class="kt">NSWindow</span><span class="p">,</span> <span class="nv">config</span><span class="p">:</span> <span class="kt">OAuth2AuthConfig</span><span class="p">,</span> <span class="nv">params</span><span class="p">:</span> <span class="kt">OAuth2StringDict</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">NSWindow</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">authorizeEmbeddedFromWindow</span><span class="p">(</span><span class="nv">window</span><span class="p">:</span> <span class="kt">NSWindow</span><span class="p">,</span> <span class="nv">config</span><span class="p">:</span> <span class="kt"><a href="../Structs/OAuth2AuthConfig.html">OAuth2AuthConfig</a></span><span class="p">,</span> <span class="nv">params</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:6OAuth216OAuth2StringDict">OAuth2StringDict</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">NSWindow</span></code></pre>
 
                         </div>
                       </div>
@@ -1565,7 +2190,7 @@ reasons.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">authorizeInNewWindow</span><span class="p">(</span><span class="nv">config</span><span class="p">:</span> <span class="kt">OAuth2AuthConfig</span><span class="p">,</span> <span class="nv">params</span><span class="p">:</span> <span class="kt">OAuth2StringDict</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="k">throws</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">authorizeInNewWindow</span><span class="p">(</span><span class="nv">config</span><span class="p">:</span> <span class="kt"><a href="../Structs/OAuth2AuthConfig.html">OAuth2AuthConfig</a></span><span class="p">,</span> <span class="nv">params</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:6OAuth216OAuth2StringDict">OAuth2StringDict</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="k">throws</span></code></pre>
 
                         </div>
                       </div>
@@ -1625,7 +2250,7 @@ reasons.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">presentableAuthorizeViewController</span><span class="p">(</span><span class="nv">params</span><span class="p">:</span> <span class="kt">OAuth2StringDict</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">OAuth2WebViewController</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">presentableAuthorizeViewController</span><span class="p">(</span><span class="nv">params</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:6OAuth216OAuth2StringDict">OAuth2StringDict</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/OAuth2WebViewController.html">OAuth2WebViewController</a></span></code></pre>
 
                         </div>
                       </div>
@@ -1662,8 +2287,8 @@ reasons.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="http://www.github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2016-04-11)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.6.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2016 <a class="link" href="http://www.github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2016-07-19)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>
