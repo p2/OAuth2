@@ -107,6 +107,9 @@ public class OAuth2PasswordGrant: OAuth2 {
 		req.params["grant_type"] = self.dynamicType.grantType
 		req.params["username"] = username
 		req.params["password"] = password
+		if let clientId = clientConfig.clientId {
+			req.params["client_id"] = clientId
+		}
 		if let scope = clientConfig.scope {
 			req.params["scope"] = scope
 		}
