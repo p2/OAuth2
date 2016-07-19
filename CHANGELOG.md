@@ -9,6 +9,7 @@ You can also refer to commit logs to get details on what was implemented, fixed 
 
 - Make keychain store name programmer-settable (fixes #111 and #119)
 - More public methods to support subclassing
+- Allow resource owner password grant without client_id
 
 
 ### 2.2.7

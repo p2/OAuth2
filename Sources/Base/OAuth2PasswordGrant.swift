@@ -102,9 +102,6 @@ public class OAuth2PasswordGrant: OAuth2 {
 		if password.isEmpty{
 			throw OAuth2Error.NoPassword
 		}
-		guard let clientId = clientConfig.clientId where !clientId.isEmpty else {
-			throw OAuth2Error.NoClientId
-		}
 		
 		let req = OAuth2AuthRequest(url: (clientConfig.tokenURL ?? clientConfig.authorizeURL))
 		req.params["grant_type"] = self.dynamicType.grantType
