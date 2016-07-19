@@ -5,6 +5,11 @@ Version numbering represents the Swift version, plus a running number representi
 You can also refer to commit logs to get details on what was implemented, fixed and improved.
 
 
+### x.x.x
+
+- Fix: add `client_id` to password grant even if there is no secret (thanks Criss!)
+
+
 ### 2.2.8
 
 - Make keychain store name programmer-settable (fixes #111 and #119)

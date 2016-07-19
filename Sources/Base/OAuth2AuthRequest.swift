@@ -126,10 +126,6 @@ public class OAuth2AuthRequest {
 	- returns: A mutable NSURLRequest
 	*/
 	public func asURLRequestFor(oauth2: OAuth2) throws -> NSMutableURLRequest {
-		guard let clientId = oauth2.clientId where !clientId.isEmpty else {
-			throw OAuth2Error.NoClientId
-		}
-		
 		var finalParams = params
 		var finalAuthHeader = headerAuthorize
 		
@@ -141,7 +137,7 @@ public class OAuth2AuthRequest {
 		req.setValue("application/json", forHTTPHeaderField: "Accept")
 		
 		// handle client secret if there is one
-		if let secret = oauth2.clientConfig.clientSecret {
+		if let clientId = oauth2.clientConfig.clientId where !clientId.isEmpty, let secret = oauth2.clientConfig.clientSecret {
 			
 			// add to request body
 			if oauth2.authConfig.secretInBody {
