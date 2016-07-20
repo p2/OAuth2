@@ -39,9 +39,9 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 	var willBecomeSheet = false
 	
 	/// The URL to load on first show.
-	public var startURL: NSURL? {
+	public var startURL: URL? {
 		didSet(oldURL) {
-			if nil != startURL && nil == oldURL && viewLoaded {
+			if nil != startURL && nil == oldURL && isViewLoaded {
 				loadURL(startURL!)
 			}
 		}
@@ -51,11 +51,11 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 	var interceptURLString: String? {
 		didSet(oldURL) {
 			if nil != interceptURLString {
-				if let url = NSURL(string: interceptURLString!) {
-					interceptComponents = NSURLComponents(URL: url, resolvingAgainstBaseURL: true)
+				if let url = URL(string: interceptURLString!) {
+					interceptComponents = URLComponents(url: url, resolvingAgainstBaseURL: true)
 				}
 				else {
-					oauth?.logIfVerbose("Failed to parse URL \(interceptURLString), discarding")
+					oauth?.logger?.warn("OAuth2", msg: "Failed to parse URL \(interceptURLString), discarding")
 					interceptURLString = nil
 				}
 			}
@@ -64,14 +64,14 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 			}
 		}
 	}
-	var interceptComponents: NSURLComponents?
+	var interceptComponents: URLComponents?
 	
 	/// Closure called when the web view gets asked to load the redirect URL, specified in `interceptURLString`. Return a Bool indicating
 	/// that you've intercepted the URL.
-	var onIntercept: ((url: NSURL) -> Bool)?
+	var onIntercept: ((url: URL) -> Bool)?
 	
 	/// Called when the web view is about to be dismissed manually.
-	var onWillCancel: (Void -> Void)?
+	var onWillCancel: ((Void) -> Void)?
 	
 	/// Our web view; implicitly unwrapped so do not attempt to use it unless isViewLoaded() returns true.
 	var webView: WKWebView!
@@ -82,14 +82,14 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 		view.translatesAutoresizingMaskIntoConstraints = false
 		
 		progressIndicator = NSProgressIndicator(frame: NSZeroRect)
-		progressIndicator.style = .SpinningStyle
-		progressIndicator.displayedWhenStopped = false
+		progressIndicator.style = .spinningStyle
+		progressIndicator.isDisplayedWhenStopped = false
 		progressIndicator.sizeToFit()
 		progressIndicator.translatesAutoresizingMaskIntoConstraints = false
 		
 		view.addSubview(progressIndicator)
-		view.addConstraint(NSLayoutConstraint(item: progressIndicator, attribute: .CenterX, relatedBy: .Equal, toItem: view, attribute: .CenterX, multiplier: 1.0, constant: 0.0))
-		view.addConstraint(NSLayoutConstraint(item: progressIndicator, attribute: .CenterY, relatedBy: .Equal, toItem: view, attribute: .CenterY, multiplier: 1.0, constant: 0.0))
+		view.addConstraint(NSLayoutConstraint(item: progressIndicator, attribute: .centerX, relatedBy: .equal, toItem: view, attribute: .centerX, multiplier: 1.0, constant: 0.0))
+		view.addConstraint(NSLayoutConstraint(item: progressIndicator, attribute: .centerY, relatedBy: .equal, toItem: view, attribute: .centerY, multiplier: 1.0, constant: 0.0))
 		
 		return view
 	}
@@ -114,10 +114,10 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 		webView.alphaValue = 0.0
 		
 		view.addSubview(webView)
-		view.addConstraint(NSLayoutConstraint(item: webView, attribute: .Top, relatedBy: .Equal, toItem: view, attribute: .Top, multiplier: 1.0, constant: 0.0))
-		view.addConstraint(NSLayoutConstraint(item: webView, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Bottom, multiplier: 1.0, constant: 0.0))
-		view.addConstraint(NSLayoutConstraint(item: webView, attribute: .Left, relatedBy: .Equal, toItem: view, attribute: .Left, multiplier: 1.0, constant: 0.0))
-		view.addConstraint(NSLayoutConstraint(item: webView, attribute: .Right, relatedBy: .Equal, toItem: view, attribute: .Right, multiplier: 1.0, constant: 0.0))
+		view.addConstraint(NSLayoutConstraint(item: webView, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1.0, constant: 0.0))
+		view.addConstraint(NSLayoutConstraint(item: webView, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1.0, constant: 0.0))
+		view.addConstraint(NSLayoutConstraint(item: webView, attribute: .left, relatedBy: .equal, toItem: view, attribute: .left, multiplier: 1.0, constant: 0.0))
+		view.addConstraint(NSLayoutConstraint(item: webView, attribute: .right, relatedBy: .equal, toItem: view, attribute: .right, multiplier: 1.0, constant: 0.0))
 		
 		// add a dismiss button
 		if willBecomeSheet {
@@ -125,10 +125,10 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 			button.translatesAutoresizingMaskIntoConstraints = false
 			button.title = "Cancel"
 			button.target = self
-			button.action = "cancel:"
+			button.action = #selector(OAuth2WebViewController.cancel(_:))
 			view.addSubview(button)
-			view.addConstraint(NSLayoutConstraint(item: button, attribute: .Trailing, relatedBy: .Equal, toItem: view, attribute: .Trailing, multiplier: 1.0, constant: -10.0))
-			view.addConstraint(NSLayoutConstraint(item: button, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Bottom, multiplier: 1.0, constant: -10.0))
+			view.addConstraint(NSLayoutConstraint(item: button, attribute: .trailing, relatedBy: .equal, toItem: view, attribute: .trailing, multiplier: 1.0, constant: -10.0))
+			view.addConstraint(NSLayoutConstraint(item: button, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1.0, constant: -10.0))
 		}
 		
 		showLoadingIndicator()
@@ -157,10 +157,10 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 		let loadingContainerView = loadingView
 		
 		view.addSubview(loadingContainerView)
-		view.addConstraint(NSLayoutConstraint(item: loadingContainerView, attribute: .Top, relatedBy: .Equal, toItem: view, attribute: .Top, multiplier: 1.0, constant: 0.0))
-		view.addConstraint(NSLayoutConstraint(item: loadingContainerView, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Bottom, multiplier: 1.0, constant: 0.0))
-		view.addConstraint(NSLayoutConstraint(item: loadingContainerView, attribute: .Left, relatedBy: .Equal, toItem: view, attribute: .Left, multiplier: 1.0, constant: 0.0))
-		view.addConstraint(NSLayoutConstraint(item: loadingContainerView, attribute: .Right, relatedBy: .Equal, toItem: view, attribute: .Right, multiplier: 1.0, constant: 0.0))
+		view.addConstraint(NSLayoutConstraint(item: loadingContainerView, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1.0, constant: 0.0))
+		view.addConstraint(NSLayoutConstraint(item: loadingContainerView, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1.0, constant: 0.0))
+		view.addConstraint(NSLayoutConstraint(item: loadingContainerView, attribute: .left, relatedBy: .equal, toItem: view, attribute: .left, multiplier: 1.0, constant: 0.0))
+		view.addConstraint(NSLayoutConstraint(item: loadingContainerView, attribute: .right, relatedBy: .equal, toItem: view, attribute: .right, multiplier: 1.0, constant: 0.0))
 		
 		progressIndicator.startAnimation(nil)
 	}
@@ -172,7 +172,7 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 		progressIndicator.superview?.removeFromSuperview()
 	}
 	
-	func showErrorMessage(message: String, animated: Bool) {
+	func showErrorMessage(_ message: String, animated: Bool) {
 		hideLoadingIndicator()
 		webView.animator().alphaValue = 1.0
 		webView.loadHTMLString("<p style=\"text-align:center;font:'helvetica neue', sans-serif;color:red\">\(message)</p>", baseURL: nil)
@@ -181,15 +181,15 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 	
 	// MARK: - Actions
 	
-	public func loadURL(url: NSURL) {
-		webView.loadRequest(NSURLRequest(URL: url))
+	public func loadURL(_ url: URL) {
+		webView.load(URLRequest(url: url))
 	}
 	
-	func goBack(sender: AnyObject?) {
+	func goBack(_ sender: AnyObject?) {
 		webView.goBack()
 	}
 	
-	func cancel(sender: AnyObject?) {
+	func cancel(_ sender: AnyObject?) {
 		webView.stopLoading()
 		onWillCancel?()
 	}
@@ -197,44 +197,43 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 	
 	// MARK: - Web View Delegate
 	
-	public func webView(webView: WKWebView, decidePolicyForNavigationAction navigationAction: WKNavigationAction, decisionHandler: (WKNavigationActionPolicy) -> Void) {
+	public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: (WKNavigationActionPolicy) -> Void) {
 		let request = navigationAction.request
 		
 		if nil == onIntercept {
-			decisionHandler(.Allow)
+			decisionHandler(.allow)
 			return
 		}
 		
 		// we compare the scheme and host first, then check the path (if there is any). Not sure if a simple string comparison
 		// would work as there may be URL parameters attached
-		if let url = request.URL where url.scheme == interceptComponents?.scheme && url.host == interceptComponents?.host {
-			let haveComponents = NSURLComponents(URL: url, resolvingAgainstBaseURL: true)
+		if let url = request.url where url.scheme == interceptComponents?.scheme && url.host == interceptComponents?.host {
+			let haveComponents = URLComponents(url: url, resolvingAgainstBaseURL: true)
 			if let hp = haveComponents?.path, ip = interceptComponents?.path where hp == ip || ("/" == hp + ip) {
 				if onIntercept!(url: url) {
-					decisionHandler(.Cancel)
+					decisionHandler(.cancel)
 				}
 				else {
-					decisionHandler(.Allow)
+					decisionHandler(.allow)
 				}
 			}
 		}
 		
-		decisionHandler(.Allow)
+		decisionHandler(.allow)
 	}
 	
-	public func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
+	public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
 		if let scheme = interceptComponents?.scheme where "urn" == scheme {
 			if let path = interceptComponents?.path where path.hasPrefix("ietf:wg:oauth:2.0:oob") {
 				if let title = webView.title where title.hasPrefix("Success ") {
-					oauth?.logIfVerbose("Creating redirect URL from document.title")
-					let qry = title.stringByReplacingOccurrencesOfString("Success ", withString: "")
-					if let url = NSURL(string: "http://localhost/?\(qry)") {
-						onIntercept?(url: url)
+					oauth?.logger?.debug("OAuth2", msg: "Creating redirect URL from document.title")
+					let qry = title.replacingOccurrences(of: "Success ", with: "")
+					if let url = URL(string: "http://localhost/?\(qry)") {
+						_ = onIntercept?(url: url)
 						return
 					}
-					else {
-						oauth?.logIfVerbose("Failed to create a URL with query parts \"\(qry)\"")
-					}
+					
+					oauth?.logger?.warn("OAuth2", msg: "Failed to create a URL with query parts \"\(qry)\"")
 				}
 			}
 		}
@@ -243,7 +242,7 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 		hideLoadingIndicator()
 	}
 	
-	public func webView(webView: WKWebView, didFailNavigation navigation: WKNavigation!, withError error: NSError) {
+	public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: NSError) {
 		if NSURLErrorDomain == error.domain && NSURLErrorCancelled == error.code {
 			return
 		}
@@ -255,7 +254,7 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 	
 	// MARK: - Window Delegate
 	
-	public func windowShouldClose(sender: AnyObject) -> Bool {
+	public func windowShouldClose(_ sender: AnyObject) -> Bool {
 		onWillCancel?()
 		return false
 	}

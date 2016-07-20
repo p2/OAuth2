@@ -43,22 +43,25 @@ class OAuth2PasswordGrantTests: XCTestCase
 		XCTAssertEqual(oauth.scope!, "login and more", "Must init correct scope")
 		XCTAssertEqual(oauth.username, "My User", "Must init user")
 		XCTAssertEqual(oauth.password, "Here is my password", "Must init password")
-		XCTAssertEqual(oauth.authURL, NSURL(string: "https://auth.ful.io")!, "Must init `authorize_uri`")
+		XCTAssertEqual(oauth.authURL, URL(string: "https://auth.ful.io")!, "Must init `authorize_uri`")
 		XCTAssertFalse(oauth.useKeychain, "Don't use keychain")
 	}
 	
 	func testTokenRequest() {
 		let oauth = genericOAuth2Password()
-		let request = try! oauth.tokenRequest()
-		XCTAssertEqual("POST", request.HTTPMethod, "Must be a POST request")
+		let request = try! oauth.tokenRequest().asURLRequestFor(oauth)
+		XCTAssertEqual("POST", request.httpMethod, "Must be a POST request")
 		
 		let authHeader = request.allHTTPHeaderFields?["Authorization"]
 		XCTAssertNotNil(authHeader, "Must create “Authorization” header")
 		XCTAssertEqual(authHeader!, "Basic YWJjOmRlZg==", "Must correctly Base64 encode header")
 		
-		let body = NSString(data: request.HTTPBody!, encoding: NSUTF8StringEncoding)
+		let body = String(data: request.httpBody!, encoding: String.Encoding.utf8)
 		XCTAssertNotNil(body, "Body data must be present")
-		XCTAssertEqual(body!, "grant_type=password&username=My+User&password=Here+is+my+password&scope=login+and+more", "Must create correct request body")
+		XCTAssertTrue(body!.contains("username=My+User"), "Must create correct request body")
+		XCTAssertTrue(body!.contains("grant_type=password"), "Must create correct request body")
+		XCTAssertTrue(body!.contains("scope=login+and+more"), "Must create correct request body")
+		XCTAssertTrue(body!.contains("password=Here+is+my+password"), "Must create correct request body")
 	}
 	
 	func testTokenResponse() {
@@ -85,17 +88,20 @@ class OAuth2PasswordGrantTests: XCTestCase
 	func testTokenRequestNoScope() {
 		let oauth = OAuth2PasswordGrant(settings: [
 			"client_id": "abc",
-			"client_secret": "def",
 			"authorize_uri": "https://auth.ful.io",
 			"username":"My User",
 			"password":"Here is my password",
 			"verbose": true
 		])
-		let request = try! oauth.tokenRequest(params: ["foo": "bar & hat"])
+		let request = try! oauth.tokenRequest(params: ["foo": "bar & hat"]).asURLRequestFor(oauth)
 		
-		let body = NSString(data: request.HTTPBody!, encoding: NSUTF8StringEncoding)
+		let body = String(data: request.httpBody!, encoding: String.Encoding.utf8)
 		XCTAssertNotNil(body, "Body data must be present")
-		XCTAssertEqual(body!, "grant_type=password&username=My+User&password=Here+is+my+password&foo=bar+%26+hat", "Must create correct request body")
+		XCTAssertTrue(body!.contains("grant_type=password"), "Must create correct request body")
+		XCTAssertTrue(body!.contains("username=My+User"), "Must create correct request body")
+		XCTAssertTrue(body!.contains("password=Here+is+my+password"), "Must create correct request body")
+		XCTAssertTrue(body!.contains("client_id=abc"), "Must add client_id to request body")
+		XCTAssertTrue(body!.contains("foo=bar+%26+hat"), "Must create correct request body")
 	}
 }
 

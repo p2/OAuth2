@@ -41,8 +41,8 @@ class OAuth2CodeGrantTests: XCTestCase {
 		XCTAssertFalse(oauth.useKeychain, "No keychain")
 		XCTAssertNil(oauth.scope, "Empty scope")
 		
-		XCTAssertEqual(oauth.authURL, NSURL(string: "https://auth.ful.io")!, "Must init `authorize_uri`")
-		XCTAssertEqual(oauth.tokenURL!, NSURL(string: "https://token.ful.io")!, "Must init `token_uri`")
+		XCTAssertEqual(oauth.authURL, URL(string: "https://auth.ful.io")!, "Must init `authorize_uri`")
+		XCTAssertEqual(oauth.tokenURL!, URL(string: "https://token.ful.io")!, "Must init `token_uri`")
 	}
 	
 	func testNotTLS() {
@@ -56,20 +56,20 @@ class OAuth2CodeGrantTests: XCTestCase {
 		
 		XCTAssertNotNil(oauth.authURL, "Must init `authorize_uri`")
 		do {
-			try oauth.authorizeURLWithRedirect("oauth2://callback", scope: nil, params: nil)
+			_ = try oauth.authorizeURLWithRedirect("oauth2://callback", scope: nil, params: nil)
 			XCTAssertTrue(false, "Should no longer be here")
 		}
-		catch OAuth2Error.NotUsingTLS {
+		catch OAuth2Error.notUsingTLS {
 		}
 		catch let error {
 			XCTAssertNil(error, "Should not be catching")
 		}
 		
 		do {
-			try oauth.tokenURLWithCode("pp")
+			_ = try oauth.tokenRequestWithCode("pp").asURL()
 			XCTAssertTrue(false, "Should no longer be here")
 		}
-		catch OAuth2Error.NotUsingTLS {
+		catch OAuth2Error.notUsingTLS {
 		}
 		catch let error {
 			XCTAssertNil(error, "Should not be catching")
@@ -80,7 +80,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 		let oauth = OAuth2CodeGrant(settings: baseSettings)
 		XCTAssertNotNil(oauth.authURL, "Must init `authorize_uri`")
 		
-		let comp = NSURLComponents(URL: try! oauth.authorizeURLWithRedirect("oauth2://callback", scope: nil, params: nil), resolvingAgainstBaseURL: true)!
+		let comp = URLComponents(url: try! oauth.authorizeURLWithRedirect("oauth2://callback", scope: nil, params: nil), resolvingAgainstBaseURL: true)!
 		XCTAssertEqual(comp.host!, "auth.ful.io", "Correct host")
 		let query = OAuth2CodeGrant.paramsFromQuery(comp.percentEncodedQuery!)
 		XCTAssertEqual(query["client_id"]!, "abc", "Expecting correct `client_id`")
@@ -96,21 +96,21 @@ class OAuth2CodeGrantTests: XCTestCase {
 		oauth.context.redirectURL = oauth.redirect
 		
 		// parse error
-		var redirect = NSURL(string: "oauth2://callback?error=invalid_scope")!
+		var redirect = URL(string: "oauth2://callback?error=invalid_scope")!
 		do {
-			try oauth.validateRedirectURL(redirect)
+			_ = try oauth.validateRedirectURL(redirect)
 			XCTAssertTrue(false, "Should not be here")
 		}
-		catch OAuth2Error.InvalidScope {
+		catch OAuth2Error.invalidScope {
 		}
 		catch let error {
 			XCTAssertTrue(false, "Must not end up here with \(error)")
 		}
 		
 		// parse custom error
-		redirect = NSURL(string: "oauth2://callback?error=invalid_scope&error_description=BadScopeDude")!
+		redirect = URL(string: "oauth2://callback?error=invalid_scope&error_description=BadScopeDude")!
 		do {
-			try oauth.validateRedirectURL(redirect)
+			_ = try oauth.validateRedirectURL(redirect)
 			XCTAssertTrue(false, "Should not be here")
 		}
 		catch let error {
@@ -118,33 +118,33 @@ class OAuth2CodeGrantTests: XCTestCase {
 		}
 		
 		// parse wrong callback
-		redirect = NSURL(string: "oauth3://callback?error=invalid_scope")!
+		redirect = URL(string: "oauth3://callback?error=invalid_scope")!
 		do {
-			try oauth.validateRedirectURL(redirect)
+			_ = try oauth.validateRedirectURL(redirect)
 			XCTAssertTrue(false, "Should not be here")
 		}
-		catch OAuth2Error.InvalidRedirectURL {
+		catch OAuth2Error.invalidRedirectURL {
 		}
 		catch let error {
 			XCTAssertTrue(false, "Should have caught invalid redirect URL error, but got \(error)")
 		}
 		
 		// parse no state
-		redirect = NSURL(string: "oauth2://callback?code=C0D3")!
+		redirect = URL(string: "oauth2://callback?code=C0D3")!
 		do {
-			try oauth.validateRedirectURL(redirect)
+			_ = try oauth.validateRedirectURL(redirect)
 			XCTAssertTrue(false, "Should not be here")
 		}
-		catch OAuth2Error.InvalidState {
+		catch OAuth2Error.invalidState {
 		}
 		catch let error {
 			XCTAssertTrue(false, "Must not end up here with \(error)")
 		}
 		
 		// parse all good
-		redirect = NSURL(string: "oauth2://callback?code=C0D3&state=\(oauth.context.state)")!
+		redirect = URL(string: "oauth2://callback?code=C0D3&state=\(oauth.context.state)")!
 		do {
-			try oauth.validateRedirectURL(redirect)
+			_ = try oauth.validateRedirectURL(redirect)
 		}
 		catch let error {
 			XCTAssertTrue(false, "Should not throw, but threw \(error)")
@@ -153,20 +153,20 @@ class OAuth2CodeGrantTests: XCTestCase {
 		// parse oob with invalid redirect
 		oauth.redirect = "urn:ietf:wg:oauth:2.0:oob"
 		oauth.context.redirectURL = oauth.redirect
-		redirect = NSURL(string: "oauth2://callback?code=C0D3&state=\(oauth.context.state)")!
+		redirect = URL(string: "oauth2://callback?code=C0D3&state=\(oauth.context.state)")!
 		do {
-			try oauth.validateRedirectURL(redirect)
+			_ = try oauth.validateRedirectURL(redirect)
 		}
-		catch OAuth2Error.InvalidRedirectURL {
+		catch OAuth2Error.invalidRedirectURL {
 		}
 		catch let error {
 			XCTAssertTrue(false, "Must not end up here with \(error)")
 		}
 		
 		// oob with valid redirect
-		redirect = NSURL(string: "http://localhost?code=C0D3&state=\(oauth.context.state)")!
+		redirect = URL(string: "http://localhost?code=C0D3&state=\(oauth.context.state)")!
 		do {
-			try oauth.validateRedirectURL(redirect)
+			_ = try oauth.validateRedirectURL(redirect)
 		}
 		catch let error {
 			XCTAssertTrue(false, "Should not throw, but threw \(error)")
@@ -184,10 +184,10 @@ class OAuth2CodeGrantTests: XCTestCase {
 		
 		// no redirect in context - fail
 		do {
-			try oauth.tokenRequestWithCode("pp")
+			_ = try oauth.tokenRequestWithCode("pp")
 			XCTAssertTrue(false, "Should not be here any more")
 		}
-		catch OAuth2Error.NoRedirectURL {
+		catch OAuth2Error.noRedirectURL {
 			XCTAssertTrue(true, "Must be here")
 		}
 		catch {
@@ -197,11 +197,11 @@ class OAuth2CodeGrantTests: XCTestCase {
 		// with redirect in context - success
 		oauth.context.redirectURL = "oauth2://callback"
 		
-		let req = try! oauth.tokenRequestWithCode("pp")
-		let comp = NSURLComponents(URL: req.URL!, resolvingAgainstBaseURL: true)!
+		let req = try! oauth.tokenRequestWithCode("pp").asURLRequestFor(oauth)
+		let comp = URLComponents(url: req.url!, resolvingAgainstBaseURL: true)!
 		XCTAssertEqual(comp.host!, "token.ful.io", "Correct host")
 		
-		let body = NSString(data: req.HTTPBody!, encoding: NSUTF8StringEncoding) as? String
+		let body = String(data: req.httpBody!, encoding: String.Encoding.utf8)
 		let query = OAuth2CodeGrant.paramsFromQuery(body!)
 		XCTAssertEqual(query["client_id"]!, "abc", "Expecting correct `client_id`")
 		XCTAssertNil(query["client_secret"], "Must not have `client_secret`")
@@ -217,11 +217,11 @@ class OAuth2CodeGrantTests: XCTestCase {
 		oauth.context.redirectURL = "oauth2://callback"
 		
 		// not in body
-		let req = try! oauth.tokenRequestWithCode("pp")
-		let comp = NSURLComponents(URL: req.URL!, resolvingAgainstBaseURL: true)!
+		let req = try! oauth.tokenRequestWithCode("pp").asURLRequestFor(oauth)
+		let comp = URLComponents(url: req.url!, resolvingAgainstBaseURL: true)!
 		XCTAssertEqual(comp.host!, "token.ful.io", "Correct host")
 		
-		let body = NSString(data: req.HTTPBody!, encoding: NSUTF8StringEncoding) as? String
+		let body = String(data: req.httpBody!, encoding: String.Encoding.utf8)
 		let query = OAuth2CodeGrant.paramsFromQuery(body!)
 		XCTAssertNil(query["client_id"], "No `client_id` in body")
 		XCTAssertNil(query["client_secret"], "Must not have `client_secret`")
@@ -233,11 +233,11 @@ class OAuth2CodeGrantTests: XCTestCase {
 		// in body
 		oauth.authConfig.secretInBody = true
 		
-		let req2 = try! oauth.tokenRequestWithCode("pp")
-		let comp2 = NSURLComponents(URL: req2.URL!, resolvingAgainstBaseURL: true)!
+		let req2 = try! oauth.tokenRequestWithCode("pp").asURLRequestFor(oauth)
+		let comp2 = URLComponents(url: req2.url!, resolvingAgainstBaseURL: true)!
 		XCTAssertEqual(comp2.host!, "token.ful.io", "Correct host")
 		
-		let body2 = NSString(data: req2.HTTPBody!, encoding: NSUTF8StringEncoding) as? String
+		let body2 = String(data: req2.httpBody!, encoding: String.Encoding.utf8)
 		let query2 = OAuth2CodeGrant.paramsFromQuery(body2!)
 		XCTAssertEqual(query2["client_id"]!, "abc", "Expecting correct `client_id`")
 		XCTAssertEqual(query2["client_secret"]!, "xyz", "Expecting correct `client_secret`")
@@ -259,8 +259,8 @@ class OAuth2CodeGrantTests: XCTestCase {
 		oauth.redirect = "oauth2://callback"
 		oauth.context.redirectURL = "oauth2://callback"
 		
-		let req = try! oauth.tokenRequestWithCode("pp")
-		let comp = NSURLComponents(URL: req.URL!, resolvingAgainstBaseURL: true)!
+		let req = try! oauth.tokenRequestWithCode("pp").asURLRequestFor(oauth)
+		let comp = URLComponents(url: req.url!, resolvingAgainstBaseURL: true)!
 		XCTAssertEqual(comp.host!, "auth.ful.io", "Correct host")
 	}
 	
@@ -284,7 +284,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 			let _ = try oauth.parseAccessTokenResponse(response)
 			XCTAssertTrue(false, "Should not be here any more")
 		}
-		catch OAuth2Error.NoTokenType {
+		catch OAuth2Error.noTokenType {
 		}
 		catch let error {
 			XCTAssertNil(error, "Should not throw wrong error")
@@ -314,7 +314,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 			let _ = try oauth.parseAccessTokenResponse(response)
 			XCTAssertTrue(false, "Should not be here any more")
 		}
-		catch OAuth2Error.UnsupportedTokenType(_) {
+		catch OAuth2Error.unsupportedTokenType(_) {
 		}
 		catch let error {
 			XCTAssertNil(error, "Should not throw wrong error")
@@ -351,10 +351,10 @@ class OAuth2CodeGrantTests: XCTestCase {
 		]
 		
 		do {
-			try oauth.parseAccessTokenResponse(response2)
+			_ = try oauth.parseAccessTokenResponse(response2)
 			XCTAssertTrue(false, "Should not be here any more")
 		}
-		catch OAuth2Error.UnsupportedTokenType {
+		catch OAuth2Error.unsupportedTokenType {
 			XCTAssertTrue(true, "Throw correct error")
 		}
 		catch {

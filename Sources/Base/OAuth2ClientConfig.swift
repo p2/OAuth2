@@ -24,13 +24,13 @@ public class OAuth2ClientConfig {
 	public final var clientName: String?
 	
 	/// The URL to authorize against.
-	public final let authorizeURL: NSURL
+	public final let authorizeURL: URL
 	
 	/// The URL where we can exchange a code for a token.
-	public final var tokenURL: NSURL?
+	public final var tokenURL: URL?
 	
 	/// Where a logo/icon for the app can be found.
-	public final var logoURL: NSURL?
+	public final var logoURL: URL?
 	
 	/// The scope currently in use.
 	public var scope: String?
@@ -43,9 +43,12 @@ public class OAuth2ClientConfig {
 	
 	/// The receiver's access token.
 	public var accessToken: String?
-	
+
+	/// The receiver's id token.  Used by Google + and AWS Cognito
+	public var idToken: String?
+
 	/// The access token's expiry date.
-	public var accessTokenExpiry: NSDate?
+	public var accessTokenExpiry: Date?
 	
 	/// If set to true (the default), uses a keychain-supplied access token even if no "expires_in" parameter was supplied.
 	public var accessTokenAssumeUnexpired = true
@@ -54,11 +57,11 @@ public class OAuth2ClientConfig {
 	public var refreshToken: String?
 	
 	/// The URL to register a client against.
-	public final var registrationURL: NSURL?
+	public final var registrationURL: URL?
 	
 	/// How the client communicates the client secret with the server. Defaults to ".None" if there is no secret, ".ClientSecretPost" if
 	/// "secret_in_body" is `true` and ".ClientSecretBasic" otherwise. Interacts with the `authConfig.secretInBody` client setting.
-	public final var endpointAuthMethod = OAuth2EndpointAuthMethod.None
+	public final var endpointAuthMethod = OAuth2EndpointAuthMethod.none
 	
 	
 	/**
@@ -70,21 +73,21 @@ public class OAuth2ClientConfig {
 		clientName = settings["client_name"] as? String
 		
 		// authorize URL
-		var aURL: NSURL?
+		var aURL: URL?
 		if let auth = settings["authorize_uri"] as? String {
-			aURL = NSURL(string: auth)
+			aURL = URL(string: auth)
 		}
-		authorizeURL = aURL ?? NSURL(string: "http://localhost")!
+		authorizeURL = aURL ?? URL(string: "http://localhost")!
 		
 		// token, registration and logo URLs
 		if let token = settings["token_uri"] as? String {
-			tokenURL = NSURL(string: token)
+			tokenURL = URL(string: token)
 		}
 		if let registration = settings["registration_uri"] as? String {
-			registrationURL = NSURL(string: registration)
+			registrationURL = URL(string: registration)
 		}
 		if let logo = settings["logo_uri"] as? String {
-			logoURL = NSURL(string: logo)
+			logoURL = URL(string: logo)
 		}
 		
 		// client authentication options
@@ -94,10 +97,10 @@ public class OAuth2ClientConfig {
 			redirect = redirs.first
 		}
 		if let inBody = settings["secret_in_body"] as? Bool where inBody {
-			endpointAuthMethod = .ClientSecretPost
+			endpointAuthMethod = .clientSecretPost
 		}
 		else if nil != clientSecret {
-			endpointAuthMethod = .ClientSecretBasic
+			endpointAuthMethod = .clientSecretBasic
 		}
 		
 		// access token options
@@ -110,18 +113,23 @@ public class OAuth2ClientConfig {
 	/**
 	Update properties from response data.
 	
+	This method assumes values are present with the standard names, such as `access_token`, and assigns them to its properties.
+	
 	- parameter json: JSON data returned from a request
 	*/
-	func updateFromResponse(json: OAuth2JSON) {
+	func updateFromResponse(_ json: OAuth2JSON) {
 		if let access = json["access_token"] as? String {
 			accessToken = access
 		}
+		if let idtoken = json["id_token"] as? String {
+			idToken = idtoken
+		}
 		accessTokenExpiry = nil
-		if let expires = json["expires_in"] as? NSTimeInterval {
-			accessTokenExpiry = NSDate(timeIntervalSinceNow: expires)
+		if let expires = json["expires_in"] as? TimeInterval {
+			accessTokenExpiry = Date(timeIntervalSinceNow: expires)
 		}
 		else if let expires = json["expires_in"] as? String {			// when parsing implicit grant from URL fragment
-			accessTokenExpiry = NSDate(timeIntervalSinceNow: Double(expires) ?? 0.0)
+			accessTokenExpiry = Date(timeIntervalSinceNow: Double(expires) ?? 0.0)
 		}
 		if let refresh = json["refresh_token"] as? String {
 			refreshToken = refresh
@@ -153,12 +161,16 @@ public class OAuth2ClientConfig {
 		guard let access = accessToken where !access.isEmpty else { return nil }
 		
 		var items: [String: NSCoding] = ["accessToken": access]
-		if let date = accessTokenExpiry where date == date.laterDate(NSDate()) {
+		if let date = accessTokenExpiry where date == (date as NSDate).laterDate(Date()) {
 			items["accessTokenDate"] = date
 		}
 		if let refresh = refreshToken where !refresh.isEmpty {
 			items["refreshToken"] = refresh
 		}
+		if let idtoken = idToken where !idtoken.isEmpty {
+			items["idToken"] = idtoken
+		}
+        
 		return items
 	}
 	
@@ -168,7 +180,7 @@ public class OAuth2ClientConfig {
 	- parameter items: The dictionary representation of the data to store to keychain
 	- returns: An array of strings containing log messages
 	*/
-	func updateFromStorableItems(items: [String: NSCoding]) -> [String] {
+	func updateFromStorableItems(_ items: [String: NSCoding]) -> [String] {
 		var messages = [String]()
 		if let id = items["id"] as? String {
 			clientId = id
@@ -182,8 +194,8 @@ public class OAuth2ClientConfig {
 			endpointAuthMethod = method
 		}
 		if let token = items["accessToken"] as? String where !token.isEmpty {
-			if let date = items["accessTokenDate"] as? NSDate {
-				if date == date.laterDate(NSDate()) {
+			if let date = items["accessTokenDate"] as? Date {
+				if date == (date as NSDate).laterDate(Date()) {
 					messages.append("Found access token, valid until \(date)")
 					accessTokenExpiry = date
 					accessToken = token
@@ -204,6 +216,10 @@ public class OAuth2ClientConfig {
 			messages.append("Found refresh token")
 			refreshToken = token
 		}
+		if let idtoken = items["idToken"] as? String where !idtoken.isEmpty {
+			messages.append("Found id token")
+			idToken = idtoken
+		}
 		return messages
 	}
 	
@@ -218,6 +234,7 @@ public class OAuth2ClientConfig {
 		accessToken = nil
 		accessTokenExpiry = nil
 		refreshToken = nil
+		idToken = nil
 	}
 }
 

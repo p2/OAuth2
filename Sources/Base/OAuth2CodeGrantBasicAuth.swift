@@ -48,14 +48,14 @@ public class OAuth2CodeGrantBasicAuth: OAuth2CodeGrant {
 	/**
 	Calls super's implementation to obtain a token request, then adds the custom "Basic" authorization header.
 	*/
-	override func tokenRequestWithURL(url: NSURL) throws -> NSMutableURLRequest {
-		let req = try super.tokenRequestWithURL(url)
+	override func tokenRequestWithCode(_ code: String, params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
+		let req = try super.tokenRequestWithCode(code, params: params)
 		if let basic = basicToken {
-			logIfVerbose("Overriding “Basic” authorization header, as specified during client initialization")
-			req.setValue("Basic \(basic)", forHTTPHeaderField: "Authorization")
+			logger?.debug("OAuth2", msg: "Overriding “Basic” authorization header, as specified during client initialization")
+			req.headerAuthorize = "Basic \(basic)"
 		}
 		else {
-			logIfVerbose("Using extended code grant, but \"basicToken\" is not actually specified. Using standard code grant.")
+			logger?.warn("OAuth2", msg: "Using extended code grant, but “basicToken” is not actually specified. Using standard code grant.")
 		}
 		return req
 	}

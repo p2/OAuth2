@@ -35,7 +35,7 @@ public class OAuth2CodeGrantLinkedIn: OAuth2CodeGrant {
 		authConfig.ui.useSafariView = false     // must use custom web view in order to be able to intercept http(s) redirects
 	}
 	
-	override func assureCorrectBearerType(params: OAuth2JSON) throws {
+	override func assureCorrectBearerType(_ params: OAuth2JSON) throws {
 	}
 }
 

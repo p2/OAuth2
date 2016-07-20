@@ -22,8 +22,8 @@ import Foundation
 
 
 /**
-    Class to handle OAuth2 requests for public clients, such as distributed Mac/iOS Apps.
- */
+Class to handle OAuth2 requests for public clients, such as distributed Mac/iOS Apps.
+*/
 public class OAuth2ImplicitGrant: OAuth2 {
 	
 	override public class var grantType: String {
@@ -34,18 +34,18 @@ public class OAuth2ImplicitGrant: OAuth2 {
 		return "token"
 	}
 	
-	override public func handleRedirectURL(redirect: NSURL) {
-		logIfVerbose("Handling redirect URL \(redirect.description)")
+	override public func handleRedirectURL(_ redirect: URL) {
+		logger?.debug("OAuth2", msg: "Handling redirect URL \(redirect.description)")
 		do {
 			// token should be in the URL fragment
-			let comp = NSURLComponents(URL: redirect, resolvingAgainstBaseURL: true)
+			let comp = URLComponents(url: redirect, resolvingAgainstBaseURL: true)
 			guard let fragment = comp?.percentEncodedFragment where fragment.characters.count > 0 else {
-				throw OAuth2Error.InvalidRedirectURL(redirect.absoluteString)
+				throw OAuth2Error.invalidRedirectURL(redirect.description)
 			}
 			
-			let params = OAuth2ImplicitGrant.paramsFromQuery(fragment)
+			let params = self.dynamicType.paramsFromQuery(fragment)
 			let dict = try parseAccessTokenResponse(params)
-			logIfVerbose("Successfully extracted access token")
+			logger?.debug("OAuth2", msg: "Successfully extracted access token")
 			didAuthorize(dict)
 		}
 		catch let error {
@@ -53,7 +53,7 @@ public class OAuth2ImplicitGrant: OAuth2 {
 		}
 	}
 	
-	override public func assureAccessTokenParamsAreValid(params: OAuth2JSON) throws {
+	override public func assureAccessTokenParamsAreValid(_ params: OAuth2JSON) throws {
 		try assureMatchesState(params)
 	}
 }

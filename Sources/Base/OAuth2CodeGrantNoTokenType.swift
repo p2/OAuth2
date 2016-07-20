@@ -28,6 +28,6 @@ public class OAuth2CodeGrantNoTokenType: OAuth2CodeGrant {
 		super.init(settings: settings)
 	}
 	
-	override func assureCorrectBearerType(params: OAuth2JSON) throws {
+	override func assureCorrectBearerType(_ params: OAuth2JSON) throws {
 	}
 }

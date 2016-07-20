@@ -4,12 +4,12 @@ OAuth2
 [![Build Status](https://travis-ci.org/p2/OAuth2.svg?branch=master)](https://travis-ci.org/p2/OAuth2)
 [![License](https://img.shields.io/:license-apache-blue.svg)](LICENSE.txt)
 
-OAuth2 frameworks for **OS X**, **iOS** and **tvOS** written in Swift 2.0.
+OAuth2 frameworks for **OS X**, **iOS** and **tvOS** written in Swift 2.2.
 
 Technical documentation is available at [p2.github.io/OAuth2](https://p2.github.io/OAuth2).
 Take a look at the [OS X sample app][sample] for basic usage of this framework.
 
-The code in this repo requires Xcode 7, the built framework can be used on **OS X 10.9** or **iOS 8** and later.
+The code in this repo requires Xcode 7.3, the built framework can be used on **OS X 10.9** or **iOS 8** and later.
 To use on **iOS 7** you'll have to include the source files in your main project.
 Happy to accept pull requests, please see [CONTRIBUTING.md](./CONTRIBUTING.md)
 
@@ -17,7 +17,7 @@ Happy to accept pull requests, please see [CONTRIBUTING.md](./CONTRIBUTING.md)
 
 Since the Swift language is constantly evolving I have adopted a versioning scheme mirroring Swift versions:
 the framework version's **first two digits are always the Swift version** the library is compatible with, see [releases](https://github.com/p2/OAuth2/releases).
-Code compatible with brand new Swift versions are to be found on a separate feature branch named after their swift version.
+Code compatible with brand new Swift versions are to be found on a separate feature branch named appropriately.
 
 
 Usage
@@ -27,7 +27,7 @@ To use OAuth2 in your own code, start with `import OAuth2` (use `p2_OAuth2` if y
 
 For a typical code grant flow you want to perform the following steps.
 The steps for other flows are mostly the same short of instantiating a different subclass and using different client settings.
-If you need to provide additional parameters to the authorize URL take a look at `authorizeURLWithRedirect(redirect:scope:params:)`.
+Most _authorize_ methods take an additional `params` parameter that allows you to supply custom additional parameters to use during authorization.
 
 ### 1. Create a Settings Dictionary.
 
@@ -36,12 +36,11 @@ let settings = [
     "client_id": "my_swift_app",
     "client_secret": "C7447242-A0CF-47C5-BAC7-B38BA91970A9",
     "authorize_uri": "https://authorize.smarthealthit.org/authorize",
-    "token_uri": "https://authorize.smarthealthit.org/token",   // code grant only!
+    "token_uri": "https://authorize.smarthealthit.org/token",   // code grant only
     "scope": "profile email",
-    "redirect_uris": ["myapp://oauth/callback"],   // don't forget to register this scheme
+    "redirect_uris": ["myapp://oauth/callback"],   // register the "myapp" scheme in Info.plist
     "keychain": false,     // if you DON'T want keychain integration
-    "title": "My Service"  // optional title to show in views
-] as OAuth2JSON            // the "as" part may or may not be needed
+] as OAuth2JSON
 ```
 
 ### 2. Instantiate OAuth2
@@ -55,8 +54,8 @@ oauth2.onAuthorize = { parameters in
     print("Did authorize with parameters: \(parameters)")
 }
 oauth2.onFailure = { error in        // `error` is nil on cancel
-    if nil != error {
-        print("Authorization went wrong: \(error!.localizedDescription)")
+    if let error = error {
+        print("Authorization went wrong: \(error)")
     }
 }
 ```
@@ -64,15 +63,21 @@ oauth2.onFailure = { error in        // `error` is nil on cancel
 ### 3. Authorize the User
 
 By default the OS browser will be used for authorization if there is no access token present in the keychain.
-To start authorization call **`authorize()`** or the convenience method `authorizeEmbeddedFrom(<# UIViewController or NSWindow #>)`.
+To start authorization call **`authorize()`** or, to use embedded authorization, the convenience method `authorizeEmbeddedFrom(<# UIViewController or NSWindow #>)`.
 
-The latter configures `authConfig` like so: changes `authorizeEmbedded` to `true` and sets a root view controller/window, from which to present the login screen, as `authorizeContext`.
+The latter configures `authConfig` like so:
+
+- changes `authorizeEmbedded` to `true` and
+- sets a root view controller/window, from which to present the login screen, as `authorizeContext`.
+
+The login screen will only be **presented if needed** (see [_Manually Performing Authentication_](#manually-performing-authentication) below for details) and will automatically **dismiss** the login screen on success.
 See [_Advanced Settings_](#advanced-settings) for other options.
 
 **Starting with iOS 9**, `SFSafariViewController` will be used when enabling embedded authorization.
 
-Your `oauth2` instance will use `NSURLSession.defaultSession()` for requests, exposed on `oauth2.session`.
-You can set `oauth2.sessionConfiguration` if you wish to change things like timeout values, and you can set `oauth2.sessionDelegate` to your own session delegate if you like.
+Your `oauth2` instance will use an automatically created `NSURLSession` using an `ephemeralSessionConfiguration()` configuration for its requests, exposed on `oauth2.session`.
+You can set `oauth2.sessionConfiguration` to your own configuration, for example if you'd like to change timeout values.
+You can also set `oauth2.sessionDelegate` to your own session delegate if you like.
 
 ```swift
 oauth2.authConfig.authorizeEmbedded = true
@@ -108,10 +113,11 @@ Hence, unless you have a reason to, you don't need to set all three callbacks, y
 ### 5. Make Requests
 
 You can now obtain an `OAuth2Request`, which is an already signed `NSMutableURLRequest`, to retrieve data from your server.
-If you use _Alamofire_ there's a [class extension](#usage-with-alamofire) below that you can use.
+This request sets the _Authorization_ header using the access token like so: `Authorization: Bearer {your access token}`
 
 ```swift
 let req = oauth2.request(forURL: <# resource URL #>)
+// set up your request, e.g. `req.HTTPMethod = "POST"`
 let task = oauth2.session.dataTaskWithRequest(req) { data, response, error in
     if let error = error {
         // something went wrong, check the error
@@ -125,6 +131,7 @@ task.resume()
 ```
 
 Of course you can use your own `NSURLSession` with these requests, you don't have to use `oauth2.session`.
+If you use _Alamofire_ there's a [class extension below](#usage-with-alamofire) that you can use.
 
 ### 6. Cancel Authorization
 
@@ -162,13 +169,14 @@ The `authorize()` method will:
 3. Try to use the refresh token to get a new access token, if it fails
 4. Start the OAuth2 dance by using the `authConfig` settings to determine how to display an authorize screen to the user
 
-If you do **not wish this kind of automation**, the manual steps to show the authorize screens are:
+The wiki has [the complete call graph](https://github.com/p2/OAuth2/wiki/Call-Graph) of the _authorize()_ method.
+If you do **not wish this kind of automation**, the manual steps to show and hide the authorize screens are:
 
 **Embedded iOS**:
 
 ```swift
-let vc = <# presenting view controller #>
-let web = oauth2.authorizeEmbeddedFrom(vc)
+let web = oauth2.authorizeEmbeddedWith(<# presenting view controller #>)
+oauth2.authConfig.authorizeEmbeddedAutoDismiss = false
 oauth2.afterAuthorizeOrFailure = { wasFailure, error in
     web.dismissViewControllerAnimated(true, completion: nil)
 }
@@ -240,7 +248,9 @@ For a full OAuth 2 code grant flow (`response_type=code`) you want to use the `O
 This flow is typically used by applications that can guard their secrets, like server-side apps, and not in distributed binaries.
 In case an application cannot guard its secret, such as a distributed iOS app, you would use the _implicit grant_ or, in some cases, still a _code grant_ but omitting the client secret.
 It has however become common practice to still use code grants from mobile devices, including a client secret.
-This class fully supports those flows, it automatically creates a “Basic” Authorization header if the client has a client secret.
+
+This class fully supports those flows, it automatically creates a “Basic” Authorization header if the client has a non-nil client secret.
+This means that you likely **must** specify `client_secret` in your settings; if there is none (like for [Reddit](https://github.com/reddit/reddit/wiki/OAuth2#token-retrieval-code-flow)) specify the empty string.
 If the site requires client credentials in the request body, set `secretInBody` to true, as explained below.
 
 #### Implicit Grant
@@ -261,67 +271,20 @@ The _Resource Owner Password Credentials Grant_ is supported with the `OAuth2Pas
 Create an instance as shown above, set its `username` and `password` properties, then call `authorize()`.
 
 
-### Site-Specific Peculiarities
+Site-Specific Peculiarities
+---------------------------
 
 Some sites might not strictly adhere to the OAuth2 flow.
-The framework deals with those deviations by creating site-specific subclasses.
+The framework deals with those deviations by creating site-specific subclasses and/or configuration details.
 
-#### Facebook
-
-Use `OAuth2CodeGrantFacebook` to deal with the [URL-query-style response](https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow/v2.2) instead of the expected JSON dictionary.
-
-#### GitHub
-
-`OAuth2CodeGrant` automatically puts the client-key/client-secret into an “Authorization: Basic” header.
-GitHub however needs those two in the POSTed body; you need to set the `authConfig.secretInBody` setting to true, either directly in code or via the `secret_in_body` key in the settings dictionary.
-
-#### Reddit
-
-`OAuth2CodeGrant` automatically adds a _Basic_ authorization header when a client secret is set.
-This means that you **must** specify a client_secret; if there is none (like for [Reddit](https://github.com/reddit/reddit/wiki/OAuth2#token-retrieval-code-flow)) specify the empty string.
-There is a [RedditLoader](https://github.com/p2/OAuth2App/blob/master/OAuth2App/RedditLoader.swift) example in the [OAuth2App sample app][sample] for a basic usage example.
-
-#### Google
-
-If you authorize against Google with a `OAuth2CodeGrant`, the built-in iOS web view will intercept the `http://localhost` as well as the `urn:ietf:wg:oauth:2.0:oob` (with or without `:auto`) callbacks.
-This means you must disable the Safari view controller and – for now – this only works on iOS.
-
-```swift
-oauth2.authConfig.authorizeEmbedded = true
-oauth2.authConfig.ui.useSafariView = false
-```
-
-#### LinkedIn
-
-There are a couple of peculiarities with LinkedIn's OAuth2 implementation.
-You can use `OAuth2CodeGrantLinkedIn` which deals with those, but since it needs the custom embedded web view this will only work on iOS for now.
-To receive _JSON_ you will also need to use their special header `x-li-format` and set it to `json`:
-
-```swift
-urlRequest.setValue("json", forHTTPHeaderField: "x-li-format")
-```
-
-#### Instagram, Bitly, ...
-
-Some sites don't return the required `token_type` parameter in their token response.
-LinkedIn does the same, see above.
-You can tell if you're getting the error _“No token type received, will not use the token”_.
-There is a subclass for code grant flows that ignores the missing token type that you can use: [`OAuth2CodeGrantNoTokenType`](Sources/Base/OAuth2CodeGrantNoTokenType.swift).
-
-For _Instagram_ you also need to set `oauth2.authConfig.secretInBody = true` (or use `secret_in_body` in your settings dict) because it expects the client secret in the request body, not the _Authorization_ header.
-
-#### Uber
-
-When making repeated calls to Uber's ride status endpoint (`/V1/REQUESTS/{REQUEST_ID}`) it may return a cached response.
-To avoid this set a cache policy for your request:
-
-```swift
-let request = oauth2.request(forURL: <# resource URL #>)
-request.cachePolicy = NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData
-oauth2.session.dataTaskWithRequest(request) { data, resp, error in
-    ...
-}
-```
+- [GitHub](https://github.com/p2/OAuth2/wiki/GitHub)
+- [Facebook](https://github.com/p2/OAuth2/wiki/Facebook)
+- [Reddit](https://github.com/p2/OAuth2/wiki/Reddit)
+- [Google](https://github.com/p2/OAuth2/wiki/Google)
+- [LinkedIn](https://github.com/p2/OAuth2/wiki/LinkedIn)
+- [Instagram, Bitly, ...](https://github.com/p2/OAuth2/wiki/Instagram)
+- [Uber](https://github.com/p2/OAuth2/wiki/Uber)
+- [BitBucket](https://github.com/p2/OAuth2/wiki/BitBucket)
 
 
 Usage with Alamofire
@@ -426,27 +389,29 @@ The main configuration you'll use with `oauth2.authConfig` is whether or not to 
 
     oauth2.authConfig.authorizeEmbedded = true
 
+Similarly, if you want to take care of dismissing the login screen yourself:
+
+    oauth2.authConfig.authorizeEmbeddedAutoDismiss = false
+
+Some sites also want the client-id/secret combination in the request _body_, not in the _Authorization_ header:
+
+    oauth2.authConfig.secretInBody = true
 
 Starting with version 2.0.1 on iOS 9, `SFSafariViewController` will be used for embedded authorization.
 To revert to the old custom `OAuth2WebViewController`:
 
     oauth2.authConfig.ui.useSafariView = false
 
-
 To customize the _go back_ button when using `OAuth2WebViewController`:
 
     oauth2.authConfig.ui.backButton = <# UIBarButtonItem(...) #>
 
 
-Some sites also want the client-id/secret combination in the request _body_, not in the _Authorization_ header:
-
-    oauth2.authConfig.secretInBody = true
-
 
 Installation
 ------------
 
-You can use git or CocoaPods to install the framework.
+You can use _git_, _CocoaPods_ and possibly _Carthage_ to install the framework.
 
 #### CocoaPods
 
@@ -457,6 +422,14 @@ If you're unfamiliar with CocoaPods, read [using CocoaPods](http://guides.cocoap
 platform :ios, '8.0'      # or platform :osx, '10.9'
 pod 'p2.OAuth2'
 use_frameworks!
+```
+
+#### Carthage
+
+Install via Carthage is possibly working with this Cartfile:
+
+```ruby
+github "p2/OAuth2" ~> 2.2
 ```
 
 #### git

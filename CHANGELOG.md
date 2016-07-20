@@ -5,6 +5,49 @@ Version numbering represents the Swift version, plus a running number representi
 You can also refer to commit logs to get details on what was implemented, fixed and improved.
 
 
+### x.x.x
+
+- Fix: add `client_id` to password grant even if there is no secret (thanks Criss!)
+
+
+### 2.2.8
+
+- Make keychain store name programmer-settable (fixes #111 and #119)
+- More public methods to support subclassing
+- Allow resource owner password grant without client_id
+
+
+### 2.2.7
+
+- Use a simple logger for logging purposes (inspired by @tompson and @ChrisInIssaquah)
+- Make `parseAccessTokenResponseData()` public for non-conformant OAuth2 providers (like Facebook)
+- Add overrideable `normalizeAccessTokenResponseKeys()` and `normalizeRefreshTokenResponseKeys()` (inspired by @ChrisTitos)
+
+
+### 2.2.6
+
+- Make sure extra params are passed to refresh token requests (fixes #105)
+- The convenience `request(forURL:)` method by default no longer uses locally cached data
+
+
+### 2.2.5
+
+- Use ephemeral NSURLSession by default; fixes #96
+- Build fix to enable Carthage builds (thanks @davidpeckham !)
+
+
+### 2.2.4
+
+- Fix: add optional auth parameters to the authorize URL
+
+
+### 2.2.3
+
+- Refactor authentication request creation
+- Add `OAuth2ClientCredentialsReddit` to deal with Reddit installed apps special flow
+- Rename clashing method definitions to fix #99
+
+
 ### 2.2.2
 
 - Add tvOS build (thanks @davidkraus and @ddengler !)

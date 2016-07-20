@@ -25,7 +25,7 @@ import OAuth2
 
 class OAuth2DynReg_Tests: XCTestCase {
 	
-	func genericOAuth2(extra: OAuth2JSON? = nil) -> OAuth2 {
+	func genericOAuth2(_ extra: OAuth2JSON? = nil) -> OAuth2 {
 		var settings = [
 			"authorize_uri": "https://auth.ful.io",
 			"token_uri": "https://token.ful.io",
@@ -47,9 +47,9 @@ class OAuth2DynReg_Tests: XCTestCase {
 		
 		do {
 			let req = try dynreg.registrationRequest(oauth)
-			XCTAssertEqual("register.ful.io", req.URL?.host)
-			XCTAssertEqual("POST", req.HTTPMethod)
-			let dict = try oauth.parseJSON(req.HTTPBody!)
+			XCTAssertEqual("register.ful.io", req.url?.host)
+			XCTAssertEqual("POST", req.httpMethod)
+			let dict = try oauth.parseJSON(req.httpBody!)
 			
 			XCTAssertEqual("none", dict["token_endpoint_auth_method"] as? String)
 			XCTAssertEqual("login", dict["scope"] as? String)
@@ -66,7 +66,7 @@ class OAuth2DynReg_Tests: XCTestCase {
 		oauth.registerClientIfNeeded() { json, error in
 			if let error = error as? OAuth2Error {
 				switch error {
-				case .NoRegistrationURL: break
+				case .noRegistrationURL: break
 				default:                 XCTAssertTrue(false, "Expecting no-registration-url error")
 				}
 			}
@@ -92,7 +92,7 @@ class OAuth2DynReg_Tests: XCTestCase {
 		oauth.registerClientIfNeeded() { json, error in
 			if let error = error as? OAuth2Error {
 				switch error {
-				case .TemporarilyUnavailable: break
+				case .temporarilyUnavailable: break
 				default:                      XCTAssertTrue(false, "Expecting random `TemporarilyUnavailable` error as implemented in `OAuth2TestDynReg`")
 				}
 			}
@@ -105,8 +105,8 @@ class OAuth2DynReg_Tests: XCTestCase {
 
 
 class OAuth2TestDynReg: OAuth2DynReg {
-	override func registerClient(client: OAuth2, callback: ((json: OAuth2JSON?, error: ErrorType?) -> Void)) {
-		callback(json: nil, error: OAuth2Error.TemporarilyUnavailable)
+	override func registerClient(_ client: OAuth2, callback: ((json: OAuth2JSON?, error: ErrorProtocol?) -> Void)) {
+		callback(json: nil, error: OAuth2Error.temporarilyUnavailable)
 	}
 }
 
