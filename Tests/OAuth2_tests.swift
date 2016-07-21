@@ -55,13 +55,13 @@ class OAuth2Tests: XCTestCase {
 	func testAuthorizeURL() {
 		let oa = genericOAuth2()
 		oa.verbose = false
-		let auth = try! oa.authorizeURLWithRedirect("oauth2app://callback", scope: "launch", params: ["extra": "param"])
+		let auth = try! oa.authorizeURL(withRedirect: "oauth2app://callback", scope: "launch", params: ["extra": "param"])
 		
 		let comp = URLComponents(url: auth, resolvingAgainstBaseURL: true)!
 		XCTAssertEqual("https", comp.scheme!, "Need correct scheme")
 		XCTAssertEqual("auth.ful.io", comp.host!, "Need correct host")
 		
-		let params = OAuth2.paramsFromQuery(comp.percentEncodedQuery!)
+		let params = OAuth2.params(fromQuery: comp.percentEncodedQuery!)
 		XCTAssertEqual(params["redirect_uri"]!, "oauth2app://callback", "Expecting correct `redirect_uri` in query")
 		XCTAssertEqual(params["scope"]!, "launch", "Expecting `scope` in query")
 		XCTAssertNotNil(params["state"], "Expecting `state` in query")
@@ -80,7 +80,7 @@ class OAuth2Tests: XCTestCase {
 		XCTAssertEqual("https", comp.scheme!, "Need correct scheme")
 		XCTAssertEqual("token.ful.io", comp.host!, "Need correct host")
 		
-		let params = OAuth2.paramsFromQuery(comp.percentEncodedQuery ?? "")
+		let params = OAuth2.params(fromQuery: comp.percentEncodedQuery ?? "")
 		//XCTAssertEqual(params["redirect_uri"]!, "oauth2app://callback", "Expecting correct `redirect_uri` in query")
 		XCTAssertNil(params["state"], "Expecting no `state` in query")
 	}
@@ -110,26 +110,26 @@ class OAuth2Tests: XCTestCase {
 			XCTAssertNotNil(error)
 			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.invalidAuthorizationContext)
 		}
-		oa.authorizeEmbeddedFrom("A string")
+		oa.authorizeEmbedded(from: "A string")
 		XCTAssertTrue(oa.authConfig.authorizeEmbedded)
 	}
 	
 	func testQueryParamParsing() {
-		let params1 = OAuth2.paramsFromQuery("access_token=xxx&expires=2015-00-00&more=stuff")
+		let params1 = OAuth2.params(fromQuery: "access_token=xxx&expires=2015-00-00&more=stuff")
 		XCTAssert(3 == params1.count, "Expecting 3 URL params")
 		
 		XCTAssertEqual(params1["access_token"]!, "xxx")
 		XCTAssertEqual(params1["expires"]!, "2015-00-00")
 		XCTAssertEqual(params1["more"]!, "stuff")
 		
-		let params2 = OAuth2.paramsFromQuery("access_token=x%26x&expires=2015-00-00&more=spacey%20stuff")
+		let params2 = OAuth2.params(fromQuery: "access_token=x%26x&expires=2015-00-00&more=spacey%20stuff")
 		XCTAssert(3 == params1.count, "Expecting 3 URL params")
 		
 		XCTAssertEqual(params2["access_token"]!, "x&x")
 		XCTAssertEqual(params2["expires"]!, "2015-00-00")
 		XCTAssertEqual(params2["more"]!, "spacey stuff")
 		
-		let params3 = OAuth2.paramsFromQuery("access_token=xxx%3D%3D&expires=2015-00-00&more=spacey+stuff+with+a+%2B")
+		let params3 = OAuth2.params(fromQuery: "access_token=xxx%3D%3D&expires=2015-00-00&more=spacey+stuff+with+a+%2B")
 		XCTAssert(3 == params1.count, "Expecting 3 URL params")
 		
 		XCTAssertEqual(params3["access_token"]!, "xxx==")
@@ -141,7 +141,7 @@ class OAuth2Tests: XCTestCase {
 		let qry = OAuth2AuthRequestParams.formEncodedQueryStringFor(["a": "AA", "b": "BB", "x": "yz"])
 		XCTAssertEqual(14, qry.characters.count, "Expecting a 14 character string")
 		
-		let dict = OAuth2.paramsFromQuery(qry)
+		let dict = OAuth2.params(fromQuery: qry)
 		XCTAssertEqual(dict["a"]!, "AA", "Must unpack `a`")
 		XCTAssertEqual(dict["b"]!, "BB", "Must unpack `b`")
 		XCTAssertEqual(dict["x"]!, "yz", "Must unpack `x`")
@@ -151,7 +151,7 @@ class OAuth2Tests: XCTestCase {
 		let qry = OAuth2AuthRequestParams.formEncodedQueryStringFor(["uri": "https://api.io", "str": "a string: cool!", "num": "3.14159"])
 		XCTAssertEqual(60, qry.characters.count, "Expecting a 60 character string")
 		
-		let dict = OAuth2.paramsFromQuery(qry)
+		let dict = OAuth2.params(fromQuery: qry)
 		XCTAssertEqual(dict["uri"]!, "https://api.io", "Must correctly unpack `uri`")
 		XCTAssertEqual(dict["str"]!, "a string: cool!", "Must correctly unpack `str`")
 		XCTAssertEqual(dict["num"]!, "3.14159", "Must correctly unpack `num`")

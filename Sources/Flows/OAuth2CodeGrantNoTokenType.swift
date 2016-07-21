@@ -18,6 +18,10 @@
 //  limitations under the License.
 //
 
+#if !NO_MODULE_IMPORT
+import Base
+#endif
+
 
 /**
 Subclass to deal with sites that don't return `token_type`, such as Instagram or Bitly.
@@ -28,6 +32,6 @@ public class OAuth2CodeGrantNoTokenType: OAuth2CodeGrant {
 		super.init(settings: settings)
 	}
 	
-	override func assureCorrectBearerType(_ params: OAuth2JSON) throws {
+	public override func assureCorrectBearerType(_ params: OAuth2JSON) throws {
 	}
 }

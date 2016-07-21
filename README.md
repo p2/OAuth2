@@ -63,7 +63,7 @@ oauth2.onFailure = { error in        // `error` is nil on cancel
 ### 3. Authorize the User
 
 By default the OS browser will be used for authorization if there is no access token present in the keychain.
-To start authorization call **`authorize()`** or, to use embedded authorization, the convenience method `authorizeEmbeddedFrom(<# UIViewController or NSWindow #>)`.
+To start authorization call **`authorize()`** or, to use embedded authorization, the convenience method `authorizeEmbedded(from: <# UIViewController or NSWindow #>)`.
 
 The latter configures `authConfig` like so:
 
@@ -85,7 +85,7 @@ oauth2.authConfig.authorizeContext = <# presenting view controller / window #>
 oauth2.authorize()
 
 // for embedded authorization you can just use:
-oauth2.authorizeEmbeddedFrom(<# presenting view controller / window #>)
+oauth2.authorizeEmbedded(from: <# presenting view controller / window #>)
 ```
 
 When using the OS browser or the iOS 9 Safari view controller, you will need to **intercept the callback** in your app delegate.
@@ -175,7 +175,7 @@ If you do **not wish this kind of automation**, the manual steps to show and hid
 **Embedded iOS**:
 
 ```swift
-let web = oauth2.authorizeEmbeddedWith(<# presenting view controller #>)
+let web = oauth2.authorizeEmbedded(from: <# presenting view controller #>)
 oauth2.authConfig.authorizeEmbeddedAutoDismiss = false
 oauth2.afterAuthorizeOrFailure = { wasFailure, error in
     web.dismissViewControllerAnimated(true, completion: nil)
@@ -187,7 +187,7 @@ oauth2.afterAuthorizeOrFailure = { wasFailure, error in
 ```swift
 let win = <# window to present from #>
 // if `win` is nil, will open a new window
-oauth2.authorizeEmbeddedFrom(win)
+oauth2.authorizeEmbedded(from: win)
 ```
 
 **Present yourself on OS X**:

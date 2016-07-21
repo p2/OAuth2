@@ -5,6 +5,12 @@ Version numbering represents the Swift version, plus a running number representi
 You can also refer to commit logs to get details on what was implemented, fixed and improved.
 
 
+### 3.0.0
+
+- Rewrite in Swift 3
+- Add `Package.swift` for the Swift package manager
+
+
 ### x.x.x
 
 - Fix: add `client_id` to password grant even if there is no secret (thanks Criss!)

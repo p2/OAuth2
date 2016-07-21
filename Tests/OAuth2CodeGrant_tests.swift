@@ -56,7 +56,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 		
 		XCTAssertNotNil(oauth.authURL, "Must init `authorize_uri`")
 		do {
-			_ = try oauth.authorizeURLWithRedirect("oauth2://callback", scope: nil, params: nil)
+			_ = try oauth.authorizeURL(withRedirect: "oauth2://callback", scope: nil, params: nil)
 			XCTAssertTrue(false, "Should no longer be here")
 		}
 		catch OAuth2Error.notUsingTLS {
@@ -80,9 +80,9 @@ class OAuth2CodeGrantTests: XCTestCase {
 		let oauth = OAuth2CodeGrant(settings: baseSettings)
 		XCTAssertNotNil(oauth.authURL, "Must init `authorize_uri`")
 		
-		let comp = URLComponents(url: try! oauth.authorizeURLWithRedirect("oauth2://callback", scope: nil, params: nil), resolvingAgainstBaseURL: true)!
+		let comp = URLComponents(url: try! oauth.authorizeURL(withRedirect: "oauth2://callback", scope: nil, params: nil), resolvingAgainstBaseURL: true)!
 		XCTAssertEqual(comp.host!, "auth.ful.io", "Correct host")
-		let query = OAuth2CodeGrant.paramsFromQuery(comp.percentEncodedQuery!)
+		let query = OAuth2CodeGrant.params(fromQuery: comp.percentEncodedQuery!)
 		XCTAssertEqual(query["client_id"]!, "abc", "Expecting correct `client_id`")
 		XCTAssertNil(query["client_secret"], "Must not have `client_secret`")
 		XCTAssertEqual(query["response_type"]!, "code", "Expecting correct `response_type`")
@@ -202,7 +202,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 		XCTAssertEqual(comp.host!, "token.ful.io", "Correct host")
 		
 		let body = String(data: req.httpBody!, encoding: String.Encoding.utf8)
-		let query = OAuth2CodeGrant.paramsFromQuery(body!)
+		let query = OAuth2CodeGrant.params(fromQuery: body!)
 		XCTAssertEqual(query["client_id"]!, "abc", "Expecting correct `client_id`")
 		XCTAssertNil(query["client_secret"], "Must not have `client_secret`")
 		XCTAssertEqual(query["code"]!, "pp", "Expecting correct `code`")
@@ -222,7 +222,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 		XCTAssertEqual(comp.host!, "token.ful.io", "Correct host")
 		
 		let body = String(data: req.httpBody!, encoding: String.Encoding.utf8)
-		let query = OAuth2CodeGrant.paramsFromQuery(body!)
+		let query = OAuth2CodeGrant.params(fromQuery: body!)
 		XCTAssertNil(query["client_id"], "No `client_id` in body")
 		XCTAssertNil(query["client_secret"], "Must not have `client_secret`")
 		XCTAssertEqual(query["code"]!, "pp", "Expecting correct `code`")
@@ -238,7 +238,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 		XCTAssertEqual(comp2.host!, "token.ful.io", "Correct host")
 		
 		let body2 = String(data: req2.httpBody!, encoding: String.Encoding.utf8)
-		let query2 = OAuth2CodeGrant.paramsFromQuery(body2!)
+		let query2 = OAuth2CodeGrant.params(fromQuery: body2!)
 		XCTAssertEqual(query2["client_id"]!, "abc", "Expecting correct `client_id`")
 		XCTAssertEqual(query2["client_secret"]!, "xyz", "Expecting correct `client_secret`")
 		XCTAssertEqual(query2["code"]!, "pp", "Expecting correct `code`")

@@ -19,15 +19,18 @@
 //
 
 import Foundation
+#if !NO_MODULE_IMPORT
+import Base
+#endif
 
 
 /**
-    Enhancing the code grant flow by allowing to specify a specific "Basic xx" authorization header.
+Enhancing the code grant flow by allowing to specify a specific "Basic xx" authorization header.
 
-    This class allows you to manually set the "Authorization" header to a given string, as accepted in its `basicToken` property. It will
-    override the superclasses automatic generation of an Authorization header if the client has a clientSecret, so you only need to use
-    this subclass if you need a different header (this is different to version 1.2.3 and earlier of this framework).
- */
+This class allows you to manually set the "Authorization" header to a given string, as accepted in its `basicToken` property. It will
+override the superclasses automatic generation of an Authorization header if the client has a clientSecret, so you only need to use
+this subclass if you need a different header (this is different to version 1.2.3 and earlier of this framework).
+*/
 public class OAuth2CodeGrantBasicAuth: OAuth2CodeGrant {
 	
 	/// The full token string to be used in the authorization header.

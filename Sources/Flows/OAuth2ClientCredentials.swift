@@ -1,9 +1,9 @@
 //
-//  OAuth2PasswordGrant.swift
+//  OAuth2ClientCredentials.swift
 //  OAuth2
 //
-//  Created by Tim Sneed on 6/5/15.
-//  Copyright (c) 2015 Pascal Pfiffner. All rights reserved.
+//  Created by Pascal Pfiffner on 5/27/15.
+//  Copyright 2015 Pascal Pfiffner
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -19,47 +19,35 @@
 //
 
 import Foundation
+#if !NO_MODULE_IMPORT
+import Base
+#endif
 
 
 /**
-A class to handle authorization for clients via password grant.
+Class to handle two-legged OAuth2 requests of the "client_credentials" type.
 */
-public class OAuth2PasswordGrant: OAuth2 {
+public class OAuth2ClientCredentials: OAuth2 {
 	
 	public override class var grantType: String {
-		return "password"
+		return "client_credentials"
 	}
 	
-	/// Username to use during authentication.
-	public var username: String
-	
-	/// The user's password.
-	public var password: String
-	
-	/**
-	Adds support for the "password" & "username" setting.
-	*/
-	public override init(settings: OAuth2JSON) {
-		username = settings["username"] as? String ?? ""
-		password = settings["password"] as? String ?? ""
-		super.init(settings: settings)
-	}
-	
-	public override func doAuthorize(params: [String : String]? = nil) {
-		self.obtainAccessToken(params: params) { params, error in
+	public override func doAuthorize(params inParams: OAuth2StringDict? = nil) {
+		self.obtainAccessToken(params: inParams) { params, error in
 			if let error = error {
-				self.didFail(error)
+				self.didFail(withError: error)
 			}
 			else {
-				self.didAuthorize(params ?? OAuth2JSON())
+				self.didAuthorize(withParameters: params ?? OAuth2JSON())
 			}
 		}
 	}
 	
 	/**
-	Create a token request and execute it to receive an access token.
+	Use the client credentials to retrieve a fresh access token.
 	
-	- parameter callback: The callback to call after the request has returned
+	- parameter callback: The callback to call after the process has finished
 	*/
 	func obtainAccessToken(params: OAuth2StringDict? = nil, callback: ((params: OAuth2JSON?, error: ErrorProtocol?) -> Void)) {
 		do {
@@ -72,23 +60,17 @@ public class OAuth2PasswordGrant: OAuth2 {
 						throw error ?? OAuth2Error.noDataInResponse
 					}
 					
-					let dict = try self.parseAccessTokenResponseData(data)
-					if status < 400 {
-						self.logger?.debug("OAuth2", msg: "Did get access token [\(nil != self.clientConfig.accessToken)]")
-						callback(params: dict, error: nil)
-					}
-					else {
-						callback(params: dict, error: OAuth2Error.responseError("The username or password is incorrect"))
-					}
+					let params = try self.parseAccessTokenResponseData(data)
+					self.logger?.debug("OAuth2", msg: "Did get access token [\(nil != self.clientConfig.accessToken)]")
+					callback(params: params, error: nil)
 				}
 				catch let error {
-					self.logger?.debug("OAuth2", msg: "Error parsing response: \(error)")
 					callback(params: nil, error: error)
 				}
 			}
 		}
-		catch let err {
-			callback(params: nil, error: err)
+		catch let error {
+			callback(params: nil, error: error)
 		}
 	}
 	
@@ -96,20 +78,15 @@ public class OAuth2PasswordGrant: OAuth2 {
 	Creates a POST request with x-www-form-urlencoded body created from the supplied URL's query part.
 	*/
 	func tokenRequest(params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
-		if username.isEmpty{
-			throw OAuth2Error.noUsername
+		guard let clientId = clientConfig.clientId where !clientId.isEmpty else {
+			throw OAuth2Error.noClientId
 		}
-		if password.isEmpty{
-			throw OAuth2Error.noPassword
+		guard nil != clientConfig.clientSecret else {
+			throw OAuth2Error.noClientSecret
 		}
 		
 		let req = OAuth2AuthRequest(url: (clientConfig.tokenURL ?? clientConfig.authorizeURL))
 		req.params["grant_type"] = self.dynamicType.grantType
-		req.params["username"] = username
-		req.params["password"] = password
-		if let clientId = clientConfig.clientId {
-			req.params["client_id"] = clientId
-		}
 		if let scope = clientConfig.scope {
 			req.params["scope"] = scope
 		}

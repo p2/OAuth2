@@ -1,8 +1,8 @@
 //
-//  OAuth2+iOS.swift
+//  Package.swift
 //  OAuth2
 //
-//  Created by David Kraus on 11/26/15.
+//  Created by Pascal Pfiffner on 12/19/15.
 //  Copyright 2015 Pascal Pfiffner
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,17 +18,18 @@
 //  limitations under the License.
 //
 
+import PackageDescription
 
-extension OAuth2 {
-	
-	// no webview or webbrowser available on tvOS
-	
-	public final func openAuthorizeURLInBrowser(params: OAuth2StringDict? = nil) throws {
-		throw OAuth2Error.generic("Not implemented")
-	}
-	
-	public func authorizeEmbeddedWith(_ config: OAuth2AuthConfig, params: OAuth2StringDict? = nil) throws {
-		throw OAuth2Error.generic("Not implemented")
-	}
-}
-
+let package = Package(
+	name: "OAuth2",
+	targets: [
+		Target(name: "SwiftKeychain"),
+		Target(name: "Base", dependencies: [.Target(name: "SwiftKeychain")]),
+		Target(name: "macOS", dependencies: [.Target(name: "Base")]),
+		Target(name: "Flows", dependencies: [.Target(name: "macOS")]),
+	],
+	dependencies: [
+		// SwiftKeychain is not yet available as a Package, so we symlink to /Sources and make it a Target
+		//.Package(url: "https://github.com/yankodimitrov/SwiftKeychain.git", majorVersion: 1),
+	]
+)

@@ -19,6 +19,9 @@
 //
 
 import Foundation
+#if !NO_MODULE_IMPORT
+import Base
+#endif
 
 
 /**
@@ -43,13 +46,13 @@ public class OAuth2ImplicitGrant: OAuth2 {
 				throw OAuth2Error.invalidRedirectURL(redirect.description)
 			}
 			
-			let params = self.dynamicType.paramsFromQuery(fragment)
+			let params = self.dynamicType.params(fromQuery: fragment)
 			let dict = try parseAccessTokenResponse(params)
 			logger?.debug("OAuth2", msg: "Successfully extracted access token")
-			didAuthorize(dict)
+			didAuthorize(withParameters: dict)
 		}
 		catch let error {
-			didFail(error)
+			didFail(withError: error)
 		}
 	}
 	

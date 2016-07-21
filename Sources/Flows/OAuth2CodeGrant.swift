@@ -19,6 +19,9 @@
 //
 
 import Foundation
+#if !NO_MODULE_IMPORT
+import Base
+#endif
 
 
 /**
@@ -78,7 +81,7 @@ public class OAuth2CodeGrant: OAuth2 {
 			exchangeCodeForToken(code)
 		}
 		catch let error {
-			didFail(error)
+			didFail(withError: error)
 		}
 	}
 	
@@ -103,19 +106,19 @@ public class OAuth2CodeGrant: OAuth2 {
 					let params = try self.parseAccessTokenResponseData(data)
 					if status < 400 {
 						self.logger?.debug("OAuth2", msg: "Did exchange code for access [\(nil != self.clientConfig.accessToken)] and refresh [\(nil != self.clientConfig.refreshToken)] tokens")
-						self.didAuthorize(params)
+						self.didAuthorize(withParameters: params)
 					}
 					else {
 						throw OAuth2Error.generic("\(status)")
 					}
 				}
 				catch let error {
-					self.didFail(error)
+					self.didFail(withError: error)
 				}
 			}
 		}
 		catch let error {
-			didFail(error)
+			didFail(withError: error)
 		}
 	}
 	
@@ -134,7 +137,7 @@ public class OAuth2CodeGrant: OAuth2 {
 			throw OAuth2Error.invalidRedirectURL("Expecting «\(expectRedirect)» but received «\(redirect)»")
 		}
 		if let compQuery = comp?.query where compQuery.characters.count > 0 {
-			let query = OAuth2CodeGrant.paramsFromQuery(comp!.percentEncodedQuery!)
+			let query = OAuth2CodeGrant.params(fromQuery: comp!.percentEncodedQuery!)
 			try assureNoErrorInResponse(query)
 			if let cd = query["code"] {
 				

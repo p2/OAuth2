@@ -59,8 +59,8 @@ public class OAuth2ClientConfig {
 	/// The URL to register a client against.
 	public final var registrationURL: URL?
 	
-	/// How the client communicates the client secret with the server. Defaults to ".None" if there is no secret, ".ClientSecretPost" if
-	/// "secret_in_body" is `true` and ".ClientSecretBasic" otherwise. Interacts with the `authConfig.secretInBody` client setting.
+	/// How the client communicates the client secret with the server. Defaults to ".None" if there is no secret, ".clientSecretPost" if
+	/// "secret_in_body" is `true` and ".clientSecretBasic" otherwise. Interacts with the `authConfig.secretInBody` client setting.
 	public final var endpointAuthMethod = OAuth2EndpointAuthMethod.none
 	
 	

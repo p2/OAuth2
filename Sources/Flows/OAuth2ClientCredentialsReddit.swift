@@ -18,6 +18,10 @@
 //  limitations under the License.
 //
 
+#if !NO_MODULE_IMPORT
+import Base
+#endif
+
 
 /**
 Enables Reddit's special client credentials flow for installed apps.

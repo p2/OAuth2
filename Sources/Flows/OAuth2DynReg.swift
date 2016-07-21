@@ -19,23 +19,19 @@
 //
 
 import Foundation
-
-
-public enum OAuth2EndpointAuthMethod: String {
-	case none = "none"
-	case clientSecretPost = "client_secret_post"
-	case clientSecretBasic = "client_secret_basic"
-}
+#if !NO_MODULE_IMPORT
+import Base
+#endif
 
 
 /**
-    Class to handle OAuth2 Dynamic Client Registration.
+Class to handle OAuth2 Dynamic Client Registration.
 
-    This is a lightweight class that uses a OAuth2 instance's settings when registering, only few settings are held by instances of this
-    class. Hence it's highly portable and can be instantiated when needed with ease.
+This is a lightweight class that uses a OAuth2 instance's settings when registering, only few settings are held by instances of this class.
+Hence it's highly portable and can be instantiated when needed with ease.
 
-	For the full OAuth2 Dynamic Client Registration spec see https://tools.ietf.org/html/rfc7591
- */
+For the full OAuth2 Dynamic Client Registration spec see https://tools.ietf.org/html/rfc7591
+*/
 public class OAuth2DynReg {
 	
 	/// Additional HTTP headers to supply during registration.
