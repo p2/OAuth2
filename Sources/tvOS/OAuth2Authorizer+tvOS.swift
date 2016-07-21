@@ -20,12 +20,15 @@
 #if os(tvOS)
 
 import Foundation
+#if !NO_MODULE_IMPORT
+import Base
+#endif
 
 
-public final class OAuth2Authorizer {
+public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 	
 	/// The OAuth2 instance this authorizer belongs to.
-	unowned let oauth2: OAuth2
+	public unowned let oauth2: OAuth2
 	
 	
 	init(oauth2: OAuth2) {

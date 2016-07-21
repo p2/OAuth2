@@ -3,7 +3,7 @@
 //  OAuth2
 //
 //  Created by Guilherme Rambo on 18/01/16.
-//  Copyright 2014 Pascal Pfiffner
+//  Copyright 2016 Pascal Pfiffner
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -21,6 +21,9 @@
 
 import Cocoa
 import WebKit
+#if !NO_MODULE_IMPORT
+import Base
+#endif
 
 
 /**
@@ -34,7 +37,7 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 	}
 	
 	/// Handle to the OAuth2 instance in play, only used for debug logging at this time.
-	var oauth: OAuth2?
+	var oauth: OAuth2Base?
 	
 	/// Configure the view to be shown as sheet, false by default; must be present before the view gets loaded.
 	var willBecomeSheet = false

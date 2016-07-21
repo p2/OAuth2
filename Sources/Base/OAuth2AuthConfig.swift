@@ -18,9 +18,6 @@
 //  limitations under the License.
 //
 
-#if os(OSX)
-import Cocoa
-#endif
 
 /**
 Simple struct to hold settings describing how authorization appears to the user.
@@ -39,15 +36,6 @@ public struct OAuth2AuthConfig {
 		
 		/// Starting with iOS 9, `SFSafariViewController` will be used for embedded authorization instead of our custom class. You can turn this off here.
 		public var useSafariView = true
-		
-		#if os(OSX)
-		/// Internally used to store default `NSWindowController` created to contain the web view controller.
-		var windowController: NSWindowController?
-		
-		#elseif os(iOS)
-		/// Internally used to store the `SFSafariViewControllerDelegate`.
-		var safariViewDelegate: AnyObject?
-		#endif
 	}
 	
 	/// Whether the receiver should use the request body instead of the Authorization header for the client secret; defaults to `false`.

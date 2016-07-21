@@ -19,12 +19,15 @@
 //
 
 import Foundation
+#if !NO_MODULE_IMPORT
+import Base
+#endif
 
 
 /**
-    Facebook only returns an "access_token=xyz&..." string, no true JSON, hence we override `parseTokenExchangeResponse`
-    and deal with the situation in a subclass.
- */
+Facebook only returns an "access_token=xyz&..." string, no true JSON, hence we override `parseTokenExchangeResponse`
+and deal with the situation in a subclass.
+*/
 public class OAuth2CodeGrantFacebook: OAuth2CodeGrant {
 	
 	/**
@@ -35,7 +38,7 @@ public class OAuth2CodeGrantFacebook: OAuth2CodeGrant {
 		guard let str = String(data: data, encoding: String.Encoding.utf8) else {
 			throw OAuth2Error.utf8DecodeError
 		}
-		let query = self.dynamicType.paramsFromQuery(str)
+		let query = self.dynamicType.params(fromQuery: str)
 		return try parseAccessTokenResponse(query)
 	}
 }

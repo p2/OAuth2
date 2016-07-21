@@ -18,14 +18,18 @@
 //  limitations under the License.
 //
 
+#if !NO_MODULE_IMPORT
+import Base
+#endif
+
 
 /**
-    LinkedIn-specific subclass to deal with LinkedIn peculiarities:
-    
-    - Must have client-id/secret in request body
-    - Must use custom web view in order to be able to intercept http(s) redirects
-    - Will **not** return the "token_type" value, so must ignore it not being present
- */
+LinkedIn-specific subclass to deal with LinkedIn peculiarities:
+
+- Must have client-id/secret in request body
+- Must use custom web view in order to be able to intercept http(s) redirects
+- Will **not** return the "token_type" value, so must ignore it not being present
+*/
 public class OAuth2CodeGrantLinkedIn: OAuth2CodeGrant {
     
 	public override init(settings: OAuth2JSON) {
@@ -35,7 +39,7 @@ public class OAuth2CodeGrantLinkedIn: OAuth2CodeGrant {
 		authConfig.ui.useSafariView = false     // must use custom web view in order to be able to intercept http(s) redirects
 	}
 	
-	override func assureCorrectBearerType(_ params: OAuth2JSON) throws {
+	public override func assureCorrectBearerType(_ params: OAuth2JSON) throws {
 	}
 }
 

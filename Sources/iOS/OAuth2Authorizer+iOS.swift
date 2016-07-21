@@ -21,15 +21,21 @@
 
 import UIKit
 import SafariServices
+#if !NO_MODULE_IMPORT
+import Base
+#endif
 
 
-public final class OAuth2Authorizer {
+public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 	
 	/// The OAuth2 instance this authorizer belongs to.
-	unowned let oauth2: OAuth2
+	public unowned let oauth2: OAuth2
+	
+	/// Used to store the `SFSafariViewControllerDelegate`.
+	var safariViewDelegate: AnyObject?
 	
 	
-	init(oauth2: OAuth2) {
+	public init(oauth2: OAuth2) {
 		self.oauth2 = oauth2
 	}
 	
@@ -100,9 +106,8 @@ public final class OAuth2Authorizer {
 		let web = SFSafariViewController(url: url)
 		web.title = oauth2.authConfig.ui.title
 		
-		let delegate = OAuth2SFViewControllerDelegate(authorizer: self)
-		web.delegate = delegate
-		oauth2.authConfig.ui.safariViewDelegate = delegate
+		safariViewDelegate = OAuth2SFViewControllerDelegate(authorizer: self)
+		web.delegate = safariViewDelegate
 		
 		controller.present(web, animated: true, completion: nil)
 		
@@ -115,7 +120,7 @@ public final class OAuth2Authorizer {
 	*/
 	@available(iOS 9.0, *)
 	func safariViewControllerDidCancel(_ safari: SFSafariViewController) {
-		oauth2.authConfig.ui.safariViewDelegate = nil
+		safariViewDelegate = nil
 		oauth2.didFail(nil)
 	}
 	

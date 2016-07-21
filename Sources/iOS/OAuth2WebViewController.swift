@@ -20,13 +20,16 @@
 #if os(iOS)
 
 import UIKit
+#if !NO_MODULE_IMPORT
+import Base
+#endif
 
 
 /**
-    A simple iOS web view controller that allows you to display the login/authorization screen.
- */
-public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
-{
+A simple iOS web view controller that allows you to display the login/authorization screen.
+*/
+public class OAuth2WebViewController: UIViewController, UIWebViewDelegate {
+	
 	/// Handle to the OAuth2 instance in play, only used for debug lugging at this time.
 	var oauth: OAuth2?
 	

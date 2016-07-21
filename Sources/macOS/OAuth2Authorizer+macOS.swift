@@ -20,15 +20,21 @@
 #if os(OSX)
 
 import Cocoa
+#if !NO_MODULE_IMPORT
+import Base
+#endif
 
 
-final class OAuth2Authorizer {
+public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 	
 	/// The OAuth2 instance this authorizer belongs to.
-	unowned let oauth2: OAuth2
+	public unowned let oauth2: OAuth2Base
+	
+	/// Stores the default `NSWindowController` created to contain the web view controller.
+	var windowController: NSWindowController?
 	
 	
-	init(oauth2: OAuth2) {
+	public init(oauth2: OAuth2Base) {
 		self.oauth2 = oauth2
 	}
 	
@@ -39,7 +45,7 @@ final class OAuth2Authorizer {
 	- parameter url: The authorize URL to open
 	- throws:        UnableToOpenAuthorizeURL on failure
 	*/
-	func openAuthorizeURLInBrowser(_ url: URL) throws {
+	public func openAuthorizeURLInBrowser(_ url: URL) throws {
 		if !NSWorkspace.shared().open(url) {
 			throw OAuth2Error.unableToOpenAuthorizeURL
 		}
@@ -49,13 +55,14 @@ final class OAuth2Authorizer {
 	// MARK: - Embedded View
 	
 	/**
-	Tries to use the given context, which on OS X should be a NSViewController, to present the authorization screen.
+	Tries to use the given context, which on OS X should be a NSWindow, to present the authorization screen. In this case will forward to
+	`authorizeEmbedded(from:with:at:)`, if the context is empty will create a new NSWindow by calling `authorizeInNewWindow(with:at:)`.
 	
 	- parameter with: The configuration to be used; usually uses the instance's `authConfig`
 	- parameter at:   The authorize URL to open
 	- throws:         Can throw OAuth2Error if the method is unable to show the authorize screen
 	*/
-	func authorizeEmbedded(with config: OAuth2AuthConfig, at url: URL) throws {
+	public func authorizeEmbedded(with config: OAuth2AuthConfig, at url: URL) throws {
 		guard #available(OSX 10.10, *) else {
 			throw OAuth2Error.generic("Embedded authorizing is only available in OS X 10.10 and later")
 		}
@@ -81,7 +88,7 @@ final class OAuth2Authorizer {
 	*/
 	@available(OSX 10.10, *)
 	@discardableResult
-	func authorizeEmbedded(from window: NSWindow, with config: OAuth2AuthConfig, at url: URL) throws -> NSWindow {
+	public func authorizeEmbedded(from window: NSWindow, with config: OAuth2AuthConfig, at url: URL) throws -> NSWindow {
 		let controller = try presentableAuthorizeViewController(at: url)
 		controller.willBecomeSheet = true
 		let sheet = windowController(forViewController: controller, with: config).window!
@@ -104,19 +111,19 @@ final class OAuth2Authorizer {
 	- parameter at:   The authorize URL to open
 	*/
 	@available(OSX 10.10, *)
-	func authorizeInNewWindow(with config: OAuth2AuthConfig, at url: URL) throws {
+	public func authorizeInNewWindow(with config: OAuth2AuthConfig, at url: URL) throws {
 		let controller = try presentableAuthorizeViewController(at: url)
-		let windowController = self.windowController(forViewController: controller, with: config)
-		oauth2.authConfig.ui.windowController = windowController
+		let wc = self.windowController(forViewController: controller, with: config)
 		
 		if config.authorizeEmbeddedAutoDismiss {
 			oauth2.internalAfterAuthorizeOrFailure = { wasFailure, error in
 				controller.view.window?.close()
-				self.oauth2.authConfig.ui.windowController = nil
+				self.windowController = nil
 			}
 		}
-		windowController.window?.center()
-		windowController.showWindow(nil)
+		wc.window?.center()
+		wc.showWindow(nil)
+		windowController = wc
 	}
 	
 	/**
@@ -141,7 +148,7 @@ final class OAuth2Authorizer {
 			return false
 		}
 		controller.onWillCancel = {
-			self.oauth2.didFail(nil)
+			self.oauth2.didFail(withError: nil)
 		}
 		return controller
 	}

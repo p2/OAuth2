@@ -25,7 +25,8 @@ let package = Package(
 	targets: [
 		Target(name: "SwiftKeychain"),
 		Target(name: "Base", dependencies: [.Target(name: "SwiftKeychain")]),
-		Target(name: "OSX", dependencies: [.Target(name: "Base")]),
+		Target(name: "macOS", dependencies: [.Target(name: "Base")]),
+		Target(name: "Flows", dependencies: [.Target(name: "macOS")]),
 	],
 	dependencies: [
 		// SwiftKeychain is not yet available as a Package, so we symlink to /Sources and make it a Target

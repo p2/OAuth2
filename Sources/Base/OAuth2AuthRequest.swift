@@ -44,6 +44,16 @@ public enum OAuth2HTTPContentType: String {
 
 
 /**
+The auth method supported by the endpoint.
+*/
+public enum OAuth2EndpointAuthMethod: String {
+	case none = "none"
+	case clientSecretPost = "client_secret_post"
+	case clientSecretBasic = "client_secret_basic"
+}
+
+
+/**
 Class representing an OAuth2 authorization request that can be used to create NSURLRequest instances.
 */
 public class OAuth2AuthRequest {
@@ -125,7 +135,7 @@ public class OAuth2AuthRequest {
 	- parameter oauth2: The OAuth2 instance from which to take client and auth settings
 	- returns: A mutable NSURLRequest
 	*/
-	public func asURLRequestFor(_ oauth2: OAuth2) throws -> URLRequest {
+	public func asURLRequestFor(_ oauth2: OAuth2Base) throws -> URLRequest {
 		var finalParams = params
 		var finalAuthHeader = headerAuthorize
 		
