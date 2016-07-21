@@ -17,6 +17,7 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 //
+#if os(iOS)
 
 import UIKit
 
@@ -240,3 +241,4 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 	}
 }
 
+#endif

@@ -55,7 +55,7 @@ class OAuth2Tests: XCTestCase {
 	func testAuthorizeURL() {
 		let oa = genericOAuth2()
 		oa.verbose = false
-		let auth = try! oa.authorizeURLWithRedirect("oauth2app://callback", scope: "launch", params: ["extra": "param"])
+		let auth = try! oa.authorizeURL(withRedirect: "oauth2app://callback", scope: "launch", params: ["extra": "param"])
 		
 		let comp = URLComponents(url: auth, resolvingAgainstBaseURL: true)!
 		XCTAssertEqual("https", comp.scheme!, "Need correct scheme")
@@ -110,7 +110,7 @@ class OAuth2Tests: XCTestCase {
 			XCTAssertNotNil(error)
 			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.invalidAuthorizationContext)
 		}
-		oa.authorizeEmbeddedFrom("A string")
+		oa.authorizeEmbedded(from: "A string")
 		XCTAssertTrue(oa.authConfig.authorizeEmbedded)
 	}
 	

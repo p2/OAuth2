@@ -22,8 +22,8 @@ import Foundation
 
 
 /**
-    Base class for specific OAuth2 authentication flow implementations.
- */
+Base class for specific OAuth2 authentication flow implementations.
+*/
 public class OAuth2: OAuth2Base {
 	
 	/// The grant type represented by the class, e.g. "authorization_code" for code grants.
@@ -129,6 +129,9 @@ public class OAuth2: OAuth2Base {
 	/// If non-nil, will be called before performing dynamic client registration, giving you a chance to instantiate your own registrar.
 	public final var onBeforeDynamicClientRegistration: ((URL) -> OAuth2DynReg?)?
 	
+	/// The authorizer to use for UI handling, depending on platform.
+	private var authorizer: OAuth2Authorizer!
+	
 	
 	/**
 	Designated initializer.
@@ -164,6 +167,7 @@ public class OAuth2: OAuth2Base {
 			authConfig.ui.title = ttl
 		}
 		super.init(settings: settings)
+		authorizer = OAuth2Authorizer(oauth2: self)
 	}
 	
 	
@@ -243,10 +247,10 @@ public class OAuth2: OAuth2Base {
 	
 	This method sets `authConfig.authorizeEmbedded = true` and `authConfig.authorizeContext = <# context #>`, then calls `authorize()`
 	
-	- parameter context: The context to start authorization from, depends on platform (UIViewController or NSWindow, see `authorizeContext`)
+	- parameter from:    The context to start authorization from, depends on platform (UIViewController or NSWindow, see `authorizeContext`)
 	- parameter params:  Optional key/value pairs to pass during authorization
 	*/
-	public func authorizeEmbeddedFrom(_ context: AnyObject, params: OAuth2StringDict? = nil) {
+	public func authorizeEmbedded(from context: AnyObject, params: OAuth2StringDict? = nil) {
 		authConfig.authorizeEmbedded = true
 		authConfig.authorizeContext = context
 		authorize(params: params)
@@ -311,11 +315,40 @@ public class OAuth2: OAuth2Base {
 	*/
 	public func doAuthorize(params: OAuth2StringDict? = nil) throws {
 		if self.authConfig.authorizeEmbedded {
-			try self.authorizeEmbeddedWith(self.authConfig, params: params)
+			try self.authorizeEmbedded(with: self.authConfig, params: params)
 		}
 		else {
 			try self.openAuthorizeURLInBrowser(params: params)
 		}
+	}
+	
+	/**
+	Open the authorize URL in the OS's browser. Forwards to the receiver's `authorizer`, which is a platform-dependent implementation of
+	`OAuth2Authorizer`.
+	
+	- parameter params: Additional parameters to pass to the authorize URL
+	- throws: UnableToOpenAuthorizeURL on failure
+	*/
+	public final func openAuthorizeURLInBrowser(params: OAuth2StringDict? = nil) throws {
+		let url = try authorizeURL(params: params)
+		logger?.debug("OAuth2", msg: "Opening authorize URL in system browser: \(url)")
+		try authorizer.openAuthorizeURLInBrowser(url)
+	}
+	
+	/**
+	Tries to use the current auth config context, which on iOS should be a UIViewController and on OS X a NSViewController, to present the
+	authorization screen. Set `oauth2.authConfig.authorizeContext` accordingly.
+	
+	Forwards to the receiver's `authorizer`, which is a platform-dependent implementation of `OAuth2Authorizer`.
+	
+	- throws:           Can throw OAuth2Error if the method is unable to show the authorize screen
+	- parameter with:   The configuration to be used; usually uses the instance's `authConfig`
+	- parameter params: Additional authorization parameters to supply during the OAuth dance
+	*/
+	public func authorizeEmbedded(with config: OAuth2AuthConfig, params: OAuth2StringDict? = nil) throws {
+		let url = try authorizeURL(params: params)
+		logger?.debug("OAuth2", msg: "Opening authorize URL embedded: \(url)")
+		try authorizer.authorizeEmbedded(with: config, at: url)
 	}
 	
 	/**
@@ -327,7 +360,7 @@ public class OAuth2: OAuth2Base {
 	- parameter params:   Any additional parameters as dictionary with string keys and values that will be added to the query part
 	- returns:            OAuth2AuthRequest to be used to call to the authorize endpoint
 	*/
-	func authorizeRequestWithRedirect(_ redirect: String, scope: String?, params: OAuth2StringDict?) throws -> OAuth2AuthRequest {
+	func authorizeRequest(withRedirect redirect: String, scope: String?, params: OAuth2StringDict?) throws -> OAuth2AuthRequest {
 		guard let clientId = clientConfig.clientId where !clientId.isEmpty else {
 			throw OAuth2Error.noClientId
 		}
@@ -354,7 +387,7 @@ public class OAuth2: OAuth2Base {
 	- returns:          NSURL to be used to start the OAuth dance
 	*/
 	public func authorizeURL(params: OAuth2StringDict? = nil) throws -> URL {
-		return try authorizeURLWithRedirect(nil, scope: nil, params: params)
+		return try authorizeURL(withRedirect: nil, scope: nil, params: params)
 	}
 	
 	/**
@@ -366,11 +399,11 @@ public class OAuth2: OAuth2Base {
 	- parameter params:   Any additional parameters as dictionary with string keys and values that will be added to the query part
 	- returns:            NSURL to be used to start the OAuth dance
 	*/
-	public func authorizeURLWithRedirect(_ redirect: String?, scope: String?, params: OAuth2StringDict?) throws -> URL {
+	public func authorizeURL(withRedirect redirect: String?, scope: String?, params: OAuth2StringDict?) throws -> URL {
 		guard let redirect = (redirect ?? clientConfig.redirect) else {
 			throw OAuth2Error.noRedirectURL
 		}
-		let req = try authorizeRequestWithRedirect(redirect, scope: scope, params: params)
+		let req = try authorizeRequest(withRedirect: redirect, scope: scope, params: params)
 		context.redirectURL = redirect
 		return try req.asURL()
 	}

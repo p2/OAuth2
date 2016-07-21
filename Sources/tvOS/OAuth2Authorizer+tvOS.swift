@@ -17,18 +17,31 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 //
+#if os(tvOS)
+
+import Foundation
 
 
-extension OAuth2 {
+public final class OAuth2Authorizer {
+	
+	/// The OAuth2 instance this authorizer belongs to.
+	unowned let oauth2: OAuth2
+	
+	
+	init(oauth2: OAuth2) {
+		self.oauth2 = oauth2
+	}
+	
 	
 	// no webview or webbrowser available on tvOS
 	
-	public final func openAuthorizeURLInBrowser(params: OAuth2StringDict? = nil) throws {
+	public func openAuthorizeURLInBrowser(_ url: URL) throws {
 		throw OAuth2Error.generic("Not implemented")
 	}
 	
-	public func authorizeEmbeddedWith(_ config: OAuth2AuthConfig, params: OAuth2StringDict? = nil) throws {
+	public func authorizeEmbedded(with config: OAuth2AuthConfig, at url: URL) throws {
 		throw OAuth2Error.generic("Not implemented")
 	}
 }
 
+#endif

@@ -56,7 +56,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 		
 		XCTAssertNotNil(oauth.authURL, "Must init `authorize_uri`")
 		do {
-			_ = try oauth.authorizeURLWithRedirect("oauth2://callback", scope: nil, params: nil)
+			_ = try oauth.authorizeURL(withRedirect: "oauth2://callback", scope: nil, params: nil)
 			XCTAssertTrue(false, "Should no longer be here")
 		}
 		catch OAuth2Error.notUsingTLS {
@@ -80,7 +80,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 		let oauth = OAuth2CodeGrant(settings: baseSettings)
 		XCTAssertNotNil(oauth.authURL, "Must init `authorize_uri`")
 		
-		let comp = URLComponents(url: try! oauth.authorizeURLWithRedirect("oauth2://callback", scope: nil, params: nil), resolvingAgainstBaseURL: true)!
+		let comp = URLComponents(url: try! oauth.authorizeURL(withRedirect: "oauth2://callback", scope: nil, params: nil), resolvingAgainstBaseURL: true)!
 		XCTAssertEqual(comp.host!, "auth.ful.io", "Correct host")
 		let query = OAuth2CodeGrant.paramsFromQuery(comp.percentEncodedQuery!)
 		XCTAssertEqual(query["client_id"]!, "abc", "Expecting correct `client_id`")
