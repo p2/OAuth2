@@ -40,20 +40,19 @@ public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 	}
 	
 	
+	// MARK: - OAuth2AuthorizerUI
+	
 	/**
 	Uses `UIApplication` to open the authorize URL in iOS's browser.
 	
 	- parameter url: The authorize URL to open
 	- throws: UnableToOpenAuthorizeURL on failure
 	*/
-	func openAuthorizeURLInBrowser(_ url: URL) throws {
+	public func openAuthorizeURLInBrowser(_ url: URL) throws {
 		if !UIApplication.shared().openURL(url) {
 			throw OAuth2Error.unableToOpenAuthorizeURL
 		}
 	}
-	
-	
-	// MARK: - Authorize Embedded
 	
 	/**
 	Tries to use the current auth config context, which on iOS should be a UIViewController, to present the authorization screen.
@@ -63,25 +62,26 @@ public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 	- parameter at:   The authorize URL to open
 	*/
 	public func authorizeEmbedded(with config: OAuth2AuthConfig, at url: URL) throws {
-		if let controller = config.authorizeContext as? UIViewController {
-			if #available(iOS 9, *), config.ui.useSafariView {
-				let web = try authorizeSafariEmbedded(from: controller, at: url)
-				if config.authorizeEmbeddedAutoDismiss {
-					oauth2.internalAfterAuthorizeOrFailure = { wasFailure, error in
-						web.dismiss(animated: true)
-					}
-				}
-				return
-			}
-			let web = try authorizeEmbedded(from: controller, at: url)
+		guard let controller = config.authorizeContext as? UIViewController else {
+			throw (nil == config.authorizeContext) ? OAuth2Error.noAuthorizationContext : OAuth2Error.invalidAuthorizationContext
+		}
+		
+		if #available(iOS 9, *), config.ui.useSafariView {
+			let web = try authorizeSafariEmbedded(from: controller, at: url)
 			if config.authorizeEmbeddedAutoDismiss {
-				oauth2.internalAfterAuthorizeOrFailure = { wasFailure, error in
+				oauth2.internalAfterAuthorizeOrFail = { wasFailure, error in
 					web.dismiss(animated: true)
 				}
 			}
-			return
+			return web
 		}
-		throw (nil == config.authorizeContext) ? OAuth2Error.noAuthorizationContext : OAuth2Error.invalidAuthorizationContext
+		let web = try authorizeEmbedded(from: controller, at: url)
+		if config.authorizeEmbeddedAutoDismiss {
+			oauth2.internalAfterAuthorizeOrFail = { wasFailure, error in
+				web.dismiss(animated: true)
+			}
+		}
+		return web
 	}
 	
 	
@@ -93,7 +93,7 @@ public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 	The mechanism works just like when you're using Safari itself to log the user in, hence you **need to implement**
 	`application(application:openURL:sourceApplication:annotation:)` in your application delegate.
 	
-	This method does NOT dismiss the view controller automatically, you probably want to do this in the `afterAuthorizeOrFailure` closure.
+	This method does NOT dismiss the view controller automatically, you probably want to do this in the callback.
 	Simply call this method first, then call `dismissViewController()` on the returned web view controller instance in that closure. Or use
 	`authorizeEmbedded(with:at:)` which does all this automatically.
 	
@@ -102,6 +102,7 @@ public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 	- returns:        SFSafariViewController, being already presented automatically
 	*/
 	@available(iOS 9.0, *)
+	@discardableResult
 	public func authorizeSafariEmbedded(from controller: UIViewController, at url: URL) throws -> SFSafariViewController {
 		let web = SFSafariViewController(url: url)
 		web.title = oauth2.authConfig.ui.title
@@ -131,8 +132,8 @@ public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 	Presents a web view controller, contained in a UINavigationController, on the supplied view controller and loads the authorize URL.
 	
 	Automatically intercepts the redirect URL and performs the token exchange. It does NOT however dismiss the web view controller
-	automatically, you probably want to do this in the `afterAuthorizeOrFailure` closure. Simply call this method first, then assign
-	that closure in which you call `dismissViewController()` on the returned web view controller instance.
+	automatically, you probably want to do this in the callback. Simply call this method first, then assign that closure in which you call
+	`dismissViewController()` on the returned web view controller instance.
 	
 	- parameter from: The view controller to use for presentation
 	- parameter at:   The authorize URL to open
@@ -142,26 +143,6 @@ public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 		guard let redirect = oauth2.redirect else {
 			throw OAuth2Error.noRedirectURL
 		}
-		return presentAuthorizeView(forURL: url, intercept: redirect, from: controller)
-	}
-	
-	/**
-	Presents a web view controller, contained in a UINavigationController, on the supplied view controller and loads the authorize URL.
-	
-	Automatically intercepts the redirect URL and performs the token exchange. It does NOT however dismiss the web view controller
-	automatically, you probably want to do this in the `afterAuthorizeOrFailure` closure. Simply call this method first, then assign
-	that closure in which you call `dismissViewController()` on the returned web view controller instance.
-	
-	- parameter from:     The view controller to use for presentation
-	- parameter redirect: The redirect URL to use
-	- parameter scope:    The scope to use
-	- parameter url:      The authorize URL to open
-	- returns: OAuth2WebViewController, embedded in a UINavigationController being presented automatically
-	*/
-	public func authorizeEmbedded(from controller: UIViewController,
-	                                     redirect: String,
-	                                        scope: String,
-	                                          url: URL) throws -> OAuth2WebViewController {
 		return presentAuthorizeView(forURL: url, intercept: redirect, from: controller)
 	}
 	

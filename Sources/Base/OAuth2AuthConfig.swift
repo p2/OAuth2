@@ -30,7 +30,6 @@ public struct OAuth2AuthConfig {
 		/// Title to propagate to views handled by OAuth2, such as OAuth2WebViewController.
 		public var title: String? = nil
 		
-		// TODO: figure out a neat way to make this a UIBarButtonItem if compiled for iOS
 		/// By assigning your own UIBarButtonItem (!) you can override the back button that is shown in the iOS embedded web view (does NOT apply to `SFSafariViewController`).
 		public var backButton: AnyObject? = nil
 		
@@ -48,9 +47,8 @@ public struct OAuth2AuthConfig {
 	public var authorizeEmbeddedAutoDismiss = true
 	
 	/// Context information for the authorization flow:
-	/// - iOS:  the parent view controller to present from
-	/// - OS X: An NSWindow from which to present a modal sheet _or_
-	/// - OS X: A `((webViewController: NSViewController) -> Void)` block to execute with the web view controller for you to present
+	/// - iOS:   The parent view controller to present from
+	/// - macOS: An NSWindow from which to present a modal sheet _or_ `nil` to present in a new window
 	public var authorizeContext: AnyObject? = nil
 	
 	/// UI-specific configuration.

@@ -55,6 +55,9 @@ public enum OAuth2Error: ErrorProtocol, CustomStringConvertible, Equatable {
 	/// There is no password.
 	case noPassword
 	
+	/// The client is already authorizing.
+	case alreadyAuthorizing
+	
 	/// There is no authorization context.
 	case noAuthorizationContext
 	
@@ -185,6 +188,8 @@ public enum OAuth2Error: ErrorProtocol, CustomStringConvertible, Equatable {
 			return "No username"
 		case noPassword:
 			return "No password"
+		case alreadyAuthorizing:
+			return "The client is already authorizing, wait for it to finish or abort authorization before trying again"
 		case noAuthorizationContext:
 			return "No authorization context present"
 		case invalidAuthorizationContext:
@@ -252,6 +257,7 @@ public func ==(lhs: OAuth2Error, rhs: OAuth2Error) -> Bool {
 	case (.noRedirectURL, .noRedirectURL):                       return true
 	case (.noUsername, .noUsername):                             return true
 	case (.noPassword, .noPassword):                             return true
+	case (.alreadyAuthorizing, .alreadyAuthorizing):             return true
 	case (.noAuthorizationContext, .noAuthorizationContext):                 return true
 	case (.invalidAuthorizationContext, .invalidAuthorizationContext):       return true
 	case (.invalidRedirectURL(let lhu), .invalidRedirectURL(let rhu)):       return lhu == rhu

@@ -109,23 +109,31 @@ public class OAuth2Base: OAuth2Backing {
 	}
 	
 	
+	/// This closure is internally used with `authorize(params:callback:)` and only exposed for subclassing reason, do not mess with it!
+	public final var didAuthorizeOrFail: ((parameters: OAuth2JSON?, error: ErrorProtocol?) -> Void)?
+	
 	/// Closure called on successful authentication on the main thread.
+	@available(*, deprecated: 3.0, message: "Use the `authorize(params:callback:)` method and variants")
 	public final var onAuthorize: ((parameters: OAuth2JSON) -> Void)?
 	
 	/// When authorization fails (if error is not nil) or is cancelled, this block is executed on the main thread.
+	@available(*, deprecated: 3.0, message: "Use the `authorize(params:callback:)` method and variants")
 	public final var onFailure: ((error: ErrorProtocol?) -> Void)?
 	
 	/**
-	Closure called after onAuthorize OR onFailure, on the main thread; useful for cleanup operations.
+	Closure called after the regular authorization callback, on the main thread. You can use this callback when you're performing
+	authorization manually and/or for cleanup operations.
 	
-	- parameter wasFailure: Bool indicating success or failure
-	- parameter error: ErrorType describing the reason for failure, as supplied to the `onFailure` callback. If it is nil and `wasFailure`
-	is true, the process was aborted.
+	- parameter authParameters: All authorization parameters; non-nil (but possibly empty) on success, nil on error
+	- parameter error:          Error giving the failure reason; if nil and `authParameters` is also nil, the process was aborted.
 	*/
-	public final var afterAuthorizeOrFailure: ((wasFailure: Bool, error: ErrorProtocol?) -> Void)?
+	public final var afterAuthorizeOrFail: ((authParameters: OAuth2JSON?, error: ErrorProtocol?) -> Void)?
 	
-	/// Same as `afterAuthorizeOrFailure`, but only for internal use and called right BEFORE the public variant. Don't mess with this!
-	public final var internalAfterAuthorizeOrFailure: ((wasFailure: Bool, error: ErrorProtocol?) -> Void)?
+	/**
+	For internal use, don't mess with it, it's public only for subclassing and compilation reasons. Executed right before
+	`afterAuthorizeOrFail`.
+	*/
+	public final var internalAfterAuthorizeOrFail: ((wasFailure: Bool, error: ErrorProtocol?) -> Void)?
 	
 	
 	/**
@@ -229,10 +237,10 @@ public class OAuth2Base: OAuth2Backing {
 	}
 	
 	/**
-	Internally used on success. Calls the `onAuthorize` and `afterAuthorizeOrFailure` callbacks on the main thread.
+	Internally used on success, calls the callbacks on the main thread.
 	
 	This method is only made public in case you want to create a subclass and call `didAuthorize(parameters:)` at an override point. If you
-	call this method yourself on standard classes you might screw things up badly.
+	call this method yourself on your OAuth2 instance you might screw things up badly.
 	
 	- parameter withParameters: The parameters received during authorization
 	*/
@@ -242,16 +250,18 @@ public class OAuth2Base: OAuth2Backing {
 		}
 		callOnMainThread() {
 			self.onAuthorize?(parameters: parameters)
-			self.internalAfterAuthorizeOrFailure?(wasFailure: false, error: nil)
-			self.afterAuthorizeOrFailure?(wasFailure: false, error: nil)
+			self.didAuthorizeOrFail?(parameters: parameters, error: nil)
+			self.didAuthorizeOrFail = nil
+			self.internalAfterAuthorizeOrFail?(wasFailure: false, error: nil)
+			self.afterAuthorizeOrFail?(authParameters: parameters, error: nil)
 		}
 	}
 	
 	/**
-	Internally used on error. Calls the `onFailure` and `afterAuthorizeOrFailure` callbacks on the main thread.
+	Internally used on error, calls the callbacks on the main thread with the appropriate error message.
 	
 	This method is only made public in case you want to create a subclass and need to call `didFail(error:)` at an override point. If you
-	call this method yourself on standard classes you might screw things up royally.
+	call this method yourself on your OAuth2 instance you might screw things up royally.
 	
 	- parameter withError: The error that led to authentication failure
 	*/
@@ -266,8 +276,10 @@ public class OAuth2Base: OAuth2Backing {
 		
 		callOnMainThread() {
 			self.onFailure?(error: finalError)
-			self.internalAfterAuthorizeOrFailure?(wasFailure: true, error: finalError)
-			self.afterAuthorizeOrFailure?(wasFailure: true, error: finalError)
+			self.didAuthorizeOrFail?(parameters: nil, error: finalError)
+			self.didAuthorizeOrFail = nil
+			self.internalAfterAuthorizeOrFail?(wasFailure: true, error: finalError)
+			self.afterAuthorizeOrFail?(authParameters: nil, error: finalError)
 		}
 	}
 	

@@ -85,7 +85,7 @@ class OAuth2Tests: XCTestCase {
 		XCTAssertNil(params["state"], "Expecting no `state` in query")
 	}
 	
-	func testAuthorizeCall() {
+	func testDeprecatedAuthorizeCall() {
 		let oa = genericOAuth2()
 		oa.verbose = false
 		XCTAssertFalse(oa.authConfig.authorizeEmbedded)
@@ -105,12 +105,32 @@ class OAuth2Tests: XCTestCase {
 			XCTAssertNotNil(error)
 			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.invalidAuthorizationContext)
 		}
-		oa.afterAuthorizeOrFailure = { wasFailure, error in
-			XCTAssertTrue(wasFailure)
+		oa.afterAuthorizeOrFail = { params, error in
+			XCTAssertNil(params)
 			XCTAssertNotNil(error)
 			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.invalidAuthorizationContext)
 		}
 		oa.authorizeEmbedded(from: "A string")
+		XCTAssertTrue(oa.authConfig.authorizeEmbedded)
+	}
+	
+	func testAuthorizeCall() {
+		let oa = genericOAuth2()
+		oa.verbose = false
+		XCTAssertFalse(oa.authConfig.authorizeEmbedded)
+		oa.authorize() { params, error in
+			XCTAssertNil(params, "Should not have auth parameters")
+			XCTAssertNotNil(error)
+			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.noRedirectURL)
+		}
+		XCTAssertFalse(oa.authConfig.authorizeEmbedded)
+		
+		// embedded
+		oa.redirect = "myapp://oauth"
+		oa.authorizeEmbedded(from: "A string") { parameters, error in
+			XCTAssertNotNil(error)
+			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.invalidAuthorizationContext)
+		}
 		XCTAssertTrue(oa.authConfig.authorizeEmbedded)
 	}
 	

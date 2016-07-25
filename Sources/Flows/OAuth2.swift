@@ -40,7 +40,7 @@ public class OAuth2: OAuth2Base {
 	public final var onBeforeDynamicClientRegistration: ((URL) -> OAuth2DynReg?)?
 	
 	/// The authorizer to use for UI handling, depending on platform.
-	private var authorizer: OAuth2AuthorizerUI!
+	public var authorizer: OAuth2AuthorizerUI!
 	
 	
 	/**
@@ -75,17 +75,27 @@ public class OAuth2: OAuth2Base {
 	// MARK: - Authorization
 	
 	/**
-	Use this method, together with `authConfig`, to obtain an access token.
- 
+	Use this method to obtain an access token. Take a look at `authConfig` on how to configure how authorization is presented to the user.
+	
+	This method is running asynchronously and can only be run one at a time.
+	
 	This method will first check if the client already has an unexpired access token (possibly from the keychain), if not and it's able to
 	use a refresh token it will try to use the refresh token. If this fails it will check whether the client has a client_id and show the
 	authorize screen if you have `authConfig` set up sufficiently. If `authConfig` is not set up sufficiently this method will end up
 	calling the `onFailure` callback. If client_id is not set but a "registration_uri" has been provided, a dynamic client registration will
-	be attempted and if it succees, an access token will be requested.
+	be attempted and if it success, an access token will be requested.
 	
-	- parameter params: Optional key/value pairs to pass during authorization and token refresh
+	- parameter params:   Optional key/value pairs to pass during authorization and token refresh
+	- parameter callback: The callback to call when authorization finishes (parameters will be non-nil but may be an empty dict), fails
+	                      (error will be non-nil) or is cancelled (both parameters and error is nil)
 	*/
-	public final func authorize(params: OAuth2StringDict? = nil) {
+	public final func authorize(params: OAuth2StringDict? = nil, callback: ((authParameters: OAuth2JSON?, error: ErrorProtocol?) -> Void)) {
+		if nil != didAuthorizeOrFail {
+			callback(authParameters: nil, error: OAuth2Error.alreadyAuthorizing)
+			return
+		}
+		didAuthorizeOrFail = callback
+		logger?.debug("OAuth2", msg: "Starting authorization")
 		tryToObtainAccessTokenIfNeeded(params: params) { successParams in
 			if let successParams = successParams {
 				self.didAuthorize(withParameters: successParams)
@@ -110,17 +120,46 @@ public class OAuth2: OAuth2Base {
 	}
 	
 	/**
+	This method is deprecated in version 3.0 and has been replaced with `authorize(params:callback:)`.
+	
+	- parameter params: Optional key/value pairs to pass during authorization and token refresh
+	*/
+	@available(*, deprecated: 3.0, message: "Use the `authorize(params:callback:)` method and variants")
+	public final func authorize(params: OAuth2StringDict? = nil) {
+		authorize(params: params) { parameters, error in
+		}
+	}
+	
+	/**
 	Shortcut function to start embedded authorization from the given context (a UIViewController on iOS, an NSWindow on OS X).
 	
 	This method sets `authConfig.authorizeEmbedded = true` and `authConfig.authorizeContext = <# context #>`, then calls `authorize()`
 	
+	- parameter from:     The context to start authorization from, depends on platform (UIViewController or NSWindow, see `authorizeContext`)
+	- parameter params:   Optional key/value pairs to pass during authorization
+	- parameter callback: The callback to call when authorization finishes (parameters will be non-nil but may be an empty dict), fails
+	(error will be non-nil) or is cancelled (both parameters and error is nil)
+	*/
+	public func authorizeEmbedded(from context: AnyObject, params: OAuth2StringDict? = nil, callback: ((authParameters: OAuth2JSON?, error: ErrorProtocol?) -> Void)) {
+		if nil != didAuthorizeOrFail {		// check before changing `authConfig`
+			callback(authParameters: nil, error: OAuth2Error.alreadyAuthorizing)
+			return
+		}
+		authConfig.authorizeEmbedded = true
+		authConfig.authorizeContext = context
+		authorize(params: params, callback: callback)
+	}
+	
+	/**
+	This method is deprecated in version 3.0 and has been replaced with `authorizeEmbedded(from:params:callback:)`.
+	
 	- parameter from:    The context to start authorization from, depends on platform (UIViewController or NSWindow, see `authorizeContext`)
 	- parameter params:  Optional key/value pairs to pass during authorization
 	*/
+	@available(*, deprecated: 3.0, message: "Use the `authorize(params:callback:)` method and variants")
 	public func authorizeEmbedded(from context: AnyObject, params: OAuth2StringDict? = nil) {
-		authConfig.authorizeEmbedded = true
-		authConfig.authorizeContext = context
-		authorize(params: params)
+		authorizeEmbedded(from: context, params: params) { parameters, error in
+		}
 	}
 	
 	/**
@@ -154,10 +193,11 @@ public class OAuth2: OAuth2Base {
 	*/
 	public func tryToObtainAccessTokenIfNeeded(params: OAuth2StringDict? = nil, callback: ((successParams: OAuth2JSON?) -> Void)) {
 		if hasUnexpiredAccessToken() {
+			logger?.debug("OAuth2", msg: "Have an apparently unexpired access token")
 			callback(successParams: OAuth2JSON())
 		}
 		else {
-			logger?.debug("OAuth2", msg: "No access token, maybe I can refresh")
+			logger?.debug("OAuth2", msg: "No access token, checking if a refresh token is available")
 			doRefreshToken(params: params) { successParams, error in
 				if let successParams = successParams {
 					callback(successParams: successParams)
@@ -181,11 +221,11 @@ public class OAuth2: OAuth2Base {
 	- parameter params: Optional key/value pairs to pass during authorization
 	*/
 	public func doAuthorize(params: OAuth2StringDict? = nil) throws {
-		if self.authConfig.authorizeEmbedded {
-			try self.authorizeEmbedded(with: self.authConfig, params: params)
+		if authConfig.authorizeEmbedded {
+			try doAuthorizeEmbedded(with: authConfig, params: params)
 		}
 		else {
-			try self.openAuthorizeURLInBrowser(params: params)
+			try doOpenAuthorizeURLInBrowser(params: params)
 		}
 	}
 	
@@ -196,7 +236,7 @@ public class OAuth2: OAuth2Base {
 	- parameter params: Additional parameters to pass to the authorize URL
 	- throws: UnableToOpenAuthorizeURL on failure
 	*/
-	public final func openAuthorizeURLInBrowser(params: OAuth2StringDict? = nil) throws {
+	final func doOpenAuthorizeURLInBrowser(params: OAuth2StringDict? = nil) throws {
 		let url = try authorizeURL(params: params)
 		logger?.debug("OAuth2", msg: "Opening authorize URL in system browser: \(url)")
 		try authorizer.openAuthorizeURLInBrowser(url)
@@ -212,7 +252,7 @@ public class OAuth2: OAuth2Base {
 	- parameter with:   The configuration to be used; usually uses the instance's `authConfig`
 	- parameter params: Additional authorization parameters to supply during the OAuth dance
 	*/
-	public func authorizeEmbedded(with config: OAuth2AuthConfig, params: OAuth2StringDict? = nil) throws {
+	final func doAuthorizeEmbedded(with config: OAuth2AuthConfig, params: OAuth2StringDict? = nil) throws {
 		let url = try authorizeURL(params: params)
 		logger?.debug("OAuth2", msg: "Opening authorize URL embedded: \(url)")
 		try authorizer.authorizeEmbedded(with: config, at: url)

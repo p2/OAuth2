@@ -8,6 +8,7 @@ You can also refer to commit logs to get details on what was implemented, fixed 
 ### 3.0.0
 
 - Rewrite in Swift 3
+- API redesign, should now use `authorize(params:callback:)`
 - Add `Package.swift` for the Swift package manager
 
 

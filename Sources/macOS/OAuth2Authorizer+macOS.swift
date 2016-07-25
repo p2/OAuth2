@@ -39,6 +39,9 @@ public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 	}
 	
 	
+	// MARK: - OAuth2AuthorizerUI
+	
+	
 	/**
 	Uses `NSWorkspace` to open the authorize URL in the OS browser.
 	
@@ -50,9 +53,6 @@ public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 			throw OAuth2Error.unableToOpenAuthorizeURL
 		}
 	}
-	
-	
-	// MARK: - Embedded View
 	
 	/**
 	Tries to use the given context, which on OS X should be a NSWindow, to present the authorization screen. In this case will forward to
@@ -69,35 +69,43 @@ public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 		
 		// present as sheet
 		if let window = config.authorizeContext as? NSWindow {
-			try authorizeEmbedded(from: window, with: config, at: url)
+			let sheet = try authorizeEmbedded(from: window, at: url)
+			if config.authorizeEmbeddedAutoDismiss {
+				oauth2.internalAfterAuthorizeOrFail = { wasFailure, error in
+					window.endSheet(sheet)
+				}
+			}
 		}
 		
 		// present in new window (or with custom block)
 		else {
-			try authorizeInNewWindow(with: config, at: url)
+			windowController = try authorizeInNewWindow(at: url)
+			if config.authorizeEmbeddedAutoDismiss {
+				oauth2.internalAfterAuthorizeOrFail = { wasFailure, error in
+					self.windowController?.window?.close()
+					self.windowController = nil
+				}
+			}
 		}
 	}
+	
+	
+	// MARK: - Window Creation
 	
 	/**
 	Presents a modal sheet from the given window.
 	
 	- parameter from: The window from which to present the sheet
-	- parameter with: The auth configuration to take into consideration
 	- parameter at:   The authorize URL to open
 	- returns:        The sheet that is being queued for presentation
 	*/
 	@available(OSX 10.10, *)
 	@discardableResult
-	public func authorizeEmbedded(from window: NSWindow, with config: OAuth2AuthConfig, at url: URL) throws -> NSWindow {
+	public func authorizeEmbedded(from window: NSWindow, at url: URL) throws -> NSWindow {
 		let controller = try presentableAuthorizeViewController(at: url)
 		controller.willBecomeSheet = true
-		let sheet = windowController(forViewController: controller, with: config).window!
+		let sheet = windowController(forViewController: controller, with: oauth2.authConfig).window!
 		
-		if config.authorizeEmbeddedAutoDismiss {
-			oauth2.internalAfterAuthorizeOrFailure = { wasFailure, error in
-				window.endSheet(sheet)
-			}
-		}
 		window.makeKeyAndOrderFront(nil)
 		window.beginSheet(sheet, completionHandler: nil)
 		
@@ -107,23 +115,19 @@ public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 	/**
 	Creates a new window, containing our `OAuth2WebViewController`, and centers it on the screen.
 	
-	- parameter with: The auth configuration to take into consideration
 	- parameter at:   The authorize URL to open
+	- returns:        The window that is being shown on screen
 	*/
 	@available(OSX 10.10, *)
-	public func authorizeInNewWindow(with config: OAuth2AuthConfig, at url: URL) throws {
+	@discardableResult
+	public func authorizeInNewWindow(at url: URL) throws -> NSWindowController {
 		let controller = try presentableAuthorizeViewController(at: url)
-		let wc = self.windowController(forViewController: controller, with: config)
+		let wc = windowController(forViewController: controller, with: oauth2.authConfig)
 		
-		if config.authorizeEmbeddedAutoDismiss {
-			oauth2.internalAfterAuthorizeOrFailure = { wasFailure, error in
-				controller.view.window?.close()
-				self.windowController = nil
-			}
-		}
 		wc.window?.center()
 		wc.showWindow(nil)
-		windowController = wc
+		
+		return wc
 	}
 	
 	/**
@@ -162,7 +166,7 @@ public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 	*/
 	@available(OSX 10.10, *)
 	func windowController(forViewController controller: OAuth2WebViewController, with config: OAuth2AuthConfig) -> NSWindowController {
-		let rect = NSMakeRect(0, 0, OAuth2WebViewController.WebViewWindowWidth, OAuth2WebViewController.WebViewWindowHeight)
+		let rect = NSMakeRect(0, 0, OAuth2WebViewController.webViewWindowWidth, OAuth2WebViewController.webViewWindowHeight)
 		let window = NSWindow(contentRect: rect, styleMask: [.titled, .closable, .resizable, .fullSizeContentView], backing: .buffered, defer: false)
 		window.backgroundColor = NSColor.white()
 		window.isMovableByWindowBackground = true

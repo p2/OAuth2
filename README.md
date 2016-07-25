@@ -46,7 +46,6 @@ let settings = [
 ### 2. Instantiate OAuth2
 
 Create an `OAuth2CodeGrant` Instance.
-Optionally, set the `onAuthorize` and `onFailure` closures **or** the `afterAuthorizeOrFailure` closure to keep informed about the status.
 
 ```swift
 let oauth2 = OAuth2CodeGrant(settings: settings)
@@ -62,30 +61,36 @@ oauth2.onFailure = { error in        // `error` is nil on cancel
 
 ### 3. Authorize the User
 
-By default the OS browser will be used for authorization if there is no access token present in the keychain.
-To start authorization call **`authorize()`** or, to use embedded authorization, the convenience method `authorizeEmbedded(from: <# UIViewController or NSWindow #>)`.
+By default the OS browser will be used for authorization if there is no access token present or in the keychain.
+**Starting with iOS 9**, `SFSafariViewController` will be used when enabling embedded authorization.
 
-The latter configures `authConfig` like so:
-
-- changes `authorizeEmbedded` to `true` and
-- sets a root view controller/window, from which to present the login screen, as `authorizeContext`.
+To start authorization call **`authorize(params:callback:)`** or, to use embedded authorization, the convenience method `authorizeEmbedded(from:callback:)`.
 
 The login screen will only be **presented if needed** (see [_Manually Performing Authentication_](#manually-performing-authentication) below for details) and will automatically **dismiss** the login screen on success.
 See [_Advanced Settings_](#advanced-settings) for other options.
 
-**Starting with iOS 9**, `SFSafariViewController` will be used when enabling embedded authorization.
-
-Your `oauth2` instance will use an automatically created `NSURLSession` using an `ephemeralSessionConfiguration()` configuration for its requests, exposed on `oauth2.session`.
-You can set `oauth2.sessionConfiguration` to your own configuration, for example if you'd like to change timeout values.
-You can also set `oauth2.sessionDelegate` to your own session delegate if you like.
 
 ```swift
-oauth2.authConfig.authorizeEmbedded = true
-oauth2.authConfig.authorizeContext = <# presenting view controller / window #>
-oauth2.authorize()
+oauth2.authorize() { authParameters, error in
+    if let error = error {
+        print("Authorization went wrong: \(error)")
+    }
+    else if let extras = authParameters {
+        print("Authorized! Access token is in `oauth2.accessToken`")
+        print("Authorized! Additional parameters: \(extras)")
+    }
+    else {
+        print("Authorization was cancelled")
+    }
+}
 
 // for embedded authorization you can just use:
-oauth2.authorizeEmbedded(from: <# presenting view controller / window #>)
+oauth2.authorizeEmbedded(from: <# presenting view controller / window #>) { ... }
+
+// which is equivalent to:
+oauth2.authConfig.authorizeEmbedded = true
+oauth2.authConfig.authorizeContext = <# presenting view controller / window #>
+oauth2.authorize() { ... }
 ```
 
 When using the OS browser or the iOS 9 Safari view controller, you will need to **intercept the callback** in your app delegate.
@@ -107,8 +112,13 @@ See [_Manually Performing Authentication_](#manually-performing-authentication) 
 
 ### 4. Receive Callback
 
-After everything completes either the `onAuthorize` or the `onFailure` closure will be called, and after that the `afterAuthorizeOrFailure` closure if it has been set.
-Hence, unless you have a reason to, you don't need to set all three callbacks, you can use any of those.
+After everything completes either the callback will be called, **either** with a non-nil _authParameters_ dictionary (which may be empty!), **or** an error.
+The access and refresh tokens and its expiration dates will already have been extracted and are available as `oauth2.accessToken` and `oauth2.refreshToken` parameters.
+You only need to inspect the _authParameters_ dictionary if you wish to extract additional information.
+
+For advanced use outlined below, there is the `afterAuthorizeOrFail` block that you can use on your OAuth2 instance.
+The `internalAfterAuthorizeOrFail` closure is, as its name suggests, provided for internal purposes – it is exposed for subclassing and compilation reasons and you should not mess with it.
+Additionally, as of version 3.0, there are deprecated callback properties `onAuthorize` and `onFailure` that you should no longer use.
 
 ### 5. Make Requests
 
@@ -162,12 +172,17 @@ storage.cookies?.forEach() { storage.deleteCookie($0) }
 Manually Performing Authentication
 ----------------------------------
 
-The `authorize()` method will:
+The `authorize(params:callback:)` method will:
 
-1. Check if an access token that has not yet expired is in the keychain, if not
-2. Check if a refresh token is in the keychain, if found
-3. Try to use the refresh token to get a new access token, if it fails
-4. Start the OAuth2 dance by using the `authConfig` settings to determine how to display an authorize screen to the user
+1. Check if an authorize call is already running, if yes it will abort with an `OAuth2Error.alreadyAuthorizing` error
+2. Check if an access token that has not yet expired is already present (or in the keychain), if not
+3. Check if a refresh token is available, if found
+4. Try to use the refresh token to get a new access token, if it fails
+5. Start the OAuth2 dance by using the `authConfig` settings to determine how to display an authorize screen to the user
+
+Your `oauth2` instance will use an automatically created `NSURLSession` using an `ephemeralSessionConfiguration()` configuration for its requests, exposed on `oauth2.session`.
+You can set `oauth2.sessionConfiguration` to your own configuration, for example if you'd like to change timeout values.
+You can also set `oauth2.sessionDelegate` to your own session delegate if you like.
 
 The wiki has [the complete call graph](https://github.com/p2/OAuth2/wiki/Call-Graph) of the _authorize()_ method.
 If you do **not wish this kind of automation**, the manual steps to show and hide the authorize screens are:
@@ -175,53 +190,48 @@ If you do **not wish this kind of automation**, the manual steps to show and hid
 **Embedded iOS**:
 
 ```swift
-let web = oauth2.authorizeEmbedded(from: <# presenting view controller #>)
+let url = try oauth2.authorizeURL(params: <# custom parameters or nil #>)
 oauth2.authConfig.authorizeEmbeddedAutoDismiss = false
-oauth2.afterAuthorizeOrFailure = { wasFailure, error in
+let web = try oauth2.authorizer.authorizeSafariEmbedded(from: <# view controller #>, at: url)
+oauth2.afterAuthorizeOrFail = { authParameters, error in
+    // inspect error or oauth2.accessToken / authParameters or do something else
     web.dismissViewControllerAnimated(true, completion: nil)
 }
 ```
 
-**Modal Sheet on OS X**:
+**Modal Sheet on macOS**:
 
 ```swift
-let win = <# window to present from #>
-// if `win` is nil, will open a new window
-oauth2.authorizeEmbedded(from: win)
+let window = <# window to present from #>
+let url = try oauth2.authorizeURL(params: <# custom parameters or nil #>)
+let sheet = try oauth2.authorizer.authorizeEmbedded(from: window, at: url)
+oauth2.afterAuthorizeOrFail = { authParameters, error in
+    // inspect error or oauth2.accessToken / authParameters or do something else
+    window.endSheet(sheet)
+}
 ```
 
-**Present yourself on OS X**:
+**New window on macOS**:
 
 ```swift
-let vc = <# view controller #>
-let web = oauth2.presentableAuthorizeViewController()
-oauth2.afterAuthorizeOrFailure = { wasFailure, error in
-    vc.dismissViewController(web)
+let url = try oauth2.authorizeURL(params: <# custom parameters or nil #>)
+let windowController = try oauth2.authorizer.authorizeInNewWindow(at: url)
+oauth2.afterAuthorizeOrFail = { authParameters, error in
+    // inspect error or oauth2.accessToken / authParameters or do something else
+    windowController.window?.close()
 }
-vc.presentViewController(web, animator: <# animator #>)
 ```
 
 **iOS/OS X browser**:
 
 ```swift
-try! oauth2.openAuthorizeURLInBrowser()
-```
-
-In case you're using the OS browser or the new Safari view controller, you will need to **intercept the callback** in your app delegate.
-
-**iOS**
-
-```swift
-func application(application: UIApplication!,
-                 openURL url: NSURL!,
-           sourceApplication: String!,
-                  annotation: AnyObject!) -> Bool {
-    // you should probably first check if this is your URL being opened
-    if <# check #> {
-        oauth2.handleRedirectURL(url)
-    }
+let url = try oauth2.authorizeURL(params: <# custom parameters or nil #>)
+try oauth2.authorizer.openAuthorizeURLInBrowser(url)
+oauth2.afterAuthorizeOrFail = { authParameters, error in
+    // inspect error or oauth2.accessToken / authParameters or do something else
 }
 ```
+
 
 **OS X**
 
