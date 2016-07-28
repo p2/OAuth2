@@ -29,7 +29,7 @@ import Base
 public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 	
 	/// The OAuth2 instance this authorizer belongs to.
-	public unowned let oauth2: OAuth2
+	public unowned let oauth2: OAuth2Base
 	
 	/// Used to store the `SFSafariViewControllerDelegate`.
 	var safariViewDelegate: AnyObject?
@@ -73,7 +73,6 @@ public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 					web.dismiss(animated: true)
 				}
 			}
-			return web
 		}
 		let web = try authorizeEmbedded(from: controller, at: url)
 		if config.authorizeEmbeddedAutoDismiss {
@@ -81,7 +80,6 @@ public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 				web.dismiss(animated: true)
 			}
 		}
-		return web
 	}
 	
 	
@@ -108,7 +106,7 @@ public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 		web.title = oauth2.authConfig.ui.title
 		
 		safariViewDelegate = OAuth2SFViewControllerDelegate(authorizer: self)
-		web.delegate = safariViewDelegate
+		web.delegate = safariViewDelegate as! OAuth2SFViewControllerDelegate
 		
 		controller.present(web, animated: true, completion: nil)
 		
@@ -122,7 +120,7 @@ public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 	@available(iOS 9.0, *)
 	func safariViewControllerDidCancel(_ safari: SFSafariViewController) {
 		safariViewDelegate = nil
-		oauth2.didFail(nil)
+		oauth2.didFail(withError: nil)
 	}
 	
 	
@@ -169,7 +167,7 @@ public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 		}
 		web.onWillDismiss = { didCancel in
 			if didCancel {
-				self.oauth2.didFail(nil)
+				self.oauth2.didFail(withError: nil)
 			}
 		}
 		
