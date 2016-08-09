@@ -96,7 +96,7 @@ public class OAuth2ClientConfig {
 			redirectURLs = redirs
 			redirect = redirs.first
 		}
-		if let inBody = settings["secret_in_body"] as? Bool where inBody {
+		if let inBody = settings["secret_in_body"] as? Bool, inBody {
 			endpointAuthMethod = .clientSecretPost
 		}
 		else if nil != clientSecret {
@@ -142,7 +142,7 @@ public class OAuth2ClientConfig {
 	- returns: A storable dictionary with credentials
 	*/
 	func storableCredentialItems() -> [String: NSCoding]? {
-		guard let clientId = clientId where !clientId.isEmpty else { return nil }
+		guard let clientId = clientId, !clientId.isEmpty else { return nil }
 		
 		var items: [String: NSCoding] = ["id": clientId]
 		if let secret = clientSecret {
@@ -158,16 +158,16 @@ public class OAuth2ClientConfig {
 	- returns: A storable dictionary with token data
 	*/
 	func storableTokenItems() -> [String: NSCoding]? {
-		guard let access = accessToken where !access.isEmpty else { return nil }
+		guard let access = accessToken, !access.isEmpty else { return nil }
 		
 		var items: [String: NSCoding] = ["accessToken": access]
-		if let date = accessTokenExpiry where date == (date as NSDate).laterDate(Date()) {
+		if let date = accessTokenExpiry, date == (date as NSDate).laterDate(Date()) {
 			items["accessTokenDate"] = date
 		}
-		if let refresh = refreshToken where !refresh.isEmpty {
+		if let refresh = refreshToken, !refresh.isEmpty {
 			items["refreshToken"] = refresh
 		}
-		if let idtoken = idToken where !idtoken.isEmpty {
+		if let idtoken = idToken, !idtoken.isEmpty {
 			items["idToken"] = idtoken
 		}
         
@@ -193,7 +193,7 @@ public class OAuth2ClientConfig {
 		if let methodName = items["endpointAuthMethod"] as? String, let method = OAuth2EndpointAuthMethod(rawValue: methodName) {
 			endpointAuthMethod = method
 		}
-		if let token = items["accessToken"] as? String where !token.isEmpty {
+		if let token = items["accessToken"] as? String, !token.isEmpty {
 			if let date = items["accessTokenDate"] as? Date {
 				if date == (date as NSDate).laterDate(Date()) {
 					messages.append("Found access token, valid until \(date)")
@@ -212,11 +212,11 @@ public class OAuth2ClientConfig {
 				messages.append("Found access token but no expiration date, discarding (set `accessTokenAssumeUnexpired` to true to still use it)")
 			}
 		}
-		if let token = items["refreshToken"] as? String where !token.isEmpty {
+		if let token = items["refreshToken"] as? String, !token.isEmpty {
 			messages.append("Found refresh token")
 			refreshToken = token
 		}
-		if let idtoken = items["idToken"] as? String where !idtoken.isEmpty {
+		if let idtoken = items["idToken"] as? String, !idtoken.isEmpty {
 			messages.append("Found id token")
 			idToken = idtoken
 		}

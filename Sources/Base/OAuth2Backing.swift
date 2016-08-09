@@ -248,13 +248,13 @@ public class OAuth2Backing {
 	- parameter request: The request to execute
 	- parameter callback: The callback to call when the request completes/fails; data and error are mutually exclusive
 	*/
-	public func performRequest(_ request: URLRequest, callback: ((data: Data?, status: Int?, error: ErrorProtocol?) -> Void)) {
+	public func performRequest(_ request: URLRequest, callback: ((data: Data?, status: Int?, error: Error?) -> Void)) {
 		self.logger?.trace("OAuth2", msg: "REQUEST\n\(request.debugDescription)\n---")
 		let task = session.dataTask(with: request) { sessData, sessResponse, error in
 			self.abortableTask = nil
 			self.logger?.trace("OAuth2", msg: "RESPONSE\n\(sessResponse?.debugDescription ?? "no response")\n\n\(String(data: sessData ?? Data(), encoding: String.Encoding.utf8) ?? "no data")\n---")
 			if let error = error {
-				if NSURLErrorDomain == error.domain && -999 == error.code {		// request was cancelled
+				if NSURLErrorDomain == error._domain && -999 == error._code {		// request was cancelled
 					callback(data: nil, status: nil, error: OAuth2Error.requestCancelled)
 				}
 				else {

@@ -105,7 +105,7 @@ class OAuth2DynReg_Tests: XCTestCase {
 
 
 class OAuth2TestDynReg: OAuth2DynReg {
-	override func registerClient(_ client: OAuth2, callback: ((json: OAuth2JSON?, error: ErrorProtocol?) -> Void)) {
+	override func registerClient(_ client: OAuth2, callback: ((json: OAuth2JSON?, error: Error?) -> Void)) {
 		callback(json: nil, error: OAuth2Error.temporarilyUnavailable)
 	}
 }

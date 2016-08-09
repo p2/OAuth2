@@ -91,7 +91,7 @@ extension URLRequest {
 	Will log an error if the OAuth2 instance does not have an access token!
 	*/
 	mutating func sign(_ oauth: OAuth2Base) {
-		if let access = oauth.clientConfig.accessToken where !access.isEmpty {
+		if let access = oauth.clientConfig.accessToken, !access.isEmpty {
 			setValue("Bearer \(access)", forHTTPHeaderField: "Authorization")
 		}
 		else {

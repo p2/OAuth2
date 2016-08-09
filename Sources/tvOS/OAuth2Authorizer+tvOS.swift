@@ -28,7 +28,7 @@ import Base
 public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 	
 	/// The OAuth2 instance this authorizer belongs to.
-	public unowned let oauth2: OAuth2
+	public unowned let oauth2: OAuth2Base
 	
 	
 	init(oauth2: OAuth2) {

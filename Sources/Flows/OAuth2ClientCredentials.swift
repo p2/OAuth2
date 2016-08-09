@@ -49,7 +49,7 @@ public class OAuth2ClientCredentials: OAuth2 {
 	
 	- parameter callback: The callback to call after the process has finished
 	*/
-	func obtainAccessToken(params: OAuth2StringDict? = nil, callback: ((params: OAuth2JSON?, error: ErrorProtocol?) -> Void)) {
+	func obtainAccessToken(params: OAuth2StringDict? = nil, callback: ((params: OAuth2JSON?, error: Error?) -> Void)) {
 		do {
 			let post = try tokenRequest(params: params).asURLRequestFor(self)
 			logger?.debug("OAuth2", msg: "Requesting new access token from \(post.url?.description ?? "nil")")
@@ -78,7 +78,7 @@ public class OAuth2ClientCredentials: OAuth2 {
 	Creates a POST request with x-www-form-urlencoded body created from the supplied URL's query part.
 	*/
 	func tokenRequest(params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
-		guard let clientId = clientConfig.clientId where !clientId.isEmpty else {
+		guard let clientId = clientConfig.clientId, !clientId.isEmpty else {
 			throw OAuth2Error.noClientId
 		}
 		guard nil != clientConfig.clientSecret else {

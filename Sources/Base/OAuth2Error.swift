@@ -26,7 +26,7 @@ All errors that might occur.
 
 The response errors return a description as defined in the spec: http://tools.ietf.org/html/rfc6749#section-4.1.2.1
 */
-public enum OAuth2Error: ErrorProtocol, CustomStringConvertible, Equatable {
+public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 	
 	/// An error for which we don't have a specific one.
 	case generic(String)
@@ -178,23 +178,23 @@ public enum OAuth2Error: ErrorProtocol, CustomStringConvertible, Equatable {
 		case .invalidURLComponents(let components):
 			return "Failed to create URL from components: \(components)"
 		
-		case noClientId:
+		case .noClientId:
 			return "Client id not set"
-		case noClientSecret:
+		case .noClientSecret:
 			return "Client secret not set"
-		case noRedirectURL:
+		case .noRedirectURL:
 			return "Redirect URL not set"
-		case noUsername:
+		case .noUsername:
 			return "No username"
-		case noPassword:
+		case .noPassword:
 			return "No password"
-		case alreadyAuthorizing:
+		case .alreadyAuthorizing:
 			return "The client is already authorizing, wait for it to finish or abort authorization before trying again"
-		case noAuthorizationContext:
+		case .noAuthorizationContext:
 			return "No authorization context present"
-		case invalidAuthorizationContext:
+		case .invalidAuthorizationContext:
 			return "Invalid authorization context"
-		case invalidRedirectURL(let url):
+		case .invalidRedirectURL(let url):
 			return "Invalid redirect URL: \(url)"
 		case .noRefreshToken:
 			return "I don't have a refresh token, not trying to refresh"
@@ -210,21 +210,21 @@ public enum OAuth2Error: ErrorProtocol, CustomStringConvertible, Equatable {
 			return "The request is missing a required parameter, includes an invalid parameter value, includes a parameter more than once, or is otherwise malformed."
 		case .requestCancelled:
 			return "The request has been cancelled"
-		case noTokenType:
+		case .noTokenType:
 			return "No token type received, will not use the token"
-		case unsupportedTokenType(let message):
+		case .unsupportedTokenType(let message):
 			return message
-		case noDataInResponse:
+		case .noDataInResponse:
 			return "No data in the response"
-		case prerequisiteFailed(let message):
+		case .prerequisiteFailed(let message):
 			return message
-		case invalidState:
+		case .invalidState:
 			return "The state was either empty or did not check out"
-		case jsonParserError:
+		case .jsonParserError:
 			return "Error parsing JSON"
-		case utf8EncodeError:
+		case .utf8EncodeError:
 			return "Failed to UTF-8 encode the given string"
-		case utf8DecodeError:
+		case .utf8DecodeError:
 			return "Failed to decode given data as a UTF-8 string"
 		
 		case .unauthorizedClient:

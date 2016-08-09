@@ -36,7 +36,7 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate {
 	/// The URL to load on first show.
 	public var startURL: URL? {
 		didSet(oldURL) {
-			if nil != startURL && nil == oldURL && isViewLoaded() {
+			if nil != startURL && nil == oldURL && isViewLoaded {
 				load(url: startURL!)
 			}
 		}
@@ -103,7 +103,7 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate {
 		automaticallyAdjustsScrollViewInsets = true
 		
 		super.loadView()
-		view.backgroundColor = UIColor.white()
+		view.backgroundColor = UIColor.white
 		
 		cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(OAuth2WebViewController.cancel(_:)))
 		navigationItem.rightBarButtonItem = cancelButton
@@ -124,7 +124,7 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate {
 	override public func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		
-		if let web = webView where !web.canGoBack {
+		if let web = webView, !web.canGoBack {
 			if nil != startURL {
 				load(url: startURL!)
 			}
@@ -194,9 +194,9 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate {
 		
 		// we compare the scheme and host first, then check the path (if there is any). Not sure if a simple string comparison
 		// would work as there may be URL parameters attached
-		if let url = request.url where url.scheme == interceptComponents?.scheme && url.host == interceptComponents?.host {
+		if let url = request.url, url.scheme == interceptComponents?.scheme && url.host == interceptComponents?.host {
 			let haveComponents = URLComponents(url: url, resolvingAgainstBaseURL: true)
-			if let hp = haveComponents?.path, ip = interceptComponents?.path where hp == ip || ("/" == hp + ip) {
+			if let hp = haveComponents?.path, let ip = interceptComponents?.path, hp == ip || ("/" == hp + ip) {
 				return !onIntercept!(url: url)
 			}
 		}
@@ -212,9 +212,9 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate {
 	
 	/* Special handling for Google's `urn:ietf:wg:oauth:2.0:oob` callback */
 	public func webViewDidFinishLoad(_ webView: UIWebView) {
-		if let scheme = interceptComponents?.scheme where "urn" == scheme {
-			if let path = interceptComponents?.path where path.hasPrefix("ietf:wg:oauth:2.0:oob") {
-				if let title = webView.stringByEvaluatingJavaScript(from: "document.title") where title.hasPrefix("Success ") {
+		if let scheme = interceptComponents?.scheme, "urn" == scheme {
+			if let path = interceptComponents?.path, path.hasPrefix("ietf:wg:oauth:2.0:oob") {
+				if let title = webView.stringByEvaluatingJavaScript(from: "document.title"), title.hasPrefix("Success ") {
 					oauth?.logger?.debug("OAuth2", msg: "Creating redirect URL from document.title")
 					let qry = title.replacingOccurrences(of: "Success ", with: "")
 					if let url = URL(string: "http://localhost/?\(qry)") {
@@ -232,14 +232,14 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate {
 		showHideBackButton(webView.canGoBack)
 	}
 	
-	public func webView(_ webView: UIWebView, didFailLoadWithError error: NSError?) {
-		if NSURLErrorDomain == error?.domain && NSURLErrorCancelled == error?.code {
+	public func webView(_ webView: UIWebView, didFailLoadWithError error: Error) {
+		if NSURLErrorDomain == error._domain && NSURLErrorCancelled == error._code {
 			return
 		}
 		// do we still need to intercept "WebKitErrorDomain" error 102?
 		
 		if nil != loadingView {
-			showErrorMessage(error?.localizedDescription ?? "Unknown web view load error", animated: true)
+			showErrorMessage(error.localizedDescription ?? "Unknown web view load error", animated: true)
 		}
 	}
 }

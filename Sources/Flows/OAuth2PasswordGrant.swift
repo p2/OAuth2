@@ -64,7 +64,7 @@ public class OAuth2PasswordGrant: OAuth2 {
 	
 	- parameter callback: The callback to call after the request has returned
 	*/
-	func obtainAccessToken(params: OAuth2StringDict? = nil, callback: ((params: OAuth2JSON?, error: ErrorProtocol?) -> Void)) {
+	func obtainAccessToken(params: OAuth2StringDict? = nil, callback: ((params: OAuth2JSON?, error: Error?) -> Void)) {
 		do {
 			let post = try tokenRequest(params: params).asURLRequestFor(self)
 			logger?.debug("OAuth2", msg: "Requesting new access token from \(post.url?.description ?? "nil")")

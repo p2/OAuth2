@@ -55,7 +55,7 @@ public class OAuth2CodeGrant: OAuth2 {
 	- returns: A request you can use to create a URL request to exchange the code for an access token
 	*/
 	func tokenRequestWithCode(_ code: String, params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
-		guard let clientId = clientConfig.clientId where !clientId.isEmpty else {
+		guard let clientId = clientConfig.clientId, !clientId.isEmpty else {
 			throw OAuth2Error.noClientId
 		}
 		guard let redirect = context.redirectURL else {
@@ -133,10 +133,10 @@ public class OAuth2CodeGrant: OAuth2 {
 			throw OAuth2Error.noRedirectURL
 		}
 		let comp = URLComponents(url: redirect, resolvingAgainstBaseURL: true)
-		if !(redirect.absoluteString?.hasPrefix(expectRedirect))! && (!(redirect.absoluteString?.hasPrefix("urn:ietf:wg:oauth:2.0:oob"))! && "localhost" != comp?.host) {
+		if !(redirect.absoluteString.hasPrefix(expectRedirect)) && (!(redirect.absoluteString.hasPrefix("urn:ietf:wg:oauth:2.0:oob")) && "localhost" != comp?.host) {
 			throw OAuth2Error.invalidRedirectURL("Expecting «\(expectRedirect)» but received «\(redirect)»")
 		}
-		if let compQuery = comp?.query where compQuery.characters.count > 0 {
+		if let compQuery = comp?.query, compQuery.characters.count > 0 {
 			let query = OAuth2CodeGrant.params(fromQuery: comp!.percentEncodedQuery!)
 			try assureNoErrorInResponse(query)
 			if let cd = query["code"] {

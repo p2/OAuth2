@@ -168,7 +168,7 @@ public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 	func windowController(forViewController controller: OAuth2WebViewController, with config: OAuth2AuthConfig) -> NSWindowController {
 		let rect = NSMakeRect(0, 0, OAuth2WebViewController.webViewWindowWidth, OAuth2WebViewController.webViewWindowHeight)
 		let window = NSWindow(contentRect: rect, styleMask: [.titled, .closable, .resizable, .fullSizeContentView], backing: .buffered, defer: false)
-		window.backgroundColor = NSColor.white()
+		window.backgroundColor = NSColor.white
 		window.isMovableByWindowBackground = true
 		window.titlebarAppearsTransparent = true
 		window.titleVisibility = .hidden

@@ -48,14 +48,14 @@ class OAuth2ImplicitGrantTests: XCTestCase
 		// Empty redirect URL
 		oauth.onFailure = { error in
 			XCTAssertNotNil(error, "Error message expected")
-			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.invalidRedirectURL(""))
+			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.invalidRedirectURL("file:///"))
 		}
 		oauth.afterAuthorizeOrFail = { authParameters, error in
 			XCTAssertNil(authParameters)
 			XCTAssertNotNil(error, "Error message expected")
 		}
 		oauth.context._state = "ONSTUH"
-		oauth.handleRedirectURL(URL(string: "")!)
+		oauth.handleRedirectURL(URL(string: "file:///")!)
 		XCTAssertNil(oauth.accessToken, "Must not have an access token")
 		
 		// No params in redirect URL
@@ -152,14 +152,14 @@ class OAuth2ImplicitGrantTests: XCTestCase
 		oauth.didAuthorizeOrFail = { authParameters, error in
 			XCTAssertNil(authParameters, "Nil auth dict expected")
 			XCTAssertNotNil(error, "Error message expected")
-			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.invalidRedirectURL(""))
+			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.invalidRedirectURL("file:///"))
 		}
 		oauth.afterAuthorizeOrFail = { authParameters, error in
 			XCTAssertNil(authParameters, "Nil auth dict expected")
 			XCTAssertNotNil(error, "Error message expected")
 		}
 		oauth.context._state = "ONSTUH"
-		oauth.handleRedirectURL(URL(string: "")!)
+		oauth.handleRedirectURL(URL(string: "file:///")!)
 		XCTAssertNil(oauth.accessToken, "Must not have an access token")
 		
 		// No params in redirect URL

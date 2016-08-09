@@ -51,7 +51,7 @@ public class OAuth2DynReg {
 	- parameter client: The client to register and update with client credentials, when successful
 	- parameter callback: The callback to call when done with the registration response (JSON) and/or an error
 	*/
-	public func registerClient(_ client: OAuth2, callback: ((json: OAuth2JSON?, error: ErrorProtocol?) -> Void)) {
+	public func registerClient(_ client: OAuth2, callback: ((json: OAuth2JSON?, error: Error?) -> Void)) {
 		do {
 			let req = try registrationRequest(client)
 			client.logger?.debug("OAuth2", msg: "Registering client at \(req.url!) with scopes “\(client.scope ?? "(none)")”")
@@ -153,7 +153,7 @@ public class OAuth2DynReg {
 		}
 		if let secret = json["client_secret"] as? String {
 			client.clientSecret = secret
-			if let expires = json["client_secret_expires_at"] as? Double where 0 != expires {
+			if let expires = json["client_secret_expires_at"] as? Double, 0 != expires {
 				client.logger?.debug("OAuth2", msg: "Client secret will expire on \(Date(timeIntervalSince1970: expires))")
 			}
 		}

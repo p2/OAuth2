@@ -89,7 +89,7 @@ public class OAuth2: OAuth2Base {
 	- parameter callback: The callback to call when authorization finishes (parameters will be non-nil but may be an empty dict), fails
 	                      (error will be non-nil) or is cancelled (both parameters and error is nil)
 	*/
-	public final func authorize(params: OAuth2StringDict? = nil, callback: ((authParameters: OAuth2JSON?, error: ErrorProtocol?) -> Void)) {
+	public final func authorize(params: OAuth2StringDict? = nil, callback: ((authParameters: OAuth2JSON?, error: Error?) -> Void)) {
 		if nil != didAuthorizeOrFail {
 			callback(authParameters: nil, error: OAuth2Error.alreadyAuthorizing)
 			return
@@ -140,7 +140,7 @@ public class OAuth2: OAuth2Base {
 	- parameter callback: The callback to call when authorization finishes (parameters will be non-nil but may be an empty dict), fails
 	(error will be non-nil) or is cancelled (both parameters and error is nil)
 	*/
-	public func authorizeEmbedded(from context: AnyObject, params: OAuth2StringDict? = nil, callback: ((authParameters: OAuth2JSON?, error: ErrorProtocol?) -> Void)) {
+	public func authorizeEmbedded(from context: AnyObject, params: OAuth2StringDict? = nil, callback: ((authParameters: OAuth2JSON?, error: Error?) -> Void)) {
 		if nil != didAuthorizeOrFail {		// check before changing `authConfig`
 			callback(authParameters: nil, error: OAuth2Error.alreadyAuthorizing)
 			return
@@ -169,7 +169,7 @@ public class OAuth2: OAuth2Base {
 	- returns: A Bool indicating whether a probably valid access token exists
 	*/
 	public func hasUnexpiredAccessToken() -> Bool {
-		guard let access = accessToken where !access.isEmpty else {
+		guard let access = accessToken, !access.isEmpty else {
 			return false
 		}
 		if let expiry = accessTokenExpiry {
@@ -268,7 +268,7 @@ public class OAuth2: OAuth2Base {
 	- returns:            OAuth2AuthRequest to be used to call to the authorize endpoint
 	*/
 	func authorizeRequest(withRedirect redirect: String, scope: String?, params: OAuth2StringDict?) throws -> OAuth2AuthRequest {
-		guard let clientId = clientConfig.clientId where !clientId.isEmpty else {
+		guard let clientId = clientConfig.clientId, !clientId.isEmpty else {
 			throw OAuth2Error.noClientId
 		}
 		
@@ -327,10 +327,10 @@ public class OAuth2: OAuth2Base {
 	- returns:          An `OAuth2AuthRequest` instance that is configured for token refresh
 	*/
 	func tokenRequestForTokenRefresh(params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
-		guard let clientId = clientId where !clientId.isEmpty else {
+		guard let clientId = clientId, !clientId.isEmpty else {
 			throw OAuth2Error.noClientId
 		}
-		guard let refreshToken = clientConfig.refreshToken where !refreshToken.isEmpty else {
+		guard let refreshToken = clientConfig.refreshToken, !refreshToken.isEmpty else {
 			throw OAuth2Error.noRefreshToken
 		}
 		
@@ -349,7 +349,7 @@ public class OAuth2: OAuth2Base {
 	- parameter params:   Optional key/value pairs to pass during token refresh
 	- parameter callback: The callback to call after the refresh token exchange has finished
 	*/
-	public func doRefreshToken(params: OAuth2StringDict? = nil, callback: ((successParams: OAuth2JSON?, error: ErrorProtocol?) -> Void)) {
+	public func doRefreshToken(params: OAuth2StringDict? = nil, callback: ((successParams: OAuth2JSON?, error: Error?) -> Void)) {
 		do {
 			let post = try tokenRequestForTokenRefresh(params: params).asURLRequestFor(self)
 			logger?.debug("OAuth2", msg: "Using refresh token to receive access token from \(post.url?.description ?? "nil")")
@@ -392,7 +392,7 @@ public class OAuth2: OAuth2Base {
 	- parameter callback: The callback to call on the main thread; if both json and error is nil no registration was attempted; error is nil
 	                      on success
 	*/
-	func registerClientIfNeeded(_ callback: ((json: OAuth2JSON?, error: ErrorProtocol?) -> Void)) {
+	func registerClientIfNeeded(_ callback: ((json: OAuth2JSON?, error: Error?) -> Void)) {
 		if nil != clientId {
 			callOnMainThread() {
 				callback(json: nil, error: nil)

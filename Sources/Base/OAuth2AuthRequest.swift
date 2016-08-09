@@ -107,7 +107,7 @@ public class OAuth2AuthRequest {
 	*/
 	func asURLComponents() throws -> URLComponents {
 		let comp = URLComponents(url: url, resolvingAgainstBaseURL: false)
-		guard var components = comp where "https" == components.scheme else {
+		guard var components = comp, "https" == components.scheme else {
 			throw OAuth2Error.notUsingTLS
 		}
 		if .GET == method && params.count > 0 {
@@ -147,7 +147,7 @@ public class OAuth2AuthRequest {
 		req.setValue("application/json", forHTTPHeaderField: "Accept")
 		
 		// handle client secret if there is one
-		if let clientId = oauth2.clientConfig.clientId where !clientId.isEmpty, let secret = oauth2.clientConfig.clientSecret {
+		if let clientId = oauth2.clientConfig.clientId, !clientId.isEmpty, let secret = oauth2.clientConfig.clientSecret {
 			
 			// add to request body
 			if oauth2.authConfig.secretInBody {
