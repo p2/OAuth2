@@ -243,47 +243,49 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 			return message
 		}
 	}
-}
-
-
-public func ==(lhs: OAuth2Error, rhs: OAuth2Error) -> Bool {
-	switch (lhs, rhs) {
-	case (.generic(let lhm), .generic(let rhm)):    return lhm == rhm
-	case (.nsError(let lhe), .nsError(let rhe)):    return lhe.isEqual(rhe)
-	case (.invalidURLComponents(let lhe), .invalidURLComponents(let rhe)):   return (lhe == rhe)
 	
-	case (.noClientId, .noClientId):                             return true
-	case (.noClientSecret, .noClientSecret):                     return true
-	case (.noRedirectURL, .noRedirectURL):                       return true
-	case (.noUsername, .noUsername):                             return true
-	case (.noPassword, .noPassword):                             return true
-	case (.alreadyAuthorizing, .alreadyAuthorizing):             return true
-	case (.noAuthorizationContext, .noAuthorizationContext):                 return true
-	case (.invalidAuthorizationContext, .invalidAuthorizationContext):       return true
-	case (.invalidRedirectURL(let lhu), .invalidRedirectURL(let rhu)):       return lhu == rhu
-	case (.noRefreshToken, .noRefreshToken):			         return true
 	
-	case (.notUsingTLS, .notUsingTLS):                           return true
-	case (.unableToOpenAuthorizeURL, .unableToOpenAuthorizeURL): return true
-	case (.invalidRequest, .invalidRequest):                     return true
-	case (.requestCancelled, .requestCancelled):                 return true
-	case (.noTokenType, .noTokenType):                           return true
-	case (.unsupportedTokenType(let lhm), .unsupportedTokenType(let rhm)):   return lhm == rhm
-	case (.noDataInResponse, .noDataInResponse):                 return true
-	case (.prerequisiteFailed(let lhm), .prerequisiteFailed(let rhm)):       return lhm == rhm
-	case (.invalidState, .invalidState):                         return true
-	case (.jsonParserError, .jsonParserError):                   return true
-	case (.utf8EncodeError, .utf8EncodeError):                   return true
-	case (.utf8DecodeError, .utf8DecodeError):                   return true
+	// MARK: - Equatable
 	
-	case (.unauthorizedClient, .unauthorizedClient):             return true
-	case (.accessDenied, .accessDenied):                         return true
-	case (.unsupportedResponseType, .unsupportedResponseType):   return true
-	case (.invalidScope, .invalidScope):                         return true
-	case (.serverError, .serverError):                           return true
-	case (.temporarilyUnavailable, .temporarilyUnavailable):     return true
-	case (.responseError(let lhm), .responseError(let rhm)):     return lhm == rhm
-	default:                                                     return false
+	public static func ==(lhs: OAuth2Error, rhs: OAuth2Error) -> Bool {
+		switch (lhs, rhs) {
+		case (.generic(let lhm), .generic(let rhm)):    return lhm == rhm
+		case (.nsError(let lhe), .nsError(let rhe)):    return lhe.isEqual(rhe)
+		case (.invalidURLComponents(let lhe), .invalidURLComponents(let rhe)):   return (lhe == rhe)
+		
+		case (.noClientId, .noClientId):                             return true
+		case (.noClientSecret, .noClientSecret):                     return true
+		case (.noRedirectURL, .noRedirectURL):                       return true
+		case (.noUsername, .noUsername):                             return true
+		case (.noPassword, .noPassword):                             return true
+		case (.alreadyAuthorizing, .alreadyAuthorizing):             return true
+		case (.noAuthorizationContext, .noAuthorizationContext):                 return true
+		case (.invalidAuthorizationContext, .invalidAuthorizationContext):       return true
+		case (.invalidRedirectURL(let lhu), .invalidRedirectURL(let rhu)):       return lhu == rhu
+		case (.noRefreshToken, .noRefreshToken):			         return true
+		
+		case (.notUsingTLS, .notUsingTLS):                           return true
+		case (.unableToOpenAuthorizeURL, .unableToOpenAuthorizeURL): return true
+		case (.invalidRequest, .invalidRequest):                     return true
+		case (.requestCancelled, .requestCancelled):                 return true
+		case (.noTokenType, .noTokenType):                           return true
+		case (.unsupportedTokenType(let lhm), .unsupportedTokenType(let rhm)):   return lhm == rhm
+		case (.noDataInResponse, .noDataInResponse):                 return true
+		case (.prerequisiteFailed(let lhm), .prerequisiteFailed(let rhm)):       return lhm == rhm
+		case (.invalidState, .invalidState):                         return true
+		case (.jsonParserError, .jsonParserError):                   return true
+		case (.utf8EncodeError, .utf8EncodeError):                   return true
+		case (.utf8DecodeError, .utf8DecodeError):                   return true
+		
+		case (.unauthorizedClient, .unauthorizedClient):             return true
+		case (.accessDenied, .accessDenied):                         return true
+		case (.unsupportedResponseType, .unsupportedResponseType):   return true
+		case (.invalidScope, .invalidScope):                         return true
+		case (.serverError, .serverError):                           return true
+		case (.temporarilyUnavailable, .temporarilyUnavailable):     return true
+		case (.responseError(let lhm), .responseError(let rhm)):     return lhm == rhm
+		default:                                                     return false
+		}
 	}
 }
 
