@@ -392,7 +392,7 @@ public class OAuth2: OAuth2Base {
 	- parameter callback: The callback to call on the main thread; if both json and error is nil no registration was attempted; error is nil
 	                      on success
 	*/
-	func registerClientIfNeeded(_ callback: ((json: OAuth2JSON?, error: Error?) -> Void)) {
+	func registerClientIfNeeded(callback: ((json: OAuth2JSON?, error: Error?) -> Void)) {
 		if nil != clientId {
 			callOnMainThread() {
 				callback(json: nil, error: nil)
@@ -400,7 +400,7 @@ public class OAuth2: OAuth2Base {
 		}
 		else if let url = clientConfig.registrationURL {
 			let dynreg = onBeforeDynamicClientRegistration?(url as URL) ?? OAuth2DynReg()
-			dynreg.registerClient(self) { json, error in
+			dynreg.register(client: self) { json, error in
 				callOnMainThread() {
 					callback(json: json, error: error)
 				}

@@ -346,7 +346,7 @@ If during setup `registration_url` is set but `client_id` is not, the `authorize
 Client credentials returned from registration are stored to the keychain.
 
 The `OAuth2DynReg` class is responsible for handling client registration.
-You can use its `registerClient(client:callback:)` method manually if you need to.
+You can use its `register(client:callback:)` method manually if you need to.
 Registration parameters are taken from the client's configuration.
 
 ```swift
@@ -364,7 +364,7 @@ oauth2.registerClientIfNeeded() { error in
 ```swift
 let oauth2 = OAuth2...()
 let dynreg = OAuth2DynReg()
-dynreg.registerClient(oauth2) { params, error in
+dynreg.register(client: oauth2) { params, error in
     if let error = error {
         // registration failed
     }

@@ -51,9 +51,9 @@ public class OAuth2DynReg {
 	- parameter client: The client to register and update with client credentials, when successful
 	- parameter callback: The callback to call when done with the registration response (JSON) and/or an error
 	*/
-	public func registerClient(_ client: OAuth2, callback: ((json: OAuth2JSON?, error: Error?) -> Void)) {
+	public func register(client: OAuth2, callback: ((json: OAuth2JSON?, error: Error?) -> Void)) {
 		do {
-			let req = try registrationRequest(client)
+			let req = try registrationRequest(for: client)
 			client.logger?.debug("OAuth2", msg: "Registering client at \(req.url!) with scopes “\(client.scope ?? "(none)")”")
 			client.performRequest(req) { data, status, error in
 				do {
@@ -61,13 +61,13 @@ public class OAuth2DynReg {
 						throw error ?? OAuth2Error.noDataInResponse
 					}
 					
-					let dict = try self.parseRegistrationResponse(data, client: client)
+					let dict = try self.parseRegistrationResponse(data: data, client: client)
 					try client.assureNoErrorInResponse(dict)
 					if status >= 400 {
 						client.logger?.warn("OAuth2", msg: "Registration failed with \(status)")
 					}
 					else {
-						self.didRegisterWith(dict, client: client)
+						self.didRegisterWith(json: dict, client: client)
 					}
 					callback(json: dict, error: nil)
 				}
@@ -87,9 +87,10 @@ public class OAuth2DynReg {
 	/**
 	Returns a URL request, set up to be used for registration: POST method, JSON body data.
 	
-	- returns: A URL request to be used for registration
+	- parameter for: The OAuth2 client the request is built for
+	- returns:       A URL request to be used for registration
 	*/
-	public func registrationRequest(_ client: OAuth2) throws -> URLRequest {
+	public func registrationRequest(for client: OAuth2) throws -> URLRequest {
 		guard let registrationURL = client.clientConfig.registrationURL else {
 			throw OAuth2Error.noRegistrationURL
 		}
@@ -103,7 +104,7 @@ public class OAuth2DynReg {
 				req.setValue(val, forHTTPHeaderField: key)
 			}
 		}
-		let body = registrationBody(client)
+		let body = registrationBody(for: client)
 		client.logger?.debug("OAuth2", msg: "Registration parameters: \(body)")
 		req.httpBody = try JSONSerialization.data(withJSONObject: body, options: [])
 		
@@ -111,7 +112,7 @@ public class OAuth2DynReg {
 	}
 	
 	/** The body data to use for registration. */
-	public func registrationBody(_ client: OAuth2) -> OAuth2JSON {
+	public func registrationBody(for client: OAuth2) -> OAuth2JSON {
 		var dict = OAuth2JSON()
 		if let client = client.clientConfig.clientName {
 			dict["client_name"] = client
@@ -139,11 +140,11 @@ public class OAuth2DynReg {
 		return dict
 	}
 	
-	public func parseRegistrationResponse(_ data: Data, client: OAuth2) throws -> OAuth2JSON {
+	public func parseRegistrationResponse(data: Data, client: OAuth2) throws -> OAuth2JSON {
 		return try client.parseJSON(data)
 	}
 	
-	public func didRegisterWith(_ json: OAuth2JSON, client: OAuth2) {
+	public func didRegisterWith(json: OAuth2JSON, client: OAuth2) {
 		if let id = json["client_id"] as? String {
 			client.clientId = id
 			client.logger?.debug("OAuth2", msg: "Did register with client-id “\(id)”, params: \(json)")
