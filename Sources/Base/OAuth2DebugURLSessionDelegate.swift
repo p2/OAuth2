@@ -28,7 +28,7 @@ Doing so is a REALLY BAD IDEA, even in development environments where you can us
 Still, sometimes you'll have to do this so this class is provided, but DO NOT SUBMIT your app using self-signed SSL certs to the App
 Store. You have been warned!
 */
-public class OAuth2DebugURLSessionDelegate: NSObject, URLSessionDelegate {
+open class OAuth2DebugURLSessionDelegate: NSObject, URLSessionDelegate {
 	
 	/// The host to allow a self-signed SSL certificate for.
 	let host: String
@@ -37,7 +37,8 @@ public class OAuth2DebugURLSessionDelegate: NSObject, URLSessionDelegate {
 		self.host = host
 	}
 	
-	public func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge,
+	@nonobjc
+	open func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge,
 	                       completionHandler: (Foundation.URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
 		if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust {
 			if challenge.protectionSpace.host == host, let trust = challenge.protectionSpace.serverTrust {

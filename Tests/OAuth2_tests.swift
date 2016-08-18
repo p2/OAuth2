@@ -73,7 +73,7 @@ class OAuth2Tests: XCTestCase {
 		let oa = genericOAuth2()
 		oa.verbose = false
 		oa.clientConfig.refreshToken = "abc"
-		let req = try! oa.tokenRequestForTokenRefresh().asURLRequestFor(oa)
+		let req = try! oa.tokenRequestForTokenRefresh().asURLRequest(for: oa)
 		let auth = req.url!
 		
 		let comp = URLComponents(url: auth, resolvingAgainstBaseURL: true)!
@@ -110,7 +110,7 @@ class OAuth2Tests: XCTestCase {
 			XCTAssertNotNil(error)
 			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.invalidAuthorizationContext)
 		}
-		oa.authorizeEmbedded(from: "A string")
+		oa.authorizeEmbedded(from: NSString())
 		XCTAssertTrue(oa.authConfig.authorizeEmbedded)
 	}
 	
@@ -127,7 +127,7 @@ class OAuth2Tests: XCTestCase {
 		
 		// embedded
 		oa.redirect = "myapp://oauth"
-		oa.authorizeEmbedded(from: "A string") { parameters, error in
+		oa.authorizeEmbedded(from: NSString()) { parameters, error in
 			XCTAssertNotNil(error)
 			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.invalidAuthorizationContext)
 		}

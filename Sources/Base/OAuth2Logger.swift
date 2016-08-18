@@ -110,10 +110,10 @@ extension OAuth2Logger {
 /**
 Basic logger that just prints to stdout.
 */
-public class OAuth2DebugLogger: OAuth2Logger {
+open class OAuth2DebugLogger: OAuth2Logger {
 	
 	/// The logger's logging level, set to `Debug` by default.
-	public var level = OAuth2LogLevel.debug
+	open var level = OAuth2LogLevel.debug
 	
 	public init(_ level: OAuth2LogLevel = OAuth2LogLevel.debug) {
 		self.level = level

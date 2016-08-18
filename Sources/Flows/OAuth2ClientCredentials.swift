@@ -27,13 +27,13 @@ import Base
 /**
 Class to handle two-legged OAuth2 requests of the "client_credentials" type.
 */
-public class OAuth2ClientCredentials: OAuth2 {
+open class OAuth2ClientCredentials: OAuth2 {
 	
-	public override class var grantType: String {
+	override open class var grantType: String {
 		return "client_credentials"
 	}
 	
-	public override func doAuthorize(params inParams: OAuth2StringDict? = nil) {
+	override open func doAuthorize(params inParams: OAuth2StringDict? = nil) {
 		self.obtainAccessToken(params: inParams) { params, error in
 			if let error = error {
 				self.didFail(withError: error)
@@ -49,35 +49,35 @@ public class OAuth2ClientCredentials: OAuth2 {
 	
 	- parameter callback: The callback to call after the process has finished
 	*/
-	func obtainAccessToken(params: OAuth2StringDict? = nil, callback: ((params: OAuth2JSON?, error: Error?) -> Void)) {
+	func obtainAccessToken(params: OAuth2StringDict? = nil, callback: ((_ params: OAuth2JSON?, _ error: Error?) -> Void)) {
 		do {
-			let post = try tokenRequest(params: params).asURLRequestFor(self)
+			let post = try tokenRequest(params: params).asURLRequest(for: self)
 			logger?.debug("OAuth2", msg: "Requesting new access token from \(post.url?.description ?? "nil")")
 			
-			performRequest(post) { data, status, error in
+			perform(request: post) { data, status, error in
 				do {
 					guard let data = data else {
 						throw error ?? OAuth2Error.noDataInResponse
 					}
 					
-					let params = try self.parseAccessTokenResponseData(data)
+					let params = try self.parseAccessTokenResponse(data: data)
 					self.logger?.debug("OAuth2", msg: "Did get access token [\(nil != self.clientConfig.accessToken)]")
-					callback(params: params, error: nil)
+					callback(params, nil)
 				}
 				catch let error {
-					callback(params: nil, error: error)
+					callback(nil, error)
 				}
 			}
 		}
 		catch let error {
-			callback(params: nil, error: error)
+			callback(nil, error)
 		}
 	}
 	
 	/**
 	Creates a POST request with x-www-form-urlencoded body created from the supplied URL's query part.
 	*/
-	func tokenRequest(params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
+	open func tokenRequest(params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
 		guard let clientId = clientConfig.clientId, !clientId.isEmpty else {
 			throw OAuth2Error.noClientId
 		}
@@ -86,7 +86,7 @@ public class OAuth2ClientCredentials: OAuth2 {
 		}
 		
 		let req = OAuth2AuthRequest(url: (clientConfig.tokenURL ?? clientConfig.authorizeURL))
-		req.params["grant_type"] = self.dynamicType.grantType
+		req.params["grant_type"] = type(of: self).grantType
 		if let scope = clientConfig.scope {
 			req.params["scope"] = scope
 		}

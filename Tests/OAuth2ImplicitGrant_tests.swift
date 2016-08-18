@@ -120,7 +120,7 @@ class OAuth2ImplicitGrantTests: XCTestCase
 		}
 		oauth.afterAuthorizeOrFail = { authParameters, error in
 			XCTAssertNotNil(authParameters, "Expecting non-nil auth dict")
-			XCTAssertTrue(authParameters?.count > 2, "Expecting non-empty auth dict")
+			XCTAssertTrue((authParameters?.count ?? 0) > 2, "Expecting non-empty auth dict")
 			print("---->  \(authParameters)")
 			XCTAssertNil(error, "No error message expected")
 		}

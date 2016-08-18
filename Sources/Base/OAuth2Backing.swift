@@ -22,7 +22,7 @@ import Foundation
 
 
 /// Typealias to ease working with JSON dictionaries.
-public typealias OAuth2JSON = [String: AnyObject]
+public typealias OAuth2JSON = [String: Any]
 
 /// Typealias to work with dictionaries full of strings.
 public typealias OAuth2StringDict = [String: String]
@@ -31,20 +31,20 @@ public typealias OAuth2StringDict = [String: String]
 /**
 Abstract base class for OAuth2 authorization as well as client registration classes.
 */
-public class OAuth2Backing {
+open class OAuth2Backing {
 	
 	/// Server-side settings, as set upon initialization.
 	final let settings: OAuth2JSON
 	
 	/// Set to `true` to log all the things. `false` by default. Use `"verbose": bool` in settings or assign `logger` yourself.
-	public var verbose = false {
+	open var verbose = false {
 		didSet {
 			logger = verbose ? OAuth2DebugLogger() : nil
 		}
 	}
 	
 	/// The logger being used. Auto-assigned to a debug logger if you set `verbose` to true or false.
-	public var logger: OAuth2Logger?
+	open var logger: OAuth2Logger?
 	
 	/// If set to `true` (the default) will use system keychain to store tokens. Use `"keychain": bool` in settings.
 	public var useKeychain = true {
@@ -56,21 +56,21 @@ public class OAuth2Backing {
 	}
 	
 	/// The keychain account to use to store tokens. Defaults to "currentTokens".
-	public var keychainAccountForTokens = "currentTokens" {
+	open var keychainAccountForTokens = "currentTokens" {
 		didSet {
 			assert(!keychainAccountForTokens.isEmpty)
 		}
 	}
 	
 	/// The keychain account name to use to store client credentials. Defaults to "clientCredentials".
-	public var keychainAccountForClientCredentials = "clientCredentials" {
+	open var keychainAccountForClientCredentials = "clientCredentials" {
 		didSet {
 			assert(!keychainAccountForClientCredentials.isEmpty)
 		}
 	}
 	
 	/// Defaults to `kSecAttrAccessibleWhenUnlocked`
-	public internal(set) var keychainAccessMode = kSecAttrAccessibleWhenUnlocked
+	open internal(set) var keychainAccessMode = kSecAttrAccessibleWhenUnlocked
 	
 	
 	/**
@@ -86,7 +86,7 @@ public class OAuth2Backing {
 			useKeychain = keychain
 		}
 		if let accessMode = settings["keychain_access_mode"] as? String {
-			keychainAccessMode = accessMode
+			keychainAccessMode = accessMode as CFString
 		}
 		if let verb = settings["verbose"] as? Bool {
 			verbose = verb
@@ -106,12 +106,12 @@ public class OAuth2Backing {
 	// MARK: - Keychain Integration
 	
 	/** The service key under which to store keychain items. Returns "http://localhost", subclasses override to return the authorize URL. */
-	public func keychainServiceName() -> String {
+	open func keychainServiceName() -> String {
 		return "http://localhost"
 	}
 	
 	/** Queries the keychain for tokens stored for the receiver's authorize URL, and updates the token properties accordingly. */
-	private func updateFromKeychain() {
+	fileprivate func updateFromKeychain() {
 		logger?.debug("OAuth2", msg: "Looking for items in keychain")
 		
 		do {
@@ -134,20 +134,20 @@ public class OAuth2Backing {
 	}
 	
 	/** Updates instance properties according to the items found in the given dictionary, which was found in the keychain. */
-	func updateFromKeychainItems(_ items: [String: NSCoding]) {
+	func updateFromKeychainItems(_ items: [String: Any]) {
 	}
 	
 	/**
 	Items that should be stored when storing client credentials.
 	
-	- returns: A dictionary with `String` keys and `NSCoding` adopting items
+	- returns: A dictionary with `String` keys and `Any` items
 	*/
-	public func storableCredentialItems() -> [String: NSCoding]? {
+	open func storableCredentialItems() -> [String: Any]? {
 		return nil
 	}
 	
 	/** Stores our client credentials in the keychain. */
-	public func storeClientToKeychain() {
+	open func storeClientToKeychain() {
 		if let items = storableCredentialItems() {
 			logger?.debug("OAuth2", msg: "Storing client credentials to keychain")
 			let keychain = OAuth2KeychainAccount(oauth2: self, account: keychainAccountForClientCredentials, data: items)
@@ -163,14 +163,14 @@ public class OAuth2Backing {
 	/**
 	Items that should be stored when tokens are stored to the keychain.
 	
-	- returns: A dictionary with `String` keys and `NSCoding` adopting items
+	- returns: A dictionary with `String` keys and `Any` items
 	*/
-	public func storableTokenItems() -> [String: NSCoding]? {
+	open func storableTokenItems() -> [String: Any]? {
 		return nil
 	}
 	
 	/** Stores our current token(s) in the keychain. */
-	internal func storeTokensToKeychain() {
+	public func storeTokensToKeychain() {
 		if let items = storableTokenItems() {
 			logger?.debug("OAuth2", msg: "Storing tokens to keychain")
 			let keychain = OAuth2KeychainAccount(oauth2: self, account: keychainAccountForTokens, data: items)
@@ -184,7 +184,7 @@ public class OAuth2Backing {
 	}
 	
 	/** Unsets the client credentials and deletes them from the keychain. */
-	public func forgetClient() {
+	open func forgetClient() {
 		logger?.debug("OAuth2", msg: "Forgetting client credentials and removing them from keychain")
 		let keychain = OAuth2KeychainAccount(oauth2: self, account: keychainAccountForClientCredentials)
 		do {
@@ -196,7 +196,7 @@ public class OAuth2Backing {
 	}
 	
 	/** Unsets the tokens and deletes them from the keychain. */
-	public func forgetTokens() {
+	open func forgetTokens() {
 		logger?.debug("OAuth2", msg: "Forgetting tokens and removing them from keychain")
 
 		let keychain = OAuth2KeychainAccount(oauth2: self, account: keychainAccountForTokens)
@@ -213,7 +213,7 @@ public class OAuth2Backing {
 	
 	/// The instance's current session, creating one by the book if necessary. Defaults to using an ephemeral session, you can use
 	/// `sessionConfiguration` and/or `sessionDelegate` to affect how the session is configured.
-	public var session: URLSession {
+	open var session: URLSession {
 		if nil == _session {
 			let config = sessionConfiguration ?? URLSessionConfiguration.ephemeral
 			_session = URLSession(configuration: config, delegate: sessionDelegate, delegateQueue: nil)
@@ -222,17 +222,17 @@ public class OAuth2Backing {
 	}
 	
 	/// The backing store for `session`.
-	private var _session: URLSession?
+	fileprivate var _session: URLSession?
 	
 	/// The configuration to use when creating `session`. Uses an `+ephemeralSessionConfiguration()` if nil.
-	public var sessionConfiguration: URLSessionConfiguration? {
+	open var sessionConfiguration: URLSessionConfiguration? {
 		didSet {
 			_session = nil
 		}
 	}
 	
 	/// URL session delegate that should be used for the `NSURLSession` the instance uses for requests.
-	public var sessionDelegate: URLSessionDelegate? {
+	open var sessionDelegate: URLSessionDelegate? {
 		didSet {
 			_session = nil
 		}
@@ -248,25 +248,25 @@ public class OAuth2Backing {
 	- parameter request: The request to execute
 	- parameter callback: The callback to call when the request completes/fails; data and error are mutually exclusive
 	*/
-	public func performRequest(_ request: URLRequest, callback: ((data: Data?, status: Int?, error: Error?) -> Void)) {
+	open func perform(request: URLRequest, callback: ((_ data: Data?, _ status: Int?, _ error: Error?) -> Void)) {
 		self.logger?.trace("OAuth2", msg: "REQUEST\n\(request.debugDescription)\n---")
 		let task = session.dataTask(with: request) { sessData, sessResponse, error in
 			self.abortableTask = nil
 			self.logger?.trace("OAuth2", msg: "RESPONSE\n\(sessResponse?.debugDescription ?? "no response")\n\n\(String(data: sessData ?? Data(), encoding: String.Encoding.utf8) ?? "no data")\n---")
 			if let error = error {
 				if NSURLErrorDomain == error._domain && -999 == error._code {		// request was cancelled
-					callback(data: nil, status: nil, error: OAuth2Error.requestCancelled)
+					callback(nil, nil, OAuth2Error.requestCancelled)
 				}
 				else {
-					callback(data: nil, status: nil, error: error)
+					callback(nil, nil, error)
 				}
 			}
 			else if let data = sessData, let http = sessResponse as? HTTPURLResponse {
-				callback(data: data, status: http.statusCode, error: nil)
+				callback(data, http.statusCode, nil)
 			}
 			else {
 				let error = OAuth2Error.generic("Unknown response \(sessResponse) with data “\(String(data: sessData!, encoding: String.Encoding.utf8))”")
-				callback(data: nil, status: nil, error: error)
+				callback(nil, nil, error)
 			}
 		}
 		abortableTask = task
@@ -274,10 +274,10 @@ public class OAuth2Backing {
 	}
 	
 	/// Currently running abortable session task.
-	private var abortableTask: URLSessionTask?
+	fileprivate var abortableTask: URLSessionTask?
 	
 	/**
-	Can be called to immediately abort the currently running authorization request, if it was started by `performRequest()`.
+	Can be called to immediately abort the currently running authorization request, if it was started by `perform(request: )`.
 	
 	- returns: A bool indicating whether a task was aborted or not
 	*/
@@ -299,7 +299,7 @@ public class OAuth2Backing {
 	- parameter data: NSData returned from the call, assumed to be JSON with string-values only.
 	- returns: An OAuth2JSON instance
 	*/
-	public func parseJSON(_ data: Data) throws -> OAuth2JSON {
+	open func parseJSON(_ data: Data) throws -> OAuth2JSON {
 		if let json = try JSONSerialization.jsonObject(with: data, options: []) as? OAuth2JSON {
 			return json
 		}

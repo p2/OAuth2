@@ -49,7 +49,7 @@ class OAuth2PasswordGrantTests: XCTestCase
 	
 	func testTokenRequest() {
 		let oauth = genericOAuth2Password()
-		let request = try! oauth.tokenRequest().asURLRequestFor(oauth)
+		let request = try! oauth.tokenRequest().asURLRequest(for: oauth)
 		XCTAssertEqual("POST", request.httpMethod, "Must be a POST request")
 		
 		let authHeader = request.allHTTPHeaderFields?["Authorization"]
@@ -67,14 +67,14 @@ class OAuth2PasswordGrantTests: XCTestCase
 	func testTokenResponse() {
 		let oauth = genericOAuth2Password()
 		let response = [
-			"access_token":"2YotnFZFEjr1zCsicMWpAA",
-			"token_type":"bearer",
-			"expires_in":3600,
-			"refresh_token":"tGzv3JOkF0XG5Qx2TlKWIA",
-			"foo":"bar"
-		]
+			"access_token": "2YotnFZFEjr1zCsicMWpAA",
+			"token_type": "bearer",
+			"expires_in": 3600,
+			"refresh_token": "tGzv3JOkF0XG5Qx2TlKWIA",
+			"foo": "bar"
+		] as [String: Any]
 		do {
-			let dict = try oauth.parseAccessTokenResponse(response)
+			let dict = try oauth.parseAccessTokenResponse(params: response)
 			XCTAssertEqual("bar", dict["foo"] as? String)
 			XCTAssertEqual("2YotnFZFEjr1zCsicMWpAA", oauth.accessToken, "Must extract access token")
 			XCTAssertNotNil(oauth.accessTokenExpiry, "Must extract access token expiry date")
@@ -93,7 +93,7 @@ class OAuth2PasswordGrantTests: XCTestCase
 			"password":"Here is my password",
 			"verbose": true
 		])
-		let request = try! oauth.tokenRequest(params: ["foo": "bar & hat"]).asURLRequestFor(oauth)
+		let request = try! oauth.tokenRequest(params: ["foo": "bar & hat"]).asURLRequest(for: oauth)
 		
 		let body = String(data: request.httpBody!, encoding: String.Encoding.utf8)
 		XCTAssertNotNil(body, "Body data must be present")

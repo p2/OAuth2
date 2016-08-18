@@ -27,28 +27,28 @@ import Base
 /**
 A class to handle authorization for clients via password grant.
 */
-public class OAuth2PasswordGrant: OAuth2 {
+open class OAuth2PasswordGrant: OAuth2 {
 	
-	public override class var grantType: String {
+	override open class var grantType: String {
 		return "password"
 	}
 	
 	/// Username to use during authentication.
-	public var username: String
+	open var username: String
 	
 	/// The user's password.
-	public var password: String
+	open var password: String
 	
 	/**
 	Adds support for the "password" & "username" setting.
 	*/
-	public override init(settings: OAuth2JSON) {
+	override public init(settings: OAuth2JSON) {
 		username = settings["username"] as? String ?? ""
 		password = settings["password"] as? String ?? ""
 		super.init(settings: settings)
 	}
 	
-	public override func doAuthorize(params: [String : String]? = nil) {
+	override open func doAuthorize(params: [String : String]? = nil) {
 		self.obtainAccessToken(params: params) { params, error in
 			if let error = error {
 				self.didFail(withError: error)
@@ -64,41 +64,41 @@ public class OAuth2PasswordGrant: OAuth2 {
 	
 	- parameter callback: The callback to call after the request has returned
 	*/
-	func obtainAccessToken(params: OAuth2StringDict? = nil, callback: ((params: OAuth2JSON?, error: Error?) -> Void)) {
+	func obtainAccessToken(params: OAuth2StringDict? = nil, callback: ((_ params: OAuth2JSON?, _ error: Error?) -> Void)) {
 		do {
-			let post = try tokenRequest(params: params).asURLRequestFor(self)
+			let post = try tokenRequest(params: params).asURLRequest(for: self)
 			logger?.debug("OAuth2", msg: "Requesting new access token from \(post.url?.description ?? "nil")")
 			
-			performRequest(post) { data, status, error in
+			perform(request: post) { data, status, error in
 				do {
 					guard let data = data else {
 						throw error ?? OAuth2Error.noDataInResponse
 					}
 					
-					let dict = try self.parseAccessTokenResponseData(data)
-					if status < 400 {
+					let dict = try self.parseAccessTokenResponse(data: data)
+					if let status = status, status < 400 {
 						self.logger?.debug("OAuth2", msg: "Did get access token [\(nil != self.clientConfig.accessToken)]")
-						callback(params: dict, error: nil)
+						callback(dict, nil)
 					}
 					else {
-						callback(params: dict, error: OAuth2Error.responseError("The username or password is incorrect"))
+						callback(dict, OAuth2Error.responseError("The username or password is incorrect"))
 					}
 				}
 				catch let error {
 					self.logger?.debug("OAuth2", msg: "Error parsing response: \(error)")
-					callback(params: nil, error: error)
+					callback(nil, error)
 				}
 			}
 		}
 		catch let err {
-			callback(params: nil, error: err)
+			callback(nil, err)
 		}
 	}
 	
 	/**
 	Creates a POST request with x-www-form-urlencoded body created from the supplied URL's query part.
 	*/
-	func tokenRequest(params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
+	open func tokenRequest(params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
 		if username.isEmpty{
 			throw OAuth2Error.noUsername
 		}
@@ -107,7 +107,7 @@ public class OAuth2PasswordGrant: OAuth2 {
 		}
 		
 		let req = OAuth2AuthRequest(url: (clientConfig.tokenURL ?? clientConfig.authorizeURL))
-		req.params["grant_type"] = self.dynamicType.grantType
+		req.params["grant_type"] = type(of: self).grantType
 		req.params["username"] = username
 		req.params["password"] = password
 		if let clientId = clientConfig.clientId {

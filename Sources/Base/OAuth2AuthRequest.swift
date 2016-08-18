@@ -56,21 +56,21 @@ public enum OAuth2EndpointAuthMethod: String {
 /**
 Class representing an OAuth2 authorization request that can be used to create NSURLRequest instances.
 */
-public class OAuth2AuthRequest {
+open class OAuth2AuthRequest {
 	
 	/// The url of the receiver. Queries may by added by parameters specified on `params`.
-	public let url: URL
+	open let url: URL
 	
 	/// The HTTP method.
-	public let method: OAuth2HTTPMethod
+	open let method: OAuth2HTTPMethod
 	
 	/// The content type that will be specified. Defaults to `wwwForm`.
-	public var contentType = OAuth2HTTPContentType.wwwForm
+	open var contentType = OAuth2HTTPContentType.wwwForm
 	
 	/// If set will take preference over any "Authorize" header that would otherwise be set.
-	public var headerAuthorize: String?
+	open var headerAuthorize: String?
 	
-	public var params = OAuth2AuthRequestParams()
+	open var params = OAuth2AuthRequestParams()
 	
 	
 	/**
@@ -89,7 +89,7 @@ public class OAuth2AuthRequest {
 	
 	- parameter params: The parameters to add to the receiver
 	*/
-	public func addParams(params inParams: OAuth2StringDict?) {
+	open func addParams(params inParams: OAuth2StringDict?) {
 		if let prms = inParams {
 			for (key, val) in prms {
 				params[key] = val
@@ -121,7 +121,7 @@ public class OAuth2AuthRequest {
 	
 	- returns: An NSURL representing the receiver
 	*/
-	public func asURL() throws -> URL {
+	open func asURL() throws -> URL {
 		let comp = try asURLComponents()
 		if let finalURL = comp.url {
 			return finalURL
@@ -135,7 +135,7 @@ public class OAuth2AuthRequest {
 	- parameter oauth2: The OAuth2 instance from which to take client and auth settings
 	- returns: A mutable NSURLRequest
 	*/
-	public func asURLRequestFor(_ oauth2: OAuth2Base) throws -> URLRequest {
+	open func asURLRequest(for oauth2: OAuth2Base) throws -> URLRequest {
 		var finalParams = params
 		var finalAuthHeader = headerAuthorize
 		
@@ -192,7 +192,7 @@ bodies.
 public struct OAuth2AuthRequestParams {
 	
 	/// The parameters to be used.
-	private var params: OAuth2StringDict? = nil
+	fileprivate var params: OAuth2StringDict? = nil
 	
 	public init() {  }
 	
@@ -212,7 +212,8 @@ public struct OAuth2AuthRequestParams {
 	- parameter forKey: The key for the value to be removed
 	- returns: The value that was removed, if any
 	*/
-	@discardableResult public mutating func removeValue(forKey key: String) -> String? {
+	@discardableResult
+	public mutating func removeValue(forKey key: String) -> String? {
 		return params?.removeValue(forKey: key)
 	}
 	
@@ -251,7 +252,7 @@ public struct OAuth2AuthRequestParams {
 		guard let params = params else {
 			return ""
 		}
-		return self.dynamicType.formEncodedQueryStringFor(params)
+		return type(of: self).formEncodedQueryStringFor(params)
 	}
 	
 	/**

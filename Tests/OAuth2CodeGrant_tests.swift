@@ -66,7 +66,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 		}
 		
 		do {
-			_ = try oauth.tokenRequestWithCode("pp").asURL()
+			_ = try oauth.accessTokenRequest(with: "pp").asURL()
 			XCTAssertTrue(false, "Should no longer be here")
 		}
 		catch OAuth2Error.notUsingTLS {
@@ -184,7 +184,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 		
 		// no redirect in context - fail
 		do {
-			_ = try oauth.tokenRequestWithCode("pp")
+			_ = try oauth.accessTokenRequest(with: "pp")
 			XCTAssertTrue(false, "Should not be here any more")
 		}
 		catch OAuth2Error.noRedirectURL {
@@ -197,7 +197,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 		// with redirect in context - success
 		oauth.context.redirectURL = "oauth2://callback"
 		
-		let req = try! oauth.tokenRequestWithCode("pp").asURLRequestFor(oauth)
+		let req = try! oauth.accessTokenRequest(with: "pp").asURLRequest(for: oauth)
 		let comp = URLComponents(url: req.url!, resolvingAgainstBaseURL: true)!
 		XCTAssertEqual(comp.host!, "token.ful.io", "Correct host")
 		
@@ -217,7 +217,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 		oauth.context.redirectURL = "oauth2://callback"
 		
 		// not in body
-		let req = try! oauth.tokenRequestWithCode("pp").asURLRequestFor(oauth)
+		let req = try! oauth.accessTokenRequest(with: "pp").asURLRequest(for: oauth)
 		let comp = URLComponents(url: req.url!, resolvingAgainstBaseURL: true)!
 		XCTAssertEqual(comp.host!, "token.ful.io", "Correct host")
 		
@@ -233,7 +233,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 		// in body
 		oauth.authConfig.secretInBody = true
 		
-		let req2 = try! oauth.tokenRequestWithCode("pp").asURLRequestFor(oauth)
+		let req2 = try! oauth.accessTokenRequest(with: "pp").asURLRequest(for: oauth)
 		let comp2 = URLComponents(url: req2.url!, resolvingAgainstBaseURL: true)!
 		XCTAssertEqual(comp2.host!, "token.ful.io", "Correct host")
 		
@@ -259,7 +259,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 		oauth.redirect = "oauth2://callback"
 		oauth.context.redirectURL = "oauth2://callback"
 		
-		let req = try! oauth.tokenRequestWithCode("pp").asURLRequestFor(oauth)
+		let req = try! oauth.accessTokenRequest(with: "pp").asURLRequest(for: oauth)
 		let comp = URLComponents(url: req.url!, resolvingAgainstBaseURL: true)!
 		XCTAssertEqual(comp.host!, "auth.ful.io", "Correct host")
 	}
@@ -270,18 +270,18 @@ class OAuth2CodeGrantTests: XCTestCase {
 			"client_secret": "xyz",
 			"authorize_uri": "https://auth.ful.io",
 			"keychain": false,
-		]
+		] as [String: Any]
 		let oauth = OAuth2CodeGrant(settings: settings)
 		var response = [
 			"access_token": "2YotnFZFEjr1zCsicMWpAA",
 			"expires_in": 3600,
 			"refresh_token": "tGzv3JOkF0XG5Qx2TlKWIA",
 			"foo": "bar & hat"
-		]
+		] as [String: Any]
 		
 		// must throw when "token_type" is missing
 		do {
-			let _ = try oauth.parseAccessTokenResponse(response)
+			_ = try oauth.parseAccessTokenResponse(params: response)
 			XCTAssertTrue(false, "Should not be here any more")
 		}
 		catch OAuth2Error.noTokenType {
@@ -293,7 +293,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 		// LinkedIn on the other hand must not throw
 		let linkedin = OAuth2CodeGrantLinkedIn(settings: settings)
 		do {
-			let _ = try linkedin.parseAccessTokenResponse(response)
+			_ = try linkedin.parseAccessTokenResponse(params: response)
 		}
 		catch let error {
 			XCTAssertNil(error, "Should not throw")
@@ -302,7 +302,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 		// Nor the generic no-token-type class
 		let noType = OAuth2CodeGrantNoTokenType(settings: settings)
 		do {
-			let _ = try noType.parseAccessTokenResponse(response)
+			_ = try noType.parseAccessTokenResponse(params: response)
 		}
 		catch let error {
 			XCTAssertNil(error, "Should not throw")
@@ -311,7 +311,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 		// must throw when "token_type" is not known
 		response["token_type"] = "guardian"
 		do {
-			let _ = try oauth.parseAccessTokenResponse(response)
+			_ = try oauth.parseAccessTokenResponse(params: response)
 			XCTAssertTrue(false, "Should not be here any more")
 		}
 		catch OAuth2Error.unsupportedTokenType(_) {
@@ -322,7 +322,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 		
 		// the no-token-type class must still ignore it
 		do {
-			let _ = try noType.parseAccessTokenResponse(response)
+			_ = try noType.parseAccessTokenResponse(params: response)
 		}
 		catch let error {
 			XCTAssertNil(error, "Should not throw")
@@ -331,7 +331,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 		// add "token_type"
 		response["token_type"] = "bearer"
 		do {
-			let dict = try oauth.parseAccessTokenResponse(response)
+			let dict = try oauth.parseAccessTokenResponse(params: response)
 			XCTAssertEqual("bar & hat", dict["foo"] as? String)
 			XCTAssertEqual("2YotnFZFEjr1zCsicMWpAA", oauth.accessToken, "Must extract access token")
 			XCTAssertNotNil(oauth.accessTokenExpiry, "Must extract access token expiry date")
@@ -348,10 +348,10 @@ class OAuth2CodeGrantTests: XCTestCase {
 			"expires_in": 3600,
 			"refresh_token": "tGzv3JOkF0XG5Qx2TlKWIA",
 			"foo": "bar & hat"
-		]
+		] as [String : Any]
 		
 		do {
-			_ = try oauth.parseAccessTokenResponse(response2)
+			_ = try oauth.parseAccessTokenResponse(params: response2)
 			XCTAssertTrue(false, "Should not be here any more")
 		}
 		catch OAuth2Error.unsupportedTokenType {

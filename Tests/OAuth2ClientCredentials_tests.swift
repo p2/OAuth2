@@ -56,7 +56,7 @@ class OAuth2ClientCredentialsTests: XCTestCase {
 	
 	func testTokenRequest() {
 		let oauth = genericOAuth2()
-		let request = try! oauth.tokenRequest().asURLRequestFor(oauth)
+		let request = try! oauth.tokenRequest().asURLRequest(for: oauth)
 		XCTAssertEqual("POST", request.httpMethod, "Must be a POST request")
 		
 		let authHeader = request.allHTTPHeaderFields?["Authorization"]
@@ -89,7 +89,7 @@ class OAuth2ClientCredentialsTests: XCTestCase {
     
 	func testTokenRequestNoScope() {
 		let oauth = genericOAuth2NoScope()
-		let request = try! oauth.tokenRequest().asURLRequestFor(oauth)
+		let request = try! oauth.tokenRequest().asURLRequest(for: oauth)
 		XCTAssertEqual("POST", request.httpMethod, "Must be a POST request")
 		
 		let body = String(data: request.httpBody!, encoding: String.Encoding.utf8)
@@ -118,7 +118,7 @@ class OAuth2ClientCredentialsTests: XCTestCase {
 		
 		oauth.deviceId = "def"
 		do {
-			let req = try oauth.tokenRequest().asURLRequestFor(oauth)
+			let req = try oauth.tokenRequest().asURLRequest(for: oauth)
 			XCTAssertEqual("Basic YWJjOg==", req.value(forHTTPHeaderField: "Authorization"))
 		}
 		catch let err {

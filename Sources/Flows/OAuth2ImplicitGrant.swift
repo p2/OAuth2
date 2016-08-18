@@ -27,17 +27,17 @@ import Base
 /**
 Class to handle OAuth2 requests for public clients, such as distributed Mac/iOS Apps.
 */
-public class OAuth2ImplicitGrant: OAuth2 {
+open class OAuth2ImplicitGrant: OAuth2 {
 	
-	override public class var grantType: String {
+	override open class var grantType: String {
 		return "implicit"
 	}
 	
-	override public class var responseType: String? {
+	override open class var responseType: String? {
 		return "token"
 	}
 	
-	override public func handleRedirectURL(_ redirect: URL) {
+	override open func handleRedirectURL(_ redirect: URL) {
 		logger?.debug("OAuth2", msg: "Handling redirect URL \(redirect.description)")
 		do {
 			// token should be in the URL fragment
@@ -46,8 +46,8 @@ public class OAuth2ImplicitGrant: OAuth2 {
 				throw OAuth2Error.invalidRedirectURL(redirect.description)
 			}
 			
-			let params = self.dynamicType.params(fromQuery: fragment)
-			let dict = try parseAccessTokenResponse(params)
+			let params = type(of: self).params(fromQuery: fragment)
+			let dict = try parseAccessTokenResponse(params: params)
 			logger?.debug("OAuth2", msg: "Successfully extracted access token")
 			didAuthorize(withParameters: dict)
 		}
@@ -56,7 +56,7 @@ public class OAuth2ImplicitGrant: OAuth2 {
 		}
 	}
 	
-	override public func assureAccessTokenParamsAreValid(_ params: OAuth2JSON) throws {
+	override open func assureAccessTokenParamsAreValid(_ params: OAuth2JSON) throws {
 		try assureMatchesState(params)
 	}
 }

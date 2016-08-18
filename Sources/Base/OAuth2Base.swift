@@ -24,23 +24,23 @@ import Foundation
 /**
 Class extending on OAuth2Backing, exposing configuration and maintaining context, serving as base class for `OAuth2`.
 */
-public class OAuth2Base: OAuth2Backing {
+open class OAuth2Base: OAuth2Backing {
 	
 	/// The grant type represented by the class, e.g. "authorization_code" for code grants.
-	public class var grantType: String {
+	open class var grantType: String {
 		return "__undefined"
 	}
 	
 	/// The response type expected from an authorize call, e.g. "code" for code grants.
-	public class var responseType: String? {
+	open class var responseType: String? {
 		return nil
 	}
 	
 	/// Settings related to the client-server relationship.
-	public let clientConfig: OAuth2ClientConfig
+	open let clientConfig: OAuth2ClientConfig
 	
 	/// Client-side authorization options.
-	public var authConfig = OAuth2AuthConfig()
+	open var authConfig = OAuth2AuthConfig()
 	
 	/// The client id.
 	public final var clientId: String? {
@@ -55,13 +55,13 @@ public class OAuth2Base: OAuth2Backing {
 	}
 	
 	/// The name of the client, as used during dynamic client registration. Use "client_name" during initalization to set.
-	public var clientName: String? {
+	open var clientName: String? {
 		get { return clientConfig.clientName }
 	}
 	
 	/// The URL to authorize against.
 	public final var authURL: URL {
-		get { return clientConfig.authorizeURL as URL }
+		get { return clientConfig.authorizeURL }
 	}
 
 	/// The URL string where we can exchange a code for a token; if nil `authURL` will be used.
@@ -70,55 +70,55 @@ public class OAuth2Base: OAuth2Backing {
 	}
 	
 	/// The scope currently in use.
-	public var scope: String? {
+	public final var scope: String? {
 		get { return clientConfig.scope }
 		set { clientConfig.scope = newValue }
 	}
 	
 	/// The redirect URL string to use.
-	public var redirect: String? {
+	public final var redirect: String? {
 		get { return clientConfig.redirect }
 		set { clientConfig.redirect = newValue }
 	}
 	
 	/// Context for the current auth dance.
-	public var context = OAuth2ContextStore()
+	open var context = OAuth2ContextStore()
 	
 	/// The receiver's access token.
-	public var accessToken: String? {
+	open var accessToken: String? {
 		get { return clientConfig.accessToken }
 		set { clientConfig.accessToken = newValue }
 	}
     
 	/// The receiver's id token.
-	public var idToken: String? {
+	open var idToken: String? {
 		get { return clientConfig.idToken }	
 		set { clientConfig.idToken = newValue }
 	}
 
 	/// The access token's expiry date.
-	public var accessTokenExpiry: Date? {
+	open var accessTokenExpiry: Date? {
 		get { return clientConfig.accessTokenExpiry }
 		set { clientConfig.accessTokenExpiry = newValue }
 	}
 	
 	/// The receiver's long-time refresh token.
-	public var refreshToken: String? {
+	open var refreshToken: String? {
 		get { return clientConfig.refreshToken }
 		set { clientConfig.refreshToken = newValue }
 	}
 	
 	
 	/// This closure is internally used with `authorize(params:callback:)` and only exposed for subclassing reason, do not mess with it!
-	public final var didAuthorizeOrFail: ((parameters: OAuth2JSON?, error: Error?) -> Void)?
+	public final var didAuthorizeOrFail: ((_ parameters: OAuth2JSON?, _ error: Error?) -> Void)?
 	
 	/// Closure called on successful authentication on the main thread.
 	@available(*, deprecated: 3.0, message: "Use the `authorize(params:callback:)` method and variants")
-	public final var onAuthorize: ((parameters: OAuth2JSON) -> Void)?
+	public final var onAuthorize: ((_ parameters: OAuth2JSON) -> Void)?
 	
 	/// When authorization fails (if error is not nil) or is cancelled, this block is executed on the main thread.
 	@available(*, deprecated: 3.0, message: "Use the `authorize(params:callback:)` method and variants")
-	public final var onFailure: ((error: Error?) -> Void)?
+	public final var onFailure: ((Error?) -> Void)?
 	
 	/**
 	Closure called after the regular authorization callback, on the main thread. You can use this callback when you're performing
@@ -127,13 +127,13 @@ public class OAuth2Base: OAuth2Backing {
 	- parameter authParameters: All authorization parameters; non-nil (but possibly empty) on success, nil on error
 	- parameter error:          Error giving the failure reason; if nil and `authParameters` is also nil, the process was aborted.
 	*/
-	public final var afterAuthorizeOrFail: ((authParameters: OAuth2JSON?, error: Error?) -> Void)?
+	public final var afterAuthorizeOrFail: ((_ authParameters: OAuth2JSON?, _ error: Error?) -> Void)?
 	
 	/**
 	For internal use, don't mess with it, it's public only for subclassing and compilation reasons. Executed right before
 	`afterAuthorizeOrFail`.
 	*/
-	public final var internalAfterAuthorizeOrFail: ((wasFailure: Bool, error: Error?) -> Void)?
+	public final var internalAfterAuthorizeOrFail: ((_ wasFailure: Bool, _ error: Error?) -> Void)?
 	
 	
 	/**
@@ -159,7 +159,7 @@ public class OAuth2Base: OAuth2Backing {
 	- token_assume_unexpired (bool, true by default, whether to use access tokens that do not come with an "expires_in" parameter)
 	- title (string, to be shown in views shown by the framework)
 	*/
-	public override init(settings: OAuth2JSON) {
+	override public init(settings: OAuth2JSON) {
 		clientConfig = OAuth2ClientConfig(settings: settings)
 		
 		// auth configuration options
@@ -176,31 +176,31 @@ public class OAuth2Base: OAuth2Backing {
 	// MARK: - Keychain Integration
 	
 	/** Overrides base implementation to return the authorize URL. */
-	public override func keychainServiceName() -> String {
+	override open func keychainServiceName() -> String {
 		return authURL.description
 	}
 	
-	override func updateFromKeychainItems(_ items: [String : NSCoding]) {
+	override func updateFromKeychainItems(_ items: [String: Any]) {
 		for message in clientConfig.updateFromStorableItems(items) {
 			logger?.debug("OAuth2", msg: message)
 		}
 		authConfig.secretInBody = (clientConfig.endpointAuthMethod == OAuth2EndpointAuthMethod.clientSecretPost)
 	}
 	
-	public override func storableCredentialItems() -> [String : NSCoding]? {
+	override open func storableCredentialItems() -> [String: Any]? {
 		return clientConfig.storableCredentialItems()
 	}
 	
-	public override func storableTokenItems() -> [String : NSCoding]? {
+	override open func storableTokenItems() -> [String: Any]? {
 		return clientConfig.storableTokenItems()
 	}
 	
-	public override func forgetClient() {
+	override open func forgetClient() {
 		super.forgetClient()
 		clientConfig.forgetCredentials()
 	}
 	
-	public override func forgetTokens() {
+	override open func forgetTokens() {
 		super.forgetTokens()
 		clientConfig.forgetTokens()
 	}
@@ -218,7 +218,7 @@ public class OAuth2Base: OAuth2Backing {
 	- parameter cachePolicy: The cache policy to use, defaults to `NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData`
 	- returns: OAuth2Request for the given URL
 	*/
-	public func request(forURL url: URL, cachePolicy: NSURLRequest.CachePolicy = .reloadIgnoringLocalCacheData) -> URLRequest {
+	open func request(forURL url: URL, cachePolicy: NSURLRequest.CachePolicy = .reloadIgnoringLocalCacheData) -> URLRequest {
 		var req = URLRequest(url: url, cachePolicy: cachePolicy, timeoutInterval: 20)
 		req.sign(self)
 		return req
@@ -232,7 +232,7 @@ public class OAuth2Base: OAuth2Backing {
 	
 	- parameter redirect: The redirect URL returned by the server that you want to handle
 	*/
-	public func handleRedirectURL(_ redirect: URL) throws {
+	open func handleRedirectURL(_ redirect: URL) throws {
 		throw OAuth2Error.generic("Abstract class use")
 	}
 	
@@ -249,11 +249,11 @@ public class OAuth2Base: OAuth2Backing {
 			storeTokensToKeychain()
 		}
 		callOnMainThread() {
-			self.onAuthorize?(parameters: parameters)
-			self.didAuthorizeOrFail?(parameters: parameters, error: nil)
+			self.onAuthorize?(parameters)
+			self.didAuthorizeOrFail?(parameters, nil)
 			self.didAuthorizeOrFail = nil
-			self.internalAfterAuthorizeOrFail?(wasFailure: false, error: nil)
-			self.afterAuthorizeOrFail?(authParameters: parameters, error: nil)
+			self.internalAfterAuthorizeOrFail?(false, nil)
+			self.afterAuthorizeOrFail?(parameters, nil)
 		}
 	}
 	
@@ -275,18 +275,18 @@ public class OAuth2Base: OAuth2Backing {
 		}
 		
 		callOnMainThread() {
-			self.onFailure?(error: finalError)
-			self.didAuthorizeOrFail?(parameters: nil, error: finalError)
+			self.onFailure?(finalError)
+			self.didAuthorizeOrFail?(nil, finalError)
 			self.didAuthorizeOrFail = nil
-			self.internalAfterAuthorizeOrFail?(wasFailure: true, error: finalError)
-			self.afterAuthorizeOrFail?(authParameters: nil, error: finalError)
+			self.internalAfterAuthorizeOrFail?(true, finalError)
+			self.afterAuthorizeOrFail?(nil, finalError)
 		}
 	}
 	
 	/**
 	Allows to abort authorization currently in progress.
 	*/
-	public func abortAuthorization() {
+	open func abortAuthorization() {
 		if !abortTask() {
 			logger?.debug("OAuth2", msg: "Aborting authorization")
 			didFail(withError: nil)
@@ -303,7 +303,7 @@ public class OAuth2Base: OAuth2Backing {
 	- parameter fallback: The message string to use in case no error description is found in the parameters
 	- returns: An OAuth2Error
 	*/
-	public func assureNoErrorInResponse(_ params: OAuth2JSON, fallback: String? = nil) throws {
+	open func assureNoErrorInResponse(_ params: OAuth2JSON, fallback: String? = nil) throws {
 		
 		// "error_description" is optional, we prefer it if it's present
 		if let err_msg = params["error_description"] as? String {
@@ -323,11 +323,11 @@ public class OAuth2Base: OAuth2Backing {
 	"error" key, will parse the error and throw it.
 	
 	- parameter data: NSData returned from the call
-	- returns: An OAuth2JSON instance with token data; may contain additional information
+	- returns:        An OAuth2JSON instance with token data; may contain additional information
 	*/
-	public func parseAccessTokenResponseData(_ data: Data) throws -> OAuth2JSON {
+	open func parseAccessTokenResponse(data: Data) throws -> OAuth2JSON {
 		let dict = try parseJSON(data)
-		return try parseAccessTokenResponse(dict)
+		return try parseAccessTokenResponse(params: dict)
 	}
 	
 	/**
@@ -340,7 +340,7 @@ public class OAuth2Base: OAuth2Backing {
 	- parameter params: Dictionary data parsed from the response
 	- returns: An OAuth2JSON instance with token data; may contain additional information
 	*/
-	public final func parseAccessTokenResponse(_ params: OAuth2JSON) throws -> OAuth2JSON {
+	public final func parseAccessTokenResponse(params: OAuth2JSON) throws -> OAuth2JSON {
 		try assureNoErrorInResponse(params)
 		try assureCorrectBearerType(params)
 		try assureAccessTokenParamsAreValid(params)
@@ -356,7 +356,7 @@ public class OAuth2Base: OAuth2Backing {
 	- parameter dict: The dictionary that was returned from an access token response
 	- returns: The dictionary with fixed key names
 	*/
-	public func normalizeAccessTokenResponseKeys(_ dict: OAuth2JSON) -> OAuth2JSON {
+	open func normalizeAccessTokenResponseKeys(_ dict: OAuth2JSON) -> OAuth2JSON {
 		return dict
 	}
 	
@@ -369,7 +369,7 @@ public class OAuth2Base: OAuth2Backing {
 	- parameter data: NSData returned from the call
 	- returns: An OAuth2JSON instance with token data; may contain additional information
 	*/
-	public func parseRefreshTokenResponseData(_ data: Data) throws -> OAuth2JSON {
+	open func parseRefreshTokenResponseData(_ data: Data) throws -> OAuth2JSON {
 		let dict = try parseJSON(data)
 		return try parseRefreshTokenResponse(dict)
 	}
@@ -400,7 +400,7 @@ public class OAuth2Base: OAuth2Backing {
 	- parameter dict: The dictionary that was returned from a refresh token response
 	- returns: The dictionary with fixed key names
 	*/
-	public func normalizeRefreshTokenResponseKeys(_ dict: OAuth2JSON) -> OAuth2JSON {
+	open func normalizeRefreshTokenResponseKeys(_ dict: OAuth2JSON) -> OAuth2JSON {
 		return dict
 	}
 	
@@ -417,7 +417,7 @@ public class OAuth2Base: OAuth2Backing {
 	/**
 	Throws unless "token_type" is "bearer" (case-insensitive).
 	*/
-	public func assureCorrectBearerType(_ params: OAuth2JSON) throws {
+	open func assureCorrectBearerType(_ params: OAuth2JSON) throws {
 		if let tokType = params["token_type"] as? String {
 			if "bearer" == tokType.lowercased() {
 				return
@@ -430,13 +430,13 @@ public class OAuth2Base: OAuth2Backing {
 	/**
 	Called when parsing the access token response. Does nothing by default, implicit grant flows check state.
 	*/
-	public func assureAccessTokenParamsAreValid(_ params: OAuth2JSON) throws {
+	open func assureAccessTokenParamsAreValid(_ params: OAuth2JSON) throws {
 	}
 	
 	/**
 	Called when parsing the refresh token response. Does nothing by default.
 	*/
-	public func assureRefreshTokenParamsAreValid(_ params: OAuth2JSON) throws {
+	open func assureRefreshTokenParamsAreValid(_ params: OAuth2JSON) throws {
 	}
 }
 
@@ -444,10 +444,10 @@ public class OAuth2Base: OAuth2Backing {
 /**
 Class, internally used, to store current authorization context, such as state and redirect-url.
 */
-public class OAuth2ContextStore {
+open class OAuth2ContextStore {
 	
 	/// Currently used redirect_url.
-	public var redirectURL: String?
+	open var redirectURL: String?
 	
 	/// The current state.
 	internal var _state = ""
@@ -457,7 +457,7 @@ public class OAuth2ContextStore {
 	
 	We internally generate a UUID and use the first 8 chars if `_state` is empty.
 	*/
-	public var state: String {
+	open var state: String {
 		if _state.isEmpty {
 			_state = UUID().uuidString
 			_state = _state[_state.startIndex..<_state.index(_state.startIndex, offsetBy: 8)]		// only use the first 8 chars, should be enough

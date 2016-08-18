@@ -31,13 +31,13 @@ This auth flow is designed for clients that are capable of protecting their clie
 exchange and token refresh flows, **if** the client has a secret, a "Basic key:secret" Authorization header will be used. If not the client
 key will be embedded into the request body.
 */
-public class OAuth2CodeGrant: OAuth2 {
+open class OAuth2CodeGrant: OAuth2 {
 	
-	public override class var grantType: String {
+	override open class var grantType: String {
 		return "authorization_code"
 	}
 	
-	override public class var responseType: String? {
+	override open class var responseType: String? {
 		return "code"
 	}
 	
@@ -54,7 +54,7 @@ public class OAuth2CodeGrant: OAuth2 {
 	- parameter params: Optional additional params to add as URL parameters
 	- returns: A request you can use to create a URL request to exchange the code for an access token
 	*/
-	func tokenRequestWithCode(_ code: String, params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
+	open func accessTokenRequest(with code: String, params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
 		guard let clientId = clientConfig.clientId, !clientId.isEmpty else {
 			throw OAuth2Error.noClientId
 		}
@@ -64,7 +64,7 @@ public class OAuth2CodeGrant: OAuth2 {
 		
 		let req = OAuth2AuthRequest(url: (clientConfig.tokenURL ?? clientConfig.authorizeURL))
 		req.params["code"] = code
-		req.params["grant_type"] = self.dynamicType.grantType
+		req.params["grant_type"] = type(of: self).grantType
 		req.params["redirect_uri"] = redirect
 		req.params["client_id"] = clientId
 		
@@ -74,7 +74,7 @@ public class OAuth2CodeGrant: OAuth2 {
 	/**
 	Extracts the code from the redirect URL and exchanges it for a token.
 	*/
-	override public func handleRedirectURL(_ redirect: URL) {
+	override open func handleRedirectURL(_ redirect: URL) {
 		logger?.debug("OAuth2", msg: "Handling redirect URL \(redirect.description)")
 		do {
 			let code = try validateRedirectURL(redirect)
@@ -94,17 +94,17 @@ public class OAuth2CodeGrant: OAuth2 {
 				throw OAuth2Error.prerequisiteFailed("I don't have a code to exchange, let the user authorize first")
 			}
 			
-			let post = try tokenRequestWithCode(code).asURLRequestFor(self)
+			let post = try accessTokenRequest(with: code).asURLRequest(for: self)
 			logger?.debug("OAuth2", msg: "Exchanging code \(code) for access token at \(post.url!)")
 			
-			performRequest(post) { data, status, error in
+			perform(request: post) { data, status, error in
 				do {
 					guard let data = data else {
 						throw error ?? OAuth2Error.noDataInResponse
 					}
 					
-					let params = try self.parseAccessTokenResponseData(data)
-					if status < 400 {
+					let params = try self.parseAccessTokenResponse(data: data)
+					if status! < 400 {
 						self.logger?.debug("OAuth2", msg: "Did exchange code for access [\(nil != self.clientConfig.accessToken)] and refresh [\(nil != self.clientConfig.refreshToken)] tokens")
 						self.didAuthorize(withParameters: params)
 					}
@@ -128,7 +128,7 @@ public class OAuth2CodeGrant: OAuth2 {
 	/**
 	Validates the redirect URI: returns a tuple with the code and nil on success, nil and an error on failure.
 	*/
-	func validateRedirectURL(_ redirect: URL) throws -> String {
+	open func validateRedirectURL(_ redirect: URL) throws -> String {
 		guard let expectRedirect = context.redirectURL else {
 			throw OAuth2Error.noRedirectURL
 		}
@@ -138,11 +138,11 @@ public class OAuth2CodeGrant: OAuth2 {
 		}
 		if let compQuery = comp?.query, compQuery.characters.count > 0 {
 			let query = OAuth2CodeGrant.params(fromQuery: comp!.percentEncodedQuery!)
-			try assureNoErrorInResponse(query)
+			try assureNoErrorInResponse(query as OAuth2JSON)
 			if let cd = query["code"] {
 				
 				// we got a code, use it if state is correct (and reset state)
-				try assureMatchesState(query)
+				try assureMatchesState(query as OAuth2JSON)
 				return cd
 			}
 			throw OAuth2Error.responseError("No “code” received")

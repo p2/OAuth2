@@ -46,7 +46,7 @@ class OAuth2DynReg_Tests: XCTestCase {
 		dynreg.extraHeaders = ["Foo": "Bar & Hat"]
 		
 		do {
-			let req = try dynreg.registrationRequest(oauth)
+			let req = try dynreg.registrationRequest(for: oauth)
 			XCTAssertEqual("register.ful.io", req.url?.host)
 			XCTAssertEqual("POST", req.httpMethod)
 			let dict = try oauth.parseJSON(req.httpBody!)
@@ -105,8 +105,8 @@ class OAuth2DynReg_Tests: XCTestCase {
 
 
 class OAuth2TestDynReg: OAuth2DynReg {
-	override func registerClient(_ client: OAuth2, callback: ((json: OAuth2JSON?, error: Error?) -> Void)) {
-		callback(json: nil, error: OAuth2Error.temporarilyUnavailable)
+	override func register(client: OAuth2, callback: ((OAuth2JSON?, Error?) -> Void)) {
+		callback(nil, OAuth2Error.temporarilyUnavailable)
 	}
 }
 

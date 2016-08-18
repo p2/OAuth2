@@ -72,7 +72,7 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 	
 	/// Closure called when the web view gets asked to load the redirect URL, specified in `interceptURLString`. Return a Bool indicating
 	/// that you've intercepted the URL.
-	var onIntercept: ((url: URL) -> Bool)?
+	var onIntercept: ((URL) -> Bool)?
 	
 	/// Called when the web view is about to be dismissed manually.
 	var onWillCancel: ((Void) -> Void)?
@@ -151,7 +151,7 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 		}
 	}
 	
-	public override func viewDidAppear() {
+	override public func viewDidAppear() {
 		super.viewDidAppear()
 		
 		view.window?.delegate = self
@@ -201,10 +201,11 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 	
 	// MARK: - Web View Delegate
 	
+	@nonobjc
 	public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: (WKNavigationActionPolicy) -> Void) {
 		let request = navigationAction.request
 		
-		if nil == onIntercept {
+		guard let onIntercept = onIntercept else {
 			decisionHandler(.allow)
 			return
 		}
@@ -214,7 +215,7 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 		if let url = request.url, url.scheme == interceptComponents?.scheme && url.host == interceptComponents?.host {
 			let haveComponents = URLComponents(url: url, resolvingAgainstBaseURL: true)
 			if let hp = haveComponents?.path, let ip = interceptComponents?.path, hp == ip || ("/" == hp + ip) {
-				if onIntercept!(url: url) {
+				if onIntercept(url) {
 					decisionHandler(.cancel)
 				}
 				else {
@@ -233,7 +234,7 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 					oauth?.logger?.debug("OAuth2", msg: "Creating redirect URL from document.title")
 					let qry = title.replacingOccurrences(of: "Success ", with: "")
 					if let url = URL(string: "http://localhost/?\(qry)") {
-						_ = onIntercept?(url: url)
+						_ = onIntercept?(url)
 						return
 					}
 					
@@ -258,6 +259,7 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 	
 	// MARK: - Window Delegate
 	
+	@nonobjc
 	public func windowShouldClose(_ sender: AnyObject) -> Bool {
 		onWillCancel?()
 		return false

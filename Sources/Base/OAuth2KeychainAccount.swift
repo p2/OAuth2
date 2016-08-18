@@ -36,13 +36,13 @@ struct OAuth2KeychainAccount: KeychainGenericPasswordType {
 	let accountName: String
 	
 	/// Data that ends up in the keychain.
-	var data = [String: AnyObject]()
+	var data = [String: Any]()
 	
 	/// Keychain access mode.
 	let accessMode: String
 	
 	
-	init(oauth2: OAuth2Backing, account: String, data inData: [String: AnyObject] = [:]) {
+	init(oauth2: OAuth2Backing, account: String, data inData: [String: Any] = [:]) {
 		serviceName = oauth2.keychainServiceName()
 		accountName = account
 		accessMode = String(oauth2.keychainAccessMode)
@@ -53,19 +53,19 @@ struct OAuth2KeychainAccount: KeychainGenericPasswordType {
 
 extension KeychainGenericPasswordType {
 	
-	var dataToStore: [String: AnyObject] {
+	var dataToStore: [String: Any] {
 		return data
 	}
 	
 	/**
 	Attempts to read data from the keychain, will ignore `errSecItemNotFound` but throw others.
 	
-	- returns: A [String: NSCoding] dictionary of data fetched from the keychain
+	- returns: A [String: Any] dictionary of data fetched from the keychain
 	*/
-	mutating func fetchedFromKeychain() throws -> [String: NSCoding] {
+	mutating func fetchedFromKeychain() throws -> [String: Any] {
 		do {
 			try _ = fetchFromKeychain()
-			if let creds_data = data as? [String: NSCoding] {
+			if let creds_data = data as? [String: Any] {
 				return creds_data
 			}
 			throw OAuth2Error.generic("Keychain data for \(serviceName) > \(accountName) is in wrong format. Got: “\(data)”")

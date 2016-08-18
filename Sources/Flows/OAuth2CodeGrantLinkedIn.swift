@@ -32,14 +32,14 @@ LinkedIn-specific subclass to deal with LinkedIn peculiarities:
 */
 public class OAuth2CodeGrantLinkedIn: OAuth2CodeGrant {
     
-	public override init(settings: OAuth2JSON) {
+	override public init(settings: OAuth2JSON) {
 		super.init(settings: settings)
 		authConfig.secretInBody = true
 		authConfig.authorizeEmbedded = true     // necessary because only http(s) redirects are allowed
 		authConfig.ui.useSafariView = false     // must use custom web view in order to be able to intercept http(s) redirects
 	}
 	
-	public override func assureCorrectBearerType(_ params: OAuth2JSON) throws {
+	override open func assureCorrectBearerType(_ params: OAuth2JSON) throws {
 	}
 }
 

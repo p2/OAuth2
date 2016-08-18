@@ -107,7 +107,7 @@ class OAuth2AuthRequest_Tests: XCTestCase {
 		let oauth = OAuth2(settings: settings)
 		let reqH = OAuth2AuthRequest(url: URL(string: "https://auth.io")!)
 		do {
-			let request = try reqH.asURLRequestFor(oauth)
+			let request = try reqH.asURLRequest(for: oauth)
 			XCTAssertEqual("Basic aWQ6c2VjcmV0", request.value(forHTTPHeaderField: "Authorization"))
 			XCTAssertNil(request.httpBody)		// because no params are left
 		}
@@ -118,7 +118,7 @@ class OAuth2AuthRequest_Tests: XCTestCase {
 		oauth.authConfig.secretInBody = true
 		let reqB = OAuth2AuthRequest(url: URL(string: "https://auth.io")!)
 		do {
-			let request = try reqB.asURLRequestFor(oauth)
+			let request = try reqB.asURLRequest(for: oauth)
 			let response = String(data: request.httpBody!, encoding: String.Encoding.utf8) ?? ""
 			XCTAssertTrue(response.contains("client_id=id"))
 			XCTAssertTrue(response.contains("client_secret=secret"))

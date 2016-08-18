@@ -34,7 +34,7 @@ extension HTTPURLResponse {
 
 extension String {
 	
-	private static var wwwFormURLPlusSpaceCharacterSet: CharacterSet = CharacterSet.wwwFormURLPlusSpaceCharacterSet
+	fileprivate static var wwwFormURLPlusSpaceCharacterSet: CharacterSet = CharacterSet.wwwFormURLPlusSpaceCharacterSet
 	
 	/// Encodes a string to become x-www-form-urlencoded; the space is encoded as plus sign (+).
 	var wwwFormURLEncodedString: String {
@@ -104,7 +104,7 @@ extension URLRequest {
 extension HTTPURLResponse {
 	
 	/** Format HTTP status and response headers as is customary. */
-	override public var debugDescription: String {
+	override open var debugDescription: String {
 		var msg = "HTTP/1.1 \(statusCode) \(statusString)"
 		allHeaderFields.forEach() { msg += "\n\($0): \($1)" }
 		return msg
