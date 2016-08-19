@@ -46,6 +46,16 @@ class OAuth2AuthRequest_Tests: XCTestCase {
 		XCTAssertEqual("application/json", req.contentType.rawValue)
 	}
 	
+	func testHeaders() {
+		let url = URL(string: "http://localhost")!
+		let req = OAuth2AuthRequest(url: url)
+		XCTAssertTrue(0 == req.params.count)
+		XCTAssertNil(req.headers)
+		
+		req.setHeader("Authorize", to: "Basic abc==")
+		XCTAssertEqual(1, req.headers?.count)
+	}
+	
 	func testParams() {
 		let url = URL(string: "http://localhost")!
 		let req = OAuth2AuthRequest(url: url)
@@ -115,6 +125,20 @@ class OAuth2AuthRequest_Tests: XCTestCase {
 			XCTAssertTrue(false, "Must not throw but threw \(error)")
 		}
 		
+		// test header override
+		reqH.setHeader("Authorization", to: "Basic def==")
+		reqH.setHeader("Accept", to: "text/plain, */*")
+		do {
+			let request = try reqH.asURLRequest(for: oauth)
+			XCTAssertEqual("Basic def==", request.value(forHTTPHeaderField: "Authorization"))
+			XCTAssertEqual("text/plain, */*", request.value(forHTTPHeaderField: "Accept"))
+			XCTAssertNil(request.httpBody)		// because no params are left
+		}
+		catch let error {
+			XCTAssertTrue(false, "Must not throw but threw \(error)")
+		}
+		
+		// test no Auth header
 		oauth.authConfig.secretInBody = true
 		let reqB = OAuth2AuthRequest(url: URL(string: "https://auth.io")!)
 		do {

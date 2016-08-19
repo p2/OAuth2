@@ -67,10 +67,10 @@ open class OAuth2AuthRequest {
 	/// The content type that will be specified. Defaults to `wwwForm`.
 	open var contentType = OAuth2HTTPContentType.wwwForm
 	
-	/// If set will take preference over any "Authorize" header that would otherwise be set.
-	open var headerAuthorize: String?
+	/// Custom headers can be set here, they will take precedence over any built-in headers.
+	open private(set) var headers: [String: String]?
 	
-	open var params = OAuth2AuthRequestParams()
+	open var params = OAuth2RequestParams()
 	
 	
 	/**
@@ -79,6 +79,24 @@ open class OAuth2AuthRequest {
 	public init(url: URL, method: OAuth2HTTPMethod = .POST) {
 		self.url = url
 		self.method = method
+	}
+	
+	
+	// MARK: - Headers
+	
+	/**
+	Set the given custom header.
+	
+	- parameter header: The header's name
+	- parameter value:  The value to use
+	*/
+	public func setHeader(_ header: String, to value: String) {
+		if nil == headers {
+			headers = [header: value]
+		}
+		else {
+			headers![header] = value
+		}
 	}
 	
 	
@@ -137,7 +155,6 @@ open class OAuth2AuthRequest {
 	*/
 	open func asURLRequest(for oauth2: OAuth2Base) throws -> URLRequest {
 		var finalParams = params
-		var finalAuthHeader = headerAuthorize
 		
 		// base request
 		let finalURL = try asURL()
@@ -157,11 +174,11 @@ open class OAuth2AuthRequest {
 			}
 			
 			// add Authorization header (if not in body)
-			else if nil == finalAuthHeader {
+			else {
 				oauth2.logger?.debug("OAuth2", msg: "Adding “Authorization” header as “Basic client-key:client-secret”")
 				let pw = "\(clientId.wwwFormURLEncodedString):\(secret.wwwFormURLEncodedString)"
 				if let utf8 = pw.data(using: String.Encoding.utf8) {
-					finalAuthHeader = "Basic \(utf8.base64EncodedString())"
+					req.setValue("Basic \(utf8.base64EncodedString())", forHTTPHeaderField: "Authorization")
 				}
 				else {
 					throw OAuth2Error.utf8EncodeError
@@ -171,9 +188,12 @@ open class OAuth2AuthRequest {
 			}
 		}
 		
-		// add custom Authorize header
-		if let authHeader = finalAuthHeader {
-			req.setValue(authHeader, forHTTPHeaderField: "Authorization")
+		// add custom headers
+		if let headers = headers {
+			for (key, val) in headers {
+				oauth2.logger?.trace("OAuth2", msg: "Adding custom “\(key)” header")
+				req.setValue(val, forHTTPHeaderField: key)
+			}
 		}
 		
 		// add a body to POST requests
@@ -189,10 +209,10 @@ open class OAuth2AuthRequest {
 Struct to hold on to request parameters. Provides utility functions so the parameters can be correctly encoded for use in URLs and request
 bodies.
 */
-public struct OAuth2AuthRequestParams {
+public struct OAuth2RequestParams {
 	
 	/// The parameters to be used.
-	fileprivate var params: OAuth2StringDict? = nil
+	public private(set) var params: OAuth2StringDict? = nil
 	
 	public init() {  }
 	

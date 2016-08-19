@@ -158,7 +158,7 @@ class OAuth2Tests: XCTestCase {
 	}
 	
 	func testQueryParamConversion() {
-		let qry = OAuth2AuthRequestParams.formEncodedQueryStringFor(["a": "AA", "b": "BB", "x": "yz"])
+		let qry = OAuth2RequestParams.formEncodedQueryStringFor(["a": "AA", "b": "BB", "x": "yz"])
 		XCTAssertEqual(14, qry.characters.count, "Expecting a 14 character string")
 		
 		let dict = OAuth2.params(fromQuery: qry)
@@ -168,7 +168,7 @@ class OAuth2Tests: XCTestCase {
 	}
 	
 	func testQueryParamEncoding() {
-		let qry = OAuth2AuthRequestParams.formEncodedQueryStringFor(["uri": "https://api.io", "str": "a string: cool!", "num": "3.14159"])
+		let qry = OAuth2RequestParams.formEncodedQueryStringFor(["uri": "https://api.io", "str": "a string: cool!", "num": "3.14159"])
 		XCTAssertEqual(60, qry.characters.count, "Expecting a 60 character string")
 		
 		let dict = OAuth2.params(fromQuery: qry)
