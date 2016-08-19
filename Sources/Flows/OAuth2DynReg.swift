@@ -55,15 +55,12 @@ open class OAuth2DynReg {
 		do {
 			let req = try registrationRequest(for: client)
 			client.logger?.debug("OAuth2", msg: "Registering client at \(req.url!) with scopes “\(client.scope ?? "(none)")”")
-			client.perform(request: req) { data, status, error in
+			client.perform(request: req) { dataStatusResponse in
 				do {
-					guard let data = data else {
-						throw error ?? OAuth2Error.noDataInResponse
-					}
-					
+					let (data, status) = try dataStatusResponse()
 					let dict = try self.parseRegistrationResponse(data: data, client: client)
 					try client.assureNoErrorInResponse(dict)
-					if let status = status, status >= 400 {
+					if status >= 400 {
 						client.logger?.warn("OAuth2", msg: "Registration failed with \(status)")
 					}
 					else {

@@ -99,20 +99,15 @@ open class OAuth2CodeGrant: OAuth2 {
 			let post = try accessTokenRequest(with: code).asURLRequest(for: self)
 			logger?.debug("OAuth2", msg: "Exchanging code \(code) for access token at \(post.url!)")
 			
-			perform(request: post) { data, status, error in
+			perform(request: post) { dataStatusResponse in
 				do {
-					guard let data = data else {
-						throw error ?? OAuth2Error.noDataInResponse
-					}
-					
+					let (data, status) = try dataStatusResponse()
 					let params = try self.parseAccessTokenResponse(data: data)
-					if status! < 400 {
-						self.logger?.debug("OAuth2", msg: "Did exchange code for access [\(nil != self.clientConfig.accessToken)] and refresh [\(nil != self.clientConfig.refreshToken)] tokens")
-						self.didAuthorize(withParameters: params)
+					if status >= 400 {
+						throw OAuth2Error.generic("Failed with status \(status)")
 					}
-					else {
-						throw OAuth2Error.generic("\(status)")
-					}
+					self.logger?.debug("OAuth2", msg: "Did exchange code for access [\(nil != self.clientConfig.accessToken)] and refresh [\(nil != self.clientConfig.refreshToken)] tokens")
+					self.didAuthorize(withParameters: params)
 				}
 				catch let error {
 					self.didFail(withError: error)

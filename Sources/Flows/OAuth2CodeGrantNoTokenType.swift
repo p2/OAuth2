@@ -28,10 +28,6 @@ Subclass to deal with sites that don't return `token_type`, such as Instagram or
 */
 public class OAuth2CodeGrantNoTokenType: OAuth2CodeGrant {
 	
-	override public init(settings: OAuth2JSON) {
-		super.init(settings: settings)
-	}
-	
 	override open func assureCorrectBearerType(_ params: OAuth2JSON) throws {
 	}
 }

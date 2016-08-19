@@ -354,19 +354,15 @@ open class OAuth2: OAuth2Base {
 			let post = try tokenRequestForTokenRefresh(params: params).asURLRequest(for: self)
 			logger?.debug("OAuth2", msg: "Using refresh token to receive access token from \(post.url?.description ?? "nil")")
 			
-			perform(request: post) { data, status, error in
+			perform(request: post) { dataStatusResponse in
 				do {
-					guard let data = data else {
-						throw error ?? OAuth2Error.noDataInResponse
-					}
+					let (data, status) = try dataStatusResponse()
 					let json = try self.parseRefreshTokenResponseData(data)
-					if status! < 400 {
-						self.logger?.debug("OAuth2", msg: "Did use refresh token for access token [\(nil != self.clientConfig.accessToken)]")
-						callback(json, nil)
+					if status >= 400 {
+						throw OAuth2Error.generic("Failed with status \(status)")
 					}
-					else {
-						throw OAuth2Error.generic("\(status)")
-					}
+					self.logger?.debug("OAuth2", msg: "Did use refresh token for access token [\(nil != self.clientConfig.accessToken)]")
+					callback(json, nil)
 				}
 				catch let error {
 					self.logger?.debug("OAuth2", msg: "Error parsing refreshed access token: \(error)")

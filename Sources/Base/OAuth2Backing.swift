@@ -111,7 +111,7 @@ open class OAuth2Backing {
 	}
 	
 	/** Queries the keychain for tokens stored for the receiver's authorize URL, and updates the token properties accordingly. */
-	fileprivate func updateFromKeychain() {
+	private func updateFromKeychain() {
 		logger?.debug("OAuth2", msg: "Looking for items in keychain")
 		
 		do {
@@ -222,7 +222,7 @@ open class OAuth2Backing {
 	}
 	
 	/// The backing store for `session`.
-	fileprivate var _session: URLSession?
+	private var _session: URLSession?
 	
 	/// The configuration to use when creating `session`. Uses an `+ephemeralSessionConfiguration()` if nil.
 	open var sessionConfiguration: URLSessionConfiguration? {
@@ -245,39 +245,69 @@ open class OAuth2Backing {
 	This implementation uses the shared `NSURLSession` and executes a data task. If the server responds with an error, this will be
 	converted into an error according to information supplied in the response JSON (if availale).
 	
-	- parameter request: The request to execute
-	- parameter callback: The callback to call when the request completes/fails; data and error are mutually exclusive
+	The callback looks terrifying but is actually easy to use, like so:
+	
+	    perform(request: req) { dataStatusResponse in
+	        do {
+	            let (data, status) = try dataStatusResponse()
+	            // do what you must with `data` as Data and `status` as Int
+	        }
+	        catch let error {
+	            // the request failed because of `error`
+	        }
+	    }
+	
+	Easy, right?
+	
+	- parameter request:  The request to execute
+	- parameter callback: The callback to call when the request completes/fails. Looks terrifying, see above on how to use it
 	*/
-	open func perform(request: URLRequest, callback: ((_ data: Data?, _ status: Int?, _ error: Error?) -> Void)) {
+	open func perform(request: URLRequest, callback: @escaping ((Void) throws -> (Data, Int)) -> Void) {
 		self.logger?.trace("OAuth2", msg: "REQUEST\n\(request.debugDescription)\n---")
 		let task = session.dataTask(with: request) { sessData, sessResponse, error in
 			self.abortableTask = nil
 			self.logger?.trace("OAuth2", msg: "RESPONSE\n\(sessResponse?.debugDescription ?? "no response")\n\n\(String(data: sessData ?? Data(), encoding: String.Encoding.utf8) ?? "no data")\n---")
-			if let error = error {
-				if NSURLErrorDomain == error._domain && -999 == error._code {		// request was cancelled
-					callback(nil, nil, OAuth2Error.requestCancelled)
-				}
-				else {
-					callback(nil, nil, error)
-				}
+			do {
+				let (data, status) = try self.requestDidReturn(with: sessData, response: sessResponse, error: error)
+				callback({ return (data, status) })
 			}
-			else if let data = sessData, let http = sessResponse as? HTTPURLResponse {
-				callback(data, http.statusCode, nil)
-			}
-			else {
-				let error = OAuth2Error.generic("Unknown response \(sessResponse) with data “\(String(data: sessData!, encoding: String.Encoding.utf8))”")
-				callback(nil, nil, error)
+			catch let error {
+				callback({ throw error })
 			}
 		}
 		abortableTask = task
 		task.resume()
 	}
 	
+	/**
+	Can be fed the output of `NSURLSession.dataTask(with:completionHandler:)` and either throws or returns data and the HTTP status code.
+	
+	- parameter data:     A hopefully non-nil Data instance
+	- parameter response: The URLResponse, hopefully as HTTPURLResponse
+	- parameter error:    An error that might have been returned
+	- returns:            A tuple containing non-optional data and the HTTP status code
+	*/
+	func requestDidReturn(with data: Data?, response: URLResponse?, error: Error?) throws -> (Data, Int) {
+		if let error = error {
+			if NSURLErrorDomain == error._domain && -999 == error._code {		// request was cancelled
+				throw OAuth2Error.requestCancelled
+			}
+			throw error
+		}
+		else if let data = data, let http = response as? HTTPURLResponse {
+			return (data, http.statusCode)
+		}
+		if nil == data {
+			throw OAuth2Error.noDataInResponse
+		}
+		throw OAuth2Error.generic("Unknown response \(response) with data “\(String(data: data!, encoding: String.Encoding.utf8))”")
+	}
+	
 	/// Currently running abortable session task.
-	fileprivate var abortableTask: URLSessionTask?
+	private var abortableTask: URLSessionTask?
 	
 	/**
-	Can be called to immediately abort the currently running authorization request, if it was started by `perform(request: )`.
+	Can be called to immediately abort the currently running authorization request, if it was started by `perform(request:callback:)`.
 	
 	- returns: A bool indicating whether a task was aborted or not
 	*/

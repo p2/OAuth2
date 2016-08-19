@@ -97,20 +97,18 @@ open class OAuth2PasswordGrant: OAuth2 {
 			let post = try accessTokenRequest(params: params).asURLRequest(for: self)
 			logger?.debug("OAuth2", msg: "Requesting new access token from \(post.url?.description ?? "nil")")
 			
-			perform(request: post) { data, status, error in
+			perform(request: post) { dataStatusResponse in
 				do {
-					guard let data = data else {
-						throw error ?? OAuth2Error.noDataInResponse
-					}
-					
+					let (data, status) = try dataStatusResponse()
 					let dict = try self.parseAccessTokenResponse(data: data)
-					if let status = status, status < 400 {
-						self.logger?.debug("OAuth2", msg: "Did get access token [\(nil != self.clientConfig.accessToken)]")
-						callback(dict, nil)
+					if status >= 400 {
+						if 401 == status || 403 == status {           // TODO: which one is it?
+							throw OAuth2Error.wrongUsernamePassword
+						}
+						throw OAuth2Error.generic("Failed with status \(status)")
 					}
-					else {
-						callback(dict, OAuth2Error.responseError("The username or password is incorrect"))
-					}
+					self.logger?.debug("OAuth2", msg: "Did get access token [\(nil != self.clientConfig.accessToken)]")
+					callback(dict, nil)
 				}
 				catch let error {
 					self.logger?.debug("OAuth2", msg: "Error parsing response: \(error)")

@@ -271,7 +271,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 			"authorize_uri": "https://auth.ful.io",
 			"keychain": false,
 		] as [String: Any]
-		let oauth = OAuth2CodeGrant(settings: settings)
+		let oauth = OAuth2CodeGrantLocal(settings: settings)
 		var response = [
 			"access_token": "2YotnFZFEjr1zCsicMWpAA",
 			"expires_in": 3600,
@@ -359,6 +359,47 @@ class OAuth2CodeGrantTests: XCTestCase {
 		}
 		catch {
 			XCTAssertTrue(false, "Should not throw wrong error")
+		}
+		
+		// test round trip - should fail because of 403
+		oauth.responseJSON = response
+		oauth.context.redirectURL = "https://localhost"
+		oauth.responseStatus = 403
+		oauth.didAuthorizeOrFail = { json, error in
+			XCTAssertNil(json)
+			XCTAssertNotNil(error)
+			XCTAssertEqual(OAuth2Error.generic("Failed with status 403"), error as? OAuth2Error)
+		}
+		oauth.exchangeCodeForToken("MNOP")
+		
+		// test round trip - should succeed because of good HTTP status
+		oauth.responseStatus = 301
+		oauth.didAuthorizeOrFail = { json, error in
+			XCTAssertNotNil(json)
+			XCTAssertNil(error)
+			XCTAssertEqual("tGzv3JOkF0XG5Qx2TlKWIA", json?["refresh_token"] as? String)
+		}
+		oauth.exchangeCodeForToken("MNOP")
+	}
+}
+
+
+class OAuth2CodeGrantLocal: OAuth2CodeGrant {
+	
+	var responseJSON: OAuth2JSON?
+	
+	var responseStatus = 200
+	
+	override func perform(request: URLRequest, callback: @escaping ((Void) throws -> (Data, Int)) -> Void) {
+		do {
+			guard let json = responseJSON else {
+				throw OAuth2Error.noDataInResponse
+			}
+			let data = try JSONSerialization.data(withJSONObject: json, options: [])
+			callback({ return (data, responseStatus) })
+		}
+		catch let error {
+			callback({ throw error })
 		}
 	}
 }

@@ -121,7 +121,6 @@ class OAuth2ImplicitGrantTests: XCTestCase
 		oauth.afterAuthorizeOrFail = { authParameters, error in
 			XCTAssertNotNil(authParameters, "Expecting non-nil auth dict")
 			XCTAssertTrue((authParameters?.count ?? 0) > 2, "Expecting non-empty auth dict")
-			print("---->  \(authParameters)")
 			XCTAssertNil(error, "No error message expected")
 		}
 		oauth.handleRedirectURL(URL(string: "https://auth.ful.io#token_type=bearer&access_token=abc&state=\(oauth.context.state)&expires_in=3599")!)
