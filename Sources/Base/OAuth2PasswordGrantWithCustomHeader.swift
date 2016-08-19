@@ -10,7 +10,7 @@ import Foundation
 
 public class OAuth2PasswordGrantWithCustomHeader: OAuth2PasswordGrant {
     
-    ///Stores header parameters
+    ///Stores header parameters. Key value in settings `header_params`
     public var headerParams: OAuth2StringDict
     
     public override init(settings: OAuth2JSON) {
