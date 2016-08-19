@@ -60,13 +60,41 @@ open class OAuth2PasswordGrant: OAuth2 {
 	}
 	
 	/**
+	Creates a POST request with x-www-form-urlencoded body created from the supplied URL's query part.
+	*/
+	open func accessTokenRequest(params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
+		if username.isEmpty{
+			throw OAuth2Error.noUsername
+		}
+		if password.isEmpty{
+			throw OAuth2Error.noPassword
+		}
+		
+		let req = OAuth2AuthRequest(url: (clientConfig.tokenURL ?? clientConfig.authorizeURL))
+		req.params["grant_type"] = type(of: self).grantType
+		req.params["username"] = username
+		req.params["password"] = password
+		if let clientId = clientConfig.clientId {
+			req.params["client_id"] = clientId
+		}
+		if let scope = clientConfig.scope {
+			req.params["scope"] = scope
+		}
+		req.addParams(params: params)
+		
+		return req
+	}
+	
+	/**
 	Create a token request and execute it to receive an access token.
+	
+	Uses `accessTokenRequest(params:)` to create the request, which you can subclass to change implementation specifics.
 	
 	- parameter callback: The callback to call after the request has returned
 	*/
-	func obtainAccessToken(params: OAuth2StringDict? = nil, callback: ((_ params: OAuth2JSON?, _ error: Error?) -> Void)) {
+	public func obtainAccessToken(params: OAuth2StringDict? = nil, callback: ((_ params: OAuth2JSON?, _ error: Error?) -> Void)) {
 		do {
-			let post = try tokenRequest(params: params).asURLRequest(for: self)
+			let post = try accessTokenRequest(params: params).asURLRequest(for: self)
 			logger?.debug("OAuth2", msg: "Requesting new access token from \(post.url?.description ?? "nil")")
 			
 			perform(request: post) { data, status, error in
@@ -93,32 +121,6 @@ open class OAuth2PasswordGrant: OAuth2 {
 		catch let err {
 			callback(nil, err)
 		}
-	}
-	
-	/**
-	Creates a POST request with x-www-form-urlencoded body created from the supplied URL's query part.
-	*/
-	open func tokenRequest(params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
-		if username.isEmpty{
-			throw OAuth2Error.noUsername
-		}
-		if password.isEmpty{
-			throw OAuth2Error.noPassword
-		}
-		
-		let req = OAuth2AuthRequest(url: (clientConfig.tokenURL ?? clientConfig.authorizeURL))
-		req.params["grant_type"] = type(of: self).grantType
-		req.params["username"] = username
-		req.params["password"] = password
-		if let clientId = clientConfig.clientId {
-			req.params["client_id"] = clientId
-		}
-		if let scope = clientConfig.scope {
-			req.params["scope"] = scope
-		}
-		req.addParams(params: params)
-		
-		return req
 	}
 }
 

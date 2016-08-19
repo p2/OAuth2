@@ -56,7 +56,7 @@ class OAuth2ClientCredentialsTests: XCTestCase {
 	
 	func testTokenRequest() {
 		let oauth = genericOAuth2()
-		let request = try! oauth.tokenRequest().asURLRequest(for: oauth)
+		let request = try! oauth.accessTokenRequest().asURLRequest(for: oauth)
 		XCTAssertEqual("POST", request.httpMethod, "Must be a POST request")
 		
 		let authHeader = request.allHTTPHeaderFields?["Authorization"]
@@ -77,7 +77,7 @@ class OAuth2ClientCredentialsTests: XCTestCase {
 		])
 		
 		do {
-			_ = try oauth.tokenRequest()
+			_ = try oauth.accessTokenRequest()
 			XCTAssertFalse(true, "`tokenRequest()` without client secret must throw .NoClientSecret")
 		}
 		catch OAuth2Error.noClientSecret {
@@ -89,7 +89,7 @@ class OAuth2ClientCredentialsTests: XCTestCase {
     
 	func testTokenRequestNoScope() {
 		let oauth = genericOAuth2NoScope()
-		let request = try! oauth.tokenRequest().asURLRequest(for: oauth)
+		let request = try! oauth.accessTokenRequest().asURLRequest(for: oauth)
 		XCTAssertEqual("POST", request.httpMethod, "Must be a POST request")
 		
 		let body = String(data: request.httpBody!, encoding: String.Encoding.utf8)
@@ -106,7 +106,7 @@ class OAuth2ClientCredentialsTests: XCTestCase {
 			])
 		
 		do {
-			_ = try oauth.tokenRequest()
+			_ = try oauth.accessTokenRequest()
 			XCTAssertFalse(true, "`tokenRequest()` without device_id must throw .Generic")
 		}
 		catch OAuth2Error.generic(let message) {
@@ -118,7 +118,7 @@ class OAuth2ClientCredentialsTests: XCTestCase {
 		
 		oauth.deviceId = "def"
 		do {
-			let req = try oauth.tokenRequest().asURLRequest(for: oauth)
+			let req = try oauth.accessTokenRequest().asURLRequest(for: oauth)
 			XCTAssertEqual("Basic YWJjOg==", req.value(forHTTPHeaderField: "Authorization"))
 		}
 		catch let err {
@@ -135,7 +135,7 @@ class OAuth2ClientCredentialsTests: XCTestCase {
 			])
 		
 		do {
-			_ = try oauth.tokenRequest()
+			_ = try oauth.accessTokenRequest()
 		}
 		catch let err {
 			XCTAssertFalse(true, "`tokenRequest()` should not have thrown but threw \(err)")

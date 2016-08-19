@@ -45,13 +45,36 @@ open class OAuth2ClientCredentials: OAuth2 {
 	}
 	
 	/**
+	Creates a POST request with x-www-form-urlencoded body created from the supplied URL's query part.
+	*/
+	open func accessTokenRequest(params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
+		guard let clientId = clientConfig.clientId, !clientId.isEmpty else {
+			throw OAuth2Error.noClientId
+		}
+		guard nil != clientConfig.clientSecret else {
+			throw OAuth2Error.noClientSecret
+		}
+		
+		let req = OAuth2AuthRequest(url: (clientConfig.tokenURL ?? clientConfig.authorizeURL))
+		req.params["grant_type"] = type(of: self).grantType
+		if let scope = clientConfig.scope {
+			req.params["scope"] = scope
+		}
+		req.addParams(params: params)
+		
+		return req
+	}
+	
+	/**
 	Use the client credentials to retrieve a fresh access token.
+	
+	Uses `accessTokenRequest(params:)` to create the request, which you can subclass to change implementation specifics.
 	
 	- parameter callback: The callback to call after the process has finished
 	*/
-	func obtainAccessToken(params: OAuth2StringDict? = nil, callback: ((_ params: OAuth2JSON?, _ error: Error?) -> Void)) {
+	public func obtainAccessToken(params: OAuth2StringDict? = nil, callback: ((_ params: OAuth2JSON?, _ error: Error?) -> Void)) {
 		do {
-			let post = try tokenRequest(params: params).asURLRequest(for: self)
+			let post = try accessTokenRequest(params: params).asURLRequest(for: self)
 			logger?.debug("OAuth2", msg: "Requesting new access token from \(post.url?.description ?? "nil")")
 			
 			perform(request: post) { data, status, error in
@@ -72,27 +95,6 @@ open class OAuth2ClientCredentials: OAuth2 {
 		catch let error {
 			callback(nil, error)
 		}
-	}
-	
-	/**
-	Creates a POST request with x-www-form-urlencoded body created from the supplied URL's query part.
-	*/
-	open func tokenRequest(params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
-		guard let clientId = clientConfig.clientId, !clientId.isEmpty else {
-			throw OAuth2Error.noClientId
-		}
-		guard nil != clientConfig.clientSecret else {
-			throw OAuth2Error.noClientSecret
-		}
-		
-		let req = OAuth2AuthRequest(url: (clientConfig.tokenURL ?? clientConfig.authorizeURL))
-		req.params["grant_type"] = type(of: self).grantType
-		if let scope = clientConfig.scope {
-			req.params["scope"] = scope
-		}
-		req.addParams(params: params)
-		
-		return req
 	}
 }
 

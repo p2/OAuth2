@@ -87,6 +87,8 @@ open class OAuth2CodeGrant: OAuth2 {
 	
 	/**
 	Takes the received code and exchanges it for a token.
+	
+	Uses `accessTokenRequest(params:)` to create the request, which you can subclass to change implementation specifics.
 	*/
 	public func exchangeCodeForToken(_ code: String) {
 		do {

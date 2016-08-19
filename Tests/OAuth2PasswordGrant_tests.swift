@@ -49,7 +49,7 @@ class OAuth2PasswordGrantTests: XCTestCase
 	
 	func testTokenRequest() {
 		let oauth = genericOAuth2Password()
-		let request = try! oauth.tokenRequest().asURLRequest(for: oauth)
+		let request = try! oauth.accessTokenRequest().asURLRequest(for: oauth)
 		XCTAssertEqual("POST", request.httpMethod, "Must be a POST request")
 		
 		let authHeader = request.allHTTPHeaderFields?["Authorization"]
@@ -93,7 +93,7 @@ class OAuth2PasswordGrantTests: XCTestCase
 			"password":"Here is my password",
 			"verbose": true
 		])
-		let request = try! oauth.tokenRequest(params: ["foo": "bar & hat"]).asURLRequest(for: oauth)
+		let request = try! oauth.accessTokenRequest(params: ["foo": "bar & hat"]).asURLRequest(for: oauth)
 		
 		let body = String(data: request.httpBody!, encoding: String.Encoding.utf8)
 		XCTAssertNotNil(body, "Body data must be present")
