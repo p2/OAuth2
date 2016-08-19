@@ -10,10 +10,11 @@ import Foundation
 
 public class OAuth2PasswordGrantWithCustomHeader: OAuth2PasswordGrant {
     
+    ///Stores header parameters
     public var headerParams: OAuth2StringDict
     
-    public init(settings: OAuth2JSON, withHeaderField header: OAuth2StringDict = ["":""]) {
-        headerParams = header
+    public override init(settings: OAuth2JSON) {
+        headerParams = settings["header_params"] as? OAuth2StringDict ?? ["":""]
         super.init(settings: settings)
     }
     
