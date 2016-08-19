@@ -28,6 +28,10 @@
 		65EC05E01C9050CB00DE9186 /* OAuth2KeychainAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65EC05DF1C9050CB00DE9186 /* OAuth2KeychainAccount.swift */; };
 		65EC05E11C9050CB00DE9186 /* OAuth2KeychainAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65EC05DF1C9050CB00DE9186 /* OAuth2KeychainAccount.swift */; };
 		65EC05E21C9050CB00DE9186 /* OAuth2KeychainAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65EC05DF1C9050CB00DE9186 /* OAuth2KeychainAccount.swift */; };
+		86B63D171D672FC2005E3F8A /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC7A8D01AE4851E008C30E7 /* Keychain.swift */; };
+		86B63D181D673081005E3F8A /* OAuth2PasswordGrantWithCustomHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865366B51D672AFA005AD3D8 /* OAuth2PasswordGrantWithCustomHeader.swift */; };
+		86B63D191D673089005E3F8A /* OAuth2PasswordGrantWithCustomHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865366B51D672AFA005AD3D8 /* OAuth2PasswordGrantWithCustomHeader.swift */; };
+		86B63D1A1D673090005E3F8A /* OAuth2PasswordGrantWithCustomHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865366B51D672AFA005AD3D8 /* OAuth2PasswordGrantWithCustomHeader.swift */; };
 		DD0CCBAD1C4DC83A0044C4E3 /* OAuth2WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0CCBAC1C4DC83A0044C4E3 /* OAuth2WebViewController.swift */; };
 		EA9758181B222CEA007744B1 /* OAuth2PasswordGrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA9758171B222CEA007744B1 /* OAuth2PasswordGrant.swift */; };
 		EA97581D1B223A5D007744B1 /* OAuth2PasswordGrant_tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA97581B1B223932007744B1 /* OAuth2PasswordGrant_tests.swift */; };
@@ -135,6 +139,7 @@
 		6598543F1C5B3B4000237D39 /* OAuth2+tvOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "OAuth2+tvOS.swift"; path = "Sources/tvOS/OAuth2+tvOS.swift"; sourceTree = SOURCE_ROOT; };
 		659854461C5B3BEA00237D39 /* OAuth2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OAuth2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		65EC05DF1C9050CB00DE9186 /* OAuth2KeychainAccount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2KeychainAccount.swift; sourceTree = "<group>"; };
+		865366B51D672AFA005AD3D8 /* OAuth2PasswordGrantWithCustomHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2PasswordGrantWithCustomHeader.swift; sourceTree = "<group>"; };
 		DD0CCBAC1C4DC83A0044C4E3 /* OAuth2WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2WebViewController.swift; sourceTree = "<group>"; };
 		EA9758171B222CEA007744B1 /* OAuth2PasswordGrant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = OAuth2PasswordGrant.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		EA97581B1B223932007744B1 /* OAuth2PasswordGrant_tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2PasswordGrant_tests.swift; sourceTree = "<group>"; };
@@ -244,6 +249,7 @@
 				EE5F4F851B19114D00DB38B3 /* OAuth2ClientCredentials.swift */,
 				EEFD23501C9ED9E400727DCF /* OAuth2ClientCredentialsReddit.swift */,
 				EA9758171B222CEA007744B1 /* OAuth2PasswordGrant.swift */,
+				865366B51D672AFA005AD3D8 /* OAuth2PasswordGrantWithCustomHeader.swift */,
 			);
 			name = Flows;
 			sourceTree = "<group>";
@@ -264,7 +270,7 @@
 				EEC7A8D01AE4851E008C30E7 /* Keychain.swift */,
 			);
 			name = SwiftKeychain;
-			path = ../../SwiftKeychain/Keychain;
+			path = ../../SwiftKeychain;
 			sourceTree = "<group>";
 		};
 		EEDB861A193FAAE500C4EEA1 = {
@@ -539,6 +545,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				86B63D191D673089005E3F8A /* OAuth2PasswordGrantWithCustomHeader.swift in Sources */,
 				659854591C5B3CA700237D39 /* OAuth2ClientCredentials.swift in Sources */,
 				6598545E1C5B3CAB00237D39 /* extensions.swift in Sources */,
 				659854541C5B3CA700237D39 /* OAuth2CodeGrant.swift in Sources */,
@@ -568,6 +575,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				86B63D181D673081005E3F8A /* OAuth2PasswordGrantWithCustomHeader.swift in Sources */,
 				EEACE1DD1A7E8DF7009BF3A7 /* extensions.swift in Sources */,
 				EEC7A8D91AE4851E008C30E7 /* Keychain.swift in Sources */,
 				EEAEF10C1CDBCF28001A1C6F /* OAuth2Logger.swift in Sources */,
@@ -598,6 +606,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				86B63D1A1D673090005E3F8A /* OAuth2PasswordGrantWithCustomHeader.swift in Sources */,
 				EEACE1DC1A7E8DF6009BF3A7 /* extensions.swift in Sources */,
 				EEC7A8D81AE4851E008C30E7 /* Keychain.swift in Sources */,
 				EEAEF10B1CDBCF28001A1C6F /* OAuth2Logger.swift in Sources */,
@@ -636,6 +645,7 @@
 				EA97581D1B223A5D007744B1 /* OAuth2PasswordGrant_tests.swift in Sources */,
 				EE92BE591C2700B600C8720B /* OAuth2RefreshToken_tests.swift in Sources */,
 				EEE209A719427DFE00736F1A /* OAuth2_tests.swift in Sources */,
+				86B63D171D672FC2005E3F8A /* Keychain.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -803,6 +813,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				METAL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -846,6 +857,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.github.p2.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = OAuth2;
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 			};
 			name = Release;
 		};
@@ -887,6 +899,7 @@
 				PRODUCT_NAME = OAuth2;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Release;
 		};
