@@ -59,7 +59,7 @@ public class OAuth2ClientConfig {
 	/// The URL to register a client against.
 	public final var registrationURL: NSURL?
     
-    /// Contains parameters headers.
+	/// Contains parameters headers.
 	public var authHeaders: OAuth2Headers?
 	
 	/// How the client communicates the client secret with the server. Defaults to ".None" if there is no secret, ".ClientSecretPost" if
