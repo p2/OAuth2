@@ -109,9 +109,9 @@ public class OAuth2: OAuth2Base {
 	}
     
     /// Contains parameters header.
-    public var headers: OAuth2Headers? {
-        get { return clientConfig.headers }
-        set { clientConfig.headers = newValue }
+    public var authHeaders: OAuth2Headers? {
+        get { return clientConfig.authHeaders }
+        set { clientConfig.authHeaders = newValue }
     }
 	
 	/// Closure called on successful authentication on the main thread.
