@@ -138,7 +138,7 @@ public class OAuth2AuthRequest {
         
         if let headerParams = oauth2.header where !headerParams.isEmpty {
             for (key, value) in headerParams {
-                req.setValue(key, forHTTPHeaderField: value)
+                req.setValue(value, forHTTPHeaderField: key)
             }
         }
 		
