@@ -108,6 +108,12 @@ public class OAuth2: OAuth2Base {
 		set { clientConfig.refreshToken = newValue }
 	}
 	
+	/// Contains parameters header.
+	public var authHeaders: OAuth2Headers? {
+		get { return clientConfig.authHeaders }
+		set { clientConfig.authHeaders = newValue }
+	}
+	
 	/// Closure called on successful authentication on the main thread.
 	public final var onAuthorize: ((parameters: OAuth2JSON) -> Void)?
 	
