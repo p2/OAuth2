@@ -50,7 +50,7 @@ public class OAuth2: OAuth2Base {
 	
 	/// The client secret, usually only needed for code grant.
 	public final var clientSecret: String? {
-        get { return clientConfig.clientSecret }
+		get { return clientConfig.clientSecret }
 		set { clientConfig.clientSecret = newValue }
 	}
 	
@@ -107,12 +107,12 @@ public class OAuth2: OAuth2Base {
 		get { return clientConfig.refreshToken }
 		set { clientConfig.refreshToken = newValue }
 	}
-    
-    /// Contains parameters header.
-    public var authHeaders: OAuth2Headers? {
-        get { return clientConfig.authHeaders }
-        set { clientConfig.authHeaders = newValue }
-    }
+	
+	/// Contains parameters header.
+	public var authHeaders: OAuth2Headers? {
+		get { return clientConfig.authHeaders }
+		set { clientConfig.authHeaders = newValue }
+	}
 	
 	/// Closure called on successful authentication on the main thread.
 	public final var onAuthorize: ((parameters: OAuth2JSON) -> Void)?
@@ -428,7 +428,7 @@ public class OAuth2: OAuth2Base {
 		do {
 			let post = try tokenRequestForTokenRefresh(params: params).asURLRequestFor(self)
 			logger?.debug("OAuth2", msg: "Using refresh token to receive access token from \(post.URL?.description ?? "nil")")
-            
+			
 			performRequest(post) { data, status, error in
 				do {
 					guard let data = data else {
