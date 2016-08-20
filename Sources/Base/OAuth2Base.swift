@@ -27,6 +27,9 @@ public typealias OAuth2JSON = [String: AnyObject]
 /// Typealias to work with dictionaries full of strings.
 public typealias OAuth2StringDict = [String: String]
 
+/// Typealias to work with headers
+public typealias OAuth2Headers = [String: String]
+
 
 /**
 Abstract base class for OAuth2 authorization as well as client registration classes.

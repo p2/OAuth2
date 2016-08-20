@@ -59,8 +59,8 @@ public class OAuth2ClientConfig {
 	/// The URL to register a client against.
 	public final var registrationURL: NSURL?
     
-    /// Contains parameters header.
-    public var headerParams: OAuth2StringDict?
+    /// Contains parameters headers.
+    public var headers: OAuth2Headers?
 	
 	/// How the client communicates the client secret with the server. Defaults to ".None" if there is no secret, ".ClientSecretPost" if
 	/// "secret_in_body" is `true` and ".ClientSecretBasic" otherwise. Interacts with the `authConfig.secretInBody` client setting.
@@ -110,9 +110,8 @@ public class OAuth2ClientConfig {
 		if let assume = settings["token_assume_unexpired"] as? Bool {
 			accessTokenAssumeUnexpired = assume
 		}
-        
-        if let params = settings["header_params"] as? OAuth2StringDict {
-            headerParams = params
+        if let params = settings["header_params"] as? OAuth2Headers {
+            headers = params
         }
 	}
 	

@@ -13,3 +13,5 @@ Glenn Schmidt, @glennschmidt
 Tomohiro Kumagai, @ez-net
 Tim Sneed, @trsneed
 Vojto Rinik, @vojto
+Vladislav Prusakov, @SpectralDragon
+

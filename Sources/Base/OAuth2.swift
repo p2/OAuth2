@@ -109,9 +109,9 @@ public class OAuth2: OAuth2Base {
 	}
     
     /// Contains parameters header. Settings key `header_params`
-    public var header: OAuth2StringDict? {
-        get { return clientConfig.headerParams }
-        set { clientConfig.headerParams = newValue }
+    public var headers: OAuth2Headers? {
+        get { return clientConfig.headers }
+        set { clientConfig.headers = newValue }
     }
 	
 	/// Closure called on successful authentication on the main thread.
@@ -169,7 +169,6 @@ public class OAuth2: OAuth2Base {
 		if let ttl = settings["title"] as? String {
 			authConfig.ui.title = ttl
 		}
-
 		super.init(settings: settings)
 	}
 	
@@ -429,7 +428,7 @@ public class OAuth2: OAuth2Base {
 		do {
 			let post = try tokenRequestForTokenRefresh(params: params).asURLRequestFor(self)
 			logger?.debug("OAuth2", msg: "Using refresh token to receive access token from \(post.URL?.description ?? "nil")")
-
+            
 			performRequest(post) { data, status, error in
 				do {
 					guard let data = data else {
