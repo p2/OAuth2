@@ -110,7 +110,7 @@ public class OAuth2ClientConfig {
 		if let assume = settings["token_assume_unexpired"] as? Bool {
 			accessTokenAssumeUnexpired = assume
 		}
-        if let params = settings["header_params"] as? OAuth2Headers {
+        if let params = settings["headers"] as? OAuth2Headers {
             headers = params
         }
 	}

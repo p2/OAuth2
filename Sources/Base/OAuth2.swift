@@ -50,7 +50,7 @@ public class OAuth2: OAuth2Base {
 	
 	/// The client secret, usually only needed for code grant.
 	public final var clientSecret: String? {
-		get { return clientConfig.clientSecret }
+        get { return clientConfig.clientSecret }
 		set { clientConfig.clientSecret = newValue }
 	}
 	
@@ -108,7 +108,7 @@ public class OAuth2: OAuth2Base {
 		set { clientConfig.refreshToken = newValue }
 	}
     
-    /// Contains parameters header. Settings key `header_params`
+    /// Contains parameters header.
     public var headers: OAuth2Headers? {
         get { return clientConfig.headers }
         set { clientConfig.headers = newValue }
