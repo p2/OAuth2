@@ -5,8 +5,9 @@ Version numbering represents the Swift version, plus a running number representi
 You can also refer to commit logs to get details on what was implemented, fixed and improved.
 
 
-### x.x.x
+### 2.2.9
 
+- Allow to add custom authentication headers (thanks @SpectralDragon)
 - Fix: add `client_id` to password grant even if there is no secret (thanks Criss!)
 
 
