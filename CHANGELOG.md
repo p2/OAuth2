@@ -8,13 +8,15 @@ You can also refer to commit logs to get details on what was implemented, fixed 
 ### 3.0.0
 
 - Rewrite in Swift 3
-- API redesign, should now use `authorize(params:callback:)`
+- Broad API redesign, you should now use `authorize(params:callback:)`
+- All errors returned by OAuth2 are now `OAuth2Error` types
 - Add `Package.swift` for the Swift package manager
 
 
-### x.x.x
+### 2.2.9
 
-- Fix: add `client_id` to password grant even if there is no secret (thanks Criss!)
+- Allow to add custom authentication headers (thanks @SpectralDragon)
+- Fix: add client_id to password grant even if there is no secret (thanks Criss!)
 
 
 ### 2.2.8

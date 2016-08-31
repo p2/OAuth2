@@ -110,7 +110,7 @@ open class OAuth2Base: OAuth2Backing {
 	
 	
 	/// This closure is internally used with `authorize(params:callback:)` and only exposed for subclassing reason, do not mess with it!
-	public final var didAuthorizeOrFail: ((_ parameters: OAuth2JSON?, _ error: Error?) -> Void)?
+	public final var didAuthorizeOrFail: ((_ parameters: OAuth2JSON?, _ error: OAuth2Error?) -> Void)?
 	
 	/// Closure called on successful authentication on the main thread.
 	@available(*, deprecated: 3.0, message: "Use the `authorize(params:callback:)` method and variants")
@@ -118,22 +118,22 @@ open class OAuth2Base: OAuth2Backing {
 	
 	/// When authorization fails (if error is not nil) or is cancelled, this block is executed on the main thread.
 	@available(*, deprecated: 3.0, message: "Use the `authorize(params:callback:)` method and variants")
-	public final var onFailure: ((Error?) -> Void)?
+	public final var onFailure: ((OAuth2Error?) -> Void)?
 	
 	/**
 	Closure called after the regular authorization callback, on the main thread. You can use this callback when you're performing
 	authorization manually and/or for cleanup operations.
 	
 	- parameter authParameters: All authorization parameters; non-nil (but possibly empty) on success, nil on error
-	- parameter error:          Error giving the failure reason; if nil and `authParameters` is also nil, the process was aborted.
+	- parameter error:          OAuth2Error giving the failure reason; if nil and `authParameters` is also nil, the process was aborted.
 	*/
-	public final var afterAuthorizeOrFail: ((_ authParameters: OAuth2JSON?, _ error: Error?) -> Void)?
+	public final var afterAuthorizeOrFail: ((_ authParameters: OAuth2JSON?, _ error: OAuth2Error?) -> Void)?
 	
 	/**
 	For internal use, don't mess with it, it's public only for subclassing and compilation reasons. Executed right before
 	`afterAuthorizeOrFail`.
 	*/
-	public final var internalAfterAuthorizeOrFail: ((_ wasFailure: Bool, _ error: Error?) -> Void)?
+	public final var internalAfterAuthorizeOrFail: ((_ wasFailure: Bool, _ error: OAuth2Error?) -> Void)?
 	
 	
 	/**
@@ -263,13 +263,13 @@ open class OAuth2Base: OAuth2Backing {
 	This method is only made public in case you want to create a subclass and need to call `didFail(error:)` at an override point. If you
 	call this method yourself on your OAuth2 instance you might screw things up royally.
 	
-	- parameter withError: The error that led to authentication failure
+	- parameter error: The error that led to authentication failure
 	*/
-	public final func didFail(withError error: Error?) {
+	public final func didFail(with error: OAuth2Error?) {
 		var finalError = error
 		if let error = error {
 			logger?.debug("OAuth2", msg: "\(error)")
-			if let oae = error as? OAuth2Error, .requestCancelled == oae {
+			if .requestCancelled == error {
 				finalError = nil
 			}
 		}
@@ -289,7 +289,7 @@ open class OAuth2Base: OAuth2Backing {
 	open func abortAuthorization() {
 		if !abortTask() {
 			logger?.debug("OAuth2", msg: "Aborting authorization")
-			didFail(withError: nil)
+			didFail(with: nil)
 		}
 	}
 	

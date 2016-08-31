@@ -89,7 +89,7 @@ open class OAuth2: OAuth2Base {
 	- parameter callback: The callback to call when authorization finishes (parameters will be non-nil but may be an empty dict), fails
 	                      (error will be non-nil) or is cancelled (both parameters and error is nil)
 	*/
-	public final func authorize(params: OAuth2StringDict? = nil, callback: ((OAuth2JSON?, Error?) -> Void)) {
+	public final func authorize(params: OAuth2StringDict? = nil, callback: ((OAuth2JSON?, OAuth2Error?) -> Void)) {
 		if nil != didAuthorizeOrFail {
 			callback(nil, OAuth2Error.alreadyAuthorizing)
 			return
@@ -103,7 +103,7 @@ open class OAuth2: OAuth2Base {
 			else {
 				self.registerClientIfNeeded() { json, error in
 					if let error = error {
-						self.didFail(withError: error)
+						self.didFail(with: error)
 					}
 					else {
 						do {
@@ -111,7 +111,7 @@ open class OAuth2: OAuth2Base {
 							try self.doAuthorize(params: params)
 						}
 						catch let error {
-							self.didFail(withError: error)
+							self.didFail(with: error.asOAuth2Error)
 						}
 					}
 				}
@@ -140,7 +140,7 @@ open class OAuth2: OAuth2Base {
 	- parameter callback: The callback to call when authorization finishes (parameters will be non-nil but may be an empty dict), fails
 	(error will be non-nil) or is cancelled (both parameters and error is nil)
 	*/
-	open func authorizeEmbedded(from context: AnyObject, params: OAuth2StringDict? = nil, callback: ((_ authParameters: OAuth2JSON?, _ error: Error?) -> Void)) {
+	open func authorizeEmbedded(from context: AnyObject, params: OAuth2StringDict? = nil, callback: ((_ authParameters: OAuth2JSON?, _ error: OAuth2Error?) -> Void)) {
 		if nil != didAuthorizeOrFail {		// check before changing `authConfig`
 			callback(nil, OAuth2Error.alreadyAuthorizing)
 			return
@@ -349,7 +349,7 @@ open class OAuth2: OAuth2Base {
 	- parameter params:   Optional key/value pairs to pass during token refresh
 	- parameter callback: The callback to call after the refresh token exchange has finished
 	*/
-	open func doRefreshToken(params: OAuth2StringDict? = nil, callback: ((OAuth2JSON?, Error?) -> Void)) {
+	open func doRefreshToken(params: OAuth2StringDict? = nil, callback: ((OAuth2JSON?, OAuth2Error?) -> Void)) {
 		do {
 			let post = try tokenRequestForTokenRefresh(params: params).asURLRequest(for: self)
 			logger?.debug("OAuth2", msg: "Using refresh token to receive access token from \(post.url?.description ?? "nil")")
@@ -366,12 +366,12 @@ open class OAuth2: OAuth2Base {
 				}
 				catch let error {
 					self.logger?.debug("OAuth2", msg: "Error parsing refreshed access token: \(error)")
-					callback(nil, error)
+					callback(nil, error.asOAuth2Error)
 				}
 			}
 		}
 		catch let error {
-			callback(nil, error)
+			callback(nil, error.asOAuth2Error)
 		}
 	}
 	
@@ -388,7 +388,7 @@ open class OAuth2: OAuth2Base {
 	- parameter callback: The callback to call on the main thread; if both json and error is nil no registration was attempted; error is nil
 	                      on success
 	*/
-	func registerClientIfNeeded(callback: ((OAuth2JSON?, Error?) -> Void)) {
+	func registerClientIfNeeded(callback: ((OAuth2JSON?, OAuth2Error?) -> Void)) {
 		if nil != clientId {
 			callOnMainThread() {
 				callback(nil, nil)
@@ -398,7 +398,7 @@ open class OAuth2: OAuth2Base {
 			let dynreg = onBeforeDynamicClientRegistration?(url as URL) ?? OAuth2DynReg()
 			dynreg.register(client: self) { json, error in
 				callOnMainThread() {
-					callback(json, error)
+					callback(json, error?.asOAuth2Error)
 				}
 			}
 		}

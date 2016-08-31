@@ -94,7 +94,7 @@ class OAuth2Tests: XCTestCase {
 		}
 		oa.onFailure = { error in
 			XCTAssertNotNil(error)
-			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.noRedirectURL)
+			XCTAssertEqual(error, OAuth2Error.noRedirectURL)
 		}
 		oa.authorize()
 		XCTAssertFalse(oa.authConfig.authorizeEmbedded)
@@ -103,12 +103,12 @@ class OAuth2Tests: XCTestCase {
 		oa.redirect = "myapp://oauth"
 		oa.onFailure = { error in
 			XCTAssertNotNil(error)
-			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.invalidAuthorizationContext)
+			XCTAssertEqual(error, OAuth2Error.invalidAuthorizationContext)
 		}
 		oa.afterAuthorizeOrFail = { params, error in
 			XCTAssertNil(params)
 			XCTAssertNotNil(error)
-			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.invalidAuthorizationContext)
+			XCTAssertEqual(error, OAuth2Error.invalidAuthorizationContext)
 		}
 		oa.authorizeEmbedded(from: NSString())
 		XCTAssertTrue(oa.authConfig.authorizeEmbedded)
@@ -121,7 +121,7 @@ class OAuth2Tests: XCTestCase {
 		oa.authorize() { params, error in
 			XCTAssertNil(params, "Should not have auth parameters")
 			XCTAssertNotNil(error)
-			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.noRedirectURL)
+			XCTAssertEqual(error, OAuth2Error.noRedirectURL)
 		}
 		XCTAssertFalse(oa.authConfig.authorizeEmbedded)
 		
@@ -129,7 +129,7 @@ class OAuth2Tests: XCTestCase {
 		oa.redirect = "myapp://oauth"
 		oa.authorizeEmbedded(from: NSString()) { parameters, error in
 			XCTAssertNotNil(error)
-			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.invalidAuthorizationContext)
+			XCTAssertEqual(error, OAuth2Error.invalidAuthorizationContext)
 		}
 		XCTAssertTrue(oa.authConfig.authorizeEmbedded)
 	}

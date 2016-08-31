@@ -51,7 +51,7 @@ open class OAuth2PasswordGrant: OAuth2 {
 	override open func doAuthorize(params: [String : String]? = nil) {
 		self.obtainAccessToken(params: params) { params, error in
 			if let error = error {
-				self.didFail(withError: error)
+				self.didFail(with: error)
 			}
 			else {
 				self.didAuthorize(withParameters: params ?? OAuth2JSON())
@@ -92,7 +92,7 @@ open class OAuth2PasswordGrant: OAuth2 {
 	
 	- parameter callback: The callback to call after the request has returned
 	*/
-	public func obtainAccessToken(params: OAuth2StringDict? = nil, callback: ((_ params: OAuth2JSON?, _ error: Error?) -> Void)) {
+	public func obtainAccessToken(params: OAuth2StringDict? = nil, callback: ((_ params: OAuth2JSON?, _ error: OAuth2Error?) -> Void)) {
 		do {
 			let post = try accessTokenRequest(params: params).asURLRequest(for: self)
 			logger?.debug("OAuth2", msg: "Requesting new access token from \(post.url?.description ?? "nil")")
@@ -112,12 +112,12 @@ open class OAuth2PasswordGrant: OAuth2 {
 				}
 				catch let error {
 					self.logger?.debug("OAuth2", msg: "Error parsing response: \(error)")
-					callback(nil, error)
+					callback(nil, error.asOAuth2Error)
 				}
 			}
 		}
-		catch let err {
-			callback(nil, err)
+		catch let error {
+			callback(nil, error.asOAuth2Error)
 		}
 	}
 }

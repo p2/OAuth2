@@ -152,7 +152,7 @@ public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 			return false
 		}
 		controller.onWillCancel = {
-			self.oauth2.didFail(withError: nil)
+			self.oauth2.didFail(with: nil)
 		}
 		return controller
 	}

@@ -120,7 +120,7 @@ public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 	@available(iOS 9.0, *)
 	func safariViewControllerDidCancel(_ safari: SFSafariViewController) {
 		safariViewDelegate = nil
-		oauth2.didFail(withError: nil)
+		oauth2.didFail(with: nil)
 	}
 	
 	
@@ -167,7 +167,7 @@ public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 		}
 		web.onWillDismiss = { didCancel in
 			if didCancel {
-				self.oauth2.didFail(withError: nil)
+				self.oauth2.didFail(with: nil)
 			}
 		}
 		

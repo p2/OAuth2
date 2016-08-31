@@ -48,7 +48,7 @@ class OAuth2ImplicitGrantTests: XCTestCase
 		// Empty redirect URL
 		oauth.onFailure = { error in
 			XCTAssertNotNil(error, "Error message expected")
-			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.invalidRedirectURL("file:///"))
+			XCTAssertEqual(error, OAuth2Error.invalidRedirectURL("file:///"))
 		}
 		oauth.afterAuthorizeOrFail = { authParameters, error in
 			XCTAssertNil(authParameters)
@@ -61,7 +61,7 @@ class OAuth2ImplicitGrantTests: XCTestCase
 		// No params in redirect URL
 		oauth.onFailure = { error in
 			XCTAssertNotNil(error, "Error message expected")
-			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.invalidRedirectURL("https://auth.ful.io"))
+			XCTAssertEqual(error, OAuth2Error.invalidRedirectURL("https://auth.ful.io"))
 		}
 		oauth.handleRedirectURL(URL(string: "https://auth.ful.io")!)
 		XCTAssertNil(oauth.accessToken, "Must not have an access token")
@@ -70,8 +70,8 @@ class OAuth2ImplicitGrantTests: XCTestCase
 		oauth.context._state = "ONSTUH"		// because it has been reset
 		oauth.onFailure = { error in
 			XCTAssertNotNil(error, "Error message expected")
-			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.accessDenied)
-			XCTAssertEqual((error as! OAuth2Error).description, "The resource owner or authorization server denied the request.")
+			XCTAssertEqual(error, OAuth2Error.accessDenied)
+			XCTAssertEqual(error?.description, "The resource owner or authorization server denied the request.")
 		}
 		oauth.handleRedirectURL(URL(string: "https://auth.ful.io#error=access_denied")!)
 		XCTAssertNil(oauth.accessToken, "Must not have an access token")
@@ -80,9 +80,9 @@ class OAuth2ImplicitGrantTests: XCTestCase
 		oauth.context._state = "ONSTUH"		// because it has been reset
 		oauth.onFailure = { error in
 			XCTAssertNotNil(error, "Error message expected")
-			XCTAssertNotEqual((error as! OAuth2Error), OAuth2Error.generic("Not good"))
-			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.responseError("Not good"))
-			XCTAssertEqual((error as! OAuth2Error).description, "Not good")
+			XCTAssertNotEqual(error, OAuth2Error.generic("Not good"))
+			XCTAssertEqual(error, OAuth2Error.responseError("Not good"))
+			XCTAssertEqual(error?.description, "Not good")
 		}
 		oauth.handleRedirectURL(URL(string: "https://auth.ful.io#error_description=Not+good")!)
 		XCTAssertNil(oauth.accessToken, "Must not have an access token")
@@ -91,7 +91,7 @@ class OAuth2ImplicitGrantTests: XCTestCase
 		oauth.context._state = "ONSTUH"		// because it has been reset
 		oauth.onFailure = { error in
 			XCTAssertNotNil(error, "Error message expected")
-			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.noTokenType)
+			XCTAssertEqual(error, OAuth2Error.noTokenType)
 		}
 		oauth.handleRedirectURL(URL(string: "https://auth.ful.io#access_token=abc&state=\(oauth.context.state)")!)
 		XCTAssertNil(oauth.accessToken, "Must not have an access token")
@@ -100,7 +100,7 @@ class OAuth2ImplicitGrantTests: XCTestCase
 		oauth.context._state = "ONSTUH"		// because it has been reset
 		oauth.onFailure = { error in
 			XCTAssertNotNil(error, "Error message expected")
-			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.unsupportedTokenType("Only “bearer” token is supported, but received “helicopter”"))
+			XCTAssertEqual(error, OAuth2Error.unsupportedTokenType("Only “bearer” token is supported, but received “helicopter”"))
 		}
 		oauth.handleRedirectURL(URL(string: "https://auth.ful.io#token_type=helicopter&access_token=abc&state=\(oauth.context.state)")!)
 		XCTAssertNil(oauth.accessToken, "Must not have an access token")
@@ -109,7 +109,7 @@ class OAuth2ImplicitGrantTests: XCTestCase
 		oauth.context._state = "ONSTUH"		// because it has been reset
 		oauth.onFailure = { error in
 			XCTAssertNotNil(error, "Error message expected")
-			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.invalidState)
+			XCTAssertEqual(error, OAuth2Error.invalidState)
 		}
 		oauth.handleRedirectURL(URL(string: "https://auth.ful.io#token_type=bearer&access_token=abc&state=ONSTOH")!)
 		XCTAssertNil(oauth.accessToken, "Must not have an access token")
@@ -151,7 +151,7 @@ class OAuth2ImplicitGrantTests: XCTestCase
 		oauth.didAuthorizeOrFail = { authParameters, error in
 			XCTAssertNil(authParameters, "Nil auth dict expected")
 			XCTAssertNotNil(error, "Error message expected")
-			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.invalidRedirectURL("file:///"))
+			XCTAssertEqual(error, OAuth2Error.invalidRedirectURL("file:///"))
 		}
 		oauth.afterAuthorizeOrFail = { authParameters, error in
 			XCTAssertNil(authParameters, "Nil auth dict expected")
@@ -165,7 +165,7 @@ class OAuth2ImplicitGrantTests: XCTestCase
 		oauth.didAuthorizeOrFail = { authParameters, error in
 			XCTAssertNil(authParameters, "Nil auth dict expected")
 			XCTAssertNotNil(error, "Error message expected")
-			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.invalidRedirectURL("https://auth.ful.io"))
+			XCTAssertEqual(error, OAuth2Error.invalidRedirectURL("https://auth.ful.io"))
 		}
 		oauth.handleRedirectURL(URL(string: "https://auth.ful.io")!)
 		XCTAssertNil(oauth.accessToken, "Must not have an access token")
@@ -175,8 +175,8 @@ class OAuth2ImplicitGrantTests: XCTestCase
 		oauth.didAuthorizeOrFail = { authParameters, error in
 			XCTAssertNil(authParameters, "Nil auth dict expected")
 			XCTAssertNotNil(error, "Error message expected")
-			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.accessDenied)
-			XCTAssertEqual((error as! OAuth2Error).description, "The resource owner or authorization server denied the request.")
+			XCTAssertEqual(error, OAuth2Error.accessDenied)
+			XCTAssertEqual(error?.description, "The resource owner or authorization server denied the request.")
 		}
 		oauth.handleRedirectURL(URL(string: "https://auth.ful.io#error=access_denied")!)
 		XCTAssertNil(oauth.accessToken, "Must not have an access token")
@@ -186,9 +186,9 @@ class OAuth2ImplicitGrantTests: XCTestCase
 		oauth.didAuthorizeOrFail = { authParameters, error in
 			XCTAssertNil(authParameters, "Nil auth dict expected")
 			XCTAssertNotNil(error, "Error message expected")
-			XCTAssertNotEqual((error as! OAuth2Error), OAuth2Error.generic("Not good"))
-			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.responseError("Not good"))
-			XCTAssertEqual((error as! OAuth2Error).description, "Not good")
+			XCTAssertNotEqual(error, OAuth2Error.generic("Not good"))
+			XCTAssertEqual(error, OAuth2Error.responseError("Not good"))
+			XCTAssertEqual(error?.description, "Not good")
 		}
 		oauth.handleRedirectURL(URL(string: "https://auth.ful.io#error_description=Not+good")!)
 		XCTAssertNil(oauth.accessToken, "Must not have an access token")
@@ -198,7 +198,7 @@ class OAuth2ImplicitGrantTests: XCTestCase
 		oauth.didAuthorizeOrFail = { authParameters, error in
 			XCTAssertNil(authParameters, "Nil auth dict expected")
 			XCTAssertNotNil(error, "Error message expected")
-			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.noTokenType)
+			XCTAssertEqual(error, OAuth2Error.noTokenType)
 		}
 		oauth.handleRedirectURL(URL(string: "https://auth.ful.io#access_token=abc&state=\(oauth.context.state)")!)
 		XCTAssertNil(oauth.accessToken, "Must not have an access token")
@@ -208,7 +208,7 @@ class OAuth2ImplicitGrantTests: XCTestCase
 		oauth.didAuthorizeOrFail = { authParameters, error in
 			XCTAssertNil(authParameters, "Nil auth dict expected")
 			XCTAssertNotNil(error, "Error message expected")
-			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.unsupportedTokenType("Only “bearer” token is supported, but received “helicopter”"))
+			XCTAssertEqual(error, OAuth2Error.unsupportedTokenType("Only “bearer” token is supported, but received “helicopter”"))
 		}
 		oauth.handleRedirectURL(URL(string: "https://auth.ful.io#token_type=helicopter&access_token=abc&state=\(oauth.context.state)")!)
 		XCTAssertNil(oauth.accessToken, "Must not have an access token")
@@ -218,7 +218,7 @@ class OAuth2ImplicitGrantTests: XCTestCase
 		oauth.didAuthorizeOrFail = { authParameters, error in
 			XCTAssertNil(authParameters, "Nil auth dict expected")
 			XCTAssertNotNil(error, "Error message expected")
-			XCTAssertEqual((error as! OAuth2Error), OAuth2Error.invalidState)
+			XCTAssertEqual(error, OAuth2Error.invalidState)
 		}
 		oauth.handleRedirectURL(URL(string: "https://auth.ful.io#token_type=bearer&access_token=abc&state=ONSTOH")!)
 		XCTAssertNil(oauth.accessToken, "Must not have an access token")

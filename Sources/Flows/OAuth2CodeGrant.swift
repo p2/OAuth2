@@ -81,7 +81,7 @@ open class OAuth2CodeGrant: OAuth2 {
 			exchangeCodeForToken(code)
 		}
 		catch let error {
-			didFail(withError: error)
+			didFail(with: error.asOAuth2Error)
 		}
 	}
 	
@@ -110,12 +110,12 @@ open class OAuth2CodeGrant: OAuth2 {
 					self.didAuthorize(withParameters: params)
 				}
 				catch let error {
-					self.didFail(withError: error)
+					self.didFail(with: error.asOAuth2Error)
 				}
 			}
 		}
 		catch let error {
-			didFail(withError: error)
+			didFail(with: error.asOAuth2Error)
 		}
 	}
 	

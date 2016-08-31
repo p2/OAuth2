@@ -64,7 +64,7 @@ class OAuth2DynReg_Tests: XCTestCase {
 	func testNotAttemptingRegistration() {
 		let oauth = genericOAuth2()
 		oauth.registerClientIfNeeded() { json, error in
-			if let error = error as? OAuth2Error {
+			if let error = error {
 				switch error {
 				case .noRegistrationURL: break
 				default:                 XCTAssertTrue(false, "Expecting no-registration-url error")
@@ -90,7 +90,7 @@ class OAuth2DynReg_Tests: XCTestCase {
 			return OAuth2TestDynReg()
 		}
 		oauth.registerClientIfNeeded() { json, error in
-			if let error = error as? OAuth2Error {
+			if let error = error {
 				switch error {
 				case .temporarilyUnavailable: break
 				default:                      XCTAssertTrue(false, "Expecting random `TemporarilyUnavailable` error as implemented in `OAuth2TestDynReg`")
@@ -105,7 +105,7 @@ class OAuth2DynReg_Tests: XCTestCase {
 
 
 class OAuth2TestDynReg: OAuth2DynReg {
-	override func register(client: OAuth2, callback: ((OAuth2JSON?, Error?) -> Void)) {
+	override func register(client: OAuth2, callback: ((OAuth2JSON?, OAuth2Error?) -> Void)) {
 		callback(nil, OAuth2Error.temporarilyUnavailable)
 	}
 }

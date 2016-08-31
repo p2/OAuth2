@@ -295,3 +295,17 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 	}
 }
 
+
+public extension Error {
+	
+	/**
+	Convenience getter to easily retrieve an OAuth2Error from any Error.
+	*/
+	public var asOAuth2Error: OAuth2Error {
+		if let oaerror = self as? OAuth2Error {
+			return oaerror
+		}
+		return OAuth2Error.nsError(self as NSError)
+	}
+}
+

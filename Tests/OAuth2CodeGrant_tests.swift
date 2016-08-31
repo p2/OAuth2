@@ -368,7 +368,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 		oauth.didAuthorizeOrFail = { json, error in
 			XCTAssertNil(json)
 			XCTAssertNotNil(error)
-			XCTAssertEqual(OAuth2Error.generic("Failed with status 403"), error as? OAuth2Error)
+			XCTAssertEqual(OAuth2Error.generic("Failed with status 403"), error)
 		}
 		oauth.exchangeCodeForToken("MNOP")
 		

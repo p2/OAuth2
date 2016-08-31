@@ -67,7 +67,7 @@ extension KeychainGenericPasswordType {
 			try _ = fetchFromKeychain()
 			return data
 		}
-		catch let error as NSError where error.domain == "swift.keychain.error" && error.code == Int(errSecItemNotFound) {
+		catch let error where error._domain == "swift.keychain.error" && error._code == Int(errSecItemNotFound) {
 			return [:]
 		}
 	}

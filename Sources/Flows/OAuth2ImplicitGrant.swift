@@ -52,7 +52,7 @@ open class OAuth2ImplicitGrant: OAuth2 {
 			didAuthorize(withParameters: dict)
 		}
 		catch let error {
-			didFail(withError: error)
+			didFail(with: error.asOAuth2Error)
 		}
 	}
 	
