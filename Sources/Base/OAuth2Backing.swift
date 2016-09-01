@@ -177,7 +177,7 @@ open class OAuth2Backing {
 			do {
 				try keychain.saveInKeychain()
 			}
-			catch {
+			catch let error {
 				logger?.warn("OAuth2", msg: "Failed to store tokens to keychain: \(error)")
 			}
 		}
