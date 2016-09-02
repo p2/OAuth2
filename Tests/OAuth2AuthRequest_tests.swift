@@ -52,7 +52,7 @@ class OAuth2AuthRequest_Tests: XCTestCase {
 		XCTAssertTrue(0 == req.params.count)
 		XCTAssertNil(req.headers)
 		
-		req.setHeader("Authorize", to: "Basic abc==")
+		req.set(header: "Authorize", to: "Basic abc==")
 		XCTAssertEqual(1, req.headers?.count)
 	}
 	
@@ -63,7 +63,7 @@ class OAuth2AuthRequest_Tests: XCTestCase {
 		
 		req.params["a"] = "A"
 		XCTAssertTrue(1 == req.params.count)
-		req.addParams(params: ["a": "AA", "b": "B"])
+		req.add(params: ["a": "AA", "b": "B"])
 		XCTAssertTrue(2 == req.params.count)
 		XCTAssertEqual("AA", req.params["a"])
 		
@@ -126,8 +126,8 @@ class OAuth2AuthRequest_Tests: XCTestCase {
 		}
 		
 		// test header override
-		reqH.setHeader("Authorization", to: "Basic def==")
-		reqH.setHeader("Accept", to: "text/plain, */*")
+		reqH.set(header: "Authorization", to: "Basic def==")
+		reqH.set(header: "Accept", to: "text/plain, */*")
 		do {
 			let request = try reqH.asURLRequest(for: oauth)
 			XCTAssertEqual("Basic def==", request.value(forHTTPHeaderField: "Authorization"))

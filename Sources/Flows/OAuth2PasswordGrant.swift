@@ -80,7 +80,7 @@ open class OAuth2PasswordGrant: OAuth2 {
 		if let scope = clientConfig.scope {
 			req.params["scope"] = scope
 		}
-		req.addParams(params: params)
+		req.add(params: params)
 		
 		return req
 	}

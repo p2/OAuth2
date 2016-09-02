@@ -60,7 +60,7 @@ open class OAuth2ClientCredentials: OAuth2 {
 		if let scope = clientConfig.scope {
 			req.params["scope"] = scope
 		}
-		req.addParams(params: params)
+		req.add(params: params)
 		
 		return req
 	}

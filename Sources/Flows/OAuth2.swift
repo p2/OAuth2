@@ -282,7 +282,7 @@ open class OAuth2: OAuth2Base {
 		if let responseType = type(of: self).responseType {
 			req.params["response_type"] = responseType
 		}
-		req.addParams(params: params)
+		req.add(params: params)
 		
 		return req
 	}
@@ -338,7 +338,7 @@ open class OAuth2: OAuth2Base {
 		req.params["grant_type"] = "refresh_token"
 		req.params["refresh_token"] = refreshToken
 		req.params["client_id"] = clientId
-		req.addParams(params: params)
+		req.add(params: params)
 		
 		return req
 	}

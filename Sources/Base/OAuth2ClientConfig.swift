@@ -63,6 +63,12 @@ open class OAuth2ClientConfig {
 	/// "secret_in_body" is `true` and ".clientSecretBasic" otherwise. Interacts with the `authConfig.secretInBody` client setting.
 	public final var endpointAuthMethod = OAuth2EndpointAuthMethod.none
 	
+	/// Contains special authorization request headers, can be used to override defaults.
+	open var authHeaders: OAuth2Headers?
+	
+	/// Custom request parameters to be added during authorization.
+	open var authParameters: OAuth2StringDict?
+	
 	
 	/**
 	Initializer to initialize properties from a settings dictionary.
@@ -101,6 +107,12 @@ open class OAuth2ClientConfig {
 		}
 		else if nil != clientSecret {
 			endpointAuthMethod = .clientSecretBasic
+		}
+		if let headers = settings["headers"] as? OAuth2Headers {
+			authHeaders = headers
+		}
+		if let params = settings["parameters"] as? OAuth2StringDict {
+			authParameters = params
 		}
 		
 		// access token options

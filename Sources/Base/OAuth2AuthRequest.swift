@@ -90,13 +90,22 @@ open class OAuth2AuthRequest {
 	- parameter header: The header's name
 	- parameter value:  The value to use
 	*/
-	public func setHeader(_ header: String, to value: String) {
+	public func set(header: String, to value: String) {
 		if nil == headers {
 			headers = [header: value]
 		}
 		else {
 			headers![header] = value
 		}
+	}
+	
+	/**
+	Unset the given header so that the default can be applied again.
+	
+	- parameter header: The header's name
+	*/
+	public func unset(header: String) {
+		_ = headers?.removeValue(forKey: header)
 	}
 	
 	
@@ -107,7 +116,7 @@ open class OAuth2AuthRequest {
 	
 	- parameter params: The parameters to add to the receiver
 	*/
-	open func addParams(params inParams: OAuth2StringDict?) {
+	open func add(params inParams: OAuth2StringDict?) {
 		if let prms = inParams {
 			for (key, val) in prms {
 				params[key] = val
@@ -188,7 +197,13 @@ open class OAuth2AuthRequest {
 			}
 		}
 		
-		// add custom headers
+		// add custom headers, first from our OAuth2 instance, then our custom ones
+		if let headers = oauth2.authHeaders {
+			for (key, val) in headers {
+				oauth2.logger?.trace("OAuth2", msg: "Overriding “\(key)” header")
+				req.setValue(val, forHTTPHeaderField: key)
+			}
+		}
 		if let headers = headers {
 			for (key, val) in headers {
 				oauth2.logger?.trace("OAuth2", msg: "Adding custom “\(key)” header")

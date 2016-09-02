@@ -55,7 +55,7 @@ open class OAuth2CodeGrantBasicAuth: OAuth2CodeGrant {
 		let req = try super.accessTokenRequest(with: code, params: params)
 		if let basic = basicToken {
 			logger?.debug("OAuth2", msg: "Overriding “Basic” authorization header, as specified during client initialization")
-			req.setHeader("Authorization", to: "Basic \(basic)")
+			req.set(header: "Authorization", to: "Basic \(basic)")
 		}
 		else {
 			logger?.warn("OAuth2", msg: "Using extended code grant, but “basicToken” is not actually specified. Using standard code grant.")

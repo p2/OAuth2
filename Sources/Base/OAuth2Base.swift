@@ -108,6 +108,18 @@ open class OAuth2Base: OAuth2Securable {
 		set { clientConfig.refreshToken = newValue }
 	}
 	
+	/// Custom or overridden HTML headers to be used during authorization.
+	public var authHeaders: OAuth2Headers? {
+		get { return clientConfig.authHeaders }
+		set { clientConfig.authHeaders = newValue }
+	}
+	
+	/// Custom authorization parameters.
+	public var authParameters: OAuth2StringDict? {
+		get { return clientConfig.authParameters }
+		set { clientConfig.authParameters = newValue }
+	}
+	
 	
 	/// This closure is internally used with `authorize(params:callback:)` and only exposed for subclassing reason, do not mess with it!
 	public final var didAuthorizeOrFail: ((_ parameters: OAuth2JSON?, _ error: OAuth2Error?) -> Void)?
@@ -220,7 +232,7 @@ open class OAuth2Base: OAuth2Securable {
 	*/
 	open func request(forURL url: URL, cachePolicy: NSURLRequest.CachePolicy = .reloadIgnoringLocalCacheData) -> URLRequest {
 		var req = URLRequest(url: url, cachePolicy: cachePolicy, timeoutInterval: 20)
-		req.sign(self)
+		req.sign(with: self)
 		return req
 	}
 	

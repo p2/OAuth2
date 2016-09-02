@@ -88,9 +88,11 @@ extension URLRequest {
 	/**
 	Signs the receiver by setting its "Authorization" header to "Bearer {token}".
 	
-	Will log an error if the OAuth2 instance does not have an access token!
+	Will log an error if the OAuth2 instance does not have an access token.
+	
+	- parameter oauth: The OAuth2 instance providing the access token to sign the request
 	*/
-	mutating func sign(_ oauth: OAuth2Base) {
+	public mutating func sign(with oauth: OAuth2Base) {
 		if let access = oauth.clientConfig.accessToken, !access.isEmpty {
 			setValue("Bearer \(access)", forHTTPHeaderField: "Authorization")
 		}
