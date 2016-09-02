@@ -1,5 +1,5 @@
 //
-//  OAuth2Backing.swift
+//  OAuth2Requestable.swift
 //  OAuth2
 //
 //  Created by Pascal Pfiffner on 6/2/15.
@@ -31,10 +31,7 @@ public typealias OAuth2StringDict = [String: String]
 /**
 Abstract base class for OAuth2 authorization as well as client registration classes.
 */
-open class OAuth2Backing {
-	
-	/// Server-side settings, as set upon initialization.
-	final let settings: OAuth2JSON
+open class OAuth2Requestable {
 	
 	/// Set to `true` to log all the things. `false` by default. Use `"verbose": bool` in settings or assign `logger` yourself.
 	open var verbose = false {
@@ -46,166 +43,20 @@ open class OAuth2Backing {
 	/// The logger being used. Auto-assigned to a debug logger if you set `verbose` to true or false.
 	open var logger: OAuth2Logger?
 	
-	/// If set to `true` (the default) will use system keychain to store tokens. Use `"keychain": bool` in settings.
-	public var useKeychain = true {
-		didSet {
-			if useKeychain {
-				updateFromKeychain()
-			}
-		}
-	}
-	
-	/// The keychain account to use to store tokens. Defaults to "currentTokens".
-	open var keychainAccountForTokens = "currentTokens" {
-		didSet {
-			assert(!keychainAccountForTokens.isEmpty)
-		}
-	}
-	
-	/// The keychain account name to use to store client credentials. Defaults to "clientCredentials".
-	open var keychainAccountForClientCredentials = "clientCredentials" {
-		didSet {
-			assert(!keychainAccountForClientCredentials.isEmpty)
-		}
-	}
-	
-	/// Defaults to `kSecAttrAccessibleWhenUnlocked`
-	open internal(set) var keychainAccessMode = kSecAttrAccessibleWhenUnlocked
-	
 	
 	/**
 	Base initializer.
-	
-	Looks at the `keychain`, `keychain_access_mode` and `verbose` keys in the _settings_ dict. Everything else is handled by subclasses.
 	*/
-	public init(settings: OAuth2JSON) {
-		self.settings = settings
-		
-		// client settings
-		if let keychain = settings["keychain"] as? Bool {
-			useKeychain = keychain
-		}
-		if let accessMode = settings["keychain_access_mode"] as? String {
-			keychainAccessMode = accessMode as CFString
-		}
-		if let verb = settings["verbose"] as? Bool {
-			verbose = verb
-			if verbose {
-				logger = OAuth2DebugLogger()
-			}
-		}
-		
-		// init from keychain
-		if useKeychain {
-			updateFromKeychain()
-		}
+	public init(verbose: Bool) {
+		self.verbose = verbose
+		logger = verbose ? OAuth2DebugLogger() : nil
 		logger?.debug("OAuth2", msg: "Initialization finished")
 	}
 	
-	
-	// MARK: - Keychain Integration
-	
-	/** The service key under which to store keychain items. Returns "http://localhost", subclasses override to return the authorize URL. */
-	open func keychainServiceName() -> String {
-		return "http://localhost"
-	}
-	
-	/** Queries the keychain for tokens stored for the receiver's authorize URL, and updates the token properties accordingly. */
-	private func updateFromKeychain() {
-		logger?.debug("OAuth2", msg: "Looking for items in keychain")
-		
-		do {
-			var creds = OAuth2KeychainAccount(oauth2: self, account: keychainAccountForClientCredentials)
-			let creds_data = try creds.fetchedFromKeychain()
-			updateFromKeychainItems(creds_data)
-		}
-		catch {
-			logger?.warn("OAuth2", msg: "Failed to load client credentials from keychain: \(error)")
-		}
-		
-		do {
-			var toks = OAuth2KeychainAccount(oauth2: self, account: keychainAccountForTokens)
-			let toks_data = try toks.fetchedFromKeychain()
-			updateFromKeychainItems(toks_data)
-		}
-		catch {
-			logger?.warn("OAuth2", msg: "Failed to load tokens from keychain: \(error)")
-		}
-	}
-	
-	/** Updates instance properties according to the items found in the given dictionary, which was found in the keychain. */
-	func updateFromKeychainItems(_ items: [String: Any]) {
-	}
-	
-	/**
-	Items that should be stored when storing client credentials.
-	
-	- returns: A dictionary with `String` keys and `Any` items
-	*/
-	open func storableCredentialItems() -> [String: Any]? {
-		return nil
-	}
-	
-	/** Stores our client credentials in the keychain. */
-	open func storeClientToKeychain() {
-		if let items = storableCredentialItems() {
-			logger?.debug("OAuth2", msg: "Storing client credentials to keychain")
-			let keychain = OAuth2KeychainAccount(oauth2: self, account: keychainAccountForClientCredentials, data: items)
-			do {
-				try keychain.saveInKeychain()
-			}
-			catch {
-				logger?.warn("OAuth2", msg: "Failed to store client credentials to keychain: \(error)")
-			}
-		}
-	}
-	
-	/**
-	Items that should be stored when tokens are stored to the keychain.
-	
-	- returns: A dictionary with `String` keys and `Any` items
-	*/
-	open func storableTokenItems() -> [String: Any]? {
-		return nil
-	}
-	
-	/** Stores our current token(s) in the keychain. */
-	public func storeTokensToKeychain() {
-		if let items = storableTokenItems() {
-			logger?.debug("OAuth2", msg: "Storing tokens to keychain")
-			let keychain = OAuth2KeychainAccount(oauth2: self, account: keychainAccountForTokens, data: items)
-			do {
-				try keychain.saveInKeychain()
-			}
-			catch {
-				logger?.warn("OAuth2", msg: "Failed to store tokens to keychain: \(error)")
-			}
-		}
-	}
-	
-	/** Unsets the client credentials and deletes them from the keychain. */
-	open func forgetClient() {
-		logger?.debug("OAuth2", msg: "Forgetting client credentials and removing them from keychain")
-		let keychain = OAuth2KeychainAccount(oauth2: self, account: keychainAccountForClientCredentials)
-		do {
-			try keychain.removeFromKeychain()
-		}
-		catch {
-			logger?.warn("OAuth2", msg: "Failed to delete credentials from keychain: \(error)")
-		}
-	}
-	
-	/** Unsets the tokens and deletes them from the keychain. */
-	open func forgetTokens() {
-		logger?.debug("OAuth2", msg: "Forgetting tokens and removing them from keychain")
-
-		let keychain = OAuth2KeychainAccount(oauth2: self, account: keychainAccountForTokens)
-		do {
-			try keychain.removeFromKeychain()
-		}
-		catch {
-			logger?.warn("OAuth2", msg: "Failed to delete tokens from keychain: \(error)")
-		}
+	public init(logger: OAuth2Logger?) {
+		self.logger = logger
+		self.verbose = (nil != logger)
+		logger?.debug("OAuth2", msg: "Initialization finished")
 	}
 	
 	
@@ -295,6 +146,9 @@ open class OAuth2Backing {
 			throw error
 		}
 		else if let data = data, let http = response as? HTTPURLResponse {
+			if 401 == http.statusCode {
+				throw OAuth2Error.unauthorizedClient
+			}
 			return (data, http.statusCode)
 		}
 		if nil == data {
@@ -330,13 +184,22 @@ open class OAuth2Backing {
 	- returns: An OAuth2JSON instance
 	*/
 	open func parseJSON(_ data: Data) throws -> OAuth2JSON {
-		if let json = try JSONSerialization.jsonObject(with: data, options: []) as? OAuth2JSON {
-			return json
+		do {
+			let json = try JSONSerialization.jsonObject(with: data, options: [])
+			if let json = json as? OAuth2JSON {
+				return json
+			}
+			if let str = String(data: data, encoding: String.Encoding.utf8) {
+				logger?.warn("OAuth2", msg: "JSON did not resolve to a dictionary, was: \(str)")
+			}
+			throw OAuth2Error.jsonParserError
 		}
-		if let str = String(data: data, encoding: String.Encoding.utf8) {
-			logger?.warn("OAuth2", msg: "Unparsable JSON was: \(str)")
+		catch let error where NSCocoaErrorDomain == error._domain && 3840 == error._code {		// JSON parser error
+			if let str = String(data: data, encoding: String.Encoding.utf8) {
+				logger?.warn("OAuth2", msg: "Unparsable JSON was: \(str)")
+			}
+			throw OAuth2Error.jsonParserError
 		}
-		throw OAuth2Error.jsonParserError
 	}
 	
 	/**

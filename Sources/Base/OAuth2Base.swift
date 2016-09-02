@@ -22,9 +22,9 @@ import Foundation
 
 
 /**
-Class extending on OAuth2Backing, exposing configuration and maintaining context, serving as base class for `OAuth2`.
+Class extending on OAuth2Requestable, exposing configuration and maintaining context, serving as base class for `OAuth2`.
 */
-open class OAuth2Base: OAuth2Backing {
+open class OAuth2Base: OAuth2Securable {
 	
 	/// The grant type represented by the class, e.g. "authorization_code" for code grants.
 	open class var grantType: String {

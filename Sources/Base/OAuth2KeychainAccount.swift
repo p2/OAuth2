@@ -42,7 +42,7 @@ struct OAuth2KeychainAccount: KeychainGenericPasswordType {
 	let accessMode: String
 	
 	
-	init(oauth2: OAuth2Backing, account: String, data inData: [String: Any] = [:]) {
+	init(oauth2: OAuth2Securable, account: String, data inData: [String: Any] = [:]) {
 		serviceName = oauth2.keychainServiceName()
 		accountName = account
 		accessMode = String(oauth2.keychainAccessMode)
