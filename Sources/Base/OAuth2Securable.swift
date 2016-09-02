@@ -160,7 +160,7 @@ open class OAuth2Securable: OAuth2Requestable {
 			do {
 				try keychain.saveInKeychain()
 			}
-			catch {
+			catch let error {
 				logger?.warn("OAuth2", msg: "Failed to store tokens to keychain: \(error)")
 			}
 		}
