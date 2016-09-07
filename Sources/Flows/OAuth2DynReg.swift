@@ -51,7 +51,7 @@ open class OAuth2DynReg {
 	- parameter client: The client to register and update with client credentials, when successful
 	- parameter callback: The callback to call when done with the registration response (JSON) and/or an error
 	*/
-	open func register(client: OAuth2, callback: ((_ json: OAuth2JSON?, _ error: OAuth2Error?) -> Void)) {
+	open func register(client: OAuth2, callback: @escaping ((_ json: OAuth2JSON?, _ error: OAuth2Error?) -> Void)) {
 		do {
 			let req = try registrationRequest(for: client)
 			client.logger?.debug("OAuth2", msg: "Registering client at \(req.url!) with scopes “\(client.scope ?? "(none)")”")

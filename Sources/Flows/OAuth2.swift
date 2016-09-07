@@ -89,7 +89,7 @@ open class OAuth2: OAuth2Base {
 	- parameter callback: The callback to call when authorization finishes (parameters will be non-nil but may be an empty dict), fails
 	                      (error will be non-nil) or is cancelled (both parameters and error is nil)
 	*/
-	public final func authorize(params: OAuth2StringDict? = nil, callback: ((OAuth2JSON?, OAuth2Error?) -> Void)) {
+	public final func authorize(params: OAuth2StringDict? = nil, callback: @escaping ((OAuth2JSON?, OAuth2Error?) -> Void)) {
 		if nil != didAuthorizeOrFail {
 			callback(nil, OAuth2Error.alreadyAuthorizing)
 			return
@@ -140,7 +140,7 @@ open class OAuth2: OAuth2Base {
 	- parameter callback: The callback to call when authorization finishes (parameters will be non-nil but may be an empty dict), fails
 	(error will be non-nil) or is cancelled (both parameters and error is nil)
 	*/
-	open func authorizeEmbedded(from context: AnyObject, params: OAuth2StringDict? = nil, callback: ((_ authParameters: OAuth2JSON?, _ error: OAuth2Error?) -> Void)) {
+	open func authorizeEmbedded(from context: AnyObject, params: OAuth2StringDict? = nil, callback: @escaping ((_ authParameters: OAuth2JSON?, _ error: OAuth2Error?) -> Void)) {
 		if nil != didAuthorizeOrFail {		// check before changing `authConfig`
 			callback(nil, OAuth2Error.alreadyAuthorizing)
 			return
@@ -191,7 +191,7 @@ open class OAuth2: OAuth2Base {
 	- parameter callback: The callback to call once the client knows whether it has an access token or not; if `success` is true an
 	                      access token is present
 	*/
-	open func tryToObtainAccessTokenIfNeeded(params: OAuth2StringDict? = nil, callback: ((OAuth2JSON?) -> Void)) {
+	open func tryToObtainAccessTokenIfNeeded(params: OAuth2StringDict? = nil, callback: @escaping ((OAuth2JSON?) -> Void)) {
 		if hasUnexpiredAccessToken() {
 			logger?.debug("OAuth2", msg: "Have an apparently unexpired access token")
 			callback(OAuth2JSON())
@@ -349,7 +349,7 @@ open class OAuth2: OAuth2Base {
 	- parameter params:   Optional key/value pairs to pass during token refresh
 	- parameter callback: The callback to call after the refresh token exchange has finished
 	*/
-	open func doRefreshToken(params: OAuth2StringDict? = nil, callback: ((OAuth2JSON?, OAuth2Error?) -> Void)) {
+	open func doRefreshToken(params: OAuth2StringDict? = nil, callback: @escaping ((OAuth2JSON?, OAuth2Error?) -> Void)) {
 		do {
 			let post = try tokenRequestForTokenRefresh(params: params).asURLRequest(for: self)
 			logger?.debug("OAuth2", msg: "Using refresh token to receive access token from \(post.url?.description ?? "nil")")
@@ -388,7 +388,7 @@ open class OAuth2: OAuth2Base {
 	- parameter callback: The callback to call on the main thread; if both json and error is nil no registration was attempted; error is nil
 	                      on success
 	*/
-	func registerClientIfNeeded(callback: ((OAuth2JSON?, OAuth2Error?) -> Void)) {
+	func registerClientIfNeeded(callback: @escaping ((OAuth2JSON?, OAuth2Error?) -> Void)) {
 		if nil != clientId {
 			callOnMainThread() {
 				callback(nil, nil)

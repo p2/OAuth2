@@ -72,7 +72,7 @@ open class OAuth2ClientCredentials: OAuth2 {
 	
 	- parameter callback: The callback to call after the process has finished
 	*/
-	public func obtainAccessToken(params: OAuth2StringDict? = nil, callback: ((_ params: OAuth2JSON?, _ error: OAuth2Error?) -> Void)) {
+	public func obtainAccessToken(params: OAuth2StringDict? = nil, callback: @escaping ((_ params: OAuth2JSON?, _ error: OAuth2Error?) -> Void)) {
 		do {
 			let post = try accessTokenRequest(params: params).asURLRequest(for: self)
 			logger?.debug("OAuth2", msg: "Requesting new access token from \(post.url?.description ?? "nil")")

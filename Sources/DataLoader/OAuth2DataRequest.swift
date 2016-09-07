@@ -33,6 +33,6 @@ public struct OAuth2DataRequest {
 	public let request: URLRequest
 	
 	/// The callback executed when the request is done.
-	public let callback: @escaping ((Void) throws -> (Data, Int)) -> Void
+	public let callback: ((Void) throws -> (Data, Int)) -> Void
 }
 
