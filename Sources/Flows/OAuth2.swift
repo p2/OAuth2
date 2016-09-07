@@ -326,7 +326,7 @@ open class OAuth2: OAuth2Base {
 	- parameter params: Additional parameters to pass during token refresh
 	- returns:          An `OAuth2AuthRequest` instance that is configured for token refresh
 	*/
-	func tokenRequestForTokenRefresh(params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
+	open func tokenRequestForTokenRefresh(params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
 		guard let clientId = clientId, !clientId.isEmpty else {
 			throw OAuth2Error.noClientId
 		}

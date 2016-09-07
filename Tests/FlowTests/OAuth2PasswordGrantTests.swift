@@ -1,5 +1,5 @@
 //
-//  OAuth2PasswordGrant_Tests.swift
+//  OAuth2PasswordGrantTests.swift
 //  OAuth2
 //
 //  Created by Tim Sneed on 6/5/15.
@@ -17,13 +17,22 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 //
+
 import XCTest
 
+#if !NO_MODULE_IMPORT
+@testable
+import Base
+@testable
+import Flows
+#else
 @testable
 import OAuth2
+#endif
 
-class OAuth2PasswordGrantTests: XCTestCase
-{
+
+class OAuth2PasswordGrantTests: XCTestCase {
+	
 	func genericOAuth2Password() -> OAuth2PasswordGrant {
 		return OAuth2PasswordGrant(settings: [
 			"client_id": "abc",

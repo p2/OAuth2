@@ -1,5 +1,5 @@
 //
-//  OAuth2ImplicitGrant_tests.swift
+//  OAuth2ImplicitGrantTests.swift
 //  OAuth2
 //
 //  Created by Pascal Pfiffner on 2/12/15.
@@ -20,8 +20,15 @@
 
 import XCTest
 
+#if !NO_MODULE_IMPORT
+@testable
+import Base
+@testable
+import Flows
+#else
 @testable
 import OAuth2
+#endif
 
 
 class OAuth2ImplicitGrantTests: XCTestCase

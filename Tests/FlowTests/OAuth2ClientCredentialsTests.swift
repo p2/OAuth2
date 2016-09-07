@@ -1,5 +1,5 @@
 //
-//  OAuth2ClientCredentials_tests.swift
+//  OAuth2ClientCredentialsTests.swift
 //  OAuth2
 //
 //  Created by Pascal Pfiffner on 5/29/15.
@@ -20,8 +20,15 @@
 
 import XCTest
 
+#if !NO_MODULE_IMPORT
+@testable
+import Base
+@testable
+import Flows
+#else
 @testable
 import OAuth2
+#endif
 
 
 class OAuth2ClientCredentialsTests: XCTestCase {

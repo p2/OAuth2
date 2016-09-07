@@ -1,5 +1,5 @@
 //
-//  OAuth2AuthRequest_tests.swift
+//  OAuth2AuthRequestTests.swift
 //  OAuth2
 //
 //  Created by Pascal Pfiffner on 18/03/16.
@@ -19,11 +19,19 @@
 //
 
 import XCTest
+
+#if !NO_MODULE_IMPORT
+@testable
+import Base
+@testable
+import Flows
+#else
 @testable
 import OAuth2
+#endif
 
 
-class OAuth2AuthRequest_Tests: XCTestCase {
+class OAuth2AuthRequestTests: XCTestCase {
 	
 	func testMethod() {
 		let url = URL(string: "http://localhost")!

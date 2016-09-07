@@ -1,5 +1,5 @@
 //
-//  OAuth2RefreshToken_tests.swift
+//  OAuth2RefreshTokenTests.swift
 //  OAuth2
 //
 //  Created by Pascal Pfiffner on 12/20/15.
@@ -18,13 +18,17 @@
 //  limitations under the License.
 //
 
-#if os(OSX)
-import Cocoa
-#endif
 import XCTest
 
+#if !NO_MODULE_IMPORT
+@testable
+import Base
+@testable
+import Flows
+#else
 @testable
 import OAuth2
+#endif
 
 
 class OAuth2RefreshTokenTests: XCTestCase {

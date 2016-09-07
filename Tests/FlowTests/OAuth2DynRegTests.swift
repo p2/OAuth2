@@ -1,5 +1,5 @@
 //
-//  OAuth2DynReg_Tests.swift
+//  OAuth2DynRegTests.swift
 //  OAuth2
 //
 //  Created by Pascal Pfiffner on 12/2/15.
@@ -19,11 +19,19 @@
 //
 
 import XCTest
+
+#if !NO_MODULE_IMPORT
+@testable
+import Base
+@testable
+import Flows
+#else
 @testable
 import OAuth2
+#endif
 
 
-class OAuth2DynReg_Tests: XCTestCase {
+class OAuth2DynRegTests: XCTestCase {
 	
 	func genericOAuth2(_ extra: OAuth2JSON? = nil) -> OAuth2 {
 		var settings = [

@@ -1,5 +1,5 @@
 //
-//  OAuth2CodeGrant.swift
+//  OAuth2CodeGrantTests.swift
 //  OAuth2
 //
 //  Created by Pascal Pfiffner on 6/18/14.
@@ -20,8 +20,15 @@
 
 import XCTest
 
+#if !NO_MODULE_IMPORT
+@testable
+import Base
+@testable
+import Flows
+#else
 @testable
 import OAuth2
+#endif
 
 
 class OAuth2CodeGrantTests: XCTestCase {

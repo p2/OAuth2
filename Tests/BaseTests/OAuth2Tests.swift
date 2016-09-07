@@ -1,5 +1,5 @@
 //
-//  OAuth2_Tests.swift
+//  OAuth2Tests.swift
 //  OAuth2 Tests
 //
 //  Created by Pascal Pfiffner on 6/6/14.
@@ -18,13 +18,17 @@
 //  limitations under the License.
 //
 
-#if os(OSX)
-import Cocoa
-#endif
 import XCTest
 
+#if !NO_MODULE_IMPORT
+@testable
+import Base
+@testable
+import Flows
+#else
 @testable
 import OAuth2
+#endif
 
 
 class OAuth2Tests: XCTestCase {
