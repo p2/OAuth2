@@ -228,14 +228,14 @@ public class OAuth2WebViewController: UIViewController, UIWebViewDelegate
 		showHideBackButton(webView.canGoBack)
 	}
 	
-	public func webView(webView: UIWebView, didFailLoadWithError error: NSError?) {
-		if NSURLErrorDomain == error?.domain && NSURLErrorCancelled == error?.code {
+	public func webView(webView: UIWebView, didFailLoadWithError error: NSError) {
+		if NSURLErrorDomain == error.domain && NSURLErrorCancelled == error.code {
 			return
 		}
 		// do we still need to intercept "WebKitErrorDomain" error 102?
 		
 		if nil != loadingView {
-			showErrorMessage(error?.localizedDescription ?? "Unknown web view load error", animated: true)
+			showErrorMessage(error.localizedDescription ?? "Unknown web view load error", animated: true)
 		}
 	}
 }
