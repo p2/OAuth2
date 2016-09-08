@@ -40,7 +40,7 @@ public class OAuth2ImplicitGrant: OAuth2 {
 			// token should be in the URL fragment
 			let comp = NSURLComponents(URL: redirect, resolvingAgainstBaseURL: true)
 			guard let fragment = comp?.percentEncodedFragment where fragment.characters.count > 0 else {
-				throw OAuth2Error.InvalidRedirectURL(redirect.absoluteString)
+				throw OAuth2Error.InvalidRedirectURL(redirect.description)
 			}
 			
 			let params = self.dynamicType.paramsFromQuery(fragment)
