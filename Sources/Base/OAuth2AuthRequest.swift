@@ -136,6 +136,13 @@ public class OAuth2AuthRequest {
 		req.setValue(contentType.rawValue, forHTTPHeaderField: "Content-Type")
 		req.setValue("application/json", forHTTPHeaderField: "Accept")
 		
+		// add custom headers
+		if let headerParams = oauth2.authHeaders where !headerParams.isEmpty {
+			for (key, value) in headerParams {
+				req.setValue(value, forHTTPHeaderField: key)
+			}
+		}
+		
 		// handle client secret if there is one
 		if let clientId = oauth2.clientConfig.clientId where !clientId.isEmpty, let secret = oauth2.clientConfig.clientSecret {
 			
