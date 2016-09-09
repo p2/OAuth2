@@ -21,7 +21,7 @@
 import Foundation
 #if !NO_MODULE_IMPORT
  import Base
- #if os(OSX)
+ #if os(macOS)
   import macOS
  #elseif os(iOS)
   import iOS

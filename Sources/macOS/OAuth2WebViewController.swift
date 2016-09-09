@@ -17,7 +17,7 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 //
-#if os(OSX)
+#if os(macOS)
 
 import Cocoa
 import WebKit
@@ -29,7 +29,7 @@ import Base
 /**
 A view controller that allows you to display the login/authorization screen.
 */
-@available(OSX 10.10, *)
+@available(macOS 10.10, *)
 public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NSWindowDelegate {
 	
 	init() {

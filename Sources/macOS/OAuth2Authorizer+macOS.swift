@@ -1,5 +1,5 @@
 //
-//  OAuth2+OSX.swift
+//  OAuth2Authorizer+macOS.swift
 //  OAuth2
 //
 //  Created by Pascal Pfiffner on 4/19/15.
@@ -17,7 +17,7 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 //
-#if os(OSX)
+#if os(macOS)
 
 import Cocoa
 #if !NO_MODULE_IMPORT
@@ -63,7 +63,7 @@ public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 	- throws:         Can throw OAuth2Error if the method is unable to show the authorize screen
 	*/
 	public func authorizeEmbedded(with config: OAuth2AuthConfig, at url: URL) throws {
-		guard #available(OSX 10.10, *) else {
+		guard #available(macOS 10.10, *) else {
 			throw OAuth2Error.generic("Embedded authorizing is only available in OS X 10.10 and later")
 		}
 		
@@ -99,7 +99,7 @@ public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 	- parameter at:   The authorize URL to open
 	- returns:        The sheet that is being queued for presentation
 	*/
-	@available(OSX 10.10, *)
+	@available(macOS 10.10, *)
 	@discardableResult
 	public func authorizeEmbedded(from window: NSWindow, at url: URL) throws -> NSWindow {
 		let controller = try presentableAuthorizeViewController(at: url)
@@ -118,7 +118,7 @@ public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 	- parameter at:   The authorize URL to open
 	- returns:        The window that is being shown on screen
 	*/
-	@available(OSX 10.10, *)
+	@available(macOS 10.10, *)
 	@discardableResult
 	public func authorizeInNewWindow(at url: URL) throws -> NSWindowController {
 		let controller = try presentableAuthorizeViewController(at: url)
@@ -136,7 +136,7 @@ public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 	- parameter at: The authorize URL to open
 	- returns:      A web view controller that you can present to the user for login
 	*/
-	@available(OSX 10.10, *)
+	@available(macOS 10.10, *)
 	func presentableAuthorizeViewController(at url: URL) throws -> OAuth2WebViewController {
 		let controller = OAuth2WebViewController()
 		controller.startURL = url
@@ -164,7 +164,7 @@ public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 	- parameter with: The auth config to use
 	- returns:                     A window controller, ready to be presented
 	*/
-	@available(OSX 10.10, *)
+	@available(macOS 10.10, *)
 	func windowController(forViewController controller: OAuth2WebViewController, with config: OAuth2AuthConfig) -> NSWindowController {
 		let rect = NSMakeRect(0, 0, OAuth2WebViewController.webViewWindowWidth, OAuth2WebViewController.webViewWindowHeight)
 		let window = NSWindow(contentRect: rect, styleMask: [.titled, .closable, .resizable, .fullSizeContentView], backing: .buffered, defer: false)

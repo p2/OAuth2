@@ -474,9 +474,9 @@
 			productReference = EEDB8624193FAAE500C4EEA1 /* OAuth2.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		EEE209461942772800736F1A /* OAuth2OSX */ = {
+		EEE209461942772800736F1A /* OAuth2macOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = EEE2095A1942772800736F1A /* Build configuration list for PBXNativeTarget "OAuth2OSX" */;
+			buildConfigurationList = EEE2095A1942772800736F1A /* Build configuration list for PBXNativeTarget "OAuth2macOS" */;
 			buildPhases = (
 				EEE209421942772800736F1A /* Sources */,
 				EEE209431942772800736F1A /* Frameworks */,
@@ -487,7 +487,7 @@
 			);
 			dependencies = (
 			);
-			name = OAuth2OSX;
+			name = OAuth2macOS;
 			productName = OAuth2;
 			productReference = EEE209471942772800736F1A /* OAuth2.framework */;
 			productType = "com.apple.product-type.framework";
@@ -555,7 +555,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				EEE209461942772800736F1A /* OAuth2OSX */,
+				EEE209461942772800736F1A /* OAuth2macOS */,
 				EEDB8623193FAAE500C4EEA1 /* OAuth2iOS */,
 				659854451C5B3BEA00237D39 /* OAuth2tvOS */,
 				EEE209A119427DFE00736F1A /* OAuth2Tests */,
@@ -719,32 +719,32 @@
 /* Begin PBXTargetDependency section */
 		EE43B1561951F2440017679A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = EEE209461942772800736F1A /* OAuth2OSX */;
+			target = EEE209461942772800736F1A /* OAuth2macOS */;
 			targetProxy = EE43B1551951F2440017679A /* PBXContainerItemProxy */;
 		};
 		EE43B1581951F2440017679A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = EEE209461942772800736F1A /* OAuth2OSX */;
+			target = EEE209461942772800736F1A /* OAuth2macOS */;
 			targetProxy = EE43B1571951F2440017679A /* PBXContainerItemProxy */;
 		};
 		EE43B15E1951FCFB0017679A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = EEE209461942772800736F1A /* OAuth2OSX */;
+			target = EEE209461942772800736F1A /* OAuth2macOS */;
 			targetProxy = EE43B15D1951FCFB0017679A /* PBXContainerItemProxy */;
 		};
 		EE43B1CC19547C4A0017679A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = EEE209461942772800736F1A /* OAuth2OSX */;
+			target = EEE209461942772800736F1A /* OAuth2macOS */;
 			targetProxy = EE43B1CB19547C4A0017679A /* PBXContainerItemProxy */;
 		};
 		EE43B1CE19547C4A0017679A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = EEE209461942772800736F1A /* OAuth2OSX */;
+			target = EEE209461942772800736F1A /* OAuth2macOS */;
 			targetProxy = EE43B1CD19547C4A0017679A /* PBXContainerItemProxy */;
 		};
 		EEE209AA19427DFE00736F1A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = EEE209461942772800736F1A /* OAuth2OSX */;
+			target = EEE209461942772800736F1A /* OAuth2macOS */;
 			targetProxy = EEE209A919427DFE00736F1A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -1050,7 +1050,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		EEE2095A1942772800736F1A /* Build configuration list for PBXNativeTarget "OAuth2OSX" */ = {
+		EEE2095A1942772800736F1A /* Build configuration list for PBXNativeTarget "OAuth2macOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EEE2095B1942772800736F1A /* Debug */,

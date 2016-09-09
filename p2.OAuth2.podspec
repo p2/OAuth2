@@ -8,9 +8,9 @@
 Pod::Spec.new do |s|
   s.name         = "p2.OAuth2"
   s.version      = "2.2.8"
-  s.summary      = "OAuth2 framework for OS X, iOS and tvOS, written in Swift."
+  s.summary      = "OAuth2 framework for macOS, iOS and tvOS, written in Swift."
   s.description  = <<-DESC
-                   OAuth2 frameworks for OS X, iOS and tvOS written in Swift.
+                   OAuth2 frameworks for macOS, iOS and tvOS written in Swift.
 
                    A flexible framework supporting standards-compliant _implicit_ and _code_ grant flows. Some
                    websites like Facebook may use slightly differring OAuth2 implementations, for those the
@@ -31,7 +31,7 @@ Pod::Spec.new do |s|
 
   s.source_files = "Sources/Base/*.swift"
   s.ios.source_files = "Sources/iOS/*.swift"
-  s.osx.source_files = "Sources/OSX/*.swift"
+  s.osx.source_files = "Sources/macOS/*.swift"
   s.tvos.source_files = "Sources/tvOS/*.swift"
 
   s.dependency "SwiftKeychain", "~> 1.0"
