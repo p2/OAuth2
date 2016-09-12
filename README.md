@@ -25,44 +25,91 @@ Usage
 
 To use OAuth2 in your own code, start with `import OAuth2` (use `p2_OAuth2` if you installed _p2.OAuth2_ via CocoaPods) in your source files.
 
-For a typical code grant flow you want to perform the following steps.
+A typical code grant flow is used for demo purposes below.
 The steps for other flows are mostly the same short of instantiating a different subclass and using different client settings.
 Most _authorize_ methods take an additional `params` parameter that allows you to supply custom additional parameters to use during authorization.
 
-### 1. Create a Settings Dictionary.
+### 1. Instantiate OAuth2 with a Settings Dictionary
+
+In this example you'll be building an iOS client to Github, so the code below will be somewhere in a view controller of yours, _maybe_ the app delegate.
 
 ```swift
-let settings = [
+let oauth2 = OAuth2CodeGrant(settings: [
     "client_id": "my_swift_app",
     "client_secret": "C7447242-A0CF-47C5-BAC7-B38BA91970A9",
-    "authorize_uri": "https://authorize.smarthealthit.org/authorize",
-    "token_uri": "https://authorize.smarthealthit.org/token",   // code grant only
-    "scope": "profile email",
-    "redirect_uris": ["myapp://oauth/callback"],   // register the "myapp" scheme in Info.plist
-    "keychain": false,     // if you DON'T want keychain integration
-] as OAuth2JSON
+    "authorize_uri": "https://github.com/login/oauth/authorize",
+    "token_uri": "https://github.com/login/oauth/access_token",   // code grant only
+    "redirect_uris": ["myapp://oauth/callback"],   // register your own "myapp" scheme in Info.plist
+    "scope": "user repo:status",
+    "secret_in_body": true,    // Github needs this
+    "keychain": false,         // if you DON'T want keychain integration
+] as OAuth2JSON)
 ```
 
-### 2. Instantiate OAuth2
-
-Create an `OAuth2CodeGrant` Instance.
+Need to debug? Use a `.debug` or even a `.trace` logger:
 
 ```swift
-let oauth2 = OAuth2CodeGrant(settings: settings)
-oauth2.onAuthorize = { parameters in
-    print("Did authorize with parameters: \(parameters)")
-}
-oauth2.onFailure = { error in        // `error` is nil on cancel
-    if let error = error {
-        print("Authorization went wrong: \(error)")
+oauth2.logger = OAuth2DebugLogger(.trace)
+```
+
+### 2. Let the Data Loader Take Over
+
+Starting with version 3.0, there is an `OAuth2DataLoader` class that you can use to retrieve data from an API.
+It will automatically start authorization if needed and will ensure that this works even if you have multiple calls going on.
+For details on how to configure authorization see step 4 below, in this example we'll use "embedded" authorization, meaning we'll show a SFSafariViewController on iOS if the user needs to log in.
+
+```swift
+oauth2.authConfig.authorizeEmbedded = true
+oauth2.authConfig.authorizeContext = <# presenting view controller / window #>
+
+let base = URL(string: "https://api.github.com")!
+let url = base.appendingPathComponent("user")
+
+var req = oauth2.request(forURL: url)
+req.setValue("application/vnd.github.v3+json", forHTTPHeaderField: "Accept")
+
+self.loader = OAuth2DataLoader(oauth2: oauth2)
+loader.perform(request: req) { response in
+    do {
+        let dict = try response.responseJSON()
+        DispatchQueue.main.async {
+            // you have received `dict` JSON data!
+        }
+    }
+    catch let error {
+        DispatchQueue.main.async {
+            // an error occurred
+        }
     }
 }
 ```
 
-### 3. Authorize the User
+### 3. Make Sure You Intercept the Callback
+
+When using the OS browser or the iOS 9+ Safari view controller, you will need to **intercept the callback** in your app delegate and let the OAuth2 instance handle the full URL:
+
+```swift
+func application(application: UIApplication,
+                 openURL url: NSURL,
+           sourceApplication: String?,
+                  annotation: AnyObject) -> Bool {
+    // you should probably first check if this is the callback being opened
+    if <# check #> {
+        oauth2.handleRedirectURL(url)
+    }
+}
+```
+
+You’re all set!
+
+---
+
+If you want to dig deeper or do authorization yourself, here it goes:
+
+### 4. Manually Authorize the User
 
 By default the OS browser will be used for authorization if there is no access token present or in the keychain.
-**Starting with iOS 9**, `SFSafariViewController` will be used when enabling embedded authorization.
+**Starting with iOS 9**, `SFSafariViewController` will be used when enabling embedded authorization on iOS.
 
 To start authorization call **`authorize(params:callback:)`** or, to use embedded authorization, the convenience method `authorizeEmbedded(from:callback:)`.
 
@@ -80,11 +127,11 @@ oauth2.authorize() { authParameters, error in
         print("Authorized! Additional parameters: \(extras)")
     }
     else {
-        print("Authorization was cancelled")
+        print("Authorization was canceled")
     }
 }
 
-// for embedded authorization you can just use:
+// for embedded authorization you can simply use:
 oauth2.authorizeEmbedded(from: <# presenting view controller / window #>) { ... }
 
 // which is equivalent to:
@@ -93,26 +140,14 @@ oauth2.authConfig.authorizeContext = <# presenting view controller / window #>
 oauth2.authorize() { ... }
 ```
 
-When using the OS browser or the iOS 9 Safari view controller, you will need to **intercept the callback** in your app delegate.
-Let the OAuth2 instance handle the full URL:
-
-```swift
-func application(application: UIApplication,
-                 openURL url: NSURL,
-           sourceApplication: String?,
-                  annotation: AnyObject) -> Bool {
-    // you should probably first check if this is your URL being opened
-    if <# check #> {
-        oauth2.handleRedirectURL(url)
-    }
-}
-```
+Don't forget, when using the OS browser or the iOS 9+ Safari view controller, you will need to **intercept the callback** in your app delegate.
+This is shown under step 2 above.
 
 See [_Manually Performing Authentication_](#manually-performing-authentication) below for details on how to do this on the Mac.
 
-### 4. Receive Callback
+### 5. Receive Callback
 
-After everything completes either the callback will be called, **either** with a non-nil _authParameters_ dictionary (which may be empty!), **or** an error.
+After everything completes the callback will be called, **either** with a non-nil _authParameters_ dictionary (which may be empty!), **or** an error.
 The access and refresh tokens and its expiration dates will already have been extracted and are available as `oauth2.accessToken` and `oauth2.refreshToken` parameters.
 You only need to inspect the _authParameters_ dictionary if you wish to extract additional information.
 
@@ -120,10 +155,10 @@ For advanced use outlined below, there is the `afterAuthorizeOrFail` block that 
 The `internalAfterAuthorizeOrFail` closure is, as its name suggests, provided for internal purposes – it is exposed for subclassing and compilation reasons and you should not mess with it.
 Additionally, as of version 3.0, there are deprecated callback properties `onAuthorize` and `onFailure` that you should no longer use.
 
-### 5. Make Requests
+### 6. Make Requests
 
-You can now obtain an `OAuth2Request`, which is an already signed `NSMutableURLRequest`, to retrieve data from your server.
-This request sets the _Authorization_ header using the access token like so: `Authorization: Bearer {your access token}`
+You can now obtain an `OAuth2Request`, which is an already signed `MutableURLRequest`, to retrieve data from your server.
+This request sets the _Authorization_ header using the access token like so: `Authorization: Bearer {your access token}`.
 
 ```swift
 let req = oauth2.request(forURL: <# resource URL #>)
@@ -140,16 +175,16 @@ let task = oauth2.session.dataTaskWithRequest(req) { data, response, error in
 task.resume()
 ```
 
-Of course you can use your own `NSURLSession` with these requests, you don't have to use `oauth2.session`.
-If you use _Alamofire_ there's a [class extension below](#usage-with-alamofire) that you can use.
+Of course you can use your own `NSURLSession` with these requests, you don't have to use `oauth2.session`; use [OAuth2DataLoader](https://github.com/p2/OAuth2/blob/master/Sources/Base/OAuth2DataLoader.swift), as shown in step 2, hand it over to _Alamofire_.
+There's a [class extension below](#usage-with-alamofire) that you can use.
 
-### 6. Cancel Authorization
+### 7. Cancel Authorization
 
 You can cancel an ongoing authorization any time by calling `oauth2.abortAuthorization()`.
 This will cancel ongoing requests (like a code exchange request) or call the callback while you're waiting for a user to login on a webpage.
 The latter will dismiss embedded login screens or redirect the user back to the app.
 
-### 7. Re-Authorize
+### 8. Re-Authorize
 
 It is safe to always call `oauth2.authorize()` before performing a request.
 You can also perform the authorization before the first request after your app became active again.
@@ -292,7 +327,7 @@ The framework deals with those deviations by creating site-specific subclasses a
 - [Reddit](https://github.com/p2/OAuth2/wiki/Reddit)
 - [Google](https://github.com/p2/OAuth2/wiki/Google)
 - [LinkedIn](https://github.com/p2/OAuth2/wiki/LinkedIn)
-- [Instagram, Bitly, ...](https://github.com/p2/OAuth2/wiki/Instagram)
+- [Instagram, Bitly, Pinterest, ...](https://github.com/p2/OAuth2/wiki/Instagram,-Bitly,-Pinterest-and-others)
 - [Uber](https://github.com/p2/OAuth2/wiki/Uber)
 - [BitBucket](https://github.com/p2/OAuth2/wiki/BitBucket)
 
@@ -421,7 +456,7 @@ To customize the _go back_ button when using `OAuth2WebViewController`:
 Installation
 ------------
 
-You can use _git_, _CocoaPods_ and possibly _Carthage_ to install the framework.
+You can use _git_, _CocoaPods_ or _Carthage_ to install the framework.
 
 #### CocoaPods
 
@@ -436,10 +471,10 @@ use_frameworks!
 
 #### Carthage
 
-Install via Carthage is possibly working with this Cartfile:
+Install via Carthage is easy enough:
 
 ```ruby
-github "p2/OAuth2" ~> 2.2
+github "p2/OAuth2" ~> 3.0
 ```
 
 #### git
