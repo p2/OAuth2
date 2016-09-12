@@ -76,7 +76,11 @@ open class OAuth2Requestable {
 	}
 	
 	/// The backing store for `session`.
-	private var _session: URLSession?
+	private var _session: URLSession? {
+		didSet {
+			requestPerformer = nil
+		}
+	}
 	
 	/// The configuration to use when creating `session`. Uses an `+ephemeralSessionConfiguration()` if nil.
 	open var sessionConfiguration: URLSessionConfiguration? {
@@ -92,6 +96,9 @@ open class OAuth2Requestable {
 		}
 	}
 	
+	/// The instance's OAuth2RequestPerformer, defaults to using OAuth2DataTaskRequestPerformer which uses `URLSession.dataTask()`.
+	open var requestPerformer: OAuth2RequestPerformer?
+	
 	/**
 	Perform the supplied request and call the callback with the response JSON dict or an error. This method is intended for authorization
 	calls, not for data calls outside of the OAuth2 dance.
@@ -99,12 +106,12 @@ open class OAuth2Requestable {
 	This implementation uses the shared `NSURLSession` and executes a data task. If the server responds with an error, this will be
 	converted into an error according to information supplied in the response JSON (if availale).
 	
-	The callback looks terrifying but is actually easy to use, like so:
+	The callback returns a response object that is easy to use, like so:
 	
-	    perform(request: req) { dataStatusResponse in
+	    perform(request: req) { response in
 	        do {
-	            let (data, status) = try dataStatusResponse()
-	            // do what you must with `data` as Data and `status` as Int
+	            let data = try response.responseData()
+	            // do what you must with `data` as Data and `response.response` as HTTPURLResponse
 	        }
 	        catch let error {
 	            // the request failed because of `error`
@@ -116,48 +123,18 @@ open class OAuth2Requestable {
 	- parameter request:  The request to execute
 	- parameter callback: The callback to call when the request completes/fails. Looks terrifying, see above on how to use it
 	*/
-	open func perform(request: URLRequest, callback: @escaping ((Void) throws -> (Data, Int)) -> Void) {
+	open func perform(request: URLRequest, callback: @escaping ((OAuth2Response) -> Void)) {
 		self.logger?.trace("OAuth2", msg: "REQUEST\n\(request.debugDescription)\n---")
-		let task = session.dataTask(with: request) { sessData, sessResponse, error in
+		let performer = requestPerformer ?? OAuth2DataTaskRequestPerformer(session: session)
+		requestPerformer = performer
+		let task = performer.perform(request: request) { sessData, sessResponse, error in
 			self.abortableTask = nil
 			self.logger?.trace("OAuth2", msg: "RESPONSE\n\(sessResponse?.debugDescription ?? "no response")\n\n\(String(data: sessData ?? Data(), encoding: String.Encoding.utf8) ?? "no data")\n---")
-			do {
-				let (data, status) = try self.requestDidReturn(with: sessData, response: sessResponse, error: error)
-				callback({ return (data, status) })
-			}
-			catch let error {
-				callback({ throw error })
-			}
+			let http = (sessResponse is HTTPURLResponse) ? (sessResponse as! HTTPURLResponse) : HTTPURLResponse(url: request.url!, statusCode: 499, httpVersion: nil, headerFields: nil)!
+			let response = OAuth2Response(data: sessData, request: request, response: http, error: error)
+			callback(response)
 		}
 		abortableTask = task
-		task.resume()
-	}
-	
-	/**
-	Can be fed the output of `NSURLSession.dataTask(with:completionHandler:)` and either throws or returns data and the HTTP status code.
-	
-	- parameter data:     A hopefully non-nil Data instance
-	- parameter response: The URLResponse, hopefully as HTTPURLResponse
-	- parameter error:    An error that might have been returned
-	- returns:            A tuple containing non-optional data and the HTTP status code
-	*/
-	func requestDidReturn(with data: Data?, response: URLResponse?, error: Error?) throws -> (Data, Int) {
-		if let error = error {
-			if NSURLErrorDomain == error._domain && -999 == error._code {		// request was cancelled
-				throw OAuth2Error.requestCancelled
-			}
-			throw error
-		}
-		else if let data = data, let http = response as? HTTPURLResponse {
-			if 401 == http.statusCode {
-				throw OAuth2Error.unauthorizedClient
-			}
-			return (data, http.statusCode)
-		}
-		if nil == data {
-			throw OAuth2Error.noDataInResponse
-		}
-		throw OAuth2Error.generic("Unknown response \(response) with data “\(String(data: data!, encoding: String.Encoding.utf8))”")
 	}
 	
 	/// Currently running abortable session task.

@@ -67,40 +67,49 @@ open class OAuth2DataLoader: OAuth2Requestable {
 	- parameter request:  The request to execute
 	- parameter callback: The callback to call when the request completes/fails. Looks terrifying, see above on how to use it
 	*/
-	override open func perform(request: URLRequest, callback: @escaping ((Void) throws -> (Data, Int)) -> Void) {
+	override open func perform(request: URLRequest, callback: @escaping ((OAuth2Response) -> Void)) {
+		perform(request: request, retry: true, callback: callback)
+	}
+	
+	open func perform(request: URLRequest, retry: Bool, callback: @escaping ((OAuth2Response) -> Void)) {
 		guard !isAuthorizing else {
 			enqueue(request: request, callback: callback)
 			return
 		}
 		
-		super.perform(request: request) { dataStatusResponse in
+		super.perform(request: request) { response in
 			do {
-				let (data, status) = try dataStatusResponse()
-				callback({ return (data, status) })
+				let _ = try response.responseData()
+				callback(response)
 			}
 			
 			// not authorized; stop and enqueue all requests, start authorization once, then re-try all enqueued requests
 			catch OAuth2Error.unauthorizedClient {
-				self.enqueue(request: request, callback: callback)
-				if !self.isAuthorizing {
-					self.isAuthorizing = true
-					self.oauth2.authorize() { json, error in
-						self.isAuthorizing = false
-						
-						// dequeue all if we're authorized, throw all away if something went wrong
-						if let error = error {
-							self.throwawayAll(with: error)
-						}
-						else {
-							self.dequeueAll()
+				if retry {
+					self.enqueue(request: request, callback: callback)
+					if !self.isAuthorizing {
+						self.isAuthorizing = true
+						self.oauth2.authorize() { json, error in
+							self.isAuthorizing = false
+							
+							// dequeue all if we're authorized, throw all away if something went wrong
+							if let error = error {
+								self.throwAllAway(with: error)
+							}
+							else {
+								self.dequeueAll()
+							}
 						}
 					}
+				}
+				else {
+					callback(response)
 				}
 			}
 				
 			// some other error, pass along
-			catch let error {
-				callback({ throw error })
+			catch {
+				callback(response)
 			}
 		}
 	}
@@ -108,7 +117,7 @@ open class OAuth2DataLoader: OAuth2Requestable {
 	
 	// MARK: - Queue
 	
-	func enqueue(request: URLRequest, callback: @escaping ((Void) throws -> (Data, Int)) -> Void) {
+	func enqueue(request: URLRequest, callback: @escaping ((OAuth2Response) -> Void)) {
 		let req = OAuth2DataRequest(request: request, callback: callback)
 		if nil == enqueued {
 			enqueued = [req]
@@ -128,11 +137,11 @@ open class OAuth2DataLoader: OAuth2Requestable {
 		for req in enq {
 			var request = req.request
 			request.sign(with: oauth2)
-			self.perform(request: request, callback: req.callback)
+			self.perform(request: request, retry: false, callback: req.callback)
 		}
 	}
 	
-	func throwawayAll(with error: OAuth2Error) {
+	func throwAllAway(with error: OAuth2Error) {
 		guard let enq = enqueued else {
 			return
 		}
@@ -140,7 +149,8 @@ open class OAuth2DataLoader: OAuth2Requestable {
 		
 		// throw them all away
 		for req in enq {
-			req.callback({ throw error })
+			let res = OAuth2Response(data: nil, request: req.request, response: HTTPURLResponse(), error: error)
+			req.callback(res)
 		}
 	}
 }

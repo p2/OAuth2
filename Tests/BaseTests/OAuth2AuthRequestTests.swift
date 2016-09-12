@@ -91,7 +91,7 @@ class OAuth2AuthRequestTests: XCTestCase {
 		catch OAuth2Error.notUsingTLS {
 		}
 		catch let error {
-			XCTAssertTrue(false, "Must throw “.NotUsingTLS” but threw \(error)")
+			XCTAssertTrue(false, "Must throw “.notUsingTLS” but threw \(error)")
 		}
 		
 		let reqP = OAuth2AuthRequest(url: URL(string: "https://auth.io")!)

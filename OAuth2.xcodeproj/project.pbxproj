@@ -84,6 +84,13 @@
 		EEAEF10B1CDBCF28001A1C6F /* OAuth2Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEAEF10A1CDBCF28001A1C6F /* OAuth2Logger.swift */; };
 		EEAEF10C1CDBCF28001A1C6F /* OAuth2Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEAEF10A1CDBCF28001A1C6F /* OAuth2Logger.swift */; };
 		EEAEF10D1CDBCF28001A1C6F /* OAuth2Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEAEF10A1CDBCF28001A1C6F /* OAuth2Logger.swift */; };
+		EEB9A97C1D86C34E0022EF66 /* OAuth2Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB9A97B1D86C34E0022EF66 /* OAuth2Response.swift */; };
+		EEB9A97D1D86C34E0022EF66 /* OAuth2Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB9A97B1D86C34E0022EF66 /* OAuth2Response.swift */; };
+		EEB9A97E1D86C34E0022EF66 /* OAuth2Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB9A97B1D86C34E0022EF66 /* OAuth2Response.swift */; };
+		EEB9A9801D86CD4A0022EF66 /* OAuth2DataLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB9A97F1D86CD4A0022EF66 /* OAuth2DataLoaderTests.swift */; };
+		EEB9A9831D86D36A0022EF66 /* OAuth2RequestPerformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB9A9821D86D36A0022EF66 /* OAuth2RequestPerformer.swift */; };
+		EEB9A9841D86D36A0022EF66 /* OAuth2RequestPerformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB9A9821D86D36A0022EF66 /* OAuth2RequestPerformer.swift */; };
+		EEB9A9851D86D36A0022EF66 /* OAuth2RequestPerformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB9A9821D86D36A0022EF66 /* OAuth2RequestPerformer.swift */; };
 		EEC49F311C9BF22400989A18 /* OAuth2AuthRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC49F301C9BF22400989A18 /* OAuth2AuthRequest.swift */; };
 		EEC49F321C9BF22400989A18 /* OAuth2AuthRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC49F301C9BF22400989A18 /* OAuth2AuthRequest.swift */; };
 		EEC49F331C9BF22400989A18 /* OAuth2AuthRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC49F301C9BF22400989A18 /* OAuth2AuthRequest.swift */; };
@@ -185,6 +192,9 @@
 		EEAC17A01CAA69110025F84B /* CONTRIBUTORS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CONTRIBUTORS.md; sourceTree = "<group>"; };
 		EEACE1DE1A7E8FC1009BF3A7 /* OAuth2CodeGrantFacebook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2CodeGrantFacebook.swift; sourceTree = "<group>"; };
 		EEAEF10A1CDBCF28001A1C6F /* OAuth2Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2Logger.swift; sourceTree = "<group>"; };
+		EEB9A97B1D86C34E0022EF66 /* OAuth2Response.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2Response.swift; sourceTree = "<group>"; };
+		EEB9A97F1D86CD4A0022EF66 /* OAuth2DataLoaderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2DataLoaderTests.swift; sourceTree = "<group>"; };
+		EEB9A9821D86D36A0022EF66 /* OAuth2RequestPerformer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2RequestPerformer.swift; sourceTree = "<group>"; };
 		EEC49F301C9BF22400989A18 /* OAuth2AuthRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = OAuth2AuthRequest.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		EEC6D57B1C2837EA00FA9B1C /* OAuth2CodeGrantLinkedIn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2CodeGrantLinkedIn.swift; sourceTree = "<group>"; };
 		EEC7A8C61AE46C33008C30E7 /* OAuth2Authorizer+macOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = "OAuth2Authorizer+macOS.swift"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -261,12 +271,14 @@
 				EE79F6561BFA945C00746243 /* OAuth2ClientConfig.swift */,
 				EE79F6531BFA93D900746243 /* OAuth2AuthConfig.swift */,
 				EEC49F301C9BF22400989A18 /* OAuth2AuthRequest.swift */,
+				EEB9A9821D86D36A0022EF66 /* OAuth2RequestPerformer.swift */,
+				EEB9A97B1D86C34E0022EF66 /* OAuth2Response.swift */,
 				EE79F6591BFAA36900746243 /* OAuth2Error.swift */,
 				EEAEF10A1CDBCF28001A1C6F /* OAuth2Logger.swift */,
 				65EC05DF1C9050CB00DE9186 /* OAuth2KeychainAccount.swift */,
-				EEDB864B19421DAD00C4EEA1 /* extensions.swift */,
 				EE29EABB195A0DB2008882C8 /* OAuth2DebugURLSessionDelegate.swift */,
 				EE2983741D40BE7600933CDD /* OAuth2AuthorizerUI.swift */,
+				EEDB864B19421DAD00C4EEA1 /* extensions.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -320,6 +332,15 @@
 				EE9EBF161D775C59003263FC /* OAuth2DataRequest.swift */,
 			);
 			path = DataLoader;
+			sourceTree = "<group>";
+		};
+		EEB9A9811D86CD540022EF66 /* DataLoader */ = {
+			isa = PBXGroup;
+			children = (
+				EEB9A97F1D86CD4A0022EF66 /* OAuth2DataLoaderTests.swift */,
+			);
+			name = DataLoader;
+			path = DataLoaderTests;
 			sourceTree = "<group>";
 		};
 		EEC7A8C51AE46C33008C30E7 /* macOS */ = {
@@ -398,6 +419,7 @@
 			children = (
 				EE4EBD7D1D7FF38200E6A9CA /* Base */,
 				EE4EBD801D7FF38200E6A9CA /* Flows */,
+				EEB9A9811D86CD540022EF66 /* DataLoader */,
 				EEE209A419427DFE00736F1A /* Supporting Files */,
 			);
 			path = Tests;
@@ -608,10 +630,12 @@
 				659854531C5B3CA700237D39 /* OAuth2ImplicitGrant.swift in Sources */,
 				659854501C5B3C9C00237D39 /* OAuth2Requestable.swift in Sources */,
 				6598544F1C5B3C9C00237D39 /* OAuth2Base.swift in Sources */,
+				EEB9A97E1D86C34E0022EF66 /* OAuth2Response.swift in Sources */,
 				EEFD23531C9ED9E400727DCF /* OAuth2ClientCredentialsReddit.swift in Sources */,
 				6598545A1C5B3CA700237D39 /* OAuth2PasswordGrant.swift in Sources */,
 				659854551C5B3CA700237D39 /* OAuth2CodeGrantFacebook.swift in Sources */,
 				659854611C5B3CB900237D39 /* Keychain.swift in Sources */,
+				EEB9A9851D86D36A0022EF66 /* OAuth2RequestPerformer.swift in Sources */,
 				659854561C5B3CA700237D39 /* OAuth2CodeGrantLinkedIn.swift in Sources */,
 				6598545D1C5B3CAB00237D39 /* OAuth2Error.swift in Sources */,
 				EE2983721D40B83600933CDD /* OAuth2.swift in Sources */,
@@ -648,11 +672,13 @@
 				EE2983761D40BE7600933CDD /* OAuth2AuthorizerUI.swift in Sources */,
 				EE9EBF181D775C59003263FC /* OAuth2DataRequest.swift in Sources */,
 				EEACE1DB1A7E8DF1009BF3A7 /* OAuth2DebugURLSessionDelegate.swift in Sources */,
+				EEB9A9841D86D36A0022EF66 /* OAuth2RequestPerformer.swift in Sources */,
 				EA97581E1B2242F9007744B1 /* OAuth2PasswordGrant.swift in Sources */,
 				EEACE1D71A7E8DEB009BF3A7 /* OAuth2ImplicitGrant.swift in Sources */,
 				EE5F4F871B19114D00DB38B3 /* OAuth2ClientCredentials.swift in Sources */,
 				EEFD23521C9ED9E400727DCF /* OAuth2ClientCredentialsReddit.swift in Sources */,
 				EE2983711D40B83600933CDD /* OAuth2.swift in Sources */,
+				EEB9A97D1D86C34E0022EF66 /* OAuth2Response.swift in Sources */,
 				EEACE1D91A7E8DEE009BF3A7 /* OAuth2CodeGrant.swift in Sources */,
 				EE9EBF141D775A21003263FC /* OAuth2DataLoader.swift in Sources */,
 				EEACE1E01A7E8FC5009BF3A7 /* OAuth2CodeGrantFacebook.swift in Sources */,
@@ -683,11 +709,13 @@
 				EE2983751D40BE7600933CDD /* OAuth2AuthorizerUI.swift in Sources */,
 				EE9EBF171D775C59003263FC /* OAuth2DataRequest.swift in Sources */,
 				EEC7A8C71AE46C33008C30E7 /* OAuth2Authorizer+macOS.swift in Sources */,
+				EEB9A9831D86D36A0022EF66 /* OAuth2RequestPerformer.swift in Sources */,
 				EEACE1DA1A7E8DF1009BF3A7 /* OAuth2DebugURLSessionDelegate.swift in Sources */,
 				EE5F4F861B19114D00DB38B3 /* OAuth2ClientCredentials.swift in Sources */,
 				EEACE1D61A7E8DEB009BF3A7 /* OAuth2ImplicitGrant.swift in Sources */,
 				EEFD23511C9ED9E400727DCF /* OAuth2ClientCredentialsReddit.swift in Sources */,
 				EE2983701D40B83600933CDD /* OAuth2.swift in Sources */,
+				EEB9A97C1D86C34E0022EF66 /* OAuth2Response.swift in Sources */,
 				EEACE1D81A7E8DEE009BF3A7 /* OAuth2CodeGrant.swift in Sources */,
 				EE9EBF131D775A21003263FC /* OAuth2DataLoader.swift in Sources */,
 				EE86C4651C48F6AC00B7D486 /* OAuth2CodeGrantNoTokenType.swift in Sources */,
@@ -708,6 +736,7 @@
 				EE4EBD891D7FF38200E6A9CA /* OAuth2ClientCredentialsTests.swift in Sources */,
 				EE4EBD8B1D7FF38200E6A9CA /* OAuth2DynRegTests.swift in Sources */,
 				EE4EBD8A1D7FF38200E6A9CA /* OAuth2CodeGrantTests.swift in Sources */,
+				EEB9A9801D86CD4A0022EF66 /* OAuth2DataLoaderTests.swift in Sources */,
 				EE4EBD8C1D7FF38200E6A9CA /* OAuth2ImplicitGrantTests.swift in Sources */,
 				EE4EBD8E1D7FF38200E6A9CA /* OAuth2RefreshTokenTests.swift in Sources */,
 				EE4EBD871D7FF38200E6A9CA /* OAuth2Tests.swift in Sources */,

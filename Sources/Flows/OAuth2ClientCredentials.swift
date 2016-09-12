@@ -77,9 +77,9 @@ open class OAuth2ClientCredentials: OAuth2 {
 			let post = try accessTokenRequest(params: params).asURLRequest(for: self)
 			logger?.debug("OAuth2", msg: "Requesting new access token from \(post.url?.description ?? "nil")")
 			
-			perform(request: post) { dataStatusResponse in
+			perform(request: post) { response in
 				do {
-					let (data, _) = try dataStatusResponse()
+					let data = try response.responseData()
 					let params = try self.parseAccessTokenResponse(data: data)
 					self.logger?.debug("OAuth2", msg: "Did get access token [\(nil != self.clientConfig.accessToken)]")
 					callback(params, nil)

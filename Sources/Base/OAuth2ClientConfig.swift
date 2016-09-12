@@ -83,7 +83,7 @@ open class OAuth2ClientConfig {
 		if let auth = settings["authorize_uri"] as? String {
 			aURL = URL(string: auth)
 		}
-		authorizeURL = aURL ?? URL(string: "http://localhost")!
+		authorizeURL = aURL ?? URL(string: "https://localhost/p2.OAuth2.defaultAuthorizeURI")!
 		
 		// token, registration and logo URLs
 		if let token = settings["token_uri"] as? String {
