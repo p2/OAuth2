@@ -190,7 +190,7 @@ It is safe to always call `oauth2.authorize()` before performing a request.
 You can also perform the authorization before the first request after your app became active again.
 Or you can always intercept 401s in your requests and call authorize again before re-attempting the request.
 
-### 8. Logout
+### 9. Logout
 
 If you're storing tokens to the keychain, you can call `forgetTokens()` to throw them away.
 
