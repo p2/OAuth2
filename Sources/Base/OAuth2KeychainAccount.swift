@@ -19,7 +19,7 @@
 //
 
 import Foundation
-#if !NO_KEYCHAIN_IMPORT     // needs to be imported when using `swift build` or with CocoaPods, not when building via Xcode
+#if !NO_KEYCHAIN_IMPORT     // needs to be imported when using `swift build`, not when building via Xcode
 import SwiftKeychain
 #endif
 

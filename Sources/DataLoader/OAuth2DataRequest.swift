@@ -20,7 +20,8 @@
 
 import Foundation
 #if !NO_MODULE_IMPORT
- import Flows
+import Base
+import Flows
 #endif
 
 

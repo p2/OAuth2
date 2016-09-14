@@ -28,7 +28,7 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = "8.0"
   s.osx.deployment_target = "10.10"
   s.tvos.deployment_target = "9.0"
-  s.compiler_flags = "-DNO_MODULE_IMPORT"
+  s.pod_target_xcconfig = { "OTHER_SWIFT_FLAGS" => "-DNO_MODULE_IMPORT -DNO_KEYCHAIN_IMPORT" }
 
   s.source_files = "Sources/Base/*.swift", "Sources/Flows/*.swift", "Sources/DataLoader/*.swift", "SwiftKeychain/Keychain/*.swift"
   s.ios.source_files = "Sources/iOS/*.swift"
