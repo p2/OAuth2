@@ -35,6 +35,9 @@ struct OAuth2KeychainAccount: KeychainGenericPasswordType {
 	/// The account name to use.
 	let accountName: String
 	
+	/// The keychain access group.
+	var accessGroup: String?
+	
 	/// Data that ends up in the keychain.
 	var data = [String: Any]()
 	
@@ -46,6 +49,7 @@ struct OAuth2KeychainAccount: KeychainGenericPasswordType {
 		serviceName = oauth2.keychainServiceName()
 		accountName = account
 		accessMode = String(oauth2.keychainAccessMode)
+		accessGroup = oauth2.keychainAccessGroup
 		data = inData
 	}
 }

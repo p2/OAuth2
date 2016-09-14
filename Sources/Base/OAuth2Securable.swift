@@ -52,14 +52,17 @@ open class OAuth2Securable: OAuth2Requestable {
 		}
 	}
 	
-	/// Defaults to `kSecAttrAccessibleWhenUnlocked`
+	/// Defaults to `kSecAttrAccessibleWhenUnlocked`. MUST be set via `keychain_access_group` init setting.
 	open internal(set) var keychainAccessMode = kSecAttrAccessibleWhenUnlocked
+	
+	/// Keychain access group, none is set by default. MUST be set via `keychain_access_group` init setting.
+	open internal(set) var keychainAccessGroup: String?
 	
 	
 	/**
 	Base initializer.
 	
-	Looks at the `verbose`, `keychain` and `keychain_access_mode`. Everything else is handled by subclasses.
+	Looks at the `verbose`, `keychain`, `keychain_access_mode` and `keychain_access_group`. Everything else is handled by subclasses.
 	*/
 	public init(settings: OAuth2JSON) {
 		self.settings = settings
@@ -70,6 +73,9 @@ open class OAuth2Securable: OAuth2Requestable {
 		}
 		if let accessMode = settings["keychain_access_mode"] as? String {
 			keychainAccessMode = accessMode as CFString
+		}
+		if let accessGroup = settings["keychain_access_group"] as? String {
+			keychainAccessGroup = accessGroup
 		}
 		
 		// logging settings

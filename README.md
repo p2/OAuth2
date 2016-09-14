@@ -4,12 +4,12 @@ OAuth2
 [![Build Status](https://travis-ci.org/p2/OAuth2.svg?branch=master)](https://travis-ci.org/p2/OAuth2)
 [![License](https://img.shields.io/:license-apache-blue.svg)](LICENSE.txt)
 
-OAuth2 frameworks for **OS X**, **iOS** and **tvOS** written in Swift 2.2.
+OAuth2 frameworks for **OS X**, **iOS** and **tvOS** written in Swift 3.0.
 
 Technical documentation is available at [p2.github.io/OAuth2](https://p2.github.io/OAuth2).
 Take a look at the [OS X sample app][sample] for basic usage of this framework.
 
-The code in this repo requires Xcode 7.3, the built framework can be used on **OS X 10.9** or **iOS 8** and later.
+The code in this repo requires Xcode 8, the built framework can be used on **OS X 10.9** or **iOS 8** and later.
 To use on **iOS 7** you'll have to include the source files in your main project.
 Happy to accept pull requests, please see [CONTRIBUTING.md](./CONTRIBUTING.md)
 
@@ -60,7 +60,7 @@ For details on how to configure authorization see step 4 below, in this example 
 
 ```swift
 oauth2.authConfig.authorizeEmbedded = true
-oauth2.authConfig.authorizeContext = <# presenting view controller / window #>
+oauth2.authConfig.authorizeContext = <# your view controller / window #>
 
 let base = URL(string: "https://api.github.com")!
 let url = base.appendingPathComponent("user")
@@ -89,10 +89,9 @@ loader.perform(request: req) { response in
 When using the OS browser or the iOS 9+ Safari view controller, you will need to **intercept the callback** in your app delegate and let the OAuth2 instance handle the full URL:
 
 ```swift
-func application(application: UIApplication,
-                 openURL url: NSURL,
-           sourceApplication: String?,
-                  annotation: AnyObject) -> Bool {
+func application(_ app: UIApplication,
+              open url: URL,
+               options: [UIApplicationOpenURLOptionsKey: Any] = [:]) -> Bool {
     // you should probably first check if this is the callback being opened
     if <# check #> {
         oauth2.handleRedirectURL(url)
@@ -175,7 +174,7 @@ let task = oauth2.session.dataTaskWithRequest(req) { data, response, error in
 task.resume()
 ```
 
-Of course you can use your own `NSURLSession` with these requests, you don't have to use `oauth2.session`; use [OAuth2DataLoader](https://github.com/p2/OAuth2/blob/master/Sources/Base/OAuth2DataLoader.swift), as shown in step 2, hand it over to _Alamofire_.
+Of course you can use your own `URLSession` with these requests, you don't have to use `oauth2.session`; use [OAuth2DataLoader](https://github.com/p2/OAuth2/blob/master/Sources/Base/OAuth2DataLoader.swift), as shown in step 2, hand it over to _Alamofire_.
 There's a [class extension below](#usage-with-alamofire) that you can use.
 
 ### 7. Cancel Authorization
@@ -199,7 +198,7 @@ When using the built-in web view on iOS 8, one can use the following snippet to 
 With the newer `SFSafariViewController`, or logins performed in the browser, it's probably best to directly **open the logout page** so the user sees the logout happen.
 
 ```swift
-let storage = NSHTTPCookieStorage.sharedHTTPCookieStorage()
+let storage = HTTPCookieStorage.shared
 storage.cookies?.forEach() { storage.deleteCookie($0) }
 ```
 
@@ -215,7 +214,7 @@ The `authorize(params:callback:)` method will:
 4. Try to use the refresh token to get a new access token, if it fails
 5. Start the OAuth2 dance by using the `authConfig` settings to determine how to display an authorize screen to the user
 
-Your `oauth2` instance will use an automatically created `NSURLSession` using an `ephemeralSessionConfiguration()` configuration for its requests, exposed on `oauth2.session`.
+Your `oauth2` instance will use an automatically created `URLSession` using an `ephemeralSessionConfiguration()` configuration for its requests, exposed on `oauth2.session`.
 You can set `oauth2.sessionConfiguration` to your own configuration, for example if you'd like to change timeout values.
 You can also set `oauth2.sessionDelegate` to your own session delegate if you like.
 
@@ -274,8 +273,8 @@ See the [OAuth2 Sample App][sample]'s AppDelegate class on how to receive the ca
 If the authentication displays the code to the user, e.g. with Google's `urn:ietf:wg:oauth:2.0:oob` callback URL, you can retrieve the code from the user's pasteboard and continue authorization with:
 
 ```swift
-let pboard = NSPasteboard.generalPasteboard()
-if let pasted = pboard.stringForType(NSPasteboardTypeString) {
+let pboard = NSPasteboard.general()
+if let pasted = pboard.string(forType: NSPasteboardTypeString) {
     oauth2.exchangeCodeForToken(pasted)
 }
 ```
