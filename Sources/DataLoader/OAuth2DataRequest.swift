@@ -40,6 +40,7 @@ public struct OAuth2DataRequest {
 	public var context: Any? = nil
 	
 	
+	/** The one initializer. */
 	public init(request: URLRequest, callback: @escaping (OAuth2Response) -> Void) {
 		self.request = request
 		self.callback = callback

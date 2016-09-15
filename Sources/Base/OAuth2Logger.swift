@@ -51,9 +51,10 @@ public enum OAuth2LogLevel: Int, CustomStringConvertible {
 }
 
 extension OAuth2LogLevel: Comparable {
-}
-public func <(lh: OAuth2LogLevel, rh: OAuth2LogLevel) -> Bool {
-	return lh.rawValue < rh.rawValue
+	
+	static public func <(lh: OAuth2LogLevel, rh: OAuth2LogLevel) -> Bool {
+		return lh.rawValue < rh.rawValue
+	}
 }
 
 

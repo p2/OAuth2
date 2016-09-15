@@ -9,6 +9,11 @@
 import Foundation
 
 
+/**
+Protocol for types that can perform `URLRequest`s.
+
+The class `OAuth2DataTaskRequestPerformer` implements this protocol and is by default used by all `OAuth2` classes to perform requests.
+*/
 public protocol OAuth2RequestPerformer {
 	
 	/**

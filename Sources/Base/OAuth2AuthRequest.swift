@@ -25,7 +25,11 @@ import Foundation
 HTTP methods for auth requests.
 */
 public enum OAuth2HTTPMethod: String {
+	
+	/// "GET" is the HTTP method of choice.
 	case GET = "GET"
+	
+	/// This is a "POST" method.
 	case POST = "POST"
 }
 
@@ -47,8 +51,14 @@ public enum OAuth2HTTPContentType: String {
 The auth method supported by the endpoint.
 */
 public enum OAuth2EndpointAuthMethod: String {
+	
+	/// No auth method is to be used. Good luck with that.
 	case none = "none"
+	
+	/// The `client_secret_post` method should be used.
 	case clientSecretPost = "client_secret_post"
+	
+	/// The `client_secret_basic` method should be used.
 	case clientSecretBasic = "client_secret_basic"
 }
 
@@ -221,14 +231,16 @@ open class OAuth2AuthRequest {
 
 
 /**
-Struct to hold on to request parameters. Provides utility functions so the parameters can be correctly encoded for use in URLs and request
-bodies.
+Struct to hold on to request parameters.
+
+Provides utility functions so the parameters can be correctly encoded for use in URLs and request bodies.
 */
 public struct OAuth2RequestParams {
 	
 	/// The parameters to be used.
 	public private(set) var params: OAuth2StringDict? = nil
 	
+	/** Designated initalizer. */
 	public init() {  }
 	
 	public subscript(key: String) -> String? {
