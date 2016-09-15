@@ -220,6 +220,16 @@ class OAuth2ImplicitGrantTests: XCTestCase
 		oauth.handleRedirectURL(URL(string: "https://auth.ful.io#token_type=helicopter&access_token=abc&state=\(oauth.context.state)")!)
 		XCTAssertNil(oauth.accessToken, "Must not have an access token")
 		
+		// Missing state
+		oauth.context._state = "ONSTUH"		// because it has been reset
+		oauth.didAuthorizeOrFail = { authParameters, error in
+			XCTAssertNil(authParameters, "Nil auth dict expected")
+			XCTAssertNotNil(error, "Error message expected")
+			XCTAssertEqual(error, OAuth2Error.missingState)
+		}
+		oauth.handleRedirectURL(URL(string: "https://auth.ful.io#token_type=bearer&access_token=abc")!)
+		XCTAssertNil(oauth.accessToken, "Must not have an access token")
+		
 		// Invalid state
 		oauth.context._state = "ONSTUH"		// because it has been reset
 		oauth.didAuthorizeOrFail = { authParameters, error in

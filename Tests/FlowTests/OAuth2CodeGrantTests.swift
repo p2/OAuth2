@@ -142,7 +142,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 			_ = try oauth.validateRedirectURL(redirect)
 			XCTAssertTrue(false, "Should not be here")
 		}
-		catch OAuth2Error.invalidState {
+		catch OAuth2Error.missingState {
 		}
 		catch let error {
 			XCTAssertTrue(false, "Must not end up here with \(error)")

@@ -12,6 +12,7 @@ You can also refer to commit logs to get details on what was implemented, fixed 
 - All errors returned by OAuth2 are now `OAuth2Error` types
 - Add `Package.swift` for the Swift package manager
 - Expose `keychainAccessGroup` (`keychain_access_group` in settings; thanks @damienrambout !)
+- Some new errors (like `.forbidden` and `.missingState`)
 
 
 ### 2.2.9

@@ -90,7 +90,7 @@ open class OAuth2: OAuth2Base {
 	                      (error will be non-nil) or is cancelled (both parameters and error is nil)
 	*/
 	public final func authorize(params: OAuth2StringDict? = nil, callback: @escaping ((OAuth2JSON?, OAuth2Error?) -> Void)) {
-		if nil != didAuthorizeOrFail {
+		if isAuthorizing {
 			callback(nil, OAuth2Error.alreadyAuthorizing)
 			return
 		}
@@ -141,7 +141,7 @@ open class OAuth2: OAuth2Base {
 	(error will be non-nil) or is cancelled (both parameters and error is nil)
 	*/
 	open func authorizeEmbedded(from context: AnyObject, params: OAuth2StringDict? = nil, callback: @escaping ((_ authParameters: OAuth2JSON?, _ error: OAuth2Error?) -> Void)) {
-		if nil != didAuthorizeOrFail {		// check before changing `authConfig`
+		if isAuthorizing {		// `authorize()` will check this, but we want to exit before changing `authConfig`
 			callback(nil, OAuth2Error.alreadyAuthorizing)
 			return
 		}

@@ -124,6 +124,11 @@ open class OAuth2Base: OAuth2Securable {
 	/// This closure is internally used with `authorize(params:callback:)` and only exposed for subclassing reason, do not mess with it!
 	public final var didAuthorizeOrFail: ((_ parameters: OAuth2JSON?, _ error: OAuth2Error?) -> Void)?
 	
+	/// Returns true if the receiver is currently authorizing.
+	public final var isAuthorizing: Bool {
+		return nil != didAuthorizeOrFail
+	}
+	
 	/// Closure called on successful authentication on the main thread.
 	@available(*, deprecated: 3.0, message: "Use the `authorize(params:callback:)` method and variants")
 	public final var onAuthorize: ((_ parameters: OAuth2JSON) -> Void)?
@@ -417,10 +422,14 @@ open class OAuth2Base: OAuth2Securable {
 	}
 	
 	/**
-	This method checks `state`, throws `OAuth2Error.InvalidState` if it doesn't match. Resets state if it matches.
+	This method checks `state`, throws `OAuth2Error.missingState` or `OAuth2Error.invalidState`. Resets state if it matches.
 	*/
 	public final func assureMatchesState(_ params: OAuth2JSON) throws {
-		if !context.matchesState(params["state"] as? String) {
+		guard let state = params["state"] as? String, !state.isEmpty else {
+			throw OAuth2Error.missingState
+		}
+		logger?.trace("OAuth2", msg: "Checking state, got “\(state)”, expecting “\(context.state)”")
+		if !context.matchesState(state) {
 			throw OAuth2Error.invalidState
 		}
 		context.resetState()

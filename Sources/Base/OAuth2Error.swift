@@ -103,6 +103,9 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 	/// Some prerequisite failed; with explanation.
 	case prerequisiteFailed(String)
 	
+	/// The state parameter was missing in the response.
+	case missingState
+	
 	/// The state parameter was invalid.
 	case invalidState
 	
@@ -224,8 +227,10 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 			return "No data in the response"
 		case .prerequisiteFailed(let message):
 			return message
+		case .missingState:
+			return "The state parameter was missing in the response"
 		case .invalidState:
-			return "The state was either empty or did not check out"
+			return "The state parameter did not check out"
 		case .jsonParserError:
 			return "Error parsing JSON"
 		case .utf8EncodeError:
@@ -282,6 +287,7 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 		case (.unsupportedTokenType(let lhm), .unsupportedTokenType(let rhm)):   return lhm == rhm
 		case (.noDataInResponse, .noDataInResponse):                 return true
 		case (.prerequisiteFailed(let lhm), .prerequisiteFailed(let rhm)):       return lhm == rhm
+		case (.missingState, .missingState):                         return true
 		case (.invalidState, .invalidState):                         return true
 		case (.jsonParserError, .jsonParserError):                   return true
 		case (.utf8EncodeError, .utf8EncodeError):                   return true
