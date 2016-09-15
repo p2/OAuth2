@@ -2,9 +2,9 @@
 module:      OAuth2
 
 author:      Pascal Pfiffner
-author_url:  http://www.github.com/p2
-root_url:    http://smart-on-fhir.github.io/Swift-SMART
-github_url:  http://p2.github.io/OAuth2
+author_url:  https://github.com/p2
+root_url:    https://p2.github.io/OAuth2
+github_url:  https://github.com/p2/OAuth2
 
 theme:       fullwidth
 readme:      README.md
