@@ -8,7 +8,8 @@ You can also refer to commit logs to get details on what was implemented, fixed 
 ### 3.0.0
 
 - Rewrite in Swift 3
-- Broad API redesign, you should now use `authorize(params:callback:)`
+- New DataLoader, meaning you don't have to do authorization yourself (and helps with Alamofire use)
+- Broad API redesign, you should now use `authorize(params:callback:)` if you still authorize manually
 - All errors returned by OAuth2 are now `OAuth2Error` types
 - Add `Package.swift` for the Swift package manager
 - Expose `keychainAccessGroup` (`keychain_access_group` in settings; thanks @damienrambout !)
