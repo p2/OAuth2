@@ -118,10 +118,13 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 	
 	// MARK: - OAuth2 errors
 	
-	/// The client is unauthorized.
+	/// The client is unauthorized (HTTP status 401).
 	case unauthorizedClient
 	
-	/// Username or password was wrong.
+	/// The request was forbidden (HTTP status 403).
+	case forbidden
+	
+	/// Username or password was wrong (HTTP status 403 on password grant).
 	case wrongUsernamePassword
 	
 	/// Access was denied.
@@ -232,10 +235,12 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 		
 		case .unauthorizedClient:
 			return "The client is not authorized to request an access token using this method."
-		case .accessDenied:
-			return "The resource owner or authorization server denied the request."
+		case .forbidden:
+			return "Forbidden"
 		case .wrongUsernamePassword:
 			return "The username or password is incorrect"
+		case .accessDenied:
+			return "The resource owner or authorization server denied the request."
 		case .unsupportedResponseType:
 			return "The authorization server does not support obtaining an access token using this method."
 		case .invalidScope:
@@ -283,8 +288,9 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 		case (.utf8DecodeError, .utf8DecodeError):                   return true
 		
 		case (.unauthorizedClient, .unauthorizedClient):             return true
-		case (.accessDenied, .accessDenied):                         return true
+		case (.forbidden, .forbidden):                               return true
 		case (.wrongUsernamePassword, .wrongUsernamePassword):       return true
+		case (.accessDenied, .accessDenied):                         return true
 		case (.unsupportedResponseType, .unsupportedResponseType):   return true
 		case (.invalidScope, .invalidScope):                         return true
 		case (.serverError, .serverError):                           return true

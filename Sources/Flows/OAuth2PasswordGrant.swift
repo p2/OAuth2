@@ -102,13 +102,16 @@ open class OAuth2PasswordGrant: OAuth2 {
 					let data = try response.responseData()
 					let dict = try self.parseAccessTokenResponse(data: data)
 					if response.response.statusCode >= 400 {
-						if 401 == response.response.statusCode || 403 == response.response.statusCode {           // TODO: which one is it?
-							throw OAuth2Error.wrongUsernamePassword
-						}
 						throw OAuth2Error.generic("Failed with status \(response.response.statusCode)")
 					}
 					self.logger?.debug("OAuth2", msg: "Did get access token [\(nil != self.clientConfig.accessToken)]")
 					callback(dict, nil)
+				}
+				catch OAuth2Error.unauthorizedClient {     // TODO: which one is it?
+					callback(nil, OAuth2Error.wrongUsernamePassword)
+				}
+				catch OAuth2Error.forbidden {              // TODO: which one is it?
+					callback(nil, OAuth2Error.wrongUsernamePassword)
 				}
 				catch let error {
 					self.logger?.debug("OAuth2", msg: "Error obtaining access token: \(error)")

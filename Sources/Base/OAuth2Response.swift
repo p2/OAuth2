@@ -65,7 +65,7 @@ open class OAuth2Response {
 	Throws errors if something with the request went wrong, noop otherwise. You can use this to quickly figure out how to proceed in
 	request callbacks.
 	
-	If data is returned but the status code is >= 400, nothing will be raised **except** if there's a 401.
+	If data is returned but the status code is >= 400, nothing will be raised **except** if there's a 401 or 403.
 	
 	- throws:  Specific OAuth2Errors (.requestCancelled, .unauthorizedClient, .noDataInResponse) or any Error returned from the request
 	- returns: Response data
@@ -79,6 +79,9 @@ open class OAuth2Response {
 		}
 		else if 401 == response.statusCode {
 			throw OAuth2Error.unauthorizedClient
+		}
+		else if 403 == response.statusCode {
+			throw OAuth2Error.forbidden
 		}
 		else if let data = data {
 			return data
