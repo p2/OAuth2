@@ -6,11 +6,11 @@ OAuth2
 
 OAuth2 frameworks for **OS X**, **iOS** and **tvOS** written in Swift 3.0.
 
-Technical documentation is available at [p2.github.io/OAuth2](https://p2.github.io/OAuth2).
-Take a look at the [OS X sample app][sample] for basic usage of this framework.
+[⤵️ Installation](#installation)  
+[📱 Sample App][sample]  
+[📖 Technical Documentation](https://p2.github.io/OAuth2)
 
-The code in this repo requires Xcode 8, the built framework can be used on **OS X 10.9** or **iOS 8** and later.
-To use on **iOS 7** you'll have to include the source files in your main project.
+OAuth2 requires Xcode 8, the built framework can be used on **OS X 10.9** or **iOS 8** and later.
 Happy to accept pull requests, please see [CONTRIBUTING.md](./CONTRIBUTING.md)
 
 ### Swift Version
@@ -37,7 +37,7 @@ In this example you'll be building an iOS client to Github, so the code below wi
 ```swift
 let oauth2 = OAuth2CodeGrant(settings: [
     "client_id": "my_swift_app",
-    "client_secret": "C7447242-A0CF-47C5-BAC7-B38BA91970A9",
+    "client_secret": "C7447242",
     "authorize_uri": "https://github.com/login/oauth/authorize",
     "token_uri": "https://github.com/login/oauth/access_token",   // code grant only
     "redirect_uris": ["myapp://oauth/callback"],   // register your own "myapp" scheme in Info.plist
@@ -46,6 +46,9 @@ let oauth2 = OAuth2CodeGrant(settings: [
     "keychain": false,         // if you DON'T want keychain integration
 ] as OAuth2JSON)
 ```
+
+See those `redirect_uris`?
+You can use the scheme you want, but you must **a)** declare the scheme you use in your `Info.plist` and **b)** register the very same URI on the website you connect to.
 
 Want to avoid switching to Safari and pop up a SafariViewController or NSPanel?
 Set this:
@@ -60,6 +63,9 @@ Need to debug? Use a `.debug` or even a `.trace` logger:
 ```swift
 oauth2.logger = OAuth2DebugLogger(.trace)
 ```
+
+For more see [advanced settings](#advanced-settings) below.
+
 
 ### 2. Let the Data Loader or Alamofire Take Over
 
@@ -346,6 +352,48 @@ let oauth2 = OAuth2CodeGrant(settings: [
 - [BitBucket](https://github.com/p2/OAuth2/wiki/BitBucket)
 
 
+Advanced Settings
+-----------------
+
+The main configuration you'll use with `oauth2.authConfig` is whether or not to use an embedded login:
+
+    oauth2.authConfig.authorizeEmbedded = true
+
+Similarly, if you want to take care of dismissing the login screen yourself:
+
+    oauth2.authConfig.authorizeEmbeddedAutoDismiss = false
+
+Some sites also want the client-id/secret combination in the request _body_, not in the _Authorization_ header:
+
+    oauth2.authConfig.secretInBody = true
+    // or in your settings:
+    "secret_in_body": true
+
+Sometimes you also need to provide additional authorization parameters.
+This can be done in 3 ways:
+
+    oauth2.clientConfig.authParameters = ["duration": "permanent"]
+    // or in your settings:
+    "parameters": ["duration": "permanent"]
+    // or when you authorize manually:
+    oauth2.authorize(params: ["duration": "permanent"]) { ... }
+
+Similar is how you specify custom HTTP headers:
+
+    oauth2.clientConfig.authHeaders = ["Accept": "application/json, text/plain"]
+    // or in your settings:
+    "headers": ["Accept": "application/json, text/plain"]
+
+Starting with version 2.0.1 on iOS 9, `SFSafariViewController` will be used for embedded authorization.
+To revert to the old custom `OAuth2WebViewController`:
+
+    oauth2.authConfig.ui.useSafariView = false
+
+To customize the _go back_ button when using `OAuth2WebViewController` on iOS 8 and older:
+
+    oauth2.authConfig.ui.backButton = <# UIBarButtonItem(...) #>
+
+
 Usage with Alamofire
 --------------------
 
@@ -409,32 +457,6 @@ You will need to intercept 401s and re-authorize if an access token has expired 
 This behavior can be turned off by supplying "token_assume_unexpired": false in settings or setting `clientConfig.accessTokenAssumeUnexpired` to false.
 
 
-Advanced Settings
------------------
-
-The main configuration you'll use with `oauth2.authConfig` is whether or not to use an embedded login:
-
-    oauth2.authConfig.authorizeEmbedded = true
-
-Similarly, if you want to take care of dismissing the login screen yourself:
-
-    oauth2.authConfig.authorizeEmbeddedAutoDismiss = false
-
-Some sites also want the client-id/secret combination in the request _body_, not in the _Authorization_ header:
-
-    oauth2.authConfig.secretInBody = true
-
-Starting with version 2.0.1 on iOS 9, `SFSafariViewController` will be used for embedded authorization.
-To revert to the old custom `OAuth2WebViewController`:
-
-    oauth2.authConfig.ui.useSafariView = false
-
-To customize the _go back_ button when using `OAuth2WebViewController`:
-
-    oauth2.authConfig.ui.backButton = <# UIBarButtonItem(...) #>
-
-
-
 Installation
 ------------
 
@@ -447,7 +469,7 @@ If you're unfamiliar with CocoaPods, read [using CocoaPods](http://guides.cocoap
 
 ```ruby
 platform :ios, '8.0'      # or platform :osx, '10.9'
-pod 'p2.OAuth2'
+pod 'p2.OAuth2', '~> 3.0'
 use_frameworks!
 ```
 
@@ -480,10 +502,6 @@ These three steps are needed to:
 1. Make your App also build the framework
 2. Link the framework into your app
 3. Embed the framework in your app when distributing
-
-> NOTE that as of Xcode 6.2, the "embed" step happens in the "General" tab.
-> You may want to perform step 2 and 3 from the "General" tab.
-> Also make sure you select the framework for the platform, as of Xcode 7 this is visible behind _OAuth2.framework_.
 
 
 License
