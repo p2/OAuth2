@@ -75,7 +75,7 @@ public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 			}
 		}
 		else {
-		let web = try authorizeEmbedded(from: controller, at: url)
+			let web = try authorizeEmbedded(from: controller, at: url)
 			if config.authorizeEmbeddedAutoDismiss {
 				oauth2.internalAfterAuthorizeOrFail = { wasFailure, error in
 					web.dismiss(animated: true)

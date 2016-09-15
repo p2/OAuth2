@@ -94,9 +94,15 @@ open class OAuth2: OAuth2Base {
 			callback(nil, OAuth2Error.alreadyAuthorizing)
 			return
 		}
+		var prms = authParameters
+		if nil != prms, let params = params {
+			params.forEach() { prms![$0] = $1 }
+		}
+		let useParams = prms ?? params
+		
 		didAuthorizeOrFail = callback
 		logger?.debug("OAuth2", msg: "Starting authorization")
-		tryToObtainAccessTokenIfNeeded(params: params) { successParams in
+		tryToObtainAccessTokenIfNeeded(params: useParams) { successParams in
 			if let successParams = successParams {
 				self.didAuthorize(withParameters: successParams)
 			}
@@ -108,7 +114,7 @@ open class OAuth2: OAuth2Base {
 					else {
 						do {
 							assert(Thread.isMainThread)
-							try self.doAuthorize(params: params)
+							try self.doAuthorize(params: useParams)
 						}
 						catch let error {
 							self.didFail(with: error.asOAuth2Error)

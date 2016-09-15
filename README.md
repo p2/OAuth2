@@ -13,7 +13,7 @@ The code in this repo requires Xcode 8, the built framework can be used on **OS 
 To use on **iOS 7** you'll have to include the source files in your main project.
 Happy to accept pull requests, please see [CONTRIBUTING.md](./CONTRIBUTING.md)
 
-#### Swift Version
+### Swift Version
 
 Since the Swift language is constantly evolving I have adopted a versioning scheme mirroring Swift versions:
 the framework version's **first two digits are always the Swift version** the library is compatible with, see [releases](https://github.com/p2/OAuth2/releases).
@@ -27,7 +27,8 @@ To use OAuth2 in your own code, start with `import OAuth2` (use `p2_OAuth2` if y
 
 A typical code grant flow is used for demo purposes below.
 The steps for other flows are mostly the same short of instantiating a different subclass and using different client settings.
-Most _authorize_ methods take an additional `params` parameter that allows you to supply custom additional parameters to use during authorization.
+Still not working?
+See [site-specific peculiarities](#site-specific-peculiarities).
 
 ### 1. Instantiate OAuth2 with a Settings Dictionary
 
@@ -46,22 +47,29 @@ let oauth2 = OAuth2CodeGrant(settings: [
 ] as OAuth2JSON)
 ```
 
+Want to avoid switching to Safari and pop up a SafariViewController or NSPanel?
+Set this:
+
+```swift
+oauth2.authConfig.authorizeEmbedded = true
+oauth2.authConfig.authorizeContext = <# your UIViewController / NSWindow #>
+```
+
 Need to debug? Use a `.debug` or even a `.trace` logger:
 
 ```swift
 oauth2.logger = OAuth2DebugLogger(.trace)
 ```
 
-### 2. Let the Data Loader Take Over
+### 2. Let the Data Loader or Alamofire Take Over
 
 Starting with version 3.0, there is an `OAuth2DataLoader` class that you can use to retrieve data from an API.
 It will automatically start authorization if needed and will ensure that this works even if you have multiple calls going on.
 For details on how to configure authorization see step 4 below, in this example we'll use "embedded" authorization, meaning we'll show a SFSafariViewController on iOS if the user needs to log in.
 
-```swift
-oauth2.authConfig.authorizeEmbedded = true
-oauth2.authConfig.authorizeContext = <# your view controller / window #>
+[This wiki page has all you need](https://github.com/p2/OAuth2/wiki/Alamofire-4) to easily use OAuth2 with Alamofire.
 
+```swift
 let base = URL(string: "https://api.github.com")!
 let url = base.appendingPathComponent("user")
 
@@ -171,8 +179,8 @@ let task = oauth2.session.dataTaskWithRequest(req) { data, response, error in
 task.resume()
 ```
 
-Of course you can use your own `URLSession` with these requests, you don't have to use `oauth2.session`; use [OAuth2DataLoader](https://github.com/p2/OAuth2/blob/master/Sources/Base/OAuth2DataLoader.swift), as shown in step 2, hand it over to _Alamofire_.
-There's a [class extension below](#usage-with-alamofire) that you can use.
+Of course you can use your own `URLSession` with these requests, you don't have to use `oauth2.session`; use [OAuth2DataLoader](https://github.com/p2/OAuth2/blob/master/Sources/Base/OAuth2DataLoader.swift), as shown in step 2, or hand it over to _Alamofire_.
+[Here's all you need](https://github.com/p2/OAuth2/wiki/Alamofire-4) to easily use OAuth2 with Alamofire.
 
 ### 7. Cancel Authorization
 
@@ -315,8 +323,18 @@ Create an instance as shown above, set its `username` and `password` properties,
 Site-Specific Peculiarities
 ---------------------------
 
-Some sites might not strictly adhere to the OAuth2 flow.
+Some sites might not strictly adhere to the OAuth2 flow, from returning data differently like Facebook to omitting mandatory return parameters like Instagram & co.
 The framework deals with those deviations by creating site-specific subclasses and/or configuration details.
+If you need to pass additional **headers** or **parameters**, you can supply these in the settings dict like so:
+
+```swift
+let oauth2 = OAuth2CodeGrant(settings: [
+    "client_id": "...",
+    ...
+    "headers": ["Accept": "application/vnd.github.v3+json"],
+    "parameters": ["duration": "permanent"],
+] as OAuth2JSON)
+```
 
 - [GitHub](https://github.com/p2/OAuth2/wiki/GitHub)
 - [Facebook](https://github.com/p2/OAuth2/wiki/Facebook)
@@ -331,42 +349,10 @@ The framework deals with those deviations by creating site-specific subclasses a
 Usage with Alamofire
 --------------------
 
-Here's an extension that can be used with Alamofire:
+You'll get the best experience when using Alamofire v4 or newer and OAuth2 v3 and newer:
 
-```swift
-import Alamofire
-
-extension OAuth2 {
-    public func request(
-        method: Alamofire.Method,
-        _ URLString: URLStringConvertible,
-        parameters: [String: AnyObject]? = nil,
-        encoding: Alamofire.ParameterEncoding = .URL,
-        headers: [String: String]? = nil)
-        -> Alamofire.Request
-    {
-        
-        var hdrs = headers ?? [:]
-        if let token = accessToken {
-            hdrs["Authorization"] = "Bearer \(token)"
-        }
-        return Alamofire.request(
-            method,
-            URLString,
-            parameters: parameters,
-            encoding: encoding,
-            headers: hdrs)
-    }
-}
-```
-
-You can now use the handle to your `OAuth2` instance instead of using _Alamofire_ directly to make requests that are signed.
-Of course this will only work once you have an access token.
-You can use `hasUnexpiredAccessToken()` to check for one or just always call `authorize()` first; it will call your callback immediately if you have a token.
-
-```swift
-oauth2.request(.GET, "http://httpbin.org/get")
-```
+- How to use Alamofire [version 4 and newer](https://github.com/p2/OAuth2/wiki/Alamofire-4)
+- How to use [version 3 and older](https://github.com/p2/OAuth2/wiki/Alamofire-3)
 
 
 Dynamic Client Registration
