@@ -35,5 +35,14 @@ public struct OAuth2DataRequest {
 	
 	/// The callback executed when the request is done.
 	public let callback: (OAuth2Response) -> Void
+	
+	/// Any context to associate with the request.
+	public var context: Any? = nil
+	
+	
+	public init(request: URLRequest, callback: @escaping (OAuth2Response) -> Void) {
+		self.request = request
+		self.callback = callback
+	}
 }
 

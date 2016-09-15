@@ -33,6 +33,10 @@ open class OAuth2DataLoader: OAuth2Requestable {
 	/// The OAuth2 instance used for OAuth2 access tokvarretrieval.
 	public let oauth2: OAuth2
 	
+	/// If set to true, a 403 is treated as a 401. The default is false.
+	public var alsoIntercept403: Bool = false
+	
+	
 	public init(oauth2: OAuth2) {
 		self.oauth2 = oauth2
 		super.init(logger: oauth2.logger)
@@ -79,6 +83,9 @@ open class OAuth2DataLoader: OAuth2Requestable {
 		
 		super.perform(request: request) { response in
 			do {
+				if self.alsoIntercept403, 403 == response.response.statusCode {
+					throw OAuth2Error.unauthorizedClient
+				}
 				let _ = try response.responseData()
 				callback(response)
 			}
@@ -87,20 +94,7 @@ open class OAuth2DataLoader: OAuth2Requestable {
 			catch OAuth2Error.unauthorizedClient {
 				if retry {
 					self.enqueue(request: request, callback: callback)
-					if !self.isAuthorizing {
-						self.isAuthorizing = true
-						self.oauth2.authorize() { json, error in
-							self.isAuthorizing = false
-							
-							// dequeue all if we're authorized, throw all away if something went wrong
-							if let error = error {
-								self.throwAllAway(with: error)
-							}
-							else {
-								self.dequeueAll()
-							}
-						}
-					}
+					self.attemptToAuthorize()
 				}
 				else {
 					callback(response)
@@ -114,27 +108,49 @@ open class OAuth2DataLoader: OAuth2Requestable {
 		}
 	}
 	
+	open func attemptToAuthorize() {
+		if !isAuthorizing {
+			isAuthorizing = true
+			oauth2.authorize() { json, error in
+				self.isAuthorizing = false
+				
+				// dequeue all if we're authorized, throw all away if something went wrong
+				if let error = error {
+					self.throwAllAway(with: error)
+				}
+				else {
+					self.retryAll()
+				}
+			}
+		}
+	}
+	
 	
 	// MARK: - Queue
 	
 	func enqueue(request: URLRequest, callback: @escaping ((OAuth2Response) -> Void)) {
-		let req = OAuth2DataRequest(request: request, callback: callback)
+		enqueue(request: OAuth2DataRequest(request: request, callback: callback))
+	}
+	
+	func enqueue(request: OAuth2DataRequest) {
 		if nil == enqueued {
-			enqueued = [req]
+			enqueued = [request]
 		}
 		else {
-			enqueued!.append(req)
+			enqueued!.append(request)
 		}
 	}
 	
-	func dequeueAll() {
+	func dequeueAndApply(closure: ((OAuth2DataRequest) -> Void)) {
 		guard let enq = enqueued else {
 			return
 		}
 		enqueued = nil
-		
-		// dequeue requests, sign them again and execute
-		for req in enq {
+		enq.forEach(closure)
+	}
+	
+	func retryAll() {
+		dequeueAndApply() { req in
 			var request = req.request
 			request.sign(with: oauth2)
 			self.perform(request: request, retry: false, callback: req.callback)
@@ -142,13 +158,7 @@ open class OAuth2DataLoader: OAuth2Requestable {
 	}
 	
 	func throwAllAway(with error: OAuth2Error) {
-		guard let enq = enqueued else {
-			return
-		}
-		enqueued = nil
-		
-		// throw them all away
-		for req in enq {
+		dequeueAndApply() { req in
 			let res = OAuth2Response(data: nil, request: req.request, response: HTTPURLResponse(), error: error)
 			req.callback(res)
 		}
