@@ -21,70 +21,108 @@
 import Foundation
 
 
-extension NSHTTPURLResponse
-{
+extension HTTPURLResponse {
+	
 	/// A localized string explaining the current `statusCode`.
 	public var statusString: String {
 		get {
-			return NSHTTPURLResponse.localizedStringForStatusCode(self.statusCode)
+			return HTTPURLResponse.localizedString(forStatusCode: self.statusCode)
 		}
 	}
 }
 
 
-extension String
-{
-	private static var wwwFormURLPlusSpaceCharacterSet: NSCharacterSet = NSMutableCharacterSet.wwwFormURLPlusSpaceCharacterSet()
+extension String {
+	
+	fileprivate static var wwwFormURLPlusSpaceCharacterSet: CharacterSet = CharacterSet.wwwFormURLPlusSpaceCharacterSet
 	
 	/// Encodes a string to become x-www-form-urlencoded; the space is encoded as plus sign (+).
 	var wwwFormURLEncodedString: String {
 		let characterSet = String.wwwFormURLPlusSpaceCharacterSet
-		return (stringByAddingPercentEncodingWithAllowedCharacters(characterSet) ?? "").stringByReplacingOccurrencesOfString(" ", withString: "+")
+		return (addingPercentEncoding(withAllowedCharacters: characterSet) ?? "").replacingOccurrences(of: " ", with: "+")
 	}
 	
 	/// Decodes a percent-encoded string and converts the plus sign into a space.
 	var wwwFormURLDecodedString: String {
-		let rep = stringByReplacingOccurrencesOfString("+", withString: " ")
-		return rep.stringByRemovingPercentEncoding ?? rep
+		let rep = replacingOccurrences(of: "+", with: " ")
+		return rep.removingPercentEncoding ?? rep
 	}
 }
 
 
-extension NSMutableCharacterSet
-{
-	/**
-	    Return the character set that does NOT need percent-encoding for x-www-form-urlencoded requests INCLUDING SPACE.
-	    YOU are responsible for replacing spaces " " with the plus sign "+".
-	    
-	    RFC3986 and the W3C spec are not entirely consistent, we're using W3C's spec which says:
-	    http://www.w3.org/TR/html5/forms.html#application/x-www-form-urlencoded-encoding-algorithm
+extension CharacterSet {
 	
-	    > If the byte is 0x20 (U+0020 SPACE if interpreted as ASCII):
-	    > - Replace the byte with a single 0x2B byte ("+" (U+002B) character if interpreted as ASCII).
-	    > If the byte is in the range 0x2A (*), 0x2D (-), 0x2E (.), 0x30 to 0x39 (0-9), 0x41 to 0x5A (A-Z), 0x5F (_),
-	    > 0x61 to 0x7A (a-z)
-	    > - Leave byte as-is
-	 */
-	class func wwwFormURLPlusSpaceCharacterSet() -> NSMutableCharacterSet {
-		let set = NSMutableCharacterSet.alphanumericCharacterSet()
-		set.addCharactersInString("-._* ")
+	/**
+	Return the character set that does NOT need percent-encoding for x-www-form-urlencoded requests INCLUDING SPACE.
+	YOU are responsible for replacing spaces " " with the plus sign "+".
+	
+	RFC3986 and the W3C spec are not entirely consistent, we're using W3C's spec which says:
+	http://www.w3.org/TR/html5/forms.html#application/x-www-form-urlencoded-encoding-algorithm
+	
+	> If the byte is 0x20 (U+0020 SPACE if interpreted as ASCII):
+	> - Replace the byte with a single 0x2B byte ("+" (U+002B) character if interpreted as ASCII).
+	> If the byte is in the range 0x2A (*), 0x2D (-), 0x2E (.), 0x30 to 0x39 (0-9), 0x41 to 0x5A (A-Z), 0x5F (_),
+	> 0x61 to 0x7A (a-z)
+	> - Leave byte as-is
+	*/
+	static var wwwFormURLPlusSpaceCharacterSet: CharacterSet {
+		var set = CharacterSet().union(CharacterSet.alphanumerics)
+		set.insert(charactersIn: "-._* ")
 		return set
 	}
 }
 
 
-extension NSURLRequest {
+extension URLRequest {
 	
-	/** Print the requests's headers and body to stdout. */
-	public func oauth2_print() {
-		print("---")
-		print("HTTP/1.1 \(HTTPMethod ?? "METHOD") \(URL?.description ?? "/")")
-		allHTTPHeaderFields?.forEach() { print("\($0): \($1)") }
-		print("")
-		if let data = HTTPBody, let body = NSString(data: data, encoding: NSUTF8StringEncoding) {
-			print(body as String)
+	/** A string describing the request, including headers and body. */
+	public var debugDescription: String {
+		var msg = "HTTP/1.1 \(httpMethod ?? "METHOD") \(url?.description ?? "/")"
+		allHTTPHeaderFields?.forEach() { msg += "\n\($0): \($1)" }
+		if let data = httpBody, let body = String(data: data, encoding: String.Encoding.utf8) {
+			msg += "\n\n\(body)"
 		}
-		print("---")
+		return msg
+	}
+	
+	/**
+	Signs the receiver by setting its "Authorization" header to "Bearer {token}".
+	
+	Will log an error if the OAuth2 instance does not have an access token.
+	
+	- parameter oauth2: The OAuth2 instance providing the access token to sign the request
+	*/
+	public mutating func sign(with oauth2: OAuth2Base) {
+		if let access = oauth2.clientConfig.accessToken, !access.isEmpty {
+			setValue("Bearer \(access)", forHTTPHeaderField: "Authorization")
+		}
+		else {
+			NSLog("Cannot sign request, access token is empty")
+		}
+	}
+	
+	/**
+	Returns a copy of the receiver, signed by setting its "Authorization" header to "Bearer {token}".
+	
+	Will log an error if the OAuth2 instance does not have an access token.
+	
+	- parameter oauth2: The OAuth2 instance providing the access token to sign the receiver
+	*/
+	public func signed(with oauth2: OAuth2Base) -> URLRequest {
+		var signed = self
+		signed.sign(with: oauth2)
+		return signed
+	}
+}
+
+
+extension HTTPURLResponse {
+	
+	/** Format HTTP status and response headers as is customary. */
+	override open var debugDescription: String {
+		var msg = "HTTP/1.1 \(statusCode) \(statusString)"
+		allHeaderFields.forEach() { msg += "\n\($0): \($1)" }
+		return msg
 	}
 }
 

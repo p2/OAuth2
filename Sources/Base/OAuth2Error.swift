@@ -26,115 +26,127 @@ All errors that might occur.
 
 The response errors return a description as defined in the spec: http://tools.ietf.org/html/rfc6749#section-4.1.2.1
 */
-public enum OAuth2Error: ErrorType, CustomStringConvertible, Equatable {
+public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 	
 	/// An error for which we don't have a specific one.
-	case Generic(String)
+	case generic(String)
 	
 	/// An error holding on to an NSError.
-	case NSError(Foundation.NSError)
+	case nsError(Foundation.NSError)
 	
 	/// Invalid URL components, failed to create a URL
-	case InvalidURLComponents(NSURLComponents)
+	case invalidURLComponents(URLComponents)
 	
 	
 	// MARK: - Client errors
 	
 	/// There is no client id.
-	case NoClientId
+	case noClientId
 	
 	/// There is no client secret.
-	case NoClientSecret
+	case noClientSecret
 	
 	/// There is no redirect URL.
-	case NoRedirectURL
+	case noRedirectURL
 	
 	/// There is no username.
-	case NoUsername
+	case noUsername
 	
 	/// There is no password.
-	case NoPassword
+	case noPassword
+	
+	/// The client is already authorizing.
+	case alreadyAuthorizing
 	
 	/// There is no authorization context.
-	case NoAuthorizationContext
+	case noAuthorizationContext
 	
 	/// The authorization context is invalid.
-	case InvalidAuthorizationContext
+	case invalidAuthorizationContext
 	
 	/// The redirect URL is invalid; with explanation.
-	case InvalidRedirectURL(String)
+	case invalidRedirectURL(String)
 	
 	/// There is no refresh token.
-	case NoRefreshToken
+	case noRefreshToken
 	
 	/// There is no registration URL.
-	case NoRegistrationURL
+	case noRegistrationURL
 	
 	
 	// MARK: - Request errors
 	
 	/// The request is not using SSL/TLS.
-	case NotUsingTLS
+	case notUsingTLS
 	
 	/// Unable to open the authorize URL.
-	case UnableToOpenAuthorizeURL
+	case unableToOpenAuthorizeURL
 	
 	/// The request is invalid.
-	case InvalidRequest
+	case invalidRequest
 	
 	/// The request was cancelled.
-	case RequestCancelled
+	case requestCancelled
 	
 	
 	// MARK: - Response Errors
 	
 	/// There was no token type in the response.
-	case NoTokenType
+	case noTokenType
 	
 	/// The token type is not supported.
-	case UnsupportedTokenType(String)
+	case unsupportedTokenType(String)
 	
 	/// There was no data in the response.
-	case NoDataInResponse
+	case noDataInResponse
 	
 	/// Some prerequisite failed; with explanation.
-	case PrerequisiteFailed(String)
+	case prerequisiteFailed(String)
+	
+	/// The state parameter was missing in the response.
+	case missingState
 	
 	/// The state parameter was invalid.
-	case InvalidState
+	case invalidState
 	
 	/// The JSON response could not be parsed.
-	case JSONParserError
+	case jsonParserError
 	
 	/// Unable to UTF-8 encode.
-	case UTF8EncodeError
+	case utf8EncodeError
 	
 	/// Unable to decode to UTF-8.
-	case UTF8DecodeError
+	case utf8DecodeError
 	
 	
 	// MARK: - OAuth2 errors
 	
-	/// The client is unauthorized.
-	case UnauthorizedClient
+	/// The client is unauthorized (HTTP status 401).
+	case unauthorizedClient
+	
+	/// The request was forbidden (HTTP status 403).
+	case forbidden
+	
+	/// Username or password was wrong (HTTP status 403 on password grant).
+	case wrongUsernamePassword
 	
 	/// Access was denied.
-	case AccessDenied
+	case accessDenied
 	
 	/// Response type is not supported.
-	case UnsupportedResponseType
+	case unsupportedResponseType
 	
 	/// Scope was invalid.
-	case InvalidScope
+	case invalidScope
 	
 	/// A 500 was thrown.
-	case ServerError
+	case serverError
 	
 	/// The service is temporarily unavailable.
-	case TemporarilyUnavailable
+	case temporarilyUnavailable
 	
 	/// Other response error, as defined in its String.
-	case ResponseError(String)
+	case responseError(String)
 	
 	
 	/**
@@ -144,140 +156,168 @@ public enum OAuth2Error: ErrorType, CustomStringConvertible, Equatable {
 	- parameter fallback: The error string to use in case the error code is not known
 	- returns: An appropriate OAuth2Error
 	*/
-	public static func fromResponseError(code: String, fallback: String? = nil) -> OAuth2Error {
+	public static func fromResponseError(_ code: String, fallback: String? = nil) -> OAuth2Error {
 		switch code {
 		case "invalid_request":
-			return .InvalidRequest
+			return .invalidRequest
 		case "unauthorized_client":
-			return .UnauthorizedClient
+			return .unauthorizedClient
 		case "access_denied":
-			return .AccessDenied
+			return .accessDenied
 		case "unsupported_response_type":
-			return .UnsupportedResponseType
+			return .unsupportedResponseType
 		case "invalid_scope":
-			return .InvalidScope
+			return .invalidScope
 		case "server_error":
-			return .ServerError
+			return .serverError
 		case "temporarily_unavailable":
-			return .TemporarilyUnavailable
+			return .temporarilyUnavailable
 		default:
-			return .ResponseError(fallback ?? "Authorization error: \(code)")
+			return .responseError(fallback ?? "Authorization error: \(code)")
 		}
 	}
 	
 	/// Human understandable error string.
 	public var description: String {
 		switch self {
-		case .Generic(let message):
+		case .generic(let message):
 			return message
-		case .NSError(let error):
+		case .nsError(let error):
 			return error.localizedDescription
-		case .InvalidURLComponents(let components):
+		case .invalidURLComponents(let components):
 			return "Failed to create URL from components: \(components)"
 		
-		case NoClientId:
+		case .noClientId:
 			return "Client id not set"
-		case NoClientSecret:
+		case .noClientSecret:
 			return "Client secret not set"
-		case NoRedirectURL:
+		case .noRedirectURL:
 			return "Redirect URL not set"
-		case NoUsername:
+		case .noUsername:
 			return "No username"
-		case NoPassword:
+		case .noPassword:
 			return "No password"
-		case NoAuthorizationContext:
+		case .alreadyAuthorizing:
+			return "The client is already authorizing, wait for it to finish or abort authorization before trying again"
+		case .noAuthorizationContext:
 			return "No authorization context present"
-		case InvalidAuthorizationContext:
+		case .invalidAuthorizationContext:
 			return "Invalid authorization context"
-		case InvalidRedirectURL(let url):
+		case .invalidRedirectURL(let url):
 			return "Invalid redirect URL: \(url)"
-		case .NoRefreshToken:
+		case .noRefreshToken:
 			return "I don't have a refresh token, not trying to refresh"
 		
-		case .NoRegistrationURL:
+		case .noRegistrationURL:
 			return "No registration URL defined"
 		
-		case .NotUsingTLS:
+		case .notUsingTLS:
 			return "You MUST use HTTPS/SSL/TLS"
-		case .UnableToOpenAuthorizeURL:
+		case .unableToOpenAuthorizeURL:
 			return "Cannot open authorize URL"
-		case .InvalidRequest:
+		case .invalidRequest:
 			return "The request is missing a required parameter, includes an invalid parameter value, includes a parameter more than once, or is otherwise malformed."
-		case .RequestCancelled:
+		case .requestCancelled:
 			return "The request has been cancelled"
-		case NoTokenType:
+		case .noTokenType:
 			return "No token type received, will not use the token"
-		case UnsupportedTokenType(let message):
+		case .unsupportedTokenType(let message):
 			return message
-		case NoDataInResponse:
+		case .noDataInResponse:
 			return "No data in the response"
-		case PrerequisiteFailed(let message):
+		case .prerequisiteFailed(let message):
 			return message
-		case InvalidState:
-			return "The state was either empty or did not check out"
-		case JSONParserError:
+		case .missingState:
+			return "The state parameter was missing in the response"
+		case .invalidState:
+			return "The state parameter did not check out"
+		case .jsonParserError:
 			return "Error parsing JSON"
-		case UTF8EncodeError:
+		case .utf8EncodeError:
 			return "Failed to UTF-8 encode the given string"
-		case UTF8DecodeError:
+		case .utf8DecodeError:
 			return "Failed to decode given data as a UTF-8 string"
 		
-		case .UnauthorizedClient:
+		case .unauthorizedClient:
 			return "The client is not authorized to request an access token using this method."
-		case .AccessDenied:
+		case .forbidden:
+			return "Forbidden"
+		case .wrongUsernamePassword:
+			return "The username or password is incorrect"
+		case .accessDenied:
 			return "The resource owner or authorization server denied the request."
-		case .UnsupportedResponseType:
+		case .unsupportedResponseType:
 			return "The authorization server does not support obtaining an access token using this method."
-		case .InvalidScope:
+		case .invalidScope:
 			return "The requested scope is invalid, unknown, or malformed."
-		case .ServerError:
+		case .serverError:
 			return "The authorization server encountered an unexpected condition that prevented it from fulfilling the request."
-		case .TemporarilyUnavailable:
+		case .temporarilyUnavailable:
 			return "The authorization server is currently unable to handle the request due to a temporary overloading or maintenance of the server."
-		case .ResponseError(let message):
+		case .responseError(let message):
 			return message
+		}
+	}
+	
+	
+	// MARK: - Equatable
+	
+	public static func ==(lhs: OAuth2Error, rhs: OAuth2Error) -> Bool {
+		switch (lhs, rhs) {
+		case (.generic(let lhm), .generic(let rhm)):    return lhm == rhm
+		case (.nsError(let lhe), .nsError(let rhe)):    return lhe.isEqual(rhe)
+		case (.invalidURLComponents(let lhe), .invalidURLComponents(let rhe)):   return (lhe == rhe)
+		
+		case (.noClientId, .noClientId):                             return true
+		case (.noClientSecret, .noClientSecret):                     return true
+		case (.noRedirectURL, .noRedirectURL):                       return true
+		case (.noUsername, .noUsername):                             return true
+		case (.noPassword, .noPassword):                             return true
+		case (.alreadyAuthorizing, .alreadyAuthorizing):             return true
+		case (.noAuthorizationContext, .noAuthorizationContext):                 return true
+		case (.invalidAuthorizationContext, .invalidAuthorizationContext):       return true
+		case (.invalidRedirectURL(let lhu), .invalidRedirectURL(let rhu)):       return lhu == rhu
+		case (.noRefreshToken, .noRefreshToken):			         return true
+		
+		case (.notUsingTLS, .notUsingTLS):                           return true
+		case (.unableToOpenAuthorizeURL, .unableToOpenAuthorizeURL): return true
+		case (.invalidRequest, .invalidRequest):                     return true
+		case (.requestCancelled, .requestCancelled):                 return true
+		case (.noTokenType, .noTokenType):                           return true
+		case (.unsupportedTokenType(let lhm), .unsupportedTokenType(let rhm)):   return lhm == rhm
+		case (.noDataInResponse, .noDataInResponse):                 return true
+		case (.prerequisiteFailed(let lhm), .prerequisiteFailed(let rhm)):       return lhm == rhm
+		case (.missingState, .missingState):                         return true
+		case (.invalidState, .invalidState):                         return true
+		case (.jsonParserError, .jsonParserError):                   return true
+		case (.utf8EncodeError, .utf8EncodeError):                   return true
+		case (.utf8DecodeError, .utf8DecodeError):                   return true
+		
+		case (.unauthorizedClient, .unauthorizedClient):             return true
+		case (.forbidden, .forbidden):                               return true
+		case (.wrongUsernamePassword, .wrongUsernamePassword):       return true
+		case (.accessDenied, .accessDenied):                         return true
+		case (.unsupportedResponseType, .unsupportedResponseType):   return true
+		case (.invalidScope, .invalidScope):                         return true
+		case (.serverError, .serverError):                           return true
+		case (.temporarilyUnavailable, .temporarilyUnavailable):     return true
+		case (.responseError(let lhm), .responseError(let rhm)):     return lhm == rhm
+		default:                                                     return false
 		}
 	}
 }
 
 
-public func ==(lhs: OAuth2Error, rhs: OAuth2Error) -> Bool {
-	switch (lhs, rhs) {
-	case (.Generic(let lhm), .Generic(let rhm)):    return lhm == rhm
-	case (.NSError(let lhe), .NSError(let rhe)):    return lhe.isEqual(rhe)
-	case (.InvalidURLComponents(let lhe), .InvalidURLComponents(let rhe)):   return lhe.isEqual(rhe)
+public extension Error {
 	
-	case (.NoClientId, .NoClientId):                             return true
-	case (.NoClientSecret, .NoClientSecret):                     return true
-	case (.NoRedirectURL, .NoRedirectURL):                       return true
-	case (.NoUsername, .NoUsername):                             return true
-	case (.NoPassword, .NoPassword):                             return true
-	case (.NoAuthorizationContext, .NoAuthorizationContext):                 return true
-	case (.InvalidAuthorizationContext, .InvalidAuthorizationContext):       return true
-	case (.InvalidRedirectURL(let lhu), .InvalidRedirectURL(let rhu)):       return lhu == rhu
-	case (.NoRefreshToken, .NoRefreshToken):			         return true
-	
-	case (.NotUsingTLS, .NotUsingTLS):                           return true
-	case (.UnableToOpenAuthorizeURL, .UnableToOpenAuthorizeURL): return true
-	case (.InvalidRequest, .InvalidRequest):                     return true
-	case (.RequestCancelled, .RequestCancelled):                 return true
-	case (.NoTokenType, .NoTokenType):                           return true
-	case (.UnsupportedTokenType(let lhm), .UnsupportedTokenType(let rhm)):   return lhm == rhm
-	case (.NoDataInResponse, .NoDataInResponse):                 return true
-	case (.PrerequisiteFailed(let lhm), .PrerequisiteFailed(let rhm)):       return lhm == rhm
-	case (.InvalidState, .InvalidState):                         return true
-	case (.JSONParserError, .JSONParserError):                   return true
-	case (.UTF8EncodeError, .UTF8EncodeError):                   return true
-	case (.UTF8DecodeError, .UTF8DecodeError):                   return true
-	
-	case (.UnauthorizedClient, .UnauthorizedClient):             return true
-	case (.AccessDenied, .AccessDenied):                         return true
-	case (.UnsupportedResponseType, .UnsupportedResponseType):   return true
-	case (.InvalidScope, .InvalidScope):                         return true
-	case (.ServerError, .ServerError):                           return true
-	case (.TemporarilyUnavailable, .TemporarilyUnavailable):     return true
-	case (.ResponseError(let lhm), .ResponseError(let rhm)):     return lhm == rhm
-	default:                                                     return false
+	/**
+	Convenience getter to easily retrieve an OAuth2Error from any Error.
+	*/
+	public var asOAuth2Error: OAuth2Error {
+		if let oaerror = self as? OAuth2Error {
+			return oaerror
+		}
+		return OAuth2Error.nsError(self as NSError)
 	}
 }
 

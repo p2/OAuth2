@@ -1,4 +1,73 @@
 # Jazzy config
-author_url:  http://www.github.com/p2
-root_url:    http://smart-on-fhir.github.io/Swift-SMART
-github_url:  http://p2.github.io/OAuth2
+module:      OAuth2
+
+author:      Pascal Pfiffner
+author_url:  https://github.com/p2
+root_url:    https://p2.github.io/OAuth2
+github_url:  https://github.com/p2/OAuth2
+
+theme:       fullwidth
+readme:      README.md
+exclude:     "**/Keychain.swift"
+
+custom_categories:
+  - name: Flows
+    children:
+      - OAuth2CodeGrant
+      - OAuth2CodeGrantBasicAuth
+      - OAuth2CodeGrantFacebook
+      - OAuth2CodeGrantLinkedIn
+      - OAuth2CodeGrantNoTokenType
+      - OAuth2ClientCredentials
+      - OAuth2ClientCredentialsReddit
+      - OAuth2ImplicitGrant
+      - OAuth2PasswordGrant
+    
+  - name: Errors & Types
+    children:
+      - OAuth2Error
+      - OAuth2JSON
+      - OAuth2StringDict
+  
+  - name: Requests
+    children:
+      - OAuth2DataLoader
+      - OAuth2DataRequest
+      - OAuth2AuthRequest
+      - OAuth2RequestPerformer
+      - OAuth2DataTaskRequestPerformer
+      - OAuth2Response
+      - OAuth2Headers
+      - OAuth2RequestParams
+      - OAuth2HTTPMethod
+      - OAuth2HTTPContentType
+      - OAuth2EndpointAuthMethod
+  
+  - name: Dyn Reg
+    children:
+      - OAuth2DynReg
+  
+  - name: Basics
+    children:
+      - OAuth2
+      - OAuth2Base
+      - OAuth2Requestable
+      - OAuth2Securable
+      - OAuth2AuthConfig
+      - OAuth2ClientConfig
+    
+  - name: Logging & Debugging
+    children:
+      - OAuth2Logger
+      - OAuth2DebugLogger
+      - OAuth2LogLevel
+      - OAuth2DebugURLSessionDelegate
+  
+  - name: Internals
+    children:
+      - OAuth2AuthorizerUI
+      - OAuth2Authorizer
+      - OAuth2ContextStore
+      - OAuth2KeychainAccount
+      - OAuth2WebViewController
+      

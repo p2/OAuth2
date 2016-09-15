@@ -25,7 +25,11 @@ import Foundation
 HTTP methods for auth requests.
 */
 public enum OAuth2HTTPMethod: String {
+	
+	/// "GET" is the HTTP method of choice.
 	case GET = "GET"
+	
+	/// This is a "POST" method.
 	case POST = "POST"
 }
 
@@ -36,39 +40,82 @@ Content types that will be specified in the request header under "Content-type".
 public enum OAuth2HTTPContentType: String {
 	
 	/// JSON content: `application/json`
-	case JSON = "application/json"
+	case json = "application/json"
 	
 	/// Form encoded content, using UTF-8: `application/x-www-form-urlencoded; charset=utf-8`
-	case WWWForm = "application/x-www-form-urlencoded; charset=utf-8"
+	case wwwForm = "application/x-www-form-urlencoded; charset=utf-8"
+}
+
+
+/**
+The auth method supported by the endpoint.
+*/
+public enum OAuth2EndpointAuthMethod: String {
+	
+	/// No auth method is to be used. Good luck with that.
+	case none = "none"
+	
+	/// The `client_secret_post` method should be used.
+	case clientSecretPost = "client_secret_post"
+	
+	/// The `client_secret_basic` method should be used.
+	case clientSecretBasic = "client_secret_basic"
 }
 
 
 /**
 Class representing an OAuth2 authorization request that can be used to create NSURLRequest instances.
 */
-public class OAuth2AuthRequest {
+open class OAuth2AuthRequest {
 	
 	/// The url of the receiver. Queries may by added by parameters specified on `params`.
-	public let url: NSURL
+	open let url: URL
 	
 	/// The HTTP method.
-	public let method: OAuth2HTTPMethod
+	open let method: OAuth2HTTPMethod
 	
-	/// The content type that will be specified. Defaults to `WWWForm`.
-	public var contentType = OAuth2HTTPContentType.WWWForm
+	/// The content type that will be specified. Defaults to `wwwForm`.
+	open var contentType = OAuth2HTTPContentType.wwwForm
 	
-	/// If set will take preference over any "Authorize" header that would otherwise be set.
-	public var headerAuthorize: String?
+	/// Custom headers can be set here, they will take precedence over any built-in headers.
+	open private(set) var headers: [String: String]?
 	
-	public var params = OAuth2AuthRequestParams()
+	open var params = OAuth2RequestParams()
 	
 	
 	/**
 	Designated initializer. Neither URL nor method can later be changed.
 	*/
-	public init(url: NSURL, method: OAuth2HTTPMethod = .POST) {
+	public init(url: URL, method: OAuth2HTTPMethod = .POST) {
 		self.url = url
 		self.method = method
+	}
+	
+	
+	// MARK: - Headers
+	
+	/**
+	Set the given custom header.
+	
+	- parameter header: The header's name
+	- parameter value:  The value to use
+	*/
+	public func set(header: String, to value: String) {
+		if nil == headers {
+			headers = [header: value]
+		}
+		else {
+			headers![header] = value
+		}
+	}
+	
+	/**
+	Unset the given header so that the default can be applied again.
+	
+	- parameter header: The header's name
+	*/
+	public func unset(header: String) {
+		_ = headers?.removeValue(forKey: header)
 	}
 	
 	
@@ -79,7 +126,7 @@ public class OAuth2AuthRequest {
 	
 	- parameter params: The parameters to add to the receiver
 	*/
-	public func addParams(params inParams: OAuth2StringDict?) {
+	open func add(params inParams: OAuth2StringDict?) {
 		if let prms = inParams {
 			for (key, val) in prms {
 				params[key] = val
@@ -95,10 +142,10 @@ public class OAuth2AuthRequest {
 	
 	- returns: NSURLComponents representing the receiver
 	*/
-	func asURLComponents() throws -> NSURLComponents {
-		let comp = NSURLComponents(URL: url, resolvingAgainstBaseURL: false)
-		guard let components = comp where "https" == components.scheme else {
-			throw OAuth2Error.NotUsingTLS
+	func asURLComponents() throws -> URLComponents {
+		let comp = URLComponents(url: url, resolvingAgainstBaseURL: false)
+		guard var components = comp, "https" == components.scheme else {
+			throw OAuth2Error.notUsingTLS
 		}
 		if .GET == method && params.count > 0 {
 			components.percentEncodedQuery = params.percentEncodedQueryString()
@@ -111,12 +158,12 @@ public class OAuth2AuthRequest {
 	
 	- returns: An NSURL representing the receiver
 	*/
-	public func asURL() throws -> NSURL {
+	open func asURL() throws -> URL {
 		let comp = try asURLComponents()
-		if let finalURL = comp.URL {
+		if let finalURL = comp.url {
 			return finalURL
 		}
-		throw OAuth2Error.InvalidURLComponents(comp)
+		throw OAuth2Error.invalidURLComponents(comp)
 	}
 	
 	/**
@@ -125,54 +172,58 @@ public class OAuth2AuthRequest {
 	- parameter oauth2: The OAuth2 instance from which to take client and auth settings
 	- returns: A mutable NSURLRequest
 	*/
-	public func asURLRequestFor(oauth2: OAuth2) throws -> NSMutableURLRequest {
-		guard let clientId = oauth2.clientId where !clientId.isEmpty else {
-			throw OAuth2Error.NoClientId
-		}
-		
+	open func asURLRequest(for oauth2: OAuth2Base) throws -> URLRequest {
 		var finalParams = params
-		var finalAuthHeader = headerAuthorize
 		
 		// base request
 		let finalURL = try asURL()
-		let req = NSMutableURLRequest(URL: finalURL)
-		req.HTTPMethod = method.rawValue
+		var req = URLRequest(url: finalURL)
+		req.httpMethod = method.rawValue
 		req.setValue(contentType.rawValue, forHTTPHeaderField: "Content-Type")
 		req.setValue("application/json", forHTTPHeaderField: "Accept")
 		
 		// handle client secret if there is one
-		if let secret = oauth2.clientConfig.clientSecret {
+		if let clientId = oauth2.clientConfig.clientId, !clientId.isEmpty, let secret = oauth2.clientConfig.clientSecret {
 			
 			// add to request body
 			if oauth2.authConfig.secretInBody {
-				oauth2.logIfVerbose("Adding “client_id” and “client_secret” to request body")
+				oauth2.logger?.debug("OAuth2", msg: "Adding “client_id” and “client_secret” to request body")
 				finalParams["client_id"] = clientId
 				finalParams["client_secret"] = secret
 			}
 			
 			// add Authorization header (if not in body)
-			else if nil == finalAuthHeader {
-				oauth2.logIfVerbose("Adding “Authorization” header as “Basic client-key:client-secret”")
+			else {
+				oauth2.logger?.debug("OAuth2", msg: "Adding “Authorization” header as “Basic client-key:client-secret”")
 				let pw = "\(clientId.wwwFormURLEncodedString):\(secret.wwwFormURLEncodedString)"
-				if let utf8 = pw.dataUsingEncoding(NSUTF8StringEncoding) {
-					finalAuthHeader = "Basic \(utf8.base64EncodedStringWithOptions([]))"
+				if let utf8 = pw.data(using: String.Encoding.utf8) {
+					req.setValue("Basic \(utf8.base64EncodedString())", forHTTPHeaderField: "Authorization")
 				}
 				else {
-					throw OAuth2Error.UTF8EncodeError
+					throw OAuth2Error.utf8EncodeError
 				}
-				finalParams.removeValueForKey("client_id")
-				finalParams.removeValueForKey("client_secret")
+				finalParams.removeValue(forKey: "client_id")
+				finalParams.removeValue(forKey: "client_secret")
 			}
 		}
 		
-		// add custom Authorize header
-		if let authHeader = finalAuthHeader {
-			req.setValue(authHeader, forHTTPHeaderField: "Authorization")
+		// add custom headers, first from our OAuth2 instance, then our custom ones
+		if let headers = oauth2.authHeaders {
+			for (key, val) in headers {
+				oauth2.logger?.trace("OAuth2", msg: "Overriding “\(key)” header")
+				req.setValue(val, forHTTPHeaderField: key)
+			}
+		}
+		if let headers = headers {
+			for (key, val) in headers {
+				oauth2.logger?.trace("OAuth2", msg: "Adding custom “\(key)” header")
+				req.setValue(val, forHTTPHeaderField: key)
+			}
 		}
 		
 		// add a body to POST requests
 		if .POST == method && finalParams.count > 0 {
-			req.HTTPBody = try finalParams.utf8EncodedData()
+			req.httpBody = try finalParams.utf8EncodedData()
 		}
 		return req
 	}
@@ -180,14 +231,16 @@ public class OAuth2AuthRequest {
 
 
 /**
-Struct to hold on to request parameters. Provides utility functions so the parameters can be correctly encoded for use in URLs and request
-bodies.
+Struct to hold on to request parameters.
+
+Provides utility functions so the parameters can be correctly encoded for use in URLs and request bodies.
 */
-public struct OAuth2AuthRequestParams {
+public struct OAuth2RequestParams {
 	
 	/// The parameters to be used.
-	private var params: OAuth2StringDict? = nil
+	public private(set) var params: OAuth2StringDict? = nil
 	
+	/** Designated initalizer. */
 	public init() {  }
 	
 	public subscript(key: String) -> String? {
@@ -203,11 +256,12 @@ public struct OAuth2AuthRequestParams {
 	/**
 	Removes the given value from the receiver, if it is defined.
 	
-	- parameter key: The key for the value to be removed
+	- parameter forKey: The key for the value to be removed
 	- returns: The value that was removed, if any
 	*/
-	public mutating func removeValueForKey(key: String) -> String? {
-		return params?.removeValueForKey(key)
+	@discardableResult
+	public mutating func removeValue(forKey key: String) -> String? {
+		return params?.removeValue(forKey: key)
 	}
 	
 	/// The number of items in the receiver.
@@ -223,16 +277,16 @@ public struct OAuth2AuthRequestParams {
 	
 	- returns: NSData representing the receiver form-encoded
 	*/
-	public func utf8EncodedData() throws -> NSData? {
+	public func utf8EncodedData() throws -> Data? {
 		guard nil != params else {
 			return nil
 		}
 		let body = percentEncodedQueryString()
-		if let encoded = body.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true) {
+		if let encoded = body.data(using: String.Encoding.utf8, allowLossyConversion: true) {
 			return encoded
 		}
 		else {
-			throw OAuth2Error.UTF8EncodeError
+			throw OAuth2Error.utf8EncodeError
 		}
 	}
 	
@@ -245,7 +299,7 @@ public struct OAuth2AuthRequestParams {
 		guard let params = params else {
 			return ""
 		}
-		return self.dynamicType.formEncodedQueryStringFor(params)
+		return type(of: self).formEncodedQueryStringFor(params)
 	}
 	
 	/**
@@ -257,12 +311,12 @@ public struct OAuth2AuthRequestParams {
 	- parameter params: The parameters you want to have encoded
 	- returns: An URL-ready query string
 	*/
-	public static func formEncodedQueryStringFor(params: OAuth2StringDict) -> String {
+	public static func formEncodedQueryStringFor(_ params: OAuth2StringDict) -> String {
 		var arr: [String] = []
 		for (key, val) in params {
 			arr.append("\(key)=\(val.wwwFormURLEncodedString)")
 		}
-		return arr.joinWithSeparator("&")
+		return arr.joined(separator: "&")
 	}
 }
 
