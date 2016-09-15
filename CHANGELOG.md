@@ -15,10 +15,15 @@ You can also refer to commit logs to get details on what was implemented, fixed 
 - Some new errors (like `.forbidden` and `.missingState`)
 
 
+### 2.3.0
+
+- Use Swift 2.3
+
+
 ### 2.2.9
 
 - Allow to add custom authorization headers (thanks @SpectralDragon)
-- Fix: add client_id to password grant even if there is no secret (thanks Criss!)
+- Fix: add `client_id` to password grant even if there is no secret (thanks Criss!)
 
 
 ### 2.2.8
