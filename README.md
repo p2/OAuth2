@@ -118,15 +118,12 @@ See [_Advanced Settings_](#advanced-settings) for other options.
 
 ```swift
 oauth2.authorize() { authParameters, error in
-    if let error = error {
-        print("Authorization went wrong: \(error)")
-    }
-    else if let extras = authParameters {
+    if let params = authParameters {
         print("Authorized! Access token is in `oauth2.accessToken`")
-        print("Authorized! Additional parameters: \(extras)")
+        print("Authorized! Additional parameters: \(params)")
     }
     else {
-        print("Authorization was canceled")
+        print("Authorization was cancelled or went wrong: \(error)")   // error will not be nil
     }
 }
 

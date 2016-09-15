@@ -93,7 +93,7 @@ open class OAuth2DataLoader: OAuth2Requestable {
 	
 	- parameter request:  The request to execute
 	- parameter retry:    Whether the request should be retried on 401 (and possibly 403)
-	- parameter callback: The callback to call when the request completes/fails. Looks terrifying, see above on how to use it
+	- parameter callback: The callback to call when the request completes/fails
 	*/
 	open func perform(request: URLRequest, retry: Bool, callback: @escaping ((OAuth2Response) -> Void)) {
 		guard !isAuthorizing else {
@@ -117,11 +117,11 @@ open class OAuth2DataLoader: OAuth2Requestable {
 					self.attemptToAuthorize() { json, error in
 						
 						// dequeue all if we're authorized, throw all away if something went wrong
-						if let error = error {
-							self.throwAllAway(with: error)
+						if nil != json {
+							self.retryAll()
 						}
 						else {
-							self.retryAll()
+							self.throwAllAway(with: error ?? OAuth2Error.requestCancelled)
 						}
 					}
 				}
@@ -139,6 +139,11 @@ open class OAuth2DataLoader: OAuth2Requestable {
 	
 	/**
 	If not already authorizing, will use its `oauth2` instance to start authorization.
+	
+	This method will ignore calls while authorization is ongoing, meaning you will only get the callback once per authorization cycle.
+	
+	- parameter callback: The callback passed on from `authorize(callback:)`. Authorization finishes successfully (auth parameters will be
+	                      non-nil but may be an empty dict), fails (error will be non-nil) or is cancelled (both params and error are nil)
 	*/
 	open func attemptToAuthorize(callback: @escaping ((OAuth2JSON?, OAuth2Error?) -> Void)) {
 		if !isAuthorizing {

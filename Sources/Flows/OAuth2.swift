@@ -86,8 +86,8 @@ open class OAuth2: OAuth2Base {
 	be attempted and if it success, an access token will be requested.
 	
 	- parameter params:   Optional key/value pairs to pass during authorization and token refresh
-	- parameter callback: The callback to call when authorization finishes (parameters will be non-nil but may be an empty dict), fails
-	                      (error will be non-nil) or is cancelled (both parameters and error is nil)
+	- parameter callback: The callback to call when authorization finishes (parameters will be non-nil but may be an empty dict), fails or is
+	                      cancelled (error will be non-nil, e.g. `.requestCancelled` if auth was aborted)
 	*/
 	public final func authorize(params: OAuth2StringDict? = nil, callback: @escaping ((OAuth2JSON?, OAuth2Error?) -> Void)) {
 		if isAuthorizing {
@@ -137,8 +137,8 @@ open class OAuth2: OAuth2Base {
 	
 	- parameter from:     The context to start authorization from, depends on platform (UIViewController or NSWindow, see `authorizeContext`)
 	- parameter params:   Optional key/value pairs to pass during authorization
-	- parameter callback: The callback to call when authorization finishes (parameters will be non-nil but may be an empty dict), fails
-	(error will be non-nil) or is cancelled (both parameters and error is nil)
+	- parameter callback: The callback to call when authorization finishes (parameters will be non-nil but may be an empty dict), fails or is
+	                      cancelled (error will be non-nil, e.g. `.requestCancelled` if auth was aborted)
 	*/
 	open func authorizeEmbedded(from context: AnyObject, params: OAuth2StringDict? = nil, callback: @escaping ((_ authParameters: OAuth2JSON?, _ error: OAuth2Error?) -> Void)) {
 		if isAuthorizing {		// `authorize()` will check this, but we want to exit before changing `authConfig`

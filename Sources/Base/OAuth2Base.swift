@@ -280,17 +280,16 @@ open class OAuth2Base: OAuth2Securable {
 	This method is only made public in case you want to create a subclass and need to call `didFail(error:)` at an override point. If you
 	call this method yourself on your OAuth2 instance you might screw things up royally.
 	
-	- parameter error: The error that led to authentication failure
+	- parameter error: The error that led to authentication failure; will use `.requestCancelled` on the callbacks if nil is passed
 	*/
 	public final func didFail(with error: OAuth2Error?) {
 		var finalError = error
-		if let error = error {
+		if let error = finalError {
 			logger?.debug("OAuth2", msg: "\(error)")
-			if .requestCancelled == error {
-				finalError = nil
-			}
 		}
-		
+		else {
+			finalError = OAuth2Error.requestCancelled
+		}
 		callOnMainThread() {
 			self.onFailure?(finalError)
 			self.didAuthorizeOrFail?(nil, finalError)
