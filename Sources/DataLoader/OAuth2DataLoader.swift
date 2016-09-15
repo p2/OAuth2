@@ -54,7 +54,7 @@ open class OAuth2DataLoader: OAuth2Requestable {
 	Overriding this method: it intercepts `unauthorizedClient` errors, stops and enqueues all calls, starts the authorization and, upon
 	success, resumes all enqueued calls.
 	
-	The callback looks terrifying but is actually easy to use, like so:
+	The callback is easy to use, like so:
 	
 	    perform(request: req) { dataStatusResponse in
 	        do {
@@ -66,8 +66,6 @@ open class OAuth2DataLoader: OAuth2Requestable {
 	        }
 	    }
 	
-	Easy, right?
-	
 	- parameter request:  The request to execute
 	- parameter callback: The callback to call when the request completes/fails. Looks terrifying, see above on how to use it
 	*/
@@ -75,6 +73,28 @@ open class OAuth2DataLoader: OAuth2Requestable {
 		perform(request: request, retry: true, callback: callback)
 	}
 	
+	/**
+	This method takes an additional `retry` flag, then uses the base implementation of `perform(request:callback:)` to perform the given
+	request. It intercepts 401 (and 403, if `alsoIntercept403` is true), enqueues the request and performs authentication. During
+	authentication, all requests to be performed are enqueued and they are all dequeued once authentication finishes, either by retrying
+	them on authentication success or by aborting them all with the same error.
+	
+	The callback is easy to use, like so:
+	
+	    perform(request: req) { dataStatusResponse in
+	        do {
+	            let (data, status) = try dataStatusResponse()
+	            // do what you must with `data` as Data and `status` as Int
+	        }
+	        catch let error {
+	            // the request failed because of `error`
+	        }
+	    }
+	
+	- parameter request:  The request to execute
+	- parameter retry:    Whether the request should be retried on 401 (and possibly 403)
+	- parameter callback: The callback to call when the request completes/fails. Looks terrifying, see above on how to use it
+	*/
 	open func perform(request: URLRequest, retry: Bool, callback: @escaping ((OAuth2Response) -> Void)) {
 		guard !isAuthorizing else {
 			enqueue(request: request, callback: callback)
@@ -94,7 +114,16 @@ open class OAuth2DataLoader: OAuth2Requestable {
 			catch OAuth2Error.unauthorizedClient {
 				if retry {
 					self.enqueue(request: request, callback: callback)
-					self.attemptToAuthorize()
+					self.attemptToAuthorize() { json, error in
+						
+						// dequeue all if we're authorized, throw all away if something went wrong
+						if let error = error {
+							self.throwAllAway(with: error)
+						}
+						else {
+							self.retryAll()
+						}
+					}
 				}
 				else {
 					callback(response)
@@ -108,19 +137,15 @@ open class OAuth2DataLoader: OAuth2Requestable {
 		}
 	}
 	
-	open func attemptToAuthorize() {
+	/**
+	If not already authorizing, will use its `oauth2` instance to start authorization.
+	*/
+	open func attemptToAuthorize(callback: @escaping ((OAuth2JSON?, OAuth2Error?) -> Void)) {
 		if !isAuthorizing {
 			isAuthorizing = true
-			oauth2.authorize() { json, error in
+			oauth2.authorize() { authParams, error in
 				self.isAuthorizing = false
-				
-				// dequeue all if we're authorized, throw all away if something went wrong
-				if let error = error {
-					self.throwAllAway(with: error)
-				}
-				else {
-					self.retryAll()
-				}
+				callback(authParams, error)
 			}
 		}
 	}
@@ -128,11 +153,22 @@ open class OAuth2DataLoader: OAuth2Requestable {
 	
 	// MARK: - Queue
 	
-	func enqueue(request: URLRequest, callback: @escaping ((OAuth2Response) -> Void)) {
+	/**
+	Enqueues the given URLRequest and callback. You probably don't want to use this method yourself.
+	
+	- parameter request:  The URLRequest to enqueue for later execution
+	- parameter callback: The closure to call when the request has been executed
+	*/
+	public func enqueue(request: URLRequest, callback: @escaping ((OAuth2Response) -> Void)) {
 		enqueue(request: OAuth2DataRequest(request: request, callback: callback))
 	}
 	
-	func enqueue(request: OAuth2DataRequest) {
+	/**
+	Enqueues the given OAuth2DataRequest. You probably don't want to use this method yourself.
+	
+	- parameter request:  The OAuth2DataRequest to enqueue for later execution
+	*/
+	public func enqueue(request: OAuth2DataRequest) {
 		if nil == enqueued {
 			enqueued = [request]
 		}
@@ -141,7 +177,12 @@ open class OAuth2DataLoader: OAuth2Requestable {
 		}
 	}
 	
-	func dequeueAndApply(closure: ((OAuth2DataRequest) -> Void)) {
+	/**
+	Dequeue all enqueued requests, applying the given closure to all of them. The queue will be empty by the time the closure is called.
+	
+	- parameter closure: The closure to apply to each enqueued request
+	*/
+	public func dequeueAndApply(closure: ((OAuth2DataRequest) -> Void)) {
 		guard let enq = enqueued else {
 			return
 		}
@@ -149,6 +190,9 @@ open class OAuth2DataLoader: OAuth2Requestable {
 		enq.forEach(closure)
 	}
 	
+	/**
+	Uses `dequeueAndApply()` by signing and re-performing all enqueued requests.
+	*/
 	func retryAll() {
 		dequeueAndApply() { req in
 			var request = req.request
@@ -157,6 +201,11 @@ open class OAuth2DataLoader: OAuth2Requestable {
 		}
 	}
 	
+	/**
+	Uses `dequeueAndApply()` to all enqueued requests, calling their callback with a response representing the given error.
+	
+	- parameter error: The error with which to finalize all enqueued requests
+	*/
 	func throwAllAway(with error: OAuth2Error) {
 		dequeueAndApply() { req in
 			let res = OAuth2Response(data: nil, request: req.request, response: HTTPURLResponse(), error: error)
