@@ -4,11 +4,13 @@ OAuth2
 [![Build Status](https://travis-ci.org/p2/OAuth2.svg?branch=master)](https://travis-ci.org/p2/OAuth2)
 [![License](https://img.shields.io/:license-apache-blue.svg)](LICENSE.txt)
 
-OAuth2 frameworks for **OS X**, **iOS** and **tvOS** written in Swift 3.0.
+OAuth2 frameworks for **macOS**, **iOS** and **tvOS** written in Swift 3.0.
 
-[⤵️ Installation](#installation)  
-[📱 Sample App][sample]  
-[📖 Technical Documentation](https://p2.github.io/OAuth2)
+- [⤵️ Installation](#installation)
+- [🛠 Usage](#usage)
+- [📱 Sample iOS app](https://github.com/p2/OAuth2PodApp) (using CocoaPods)
+- [🖥 Sample macOS app][sample] (with data loader examples)
+- [📖 Technical Documentation](https://p2.github.io/OAuth2)
 
 OAuth2 requires Xcode 8, the built framework can be used on **OS X 10.9** or **iOS 8** and later.
 Happy to accept pull requests, please see [CONTRIBUTING.md](./CONTRIBUTING.md)
@@ -73,7 +75,7 @@ Starting with version 3.0, there is an `OAuth2DataLoader` class that you can use
 It will automatically start authorization if needed and will ensure that this works even if you have multiple calls going on.
 For details on how to configure authorization see step 4 below, in this example we'll use "embedded" authorization, meaning we'll show a SFSafariViewController on iOS if the user needs to log in.
 
-[This wiki page has all you need](https://github.com/p2/OAuth2/wiki/Alamofire-4) to easily use OAuth2 with Alamofire.
+[This wiki page has all you need](https://github.com/p2/OAuth2/wiki/Alamofire-4) to easily use OAuth2 with Alamofire instead.
 
 ```swift
 let base = URL(string: "https://api.github.com")!
@@ -108,6 +110,7 @@ func application(_ app: UIApplication,
                options: [UIApplicationOpenURLOptionsKey: Any] = [:]) -> Bool {
     // you should probably first check if this is the callback being opened
     if <# check #> {
+        // if your oauth2 instance lives somewhere else, adapt accordingly
         oauth2.handleRedirectURL(url)
     }
 }
@@ -267,7 +270,7 @@ oauth2.afterAuthorizeOrFail = { authParameters, error in
 }
 ```
 
-**iOS/OS X browser**:
+**iOS/macOS browser**:
 
 ```swift
 let url = try oauth2.authorizeURL(params: <# custom parameters or nil #>)
@@ -278,7 +281,7 @@ oauth2.afterAuthorizeOrFail = { authParameters, error in
 ```
 
 
-**OS X**
+**macOS**
 
 See the [OAuth2 Sample App][sample]'s AppDelegate class on how to receive the callback URL in your Mac app.
 If the authorization displays the code to the user, e.g. with Google's `urn:ietf:wg:oauth:2.0:oob` callback URL, you can retrieve the code from the user's pasteboard and continue authorization with:
@@ -443,7 +446,7 @@ dynreg.register(client: oauth2) { params, error in
 Keychain
 --------
 
-This framework can transparently use the iOS and OS X keychain.
+This framework can transparently use the iOS and macOS keychain.
 It is controlled by the `useKeychain` property, which can be disabled during initialization with the "keychain" setting.
 Since this is **enabled by default**, if you do _not_ turn it off during initialization, the keychain will be queried for tokens and client credentials related to the authorization URL.
 If you turn it off _after_ initialization, the keychain will be queried for existing tokens, but new tokens will not be written to the keychain.
