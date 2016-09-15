@@ -5,6 +5,17 @@ Version numbering represents the Swift version, plus a running number representi
 You can also refer to commit logs to get details on what was implemented, fixed and improved.
 
 
+### 3.0.0
+
+- Rewrite in Swift 3
+- New DataLoader, meaning you don't have to do authorization yourself (and helps with Alamofire use)
+- Broad API redesign, you should now use `authorize(params:callback:)` if you still authorize manually
+- All errors returned by OAuth2 are now `OAuth2Error` types
+- Add `Package.swift` for the Swift package manager
+- Expose `keychainAccessGroup` (`keychain_access_group` in settings; thanks @damienrambout !)
+- Some new errors (like `.forbidden` and `.missingState`)
+
+
 ### 2.3.0
 
 - Use Swift 2.3
@@ -12,7 +23,7 @@ You can also refer to commit logs to get details on what was implemented, fixed 
 
 ### 2.2.9
 
-- Allow to add custom authentication headers (thanks @SpectralDragon)
+- Allow to add custom authorization headers (thanks @SpectralDragon)
 - Fix: add `client_id` to password grant even if there is no secret (thanks Criss!)
 
 
@@ -49,7 +60,7 @@ You can also refer to commit logs to get details on what was implemented, fixed 
 
 ### 2.2.3
 
-- Refactor authentication request creation
+- Refactor authorization request creation
 - Add `OAuth2ClientCredentialsReddit` to deal with Reddit installed apps special flow
 - Rename clashing method definitions to fix #99
 

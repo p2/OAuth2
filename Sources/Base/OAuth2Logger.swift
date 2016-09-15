@@ -25,26 +25,26 @@ Logging levels
 public enum OAuth2LogLevel: Int, CustomStringConvertible {
 	
 	/// If you want the logger to log everything.
-	case Trace = 0
+	case trace = 0
 	
 	/// Only log debug messages.
-	case Debug
+	case debug
 	
 	/// Only warning messages.
-	case Warn
+	case warn
 	
 	/// Don't log anything.
-	case Off
+	case off
 	
 	public var description: String {
 		switch self {
-		case .Trace:
+		case .trace:
 			return "Trace"
-		case .Debug:
+		case .debug:
 			return "Debug"
-		case .Warn:
+		case .warn:
 			return "Warn!"
-		case .Off:
+		case .off:
 			return "-/-"
 		}
 	}
@@ -69,13 +69,13 @@ public protocol OAuth2Logger {
 	var level: OAuth2LogLevel { get }
 	
 	/** Log a message at the trace level. */
-	func trace(module: String?, filename: String?, line: Int?, function: String?, @autoclosure msg: () -> String)
+	func trace(_ module: String?, filename: String?, line: Int?, function: String?, msg: @autoclosure() -> String)
 	
 	/** Standard debug logging. */
-	func debug(module: String?, filename: String?, line: Int?, function: String?, @autoclosure msg: () -> String)
+	func debug(_ module: String?, filename: String?, line: Int?, function: String?, msg: @autoclosure() -> String)
 	
 	/** Log warning messages. */
-	func warn(module: String?, filename: String?, line: Int?, function: String?, @autoclosure msg: () -> String)
+	func warn(_ module: String?, filename: String?, line: Int?, function: String?, msg: @autoclosure() -> String)
 }
 
 extension OAuth2Logger {
@@ -84,25 +84,25 @@ extension OAuth2Logger {
 	The main log method, figures out whether to log the given message based on the receiver's logging level, then just uses `print`. Ignores
 	filename, line and function.
 	*/
-	public func log(atLevel: OAuth2LogLevel, module: String?, filename: String?, line: Int?, function: String?, @autoclosure msg: () -> String) {
-		if level != .Off && atLevel.rawValue >= level.rawValue {
+	public func log(_ atLevel: OAuth2LogLevel, module: String?, filename: String?, line: Int?, function: String?, msg: @autoclosure() -> String) {
+		if level != .off && atLevel.rawValue >= level.rawValue {
 			print("[\(atLevel)] \(module ?? ""): \(msg())")
 		}
 	}
 	
 	/** Log a message at the trace level. */
-	public func trace(module: String? = "OAuth2", filename: String? = #file, line: Int? = #line, function: String? = #function, @autoclosure msg: () -> String) {
-		log(.Trace, module: module, filename: filename, line: line, function: function, msg: msg)
+	public func trace(_ module: String? = "OAuth2", filename: String? = #file, line: Int? = #line, function: String? = #function, msg: @autoclosure() -> String) {
+		log(.trace, module: module, filename: filename, line: line, function: function, msg: msg)
 	}
 	
 	/** Standard debug logging. */
-	public func debug(module: String? = "OAuth2", filename: String? = #file, line: Int? = #line, function: String? = #function, @autoclosure msg: () -> String) {
-		log(.Debug, module: module, filename: filename, line: line, function: function, msg: msg)
+	public func debug(_ module: String? = "OAuth2", filename: String? = #file, line: Int? = #line, function: String? = #function, msg: @autoclosure() -> String) {
+		log(.debug, module: module, filename: filename, line: line, function: function, msg: msg)
 	}
 	
 	/** Log warning messages. */
-	public func warn(module: String? = "OAuth2", filename: String? = #file, line: Int? = #line, function: String? = #function, @autoclosure msg: () -> String) {
-		log(.Warn, module: module, filename: filename, line: line, function: function, msg: msg)
+	public func warn(_ module: String? = "OAuth2", filename: String? = #file, line: Int? = #line, function: String? = #function, msg: @autoclosure() -> String) {
+		log(.warn, module: module, filename: filename, line: line, function: function, msg: msg)
 	}
 }
 
@@ -110,12 +110,12 @@ extension OAuth2Logger {
 /**
 Basic logger that just prints to stdout.
 */
-public class OAuth2DebugLogger: OAuth2Logger {
+open class OAuth2DebugLogger: OAuth2Logger {
 	
 	/// The logger's logging level, set to `Debug` by default.
-	public var level = OAuth2LogLevel.Debug
+	open var level = OAuth2LogLevel.debug
 	
-	public init(_ level: OAuth2LogLevel = OAuth2LogLevel.Debug) {
+	public init(_ level: OAuth2LogLevel = OAuth2LogLevel.debug) {
 		self.level = level
 	}
 }

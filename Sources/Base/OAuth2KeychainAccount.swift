@@ -19,7 +19,7 @@
 //
 
 import Foundation
-#if !NO_KEYCHAIN_IMPORT     // needs to be imported when using `swift build` or with CocoaPods, not when building via Xcode
+#if !NO_KEYCHAIN_IMPORT     // needs to be imported when using `swift build`, not when building via Xcode
 import SwiftKeychain
 #endif
 
@@ -35,17 +35,21 @@ struct OAuth2KeychainAccount: KeychainGenericPasswordType {
 	/// The account name to use.
 	let accountName: String
 	
+	/// The keychain access group.
+	var accessGroup: String?
+	
 	/// Data that ends up in the keychain.
-	var data = [String: AnyObject]()
+	var data = [String: Any]()
 	
 	/// Keychain access mode.
 	let accessMode: String
 	
 	
-	init(oauth2: OAuth2Base, account: String, data inData: [String: AnyObject] = [:]) {
+	init(oauth2: OAuth2Securable, account: String, data inData: [String: Any] = [:]) {
 		serviceName = oauth2.keychainServiceName()
 		accountName = account
 		accessMode = String(oauth2.keychainAccessMode)
+		accessGroup = oauth2.keychainAccessGroup
 		data = inData
 	}
 }
@@ -53,24 +57,21 @@ struct OAuth2KeychainAccount: KeychainGenericPasswordType {
 
 extension KeychainGenericPasswordType {
 	
-	var dataToStore: [String: AnyObject] {
+	var dataToStore: [String: Any] {
 		return data
 	}
 	
 	/**
 	Attempts to read data from the keychain, will ignore `errSecItemNotFound` but throw others.
 	
-	- returns: A [String: NSCoding] dictionary of data fetched from the keychain
+	- returns: A [String: Any] dictionary of data fetched from the keychain
 	*/
-	mutating func fetchedFromKeychain() throws -> [String: NSCoding] {
+	mutating func fetchedFromKeychain() throws -> [String: Any] {
 		do {
-			try fetchFromKeychain()
-			if let creds_data = data as? [String: NSCoding] {
-				return creds_data
-			}
-			throw OAuth2Error.Generic("Keychain data for \(serviceName) > \(accountName) is in wrong format. Got: “\(data)”")
+			try _ = fetchFromKeychain()
+			return data
 		}
-		catch let error as NSError where error.domain == "swift.keychain.error" && error.code == Int(errSecItemNotFound) {
+		catch let error where error._domain == "swift.keychain.error" && error._code == Int(errSecItemNotFound) {
 			return [:]
 		}
 	}

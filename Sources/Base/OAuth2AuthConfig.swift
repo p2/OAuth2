@@ -18,9 +18,6 @@
 //  limitations under the License.
 //
 
-#if os(OSX)
-import Cocoa
-#endif
 
 /**
 Simple struct to hold settings describing how authorization appears to the user.
@@ -33,21 +30,11 @@ public struct OAuth2AuthConfig {
 		/// Title to propagate to views handled by OAuth2, such as OAuth2WebViewController.
 		public var title: String? = nil
 		
-		// TODO: figure out a neat way to make this a UIBarButtonItem if compiled for iOS
 		/// By assigning your own UIBarButtonItem (!) you can override the back button that is shown in the iOS embedded web view (does NOT apply to `SFSafariViewController`).
 		public var backButton: AnyObject? = nil
 		
 		/// Starting with iOS 9, `SFSafariViewController` will be used for embedded authorization instead of our custom class. You can turn this off here.
 		public var useSafariView = true
-		
-		#if os(OSX)
-		/// Internally used to store default `NSWindowController` created to contain the web view controller.
-		var windowController: NSWindowController?
-		
-		#elseif os(iOS)
-		/// Internally used to store the `SFSafariViewControllerDelegate`.
-		var safariViewDelegate: AnyObject?
-		#endif
 	}
 	
 	/// Whether the receiver should use the request body instead of the Authorization header for the client secret; defaults to `false`.
@@ -60,9 +47,8 @@ public struct OAuth2AuthConfig {
 	public var authorizeEmbeddedAutoDismiss = true
 	
 	/// Context information for the authorization flow:
-	/// - iOS:  the parent view controller to present from
-	/// - OS X: An NSWindow from which to present a modal sheet _or_
-	/// - OS X: A `((webViewController: NSViewController) -> Void)` block to execute with the web view controller for you to present
+	/// - iOS:   The parent view controller to present from
+	/// - macOS: An NSWindow from which to present a modal sheet _or_ `nil` to present in a new window
 	public var authorizeContext: AnyObject? = nil
 	
 	/// UI-specific configuration.

@@ -2,8 +2,8 @@
 //  OAuth2Base.swift
 //  OAuth2
 //
-//  Created by Pascal Pfiffner on 6/2/15.
-//  Copyright 2015 Pascal Pfiffner
+//  Created by Pascal Pfiffner on 6/4/14.
+//  Copyright 2014 Pascal Pfiffner
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -21,280 +21,296 @@
 import Foundation
 
 
-/// Typealias to ease working with JSON dictionaries.
-public typealias OAuth2JSON = [String: AnyObject]
-
-/// Typealias to work with dictionaries full of strings.
-public typealias OAuth2StringDict = [String: String]
-
-/// Typealias to work with headers
-public typealias OAuth2Headers = [String: String]
-
-
 /**
-Abstract base class for OAuth2 authorization as well as client registration classes.
+Class extending on OAuth2Requestable, exposing configuration and maintaining context, serving as base class for `OAuth2`.
 */
-public class OAuth2Base {
+open class OAuth2Base: OAuth2Securable {
 	
-	/// Server-side settings, as set upon initialization.
-	final let settings: OAuth2JSON
-	
-	/// Set to `true` to log all the things. `false` by default. Use `"verbose": bool` in settings or assign `logger` yourself.
-	public var verbose = false {
-		didSet {
-			logger = verbose ? OAuth2DebugLogger() : nil
-		}
+	/// The grant type represented by the class, e.g. "authorization_code" for code grants.
+	open class var grantType: String {
+		return "__undefined"
 	}
 	
-	/// The logger being used. Auto-assigned to a debug logger if you set `verbose` to true or false.
-	public var logger: OAuth2Logger?
-	
-	/// If set to `true` (the default) will use system keychain to store tokens. Use `"keychain": bool` in settings.
-	public var useKeychain = true {
-		didSet {
-			if useKeychain {
-				updateFromKeychain()
-			}
-		}
+	/// The response type expected from an authorize call, e.g. "code" for code grants.
+	open class var responseType: String? {
+		return nil
 	}
 	
-	/// The keychain account to use to store tokens. Defaults to "currentTokens".
-	public var keychainAccountForTokens = "currentTokens" {
-		didSet {
-			assert(!keychainAccountForTokens.isEmpty)
-		}
+	/// Settings related to the client-server relationship.
+	open let clientConfig: OAuth2ClientConfig
+	
+	/// Client-side authorization options.
+	open var authConfig = OAuth2AuthConfig()
+	
+	/// The client id.
+	public final var clientId: String? {
+		get { return clientConfig.clientId }
+		set { clientConfig.clientId = newValue }
 	}
 	
-	/// The keychain account name to use to store client credentials. Defaults to "clientCredentials".
-	public var keychainAccountForClientCredentials = "clientCredentials" {
-		didSet {
-			assert(!keychainAccountForClientCredentials.isEmpty)
-		}
+	/// The client secret, usually only needed for code grant.
+	public final var clientSecret: String? {
+		get { return clientConfig.clientSecret }
+		set { clientConfig.clientSecret = newValue }
 	}
 	
-	/// Defaults to `kSecAttrAccessibleWhenUnlocked`
-	public internal(set) var keychainAccessMode = kSecAttrAccessibleWhenUnlocked
+	/// The name of the client, as used during dynamic client registration. Use "client_name" during initalization to set.
+	open var clientName: String? {
+		get { return clientConfig.clientName }
+	}
+	
+	/// The URL to authorize against.
+	public final var authURL: URL {
+		get { return clientConfig.authorizeURL }
+	}
+
+	/// The URL string where we can exchange a code for a token; if nil `authURL` will be used.
+	public final var tokenURL: URL? {
+		get { return clientConfig.tokenURL }
+	}
+	
+	/// The scope currently in use.
+	public final var scope: String? {
+		get { return clientConfig.scope }
+		set { clientConfig.scope = newValue }
+	}
+	
+	/// The redirect URL string to use.
+	public final var redirect: String? {
+		get { return clientConfig.redirect }
+		set { clientConfig.redirect = newValue }
+	}
+	
+	/// Context for the current auth dance.
+	open var context = OAuth2ContextStore()
+	
+	/// The receiver's access token.
+	open var accessToken: String? {
+		get { return clientConfig.accessToken }
+		set { clientConfig.accessToken = newValue }
+	}
+    
+	/// The receiver's id token.
+	open var idToken: String? {
+		get { return clientConfig.idToken }	
+		set { clientConfig.idToken = newValue }
+	}
+
+	/// The access token's expiry date.
+	open var accessTokenExpiry: Date? {
+		get { return clientConfig.accessTokenExpiry }
+		set { clientConfig.accessTokenExpiry = newValue }
+	}
+	
+	/// The receiver's long-time refresh token.
+	open var refreshToken: String? {
+		get { return clientConfig.refreshToken }
+		set { clientConfig.refreshToken = newValue }
+	}
+	
+	/// Custom or overridden HTML headers to be used during authorization.
+	public var authHeaders: OAuth2Headers? {
+		get { return clientConfig.authHeaders }
+		set { clientConfig.authHeaders = newValue }
+	}
+	
+	/// Custom authorization parameters.
+	public var authParameters: OAuth2StringDict? {
+		get { return clientConfig.authParameters }
+		set { clientConfig.authParameters = newValue }
+	}
+	
+	
+	/// This closure is internally used with `authorize(params:callback:)` and only exposed for subclassing reason, do not mess with it!
+	public final var didAuthorizeOrFail: ((_ parameters: OAuth2JSON?, _ error: OAuth2Error?) -> Void)?
+	
+	/// Returns true if the receiver is currently authorizing.
+	public final var isAuthorizing: Bool {
+		return nil != didAuthorizeOrFail
+	}
+	
+	/// Closure called on successful authorization on the main thread.
+	@available(*, deprecated: 3.0, message: "Use the `authorize(params:callback:)` method and variants")
+	public final var onAuthorize: ((_ parameters: OAuth2JSON) -> Void)?
+	
+	/// When authorization fails (if error is not nil) or is cancelled, this block is executed on the main thread.
+	@available(*, deprecated: 3.0, message: "Use the `authorize(params:callback:)` method and variants")
+	public final var onFailure: ((OAuth2Error?) -> Void)?
+	
+	/**
+	Closure called after the regular authorization callback, on the main thread. You can use this callback when you're performing
+	authorization manually and/or for cleanup operations.
+	
+	- parameter authParameters: All authorization parameters; non-nil (but possibly empty) on success, nil on error
+	- parameter error:          OAuth2Error giving the failure reason; if nil and `authParameters` is also nil, the process was aborted.
+	*/
+	public final var afterAuthorizeOrFail: ((_ authParameters: OAuth2JSON?, _ error: OAuth2Error?) -> Void)?
+	
+	/**
+	For internal use, don't mess with it, it's public only for subclassing and compilation reasons. Executed right before
+	`afterAuthorizeOrFail`.
+	*/
+	public final var internalAfterAuthorizeOrFail: ((_ wasFailure: Bool, _ error: OAuth2Error?) -> Void)?
 	
 	
 	/**
-	Base initializer.
+	Designated initializer.
 	
-	Looks at the `keychain`, `keychain_access_mode` and `verbose` keys in the _settings_ dict. Everything else is handled by subclasses.
+	The following settings keys are currently supported:
+	
+	- client_id (string)
+	- client_secret (string), usually only needed for code grant
+	- authorize_uri (URL-string)
+	- token_uri (URL-string), if omitted the authorize_uri will be used to obtain tokens
+	- redirect_uris (list of URL-strings)
+	- scope (string)
+	
+	- client_name (string)
+	- registration_uri (URL-string)
+	- logo_uri (URL-string)
+	
+	- keychain (bool, true by default, applies to using the system keychain)
+	- keychain_access_mode (string, value for keychain kSecAttrAccessible attribute, kSecAttrAccessibleWhenUnlocked by default)
+	- keychain_access_group (string, value for keychain kSecAttrAccessGroup attribute, nil by default)
+	- verbose (bool, false by default, applies to client logging)
+	- secret_in_body (bool, false by default, forces the flow to use the request body for the client secret)
+	- token_assume_unexpired (bool, true by default, whether to use access tokens that do not come with an "expires_in" parameter)
 	*/
-	public init(settings: OAuth2JSON) {
-		self.settings = settings
+	override public init(settings: OAuth2JSON) {
+		clientConfig = OAuth2ClientConfig(settings: settings)
 		
-		// client settings
-		if let keychain = settings["keychain"] as? Bool {
-			useKeychain = keychain
+		// auth configuration options
+		if let inBody = settings["secret_in_body"] as? Bool {
+			authConfig.secretInBody = inBody
 		}
-		if let accessMode = settings["keychain_access_mode"] as? String {
-			keychainAccessMode = accessMode
+		if let ttl = settings["title"] as? String {
+			authConfig.ui.title = ttl
 		}
-		if let verb = settings["verbose"] as? Bool {
-			verbose = verb
-			if verbose {
-				logger = OAuth2DebugLogger()
-			}
-		}
-		
-		// init from keychain
-		if useKeychain {
-			updateFromKeychain()
-		}
-		logger?.debug("OAuth2", msg: "Initialization finished")
+		super.init(settings: settings)
 	}
 	
 	
 	// MARK: - Keychain Integration
 	
-	/** The service key under which to store keychain items. Returns "http://localhost", subclasses override to return the authorize URL. */
-	public func keychainServiceName() -> String {
-		return "http://localhost"
+	/** Overrides base implementation to return the authorize URL. */
+	override open func keychainServiceName() -> String {
+		return authURL.description
 	}
 	
-	/** Queries the keychain for tokens stored for the receiver's authorize URL, and updates the token properties accordingly. */
-	private func updateFromKeychain() {
-		logger?.debug("OAuth2", msg: "Looking for items in keychain")
-		
-		do {
-			var creds = OAuth2KeychainAccount(oauth2: self, account: keychainAccountForClientCredentials)
-			let creds_data = try creds.fetchedFromKeychain()
-			updateFromKeychainItems(creds_data)
+	override func updateFromKeychainItems(_ items: [String: Any]) {
+		for message in clientConfig.updateFromStorableItems(items) {
+			logger?.debug("OAuth2", msg: message)
 		}
-		catch {
-			logger?.warn("OAuth2", msg: "Failed to load client credentials from keychain: \(error)")
-		}
-		
-		do {
-			var toks = OAuth2KeychainAccount(oauth2: self, account: keychainAccountForTokens)
-			let toks_data = try toks.fetchedFromKeychain()
-			updateFromKeychainItems(toks_data)
-		}
-		catch {
-			logger?.warn("OAuth2", msg: "Failed to load tokens from keychain: \(error)")
-		}
+		authConfig.secretInBody = (clientConfig.endpointAuthMethod == OAuth2EndpointAuthMethod.clientSecretPost)
 	}
 	
-	/** Updates instance properties according to the items found in the given dictionary, which was found in the keychain. */
-	func updateFromKeychainItems(items: [String: NSCoding]) {
+	override open func storableCredentialItems() -> [String: Any]? {
+		return clientConfig.storableCredentialItems()
+	}
+	
+	override open func storableTokenItems() -> [String: Any]? {
+		return clientConfig.storableTokenItems()
+	}
+	
+	override open func forgetClient() {
+		super.forgetClient()
+		clientConfig.forgetCredentials()
+	}
+	
+	override open func forgetTokens() {
+		super.forgetTokens()
+		clientConfig.forgetTokens()
+	}
+	
+	
+	// MARK: - Request Signing
+	
+	/**
+	Return an OAuth2Request, a NSMutableURLRequest subclass, that has already been signed and can be used against your OAuth2 endpoint.
+	
+	This method by default ignores locally cached data and specifies a timeout interval of 20 seconds. This should be ideal for small JSON
+	data requests, but you probably don't want to disable cache for binary data like avatars.
+	
+	- parameter forURL: The URL to create a request for
+	- parameter cachePolicy: The cache policy to use, defaults to `NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData`
+	- returns: OAuth2Request for the given URL
+	*/
+	open func request(forURL url: URL, cachePolicy: NSURLRequest.CachePolicy = .reloadIgnoringLocalCacheData) -> URLRequest {
+		var req = URLRequest(url: url, cachePolicy: cachePolicy, timeoutInterval: 20)
+		req.sign(with: self)
+		return req
+	}
+	
+	
+	// MARK: - Callbacks
+	
+	/**
+	Subclasses override this method to extract information from the supplied redirect URL.
+	
+	- parameter redirect: The redirect URL returned by the server that you want to handle
+	*/
+	open func handleRedirectURL(_ redirect: URL) throws {
+		throw OAuth2Error.generic("Abstract class use")
 	}
 	
 	/**
-	Items that should be stored when storing client credentials.
+	Internally used on success, calls the callbacks on the main thread.
 	
-	- returns: A dictionary with `String` keys and `NSCoding` adopting items
+	This method is only made public in case you want to create a subclass and call `didAuthorize(parameters:)` at an override point. If you
+	call this method yourself on your OAuth2 instance you might screw things up badly.
+	
+	- parameter withParameters: The parameters received during authorization
 	*/
-	public func storableCredentialItems() -> [String: NSCoding]? {
-		return nil
-	}
-	
-	/** Stores our client credentials in the keychain. */
-	internal func storeClientToKeychain() {
-		if let items = storableCredentialItems() {
-			logger?.debug("OAuth2", msg: "Storing client credentials to keychain")
-			let keychain = OAuth2KeychainAccount(oauth2: self, account: keychainAccountForClientCredentials, data: items)
-			do {
-				try keychain.saveInKeychain()
-			}
-			catch {
-				logger?.warn("OAuth2", msg: "Failed to store client credentials to keychain: \(error)")
-			}
+	public final func didAuthorize(withParameters parameters: OAuth2JSON) {
+		if useKeychain {
+			storeTokensToKeychain()
 		}
-	}
-	
-	/**
-	Items that should be stored when tokens are stored to the keychain.
-	
-	- returns: A dictionary with `String` keys and `NSCoding` adopting items
-	*/
-	public func storableTokenItems() -> [String: NSCoding]? {
-		return nil
-	}
-	
-	/** Stores our current token(s) in the keychain. */
-	internal func storeTokensToKeychain() {
-		if let items = storableTokenItems() {
-			logger?.debug("OAuth2", msg: "Storing tokens to keychain")
-			let keychain = OAuth2KeychainAccount(oauth2: self, account: keychainAccountForTokens, data: items)
-			do {
-				try keychain.saveInKeychain()
-			}
-			catch {
-				logger?.warn("OAuth2", msg: "Failed to store tokens to keychain: \(error)")
-			}
-		}
-	}
-	
-	/** Unsets the client credentials and deletes them from the keychain. */
-	public func forgetClient() {
-		logger?.debug("OAuth2", msg: "Forgetting client credentials and removing them from keychain")
-		let keychain = OAuth2KeychainAccount(oauth2: self, account: keychainAccountForClientCredentials)
-		do {
-			try keychain.removeFromKeychain()
-		}
-		catch {
-			logger?.warn("OAuth2", msg: "Failed to delete credentials from keychain: \(error)")
-		}
-	}
-	
-	/** Unsets the tokens and deletes them from the keychain. */
-	public func forgetTokens() {
-		logger?.debug("OAuth2", msg: "Forgetting tokens and removing them from keychain")
-
-		let keychain = OAuth2KeychainAccount(oauth2: self, account: keychainAccountForTokens)
-		do {
-			try keychain.removeFromKeychain()
-		}
-		catch {
-			logger?.warn("OAuth2", msg: "Failed to delete tokens from keychain: \(error)")
-		}
-	}
-	
-	
-	// MARK: - Requests
-	
-	/// The instance's current session, creating one by the book if necessary. Defaults to using an ephemeral session, you can use
-	/// `sessionConfiguration` and/or `sessionDelegate` to affect how the session is configured.
-	public var session: NSURLSession {
-		if nil == _session {
-			let config = sessionConfiguration ?? NSURLSessionConfiguration.ephemeralSessionConfiguration()
-			_session = NSURLSession(configuration: config, delegate: sessionDelegate, delegateQueue: nil)
-		}
-		return _session!
-	}
-	
-	/// The backing store for `session`.
-	private var _session: NSURLSession?
-	
-	/// The configuration to use when creating `session`. Uses an `+ephemeralSessionConfiguration()` if nil.
-	public var sessionConfiguration: NSURLSessionConfiguration? {
-		didSet {
-			_session = nil
-		}
-	}
-	
-	/// URL session delegate that should be used for the `NSURLSession` the instance uses for requests.
-	public var sessionDelegate: NSURLSessionDelegate? {
-		didSet {
-			_session = nil
+		callOnMainThread() {
+			self.onAuthorize?(parameters)
+			self.didAuthorizeOrFail?(parameters, nil)
+			self.didAuthorizeOrFail = nil
+			self.internalAfterAuthorizeOrFail?(false, nil)
+			self.afterAuthorizeOrFail?(parameters, nil)
 		}
 	}
 	
 	/**
-	Perform the supplied request and call the callback with the response JSON dict or an error. This method is intended for authorization
-	calls, not for data calls outside of the OAuth2 dance.
+	Internally used on error, calls the callbacks on the main thread with the appropriate error message.
 	
-	This implementation uses the shared `NSURLSession` and executes a data task. If the server responds with an error, this will be
-	converted into an error according to information supplied in the response JSON (if availale).
+	This method is only made public in case you want to create a subclass and need to call `didFail(error:)` at an override point. If you
+	call this method yourself on your OAuth2 instance you might screw things up royally.
 	
-	- parameter request: The request to execute
-	- parameter callback: The callback to call when the request completes/fails; data and error are mutually exclusive
+	- parameter error: The error that led to authorization failure; will use `.requestCancelled` on the callbacks if nil is passed
 	*/
-	public func performRequest(request: NSURLRequest, callback: ((data: NSData?, status: Int?, error: ErrorType?) -> Void)) {
-		self.logger?.trace("OAuth2", msg: "REQUEST\n\(request.debugDescription)\n---")
-		let task = session.dataTaskWithRequest(request) { sessData, sessResponse, error in
-			self.abortableTask = nil
-			self.logger?.trace("OAuth2", msg: "RESPONSE\n\(sessResponse?.debugDescription ?? "no response")\n\n\(NSString(data: sessData ?? NSData(), encoding: NSUTF8StringEncoding) ?? "no data")\n---")
-			if let error = error {
-				if NSURLErrorDomain == error.domain && -999 == error.code {		// request was cancelled
-					callback(data: nil, status: nil, error: OAuth2Error.RequestCancelled)
-				}
-				else {
-					callback(data: nil, status: nil, error: error)
-				}
-			}
-			else if let data = sessData, let http = sessResponse as? NSHTTPURLResponse {
-				callback(data: data, status: http.statusCode, error: nil)
-			}
-			else {
-				let error = OAuth2Error.Generic("Unknown response \(sessResponse) with data “\(NSString(data: sessData!, encoding: NSUTF8StringEncoding))”")
-				callback(data: nil, status: nil, error: error)
-			}
+	public final func didFail(with error: OAuth2Error?) {
+		var finalError = error
+		if let error = finalError {
+			logger?.debug("OAuth2", msg: "\(error)")
 		}
-		abortableTask = task
-		task.resume()
+		else {
+			finalError = OAuth2Error.requestCancelled
+		}
+		callOnMainThread() {
+			self.onFailure?(finalError)
+			self.didAuthorizeOrFail?(nil, finalError)
+			self.didAuthorizeOrFail = nil
+			self.internalAfterAuthorizeOrFail?(true, finalError)
+			self.afterAuthorizeOrFail?(nil, finalError)
+		}
 	}
-	
-	/// Currently running abortable session task.
-	private var abortableTask: NSURLSessionTask?
 	
 	/**
-	Can be called to immediately abort the currently running authorization request, if it was started by `performRequest()`.
-	
-	- returns: A bool indicating whether a task was aborted or not
+	Allows to abort authorization currently in progress.
 	*/
-	func abortTask() -> Bool {
-		guard let task = abortableTask else {
-			return false
+	open func abortAuthorization() {
+		if !abortTask() {
+			logger?.debug("OAuth2", msg: "Aborting authorization")
+			didFail(with: nil)
 		}
-		logger?.debug("OAuth2", msg: "Aborting request")
-		task.cancel()
-		return true
 	}
 	
 	
-	// MARK: - Response Verification
+	// MARK: - Response Parsing
 	
 	/**
 	Handles access token error response.
@@ -303,11 +319,11 @@ public class OAuth2Base {
 	- parameter fallback: The message string to use in case no error description is found in the parameters
 	- returns: An OAuth2Error
 	*/
-	public func assureNoErrorInResponse(params: OAuth2JSON, fallback: String? = nil) throws {
+	open func assureNoErrorInResponse(_ params: OAuth2JSON, fallback: String? = nil) throws {
 		
 		// "error_description" is optional, we prefer it if it's present
 		if let err_msg = params["error_description"] as? String {
-			throw OAuth2Error.ResponseError(err_msg)
+			throw OAuth2Error.responseError(err_msg)
 		}
 		
 		// the "error" response is required for error responses, so it should be present
@@ -316,57 +332,177 @@ public class OAuth2Base {
 		}
 	}
 	
-	
-	// MARK: - Utilities
-	
 	/**
-	Parse string-only JSON from NSData.
+	Parse response data returned while exchanging the code for a token.
 	
-	- parameter data: NSData returned from the call, assumed to be JSON with string-values only.
-	- returns: An OAuth2JSON instance
+	This method expects token data to be JSON, decodes JSON and fills the receiver's properties accordingly. If the response contains an
+	"error" key, will parse the error and throw it.
+	
+	- parameter data: NSData returned from the call
+	- returns:        An OAuth2JSON instance with token data; may contain additional information
 	*/
-	func parseJSON(data: NSData) throws -> OAuth2JSON {
-		if let json = try NSJSONSerialization.JSONObjectWithData(data, options: []) as? OAuth2JSON {
-			return json
-		}
-		if let str = NSString(data: data, encoding: NSUTF8StringEncoding) {
-			logger?.warn("OAuth2", msg: "Unparsable JSON was: \(str)")
-		}
-		throw OAuth2Error.JSONParserError
+	open func parseAccessTokenResponse(data: Data) throws -> OAuth2JSON {
+		let dict = try parseJSON(data)
+		return try parseAccessTokenResponse(params: dict)
 	}
 	
 	/**
-	Parse a query string into a dictionary of String: String pairs.
+	Parse response data returned while exchanging the code for a token.
 	
-	If you're retrieving a query or fragment from NSURLComponents, use the `percentEncoded##` variant as the others
-	automatically perform percent decoding, potentially messing with your query string.
+	This method extracts token data and fills the receiver's properties accordingly. If the response contains an "error" key, will parse the
+	error and throw it. The method is final to ensure correct order of error parsing and not parsing the response if an error happens. This
+	is not possible in overrides. Instead, override the various `assureXy(dict:)` methods, especially `assureAccessTokenParamsAreValid()`.
 	
-	- parameter query: The query string you want to have parsed
-	- returns: A dictionary full of strings with the key-value pairs found in the query
+	- parameter params: Dictionary data parsed from the response
+	- returns: An OAuth2JSON instance with token data; may contain additional information
 	*/
-	public final class func paramsFromQuery(query: String) -> OAuth2StringDict {
-		let parts = query.characters.split() { $0 == "&" }.map() { String($0) }
-		var params = OAuth2StringDict(minimumCapacity: parts.count)
-		for part in parts {
-			let subparts = part.characters.split() { $0 == "=" }.map() { String($0) }
-			if 2 == subparts.count {
-				params[subparts[0]] = subparts[1].wwwFormURLDecodedString
-			}
-		}
+	public final func parseAccessTokenResponse(params: OAuth2JSON) throws -> OAuth2JSON {
+		try assureNoErrorInResponse(params)
+		try assureCorrectBearerType(params)
+		try assureAccessTokenParamsAreValid(params)
+		
+		clientConfig.updateFromResponse(normalizeAccessTokenResponseKeys(params))
 		return params
+	}
+	
+	/**
+	This method does nothing, but allows subclasses to fix parameter names before passing the access token response to `OAuth2ClientConfig`s
+	`updateFromResponse()`.
+	
+	- parameter dict: The dictionary that was returned from an access token response
+	- returns: The dictionary with fixed key names
+	*/
+	open func normalizeAccessTokenResponseKeys(_ dict: OAuth2JSON) -> OAuth2JSON {
+		return dict
+	}
+	
+	/**
+	Parse response data returned while using a refresh token.
+	
+	This method extracts token data, expected to be JSON, and fills the receiver's properties accordingly. If the response contains an
+	"error" key, will parse the error and throw it.
+	
+	- parameter data: NSData returned from the call
+	- returns: An OAuth2JSON instance with token data; may contain additional information
+	*/
+	open func parseRefreshTokenResponseData(_ data: Data) throws -> OAuth2JSON {
+		let dict = try parseJSON(data)
+		return try parseRefreshTokenResponse(dict)
+	}
+	
+	/**
+	Parse response data returned while using a refresh token.
+	
+	This method extracts token data and fills the receiver's properties accordingly. If the response contains an "error" key, will parse the
+	error and throw it. The method is final to ensure correct order of error parsing and not parsing the response if an error happens. This
+	is not possible in overrides. Instead, override the various `assureXy(dict:)` methods, especially `assureRefreshTokenParamsAreValid()`.
+	
+	- parameter json: Dictionary data parsed from the response
+	- returns: An OAuth2JSON instance with token data; may contain additional information
+	*/
+	final func parseRefreshTokenResponse(_ dict: OAuth2JSON) throws -> OAuth2JSON {
+		try assureNoErrorInResponse(dict)
+		try assureCorrectBearerType(dict)
+		try assureRefreshTokenParamsAreValid(dict)
+		
+		clientConfig.updateFromResponse(dict)
+		return dict
+	}
+	
+	/**
+	This method does nothing, but allows subclasses to fix parameter names before passing the refresh token response to
+	`OAuth2ClientConfig`s `updateFromResponse()`.
+	
+	- parameter dict: The dictionary that was returned from a refresh token response
+	- returns: The dictionary with fixed key names
+	*/
+	open func normalizeRefreshTokenResponseKeys(_ dict: OAuth2JSON) -> OAuth2JSON {
+		return dict
+	}
+	
+	/**
+	This method checks `state`, throws `OAuth2Error.missingState` or `OAuth2Error.invalidState`. Resets state if it matches.
+	*/
+	public final func assureMatchesState(_ params: OAuth2JSON) throws {
+		guard let state = params["state"] as? String, !state.isEmpty else {
+			throw OAuth2Error.missingState
+		}
+		logger?.trace("OAuth2", msg: "Checking state, got “\(state)”, expecting “\(context.state)”")
+		if !context.matchesState(state) {
+			throw OAuth2Error.invalidState
+		}
+		context.resetState()
+	}
+	
+	/**
+	Throws unless "token_type" is "bearer" (case-insensitive).
+	*/
+	open func assureCorrectBearerType(_ params: OAuth2JSON) throws {
+		if let tokType = params["token_type"] as? String {
+			if "bearer" == tokType.lowercased() {
+				return
+			}
+			throw OAuth2Error.unsupportedTokenType("Only “bearer” token is supported, but received “\(tokType)”")
+		}
+		throw OAuth2Error.noTokenType
+	}
+	
+	/**
+	Called when parsing the access token response. Does nothing by default, implicit grant flows check state.
+	*/
+	open func assureAccessTokenParamsAreValid(_ params: OAuth2JSON) throws {
+	}
+	
+	/**
+	Called when parsing the refresh token response. Does nothing by default.
+	*/
+	open func assureRefreshTokenParamsAreValid(_ params: OAuth2JSON) throws {
 	}
 }
 
 
 /**
-Helper function to ensure that the callback is executed on the main thread.
+Class, internally used, to store current authorization context, such as state and redirect-url.
 */
-func callOnMainThread(callback: (Void -> Void)) {
-	if NSThread.isMainThread() {
-		callback()
+open class OAuth2ContextStore {
+	
+	/// Currently used redirect_url.
+	open var redirectURL: String?
+	
+	/// The current state.
+	internal var _state = ""
+	
+	/**
+	The state sent to the server when requesting a token.
+	
+	We internally generate a UUID and use the first 8 chars if `_state` is empty.
+	*/
+	open var state: String {
+		if _state.isEmpty {
+			_state = UUID().uuidString
+			_state = _state[_state.startIndex..<_state.index(_state.startIndex, offsetBy: 8)]		// only use the first 8 chars, should be enough
+		}
+		return _state
 	}
-	else {
-		dispatch_sync(dispatch_get_main_queue(), callback)
+	
+	/**
+	Checks that given state matches the internal state.
+	
+	- parameter state: The state to check (may be nil)
+	- returns: true if state matches, false otherwise or if given state is nil.
+	*/
+	func matchesState(_ state: String?) -> Bool {
+		if let st = state {
+			return st == _state
+		}
+		return false
+	}
+	
+	/**
+	Resets current state so it gets regenerated next time it's needed.
+	*/
+	func resetState() {
+		_state = ""
 	}
 }
 
