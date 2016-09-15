@@ -75,9 +75,9 @@ open class OAuth2DataLoader: OAuth2Requestable {
 	
 	/**
 	This method takes an additional `retry` flag, then uses the base implementation of `perform(request:callback:)` to perform the given
-	request. It intercepts 401 (and 403, if `alsoIntercept403` is true), enqueues the request and performs authentication. During
-	authentication, all requests to be performed are enqueued and they are all dequeued once authentication finishes, either by retrying
-	them on authentication success or by aborting them all with the same error.
+	request. It intercepts 401 (and 403, if `alsoIntercept403` is true), enqueues the request and performs authorization. During
+	authorization, all requests to be performed are enqueued and they are all dequeued once authorization finishes, either by retrying
+	them on authorization success or by aborting them all with the same error.
 	
 	The callback is easy to use, like so:
 	

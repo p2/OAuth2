@@ -32,7 +32,7 @@ import Foundation
 
 
 /**
-Base class for specific OAuth2 authentication flow implementations.
+Base class for specific OAuth2 flow implementations.
 */
 open class OAuth2: OAuth2Base {
 	

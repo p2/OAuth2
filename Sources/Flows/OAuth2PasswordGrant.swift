@@ -33,7 +33,7 @@ open class OAuth2PasswordGrant: OAuth2 {
 		return "password"
 	}
 	
-	/// Username to use during authentication.
+	/// Username to use during authorization.
 	open var username: String
 	
 	/// The user's password.

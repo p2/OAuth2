@@ -129,7 +129,7 @@ open class OAuth2Base: OAuth2Securable {
 		return nil != didAuthorizeOrFail
 	}
 	
-	/// Closure called on successful authentication on the main thread.
+	/// Closure called on successful authorization on the main thread.
 	@available(*, deprecated: 3.0, message: "Use the `authorize(params:callback:)` method and variants")
 	public final var onAuthorize: ((_ parameters: OAuth2JSON) -> Void)?
 	
@@ -280,7 +280,7 @@ open class OAuth2Base: OAuth2Securable {
 	This method is only made public in case you want to create a subclass and need to call `didFail(error:)` at an override point. If you
 	call this method yourself on your OAuth2 instance you might screw things up royally.
 	
-	- parameter error: The error that led to authentication failure; will use `.requestCancelled` on the callbacks if nil is passed
+	- parameter error: The error that led to authorization failure; will use `.requestCancelled` on the callbacks if nil is passed
 	*/
 	public final func didFail(with error: OAuth2Error?) {
 		var finalError = error

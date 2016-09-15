@@ -112,7 +112,7 @@ By default the OS browser will be used for authorization if there is no access t
 
 To start authorization call **`authorize(params:callback:)`** or, to use embedded authorization, the convenience method `authorizeEmbedded(from:callback:)`.
 
-The login screen will only be **presented if needed** (see [_Manually Performing Authentication_](#manually-performing-authentication) below for details) and will automatically **dismiss** the login screen on success.
+The login screen will only be **presented if needed** (see [_Manually Performing Authorization](#manually-performing-authorization) below for details) and will automatically **dismiss** the login screen on success.
 See [_Advanced Settings_](#advanced-settings) for other options.
 
 
@@ -139,7 +139,7 @@ oauth2.authorize() { ... }
 Don't forget, when using the OS browser or the iOS 9+ Safari view controller, you will need to **intercept the callback** in your app delegate.
 This is shown under step 2 above.
 
-See [_Manually Performing Authentication_](#manually-performing-authentication) below for details on how to do this on the Mac.
+See [_Manually Performing Authorization_](#manually-performing-authorization) below for details on how to do this on the Mac.
 
 ### 5. Receive Callback
 
@@ -200,8 +200,8 @@ storage.cookies?.forEach() { storage.deleteCookie($0) }
 ```
 
 
-Manually Performing Authentication
-----------------------------------
+Manually Performing Authorization
+---------------------------------
 
 The `authorize(params:callback:)` method will:
 
@@ -267,7 +267,7 @@ oauth2.afterAuthorizeOrFail = { authParameters, error in
 **OS X**
 
 See the [OAuth2 Sample App][sample]'s AppDelegate class on how to receive the callback URL in your Mac app.
-If the authentication displays the code to the user, e.g. with Google's `urn:ietf:wg:oauth:2.0:oob` callback URL, you can retrieve the code from the user's pasteboard and continue authorization with:
+If the authorization displays the code to the user, e.g. with Google's `urn:ietf:wg:oauth:2.0:oob` callback URL, you can retrieve the code from the user's pasteboard and continue authorization with:
 
 ```swift
 let pboard = NSPasteboard.general()
@@ -303,7 +303,7 @@ Would be nice to add another code example here, but it's pretty much the same as
 
 #### Client Credentials
 
-A 2-legged flow that lets an app authenticate itself via its client id and secret.
+A 2-legged flow that lets an app authorize itself via its client id and secret.
 Instantiate `OAuth2ClientCredentials`, as usual supplying `client_id` but also a `client_secret` – plus your other configurations – in the settings dict, and you should be good to go.
 
 #### Username and Password
@@ -419,7 +419,7 @@ If you have dynamically registered your client and want to start anew, you can c
 
 Ideally, access tokens get delivered with an "expires_in" parameter that tells you how long the token is valid.
 If it is missing the framework will still use those tokens if one is found in the keychain and not re-perform the OAuth dance.
-You will need to intercept 401s and re-authenticate if an access token has expired but the framework has still pulled it from the keychain.
+You will need to intercept 401s and re-authorize if an access token has expired but the framework has still pulled it from the keychain.
 This behavior can be turned off by supplying "token_assume_unexpired": false in settings or setting `clientConfig.accessTokenAssumeUnexpired` to false.
 
 

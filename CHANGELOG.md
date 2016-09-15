@@ -17,7 +17,7 @@ You can also refer to commit logs to get details on what was implemented, fixed 
 
 ### 2.2.9
 
-- Allow to add custom authentication headers (thanks @SpectralDragon)
+- Allow to add custom authorization headers (thanks @SpectralDragon)
 - Fix: add client_id to password grant even if there is no secret (thanks Criss!)
 
 
@@ -54,7 +54,7 @@ You can also refer to commit logs to get details on what was implemented, fixed 
 
 ### 2.2.3
 
-- Refactor authentication request creation
+- Refactor authorization request creation
 - Add `OAuth2ClientCredentialsReddit` to deal with Reddit installed apps special flow
 - Rename clashing method definitions to fix #99
 

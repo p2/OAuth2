@@ -96,7 +96,7 @@ open class OAuth2ClientConfig {
 			logoURL = URL(string: logo)
 		}
 		
-		// client authentication options
+		// client authorization options
 		scope = settings["scope"] as? String
 		if let redirs = settings["redirect_uris"] as? [String] {
 			redirectURLs = redirs
