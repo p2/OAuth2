@@ -8,8 +8,8 @@ OAuth2 frameworks for **macOS**, **iOS** and **tvOS** written in Swift 3.0.
 
 - [⤵️ Installation](#installation)
 - [🛠 Usage](#usage)
-- [📱 Sample iOS app](https://github.com/p2/OAuth2PodApp) (using CocoaPods)
 - [🖥 Sample macOS app][sample] (with data loader examples)
+- [📱 Sample iOS app](https://github.com/p2/OAuth2PodApp) (using CocoaPods)
 - [📖 Technical Documentation](https://p2.github.io/OAuth2)
 
 OAuth2 requires Xcode 8, the built framework can be used on **OS X 10.9** or **iOS 8** and later.
@@ -463,22 +463,12 @@ This behavior can be turned off by supplying "token_assume_unexpired": false in 
 Installation
 ------------
 
-You can use _git_, _CocoaPods_ or _Carthage_ to install the framework.
-
-#### CocoaPods
-
-Add a `Podfile` that contains at least the following information to the root of your app project, then do `pod install`.
-If you're unfamiliar with CocoaPods, read [using CocoaPods](http://guides.cocoapods.org/using/using-cocoapods.html).
-
-```ruby
-platform :ios, '8.0'      # or platform :osx, '10.9'
-pod 'p2.OAuth2', '~> 3.0'
-use_frameworks!
-```
+You can use _git_, _Carthage_ and even _CocoaPods_ to install the framework.
+The preferred way is to use _git_ directly or _Carthage_.
 
 #### Carthage
 
-Install via Carthage is easy enough:
+Installation via Carthage is easy enough:
 
 ```ruby
 github "p2/OAuth2" ~> 3.0
@@ -505,6 +495,23 @@ These three steps are needed to:
 1. Make your App also build the framework
 2. Link the framework into your app
 3. Embed the framework in your app when distributing
+
+#### CocoaPods
+
+CocoaPods was nice back in the days for Obj-C and static libraries, but is overkill in the modern days of Swift and iOS frameworks.
+You can however still use OAuth2 with Cocoapods.
+
+Add a `Podfile` that contains at least the following information to the root of your app project, then do `pod install`.
+If you're unfamiliar with CocoaPods, read [using CocoaPods](http://guides.cocoapods.org/using/using-cocoapods.html).
+
+```ruby
+platform :ios, '8.0'          # or platform :osx, '10.9'
+use_frameworks!
+target `YourApp` do
+  #pod 'p2.OAuth2', '~> 3.0'  # NOT YET AVAILABLE
+  pod 'p2.OAuth2', :git => 'https://github.com/p2/OAuth2', :submodules => true
+end
+```
 
 
 License
