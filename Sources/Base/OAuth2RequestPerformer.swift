@@ -48,6 +48,7 @@ open class OAuth2DataTaskRequestPerformer: OAuth2RequestPerformer {
 	- parameter completionHandler: The completion handler to call when the load request is complete.
 	- returns: An already running session data task
 	*/
+	@discardableResult
 	open func perform(request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionTask? {
 		let task = session.dataTask(with: request, completionHandler: completionHandler)
 		task.resume()
