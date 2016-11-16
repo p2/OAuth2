@@ -66,8 +66,16 @@ open class OAuth2Securable: OAuth2Requestable {
 	*/
 	public init(settings: OAuth2JSON) {
 		self.settings = settings
-		
+        
 		// keychain settings
+        if let keychainAccountForClientCredentials = settings["keychainAccountForClientCredentials"] as? String {
+            self.keychainAccountForClientCredentials = keychainAccountForClientCredentials
+        }
+        
+        if let keychainAccountForTokens = settings["keychainAccountForTokens"] as? String {
+            self.keychainAccountForTokens = keychainAccountForTokens
+        }
+        
 		if let keychain = settings["keychain"] as? Bool {
 			useKeychain = keychain
 		}
