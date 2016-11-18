@@ -282,6 +282,9 @@ open class OAuth2: OAuth2Base {
 		req.params["redirect_uri"] = redirect
 		req.params["client_id"] = clientId
 		req.params["state"] = context.state
+		if clientConfig.safariCancelWorkaround {
+			req.params["swa"] = "\(Date.timeIntervalSinceReferenceDate)" // Safari issue workaround
+		}
 		if let scope = scope ?? clientConfig.scope {
 			req.params["scope"] = scope
 		}
