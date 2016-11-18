@@ -89,7 +89,7 @@ open class OAuth2Base: OAuth2Securable {
 		get { return clientConfig.accessToken }
 		set { clientConfig.accessToken = newValue }
 	}
-    
+	
 	/// The receiver's id token.
 	open var idToken: String? {
 		get { return clientConfig.idToken }	
@@ -168,10 +168,11 @@ open class OAuth2Base: OAuth2Securable {
 	- client_name (string)
 	- registration_uri (URL-string)
 	- logo_uri (URL-string)
-	
 	- keychain (bool, true by default, applies to using the system keychain)
 	- keychain_access_mode (string, value for keychain kSecAttrAccessible attribute, kSecAttrAccessibleWhenUnlocked by default)
 	- keychain_access_group (string, value for keychain kSecAttrAccessGroup attribute, nil by default)
+	- keychain_account_for_client_credentials(string, "clientCredentials" by default)
+	- keychain_account_for_tokens(string, "currentTokens" by default)
 	- verbose (bool, false by default, applies to client logging)
 	- secret_in_body (bool, false by default, forces the flow to use the request body for the client secret)
 	- token_assume_unexpired (bool, true by default, whether to use access tokens that do not come with an "expires_in" parameter)

@@ -62,20 +62,18 @@ open class OAuth2Securable: OAuth2Requestable {
 	/**
 	Base initializer.
 	
-	Looks at the `verbose`, `keychain`, `keychain_access_mode` and `keychain_access_group`. Everything else is handled by subclasses.
+	Looks at the `verbose`, `keychain`, `keychain_access_mode`, `keychain_access_group` `keychain_account_for_client_credentials` and `keychain_account_for_tokens`. Everything else is handled by subclasses.
 	*/
 	public init(settings: OAuth2JSON) {
 		self.settings = settings
-        
+
 		// keychain settings
-        if let keychainAccountForClientCredentials = settings["keychainAccountForClientCredentials"] as? String {
-            self.keychainAccountForClientCredentials = keychainAccountForClientCredentials
-        }
-        
-        if let keychainAccountForTokens = settings["keychainAccountForTokens"] as? String {
-            self.keychainAccountForTokens = keychainAccountForTokens
-        }
-        
+		if let accountForClientCredentials = settings["keychain_account_for_client_credentials"] as? String {
+			keychainAccountForClientCredentials = accountForClientCredentials
+		}
+		if let accountForTokens = settings["keychain_account_for_tokens"] as? String {
+			keychainAccountForTokens = accountForTokens
+		}
 		if let keychain = settings["keychain"] as? Bool {
 			useKeychain = keychain
 		}
