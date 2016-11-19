@@ -68,7 +68,19 @@ open class OAuth2ClientConfig {
 	
 	/// Custom request parameters to be added during authorization.
 	open var authParameters: OAuth2StringDict?
-	
+
+	/// There's an issue with authenticating through 'system browser', where safari says:
+	/// "Safari cannot open the page because the address is invalid." if you first selects 'Cancel'
+	/// when asked to switch back to "your" app, and then you try authenticating again.
+	/// To get rid of it you must restart Safari.
+	///
+	/// Read more about it here:
+	/// http://stackoverflow.com/questions/27739442/ios-safari-does-not-recognize-url-schemes-after-user-cancels
+	/// https://community.fitbit.com/t5/Web-API/oAuth2-authentication-page-gives-me-a-quot-Cannot-Open-Page-quot-error/td-p/1150391
+	///
+	/// Toggling `safariCancelWorkaround` to true will send an extra get-paramter to make the url unique,
+	/// thus it will ask again for the new url.
+	open var safariCancelWorkaround = false	
 	
 	/**
 	Initializer to initialize properties from a settings dictionary.
