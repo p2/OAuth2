@@ -253,6 +253,26 @@ class OAuth2CodeGrantTests: XCTestCase {
 		XCTAssertEqual(query2["redirect_uri"]!, "oauth2://callback", "Expecting correct `redirect_uri`")
 		XCTAssertNil(query2["state"], "`state` must be empty")
 	}
+
+	func testCustomAuthParameters() {
+		let oauth = OAuth2CodeGrant(settings: baseSettings)
+		oauth.redirect = "oauth2://callback"
+		oauth.context.redirectURL = "oauth2://callback"
+
+		// not in body
+		let req = try! oauth.accessTokenRequest(with: "pp").asURLRequest(for: oauth)
+		let body = String(data: req.httpBody!, encoding: String.Encoding.utf8)
+		let query = OAuth2CodeGrant.params(fromQuery: body!)
+		XCTAssertNil(query["foo"], "`foo` should be nil")
+
+		oauth.authConfig.customParameters = [ "foo": "bar" ]
+
+		// in body
+		let req2 = try! oauth.accessTokenRequest(with: "pp").asURLRequest(for: oauth)
+		let body2 = String(data: req2.httpBody!, encoding: String.Encoding.utf8)
+		let query2 = OAuth2CodeGrant.params(fromQuery: body2!)
+		XCTAssertEqual(query2["foo"]!, "bar", "Expecting key `foo` to be `bar`")
+    }
 	
 	func testTokenRequestAgainstAuthURL() {
 		
