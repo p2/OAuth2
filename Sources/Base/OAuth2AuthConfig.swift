@@ -45,7 +45,10 @@ public struct OAuth2AuthConfig {
 	
 	/// Whether to automatically dismiss the auto-presented authorization screen.
 	public var authorizeEmbeddedAutoDismiss = true
-	
+
+	/// Add custom parameters to the request
+	public var customParameters: [String: String]? = nil
+
 	/// Context information for the authorization flow:
 	/// - iOS:   The parent view controller to present from
 	/// - macOS: An NSWindow from which to present a modal sheet _or_ `nil` to present in a new window

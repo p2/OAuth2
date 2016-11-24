@@ -220,7 +220,11 @@ open class OAuth2AuthRequest {
 				req.setValue(val, forHTTPHeaderField: key)
 			}
 		}
-		
+		if let customParameters = oauth2.authConfig.customParameters {
+			for (k, v) in customParameters {
+				finalParams[k] = v
+			}
+		}
 		// add a body to POST requests
 		if .POST == method && finalParams.count > 0 {
 			req.httpBody = try finalParams.utf8EncodedData()
