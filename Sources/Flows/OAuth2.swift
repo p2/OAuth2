@@ -48,23 +48,27 @@ open class OAuth2: OAuth2Base {
 	
 	The following settings keys are currently supported:
 	
-	- client_id (string)
-	- client_secret (string), usually only needed for code grant
-	- authorize_uri (URL-string)
-	- token_uri (URL-string), if omitted the authorize_uri will be used to obtain tokens
-	- redirect_uris (list of URL-strings)
-	- scope (string)
+	- client_id (String)
+	- client_secret (String), usually only needed for code grant
+	- authorize_uri (URL-String)
+	- token_uri (URL-String), if omitted the authorize_uri will be used to obtain tokens
+	- redirect_uris (Array of URL-Strings)
+	- scope (String)
 	
-	- client_name (string)
-	- registration_uri (URL-string)
-	- logo_uri (URL-string)
+	- client_name (String)
+	- registration_uri (URL-String)
+	- logo_uri (URL-String)
 	
-	- keychain (bool, true by default, applies to using the system keychain)
-	- keychain_access_mode (string, value for keychain kSecAttrAccessible attribute, kSecAttrAccessibleWhenUnlocked by default)
-	- keychain_access_group (string, value for keychain kSecAttrAccessGroup attribute, nil by default)
+	- keychain (Bool, true by default, applies to using the system keychain)
+	- keychain_access_mode (String, value for keychain kSecAttrAccessible attribute, kSecAttrAccessibleWhenUnlocked by default)
+	- keychain_access_group (String, value for keychain kSecAttrAccessGroup attribute, nil by default)
+	- keychain_account_for_client_credentials(String, "clientCredentials" by default)
+	- keychain_account_for_tokens(String, "currentTokens" by default)
+	- secret_in_body (Bool, false by default, forces the flow to use the request body for the client secret)
+	- parameters ([String: String], custom request parameters to be added during authorization)
+	- token_assume_unexpired (Bool, true by default, whether to use access tokens that do not come with an "expires_in" parameter)
+	
 	- verbose (bool, false by default, applies to client logging)
-	- secret_in_body (bool, false by default, forces the flow to use the request body for the client secret)
-	- token_assume_unexpired (bool, true by default, whether to use access tokens that do not come with an "expires_in" parameter)
 	*/
 	override public init(settings: OAuth2JSON) {
 		super.init(settings: settings)

@@ -172,10 +172,13 @@ open class OAuth2Base: OAuth2Securable {
 	- keychain (Bool, true by default, applies to using the system keychain)
 	- keychain_access_mode (String, value for keychain kSecAttrAccessible attribute, kSecAttrAccessibleWhenUnlocked by default)
 	- keychain_access_group (String, value for keychain kSecAttrAccessGroup attribute, nil by default)
-	- verbose (Bool, false by default, applies to client logging)
+	- keychain_account_for_client_credentials(String, "clientCredentials" by default)
+	- keychain_account_for_tokens(String, "currentTokens" by default)
 	- secret_in_body (Bool, false by default, forces the flow to use the request body for the client secret)
 	- parameters ([String: String], custom request parameters to be added during authorization)
 	- token_assume_unexpired (Bool, true by default, whether to use access tokens that do not come with an "expires_in" parameter)
+	
+	- verbose (Bool, false by default, applies to client logging)
 	*/
 	override public init(settings: OAuth2JSON) {
 		clientConfig = OAuth2ClientConfig(settings: settings)

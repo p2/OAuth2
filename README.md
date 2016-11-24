@@ -508,9 +508,14 @@ If you're unfamiliar with CocoaPods, read [using CocoaPods](http://guides.cocoap
 platform :ios, '8.0'          # or platform :osx, '10.9'
 use_frameworks!
 target `YourApp` do
-  #pod 'p2.OAuth2', '~> 3.0'  # NOT YET AVAILABLE
-  pod 'p2.OAuth2', :git => 'https://github.com/p2/OAuth2', :submodules => true
+  pod 'p2.OAuth2', '~> 3.0'
 end
+```
+
+If you want the bleeding edge, use this command for CocoaPods instead – note the `submodules` flag: without it the library will not compile.
+
+```ruby
+pod 'p2.OAuth2', :git => 'https://github.com/p2/OAuth2', :submodules => true
 ```
 
 
