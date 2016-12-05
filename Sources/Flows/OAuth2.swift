@@ -48,25 +48,27 @@ open class OAuth2: OAuth2Base {
 	
 	The following settings keys are currently supported:
 	
-	- client_id (string)
-	- client_secret (string), usually only needed for code grant
-	- authorize_uri (URL-string)
-	- token_uri (URL-string), if omitted the authorize_uri will be used to obtain tokens
-	- redirect_uris (list of URL-strings)
-	- scope (string)
+	- client_id (String)
+	- client_secret (String), usually only needed for code grant
+	- authorize_uri (URL-String)
+	- token_uri (URL-String), if omitted the authorize_uri will be used to obtain tokens
+	- redirect_uris (Array of URL-Strings)
+	- scope (String)
 	
-	- client_name (string)
-	- registration_uri (URL-string)
-	- logo_uri (URL-string)
+	- client_name (String)
+	- registration_uri (URL-String)
+	- logo_uri (URL-String)
 	
-	- keychain (bool, true by default, applies to using the system keychain)
-	- keychain_access_mode (string, value for keychain kSecAttrAccessible attribute, kSecAttrAccessibleWhenUnlocked by default)
-	- keychain_access_group (string, value for keychain kSecAttrAccessGroup attribute, nil by default)
-	- keychain_account_for_client_credentials(string, "clientCredentials" by default)
-	- keychain_account_for_tokens(string, "currentTokens" by default)
+	- keychain (Bool, true by default, applies to using the system keychain)
+	- keychain_access_mode (String, value for keychain kSecAttrAccessible attribute, kSecAttrAccessibleWhenUnlocked by default)
+	- keychain_access_group (String, value for keychain kSecAttrAccessGroup attribute, nil by default)
+	- keychain_account_for_client_credentials(String, "clientCredentials" by default)
+	- keychain_account_for_tokens(String, "currentTokens" by default)
+	- secret_in_body (Bool, false by default, forces the flow to use the request body for the client secret)
+	- parameters ([String: String], custom request parameters to be added during authorization)
+	- token_assume_unexpired (Bool, true by default, whether to use access tokens that do not come with an "expires_in" parameter)
+	
 	- verbose (bool, false by default, applies to client logging)
-	- secret_in_body (bool, false by default, forces the flow to use the request body for the client secret)
-	- token_assume_unexpired (bool, true by default, whether to use access tokens that do not come with an "expires_in" parameter)
 	*/
 	override public init(settings: OAuth2JSON) {
 		super.init(settings: settings)
@@ -88,23 +90,18 @@ open class OAuth2: OAuth2Base {
 	be attempted and if it success, an access token will be requested.
 	
 	- parameter params:   Optional key/value pairs to pass during authorization and token refresh
-	- parameter callback: The callback to call when authorization finishes (parameters will be non-nil but may be an empty dict), fails or is
-	                      cancelled (error will be non-nil, e.g. `.requestCancelled` if auth was aborted)
+	- parameter callback: The callback to call when authorization finishes (parameters will be non-nil but may be an empty dict), fails or
+	                      is cancelled (error will be non-nil, e.g. `.requestCancelled` if auth was aborted)
 	*/
 	public final func authorize(params: OAuth2StringDict? = nil, callback: @escaping ((OAuth2JSON?, OAuth2Error?) -> Void)) {
 		if isAuthorizing {
 			callback(nil, OAuth2Error.alreadyAuthorizing)
 			return
 		}
-		var prms = authParameters
-		if nil != prms, let params = params {
-			params.forEach() { prms![$0] = $1 }
-		}
-		let useParams = prms ?? params
 		
 		didAuthorizeOrFail = callback
 		logger?.debug("OAuth2", msg: "Starting authorization")
-		tryToObtainAccessTokenIfNeeded(params: useParams) { successParams in
+		tryToObtainAccessTokenIfNeeded(params: params) { successParams in
 			if let successParams = successParams {
 				self.didAuthorize(withParameters: successParams)
 			}
@@ -116,7 +113,7 @@ open class OAuth2: OAuth2Base {
 					else {
 						do {
 							assert(Thread.isMainThread)
-							try self.doAuthorize(params: useParams)
+							try self.doAuthorize(params: params)
 						}
 						catch let error {
 							self.didFail(with: error.asOAuth2Error)
@@ -145,8 +142,8 @@ open class OAuth2: OAuth2Base {
 	
 	- parameter from:     The context to start authorization from, depends on platform (UIViewController or NSWindow, see `authorizeContext`)
 	- parameter params:   Optional key/value pairs to pass during authorization
-	- parameter callback: The callback to call when authorization finishes (parameters will be non-nil but may be an empty dict), fails or is
-	                      cancelled (error will be non-nil, e.g. `.requestCancelled` if auth was aborted)
+	- parameter callback: The callback to call when authorization finishes (parameters will be non-nil but may be an empty dict), fails or
+	                      is cancelled (error will be non-nil, e.g. `.requestCancelled` if auth was aborted)
 	*/
 	open func authorizeEmbedded(from context: AnyObject, params: OAuth2StringDict? = nil, callback: @escaping ((_ authParameters: OAuth2JSON?, _ error: OAuth2Error?) -> Void)) {
 		if isAuthorizing {		// `authorize()` will check this, but we want to exit before changing `authConfig`
@@ -270,7 +267,7 @@ open class OAuth2: OAuth2Base {
 	Method that creates the OAuth2AuthRequest instance used to create the authorize URL
 	
 	- parameter redirect: The redirect URI string to supply. If it is nil, the first value of the settings' `redirect_uris` entries is
-                          used. Must be present in the end!
+	                      used. Must be present in the end!
 	- parameter scope:    The scope to request
 	- parameter params:   Any additional parameters as dictionary with string keys and values that will be added to the query part
 	- returns:            OAuth2AuthRequest to be used to call to the authorize endpoint
@@ -284,6 +281,9 @@ open class OAuth2: OAuth2Base {
 		req.params["redirect_uri"] = redirect
 		req.params["client_id"] = clientId
 		req.params["state"] = context.state
+		if clientConfig.safariCancelWorkaround {
+			req.params["swa"] = "\(Date.timeIntervalSinceReferenceDate)" // Safari issue workaround
+		}
 		if let scope = scope ?? clientConfig.scope {
 			req.params["scope"] = scope
 		}
@@ -309,7 +309,7 @@ open class OAuth2: OAuth2Base {
 	Convenience method to be overridden by and used from subclasses.
 	
 	- parameter redirect: The redirect URI string to supply. If it is nil, the first value of the settings' `redirect_uris` entries is
-                          used. Must be present in the end!
+	                      used. Must be present in the end!
 	- parameter scope:    The scope to request
 	- parameter params:   Any additional parameters as dictionary with string keys and values that will be added to the query part
 	- returns:            NSURL to be used to start the OAuth dance

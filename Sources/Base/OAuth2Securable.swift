@@ -66,7 +66,7 @@ open class OAuth2Securable: OAuth2Requestable {
 	*/
 	public init(settings: OAuth2JSON) {
 		self.settings = settings
-
+		
 		// keychain settings
 		if let accountForClientCredentials = settings["keychain_account_for_client_credentials"] as? String {
 			keychainAccountForClientCredentials = accountForClientCredentials

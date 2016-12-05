@@ -375,7 +375,7 @@ Some sites also want the client-id/secret combination in the request _body_, not
 Sometimes you also need to provide additional authorization parameters.
 This can be done in 3 ways:
 
-    oauth2.clientConfig.authParameters = ["duration": "permanent"]
+    oauth2.authParameters = ["duration": "permanent"]
     // or in your settings:
     "parameters": ["duration": "permanent"]
     // or when you authorize manually:

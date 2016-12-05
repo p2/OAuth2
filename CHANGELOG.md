@@ -5,6 +5,13 @@ Version numbering represents the Swift version, plus a running number representi
 You can also refer to commit logs to get details on what was implemented, fixed and improved.
 
 
+### 3.0.1
+
+- Add Azure flow (thanks @everlof)
+- Add `keychain_account_*` settings (thanks @aidzz)
+- Workaround for Safari issue (thanks @everlof)
+
+
 ### 3.0.0
 
 - Rewrite in Swift 3
