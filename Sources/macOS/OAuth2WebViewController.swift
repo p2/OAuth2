@@ -78,7 +78,7 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 	public var onWillCancel: ((Void) -> Void)?
 	
 	/// Our web view; implicitly unwrapped so do not attempt to use it unless isViewLoaded() returns true.
-	var webView: WKWebView!
+	public var webView: WKWebView!
 	
 	private var progressIndicator: NSProgressIndicator!
 	private var loadingView: NSView {
