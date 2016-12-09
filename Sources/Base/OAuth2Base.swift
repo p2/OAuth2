@@ -412,7 +412,7 @@ open class OAuth2Base: OAuth2Securable {
 		try assureCorrectBearerType(dict)
 		try assureRefreshTokenParamsAreValid(dict)
 		
-		clientConfig.updateFromResponse(dict)
+		clientConfig.updateFromResponse(normalizeRefreshTokenResponseKeys(dict))
 		return dict
 	}
 	
