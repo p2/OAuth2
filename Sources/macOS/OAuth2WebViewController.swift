@@ -52,7 +52,7 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 	}
 	
 	/// The URL string to intercept and respond to.
-	var interceptURLString: String? {
+	public var interceptURLString: String? {
 		didSet(oldURL) {
 			if nil != interceptURLString {
 				if let url = URL(string: interceptURLString!) {
@@ -72,10 +72,10 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 	
 	/// Closure called when the web view gets asked to load the redirect URL, specified in `interceptURLString`. Return a Bool indicating
 	/// that you've intercepted the URL.
-	var onIntercept: ((URL) -> Bool)?
+	public var onIntercept: ((URL) -> Bool)?
 	
 	/// Called when the web view is about to be dismissed manually.
-	var onWillCancel: ((Void) -> Void)?
+	public var onWillCancel: ((Void) -> Void)?
 	
 	/// Our web view; implicitly unwrapped so do not attempt to use it unless isViewLoaded() returns true.
 	var webView: WKWebView!
