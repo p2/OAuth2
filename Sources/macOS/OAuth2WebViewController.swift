@@ -32,7 +32,7 @@ A view controller that allows you to display the login/authorization screen.
 @available(macOS 10.10, *)
 public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NSWindowDelegate {
 	
-	init() {
+	public init() {
 		super.init(nibName: nil, bundle: nil)!
 	}
 	
