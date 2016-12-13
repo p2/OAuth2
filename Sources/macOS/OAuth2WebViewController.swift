@@ -32,6 +32,7 @@ A view controller that allows you to display the login/authorization screen.
 @available(macOS 10.10, *)
 public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NSWindowDelegate {
 	
+	/** Designated initializer. */
 	public init() {
 		super.init(nibName: nil, bundle: nil)!
 	}
@@ -68,6 +69,8 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 			}
 		}
 	}
+	
+	/// Internally used; the URL components, derived from `interceptURLString`, comprising the URL to be intercepted.
 	var interceptComponents: URLComponents?
 	
 	/// Closure called when the web view gets asked to load the redirect URL, specified in `interceptURLString`. Return a Bool indicating
@@ -98,6 +101,7 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 		return view
 	}
 	
+	/** Initializer from an NSCoder. */
 	required public init?(coder aDecoder: NSCoder) {
 		super.init(coder: aDecoder)
 	}
@@ -105,9 +109,13 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 	
 	// MARK: - View Handling
 	
+	/// Default web view window width; defaults to 600.
 	internal static let webViewWindowWidth = CGFloat(600.0)
+	
+	/// Default web view window height; defaults to 500.
 	internal static let webViewWindowHeight = CGFloat(500.0)
 	
+	/** Override to fully load the view; adds a `WKWebView`, optionally a dismiss button, and shows the loading indicator. */
 	override public func loadView() {
 		view = NSView(frame: NSMakeRect(0, 0, OAuth2WebViewController.webViewWindowWidth, OAuth2WebViewController.webViewWindowHeight))
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -138,6 +146,7 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 		showLoadingIndicator()
 	}
 	
+	/** This override starts loading `startURL` if nothing has been loaded yet, e.g. on first show. */
 	override public func viewWillAppear() {
 		super.viewWillAppear()
 		
@@ -151,12 +160,13 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 		}
 	}
 	
+	/** Override to set the window delegate to self. */
 	override public func viewDidAppear() {
 		super.viewDidAppear()
-		
 		view.window?.delegate = self
 	}
 	
+	/** Adds a loading indicator view to the center of the view. */
 	func showLoadingIndicator() {
 		let loadingContainerView = loadingView
 		
@@ -169,6 +179,7 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 		progressIndicator.startAnimation(nil)
 	}
 	
+	/** Hides the loading indicator, if it is currently being shown. */
 	func hideLoadingIndicator() {
 		guard progressIndicator != nil else { return }
 		
@@ -176,6 +187,7 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 		progressIndicator.superview?.removeFromSuperview()
 	}
 	
+	/** Convenience method to show an error message; will add the error to a <p> element shown centered in the web view. */
 	func showErrorMessage(_ message: String, animated: Bool) {
 		hideLoadingIndicator()
 		webView.animator().alphaValue = 1.0
@@ -185,14 +197,25 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 	
 	// MARK: - Actions
 	
+	/**
+	Loads the given URL in the web view.
+	
+	- parameter url: The URL to load
+	*/
 	public func loadURL(_ url: URL) {
 		webView.load(URLRequest(url: url))
 	}
 	
+	/**
+	Tells the web view to go back in history.
+	*/
 	func goBack(_ sender: AnyObject?) {
 		webView.goBack()
 	}
 	
+	/**
+	Tells the web view to stop loading the current page, then calls the `onWillCancel` block if it has a value.
+	*/
 	func cancel(_ sender: AnyObject?) {
 		webView.stopLoading()
 		onWillCancel?()

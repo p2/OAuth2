@@ -20,15 +20,21 @@
 
 import Foundation
 #if !NO_MODULE_IMPORT
-    import Base
+import Base
 #endif
 
 
 /**
- Azure requires a `resource`, hence our `init` requires it as well
- */
+Azure requires a `resource`, hence our `init` requires it as well
+*/
 public class OAuth2CodeGrantAzure: OAuth2CodeGrant {
-
+	
+	/**
+	Designated initializer.
+	
+	- parameter settings: The settings for this client
+	- parameter resource: The resource we want to use
+	*/
 	public init(settings: OAuth2JSON, resource: String) {
 		super.init(settings: settings)
 		authConfig.secretInBody = true

@@ -116,6 +116,8 @@ open class OAuth2DebugLogger: OAuth2Logger {
 	/// The logger's logging level, set to `Debug` by default.
 	open var level = OAuth2LogLevel.debug
 	
+	
+	/** Designated initializer. */
 	public init(_ level: OAuth2LogLevel = OAuth2LogLevel.debug) {
 		self.level = level
 	}

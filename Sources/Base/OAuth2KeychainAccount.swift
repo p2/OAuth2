@@ -45,6 +45,13 @@ struct OAuth2KeychainAccount: KeychainGenericPasswordType {
 	let accessMode: String
 	
 	
+	/**
+	Designated initializer.
+	
+	- parameter oauth2:  The OAuth2 instance from which to retrieve settings
+	- parameter account: The account name to use
+	- parameter data:    Data that we want to store to the keychain
+	*/
 	init(oauth2: OAuth2Securable, account: String, data inData: [String: Any] = [:]) {
 		serviceName = oauth2.keychainServiceName()
 		accountName = account
@@ -57,6 +64,7 @@ struct OAuth2KeychainAccount: KeychainGenericPasswordType {
 
 extension KeychainGenericPasswordType {
 	
+	/// Data to store to the keychain.
 	var dataToStore: [String: Any] {
 		return data
 	}

@@ -40,6 +40,8 @@ open class OAuth2DynReg {
 	/// Whether registration should also allow refresh tokens. Defaults to true, making sure "refresh_token" grant type is being registered.
 	open var allowRefreshTokens = true
 	
+	
+	/** Designated initializer. */
 	public init() {  }
 	
 	
@@ -137,10 +139,28 @@ open class OAuth2DynReg {
 		return dict
 	}
 	
+	/**
+	Parse the registration data that's being returned.
+	
+	This implementation uses `OAuth2.parseJSON()` to convert the data to `OAuth2JSON`.
+	
+	- parameter data:   The NSData instance returned by the server
+	- parameter client: The client for which we're doing registration
+	- returns:          An OAuth2JSON representation of the registration data
+	*/
 	open func parseRegistrationResponse(data: Data, client: OAuth2) throws -> OAuth2JSON {
 		return try client.parseJSON(data)
 	}
 	
+	/**
+	Called when registration has returned data and that data has been parsed.
+	
+	This implementation extracts `client_id`, `client_secret` and `token_endpoint_auth_method` and invokes the client's
+	`storeClientToKeychain()` method.
+	
+	- parameter json:   The registration data in JSON format
+	- parameter client: The client for which we're doing registration
+	*/
 	open func didRegisterWith(json: OAuth2JSON, client: OAuth2) {
 		if let id = json["client_id"] as? String {
 			client.clientId = id

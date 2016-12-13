@@ -15,6 +15,7 @@ custom_categories:
     children:
       - OAuth2CodeGrant
       - OAuth2CodeGrantBasicAuth
+      - OAuth2CodeGrantAzure
       - OAuth2CodeGrantFacebook
       - OAuth2CodeGrantLinkedIn
       - OAuth2CodeGrantNoTokenType

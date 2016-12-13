@@ -56,6 +56,11 @@ open class OAuth2Requestable {
 		logger?.debug("OAuth2", msg: "Initialization finished")
 	}
 	
+	/**
+	Designated initializer.
+	
+	- parameter logger: An optional `OAuth2Logger` instance to use
+	*/
 	public init(logger: OAuth2Logger?) {
 		self.logger = logger
 		self.verbose = (nil != logger)

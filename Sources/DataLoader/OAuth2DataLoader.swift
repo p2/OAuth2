@@ -37,6 +37,11 @@ open class OAuth2DataLoader: OAuth2Requestable {
 	public var alsoIntercept403: Bool = false
 	
 	
+	/**
+	Designated initializer.
+	
+	- parameter oauth2: The OAuth2 instance to use for authorization when loading data.
+	*/
 	public init(oauth2: OAuth2) {
 		self.oauth2 = oauth2
 		super.init(logger: oauth2.logger)

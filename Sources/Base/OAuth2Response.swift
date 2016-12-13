@@ -51,6 +51,14 @@ open class OAuth2Response {
 	open var error: Error?
 	
 	
+	/**
+	Designated initializer.
+	
+	- parameter data:     Data that was returned
+	- parameter request:  The request to which we responded
+	- parameter response: The `HTTPURLResponse` to be represented by this instance
+	- parameter error:    Error that occurred when handling our request
+	*/
 	public init(data: Data?, request: URLRequest, response: HTTPURLResponse, error: Error?) {
 		self.data = data
 		self.request = request

@@ -36,6 +36,10 @@ open class OAuth2DataTaskRequestPerformer: OAuth2RequestPerformer {
 	/// The URLSession that should be used.
 	public var session: URLSession
 	
+	
+	/**
+	Designated initializer.
+	*/
 	public init(session: URLSession) {
 		self.session = session
 	}

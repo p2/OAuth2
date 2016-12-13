@@ -25,6 +25,9 @@ import Base
 #endif
 
 
+/**
+The authorizer to use when on the macOS platform.
+*/
 public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 	
 	/// The OAuth2 instance this authorizer belongs to.
@@ -34,6 +37,11 @@ public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 	var windowController: NSWindowController?
 	
 	
+	/**
+	Designated initializer.
+	
+	- parameter oauth2: The OAuth2 instance for which to present an authorization UI
+	*/
 	public init(oauth2: OAuth2Base) {
 		self.oauth2 = oauth2
 	}
