@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>OAuth2HTTPMethod Enum Reference</title>
+    <title>OAuth2CodeGrantAzure Class Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset="utf-8">
@@ -11,9 +11,9 @@
   </head>
   <body>
 
-    <a name="//apple_ref/swift/Enum/OAuth2HTTPMethod" class="dashAnchor"></a>
+    <a name="//apple_ref/swift/Class/OAuth2CodeGrantAzure" class="dashAnchor"></a>
 
-    <a title="OAuth2HTTPMethod Enum Reference"></a>
+    <a title="OAuth2CodeGrantAzure Class Reference"></a>
 
     <header class="header">
       <p class="header-col header-col--primary">
@@ -41,7 +41,7 @@
     <p class="breadcrumbs">
       <a class="breadcrumb" href="../index.html">OAuth2 Reference</a>
       <img class="carat" src="../img/carat.png" />
-      OAuth2HTTPMethod Enum Reference
+      OAuth2CodeGrantAzure Class Reference
     </p>
 
     <div class="content-wrapper">
@@ -242,14 +242,14 @@
 
         <section class="section">
           <div class="section-content">
-            <h1>OAuth2HTTPMethod</h1>
+            <h1>OAuth2CodeGrantAzure</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OAuth2HTTPMethod</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2CodeGrantAzure</span><span class="p">:</span> <span class="kt"><a href="../Classes/OAuth2CodeGrant.html">OAuth2CodeGrant</a></span></code></pre>
 
                 </div>
               </div>
-            <p>HTTP methods for auth requests.</p>
+            <p>Azure requires a <code>resource</code>, hence our <code>init</code> requires it as well</p>
 
           </div>
         </section>
@@ -261,9 +261,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO6OAuth216OAuth2HTTPMethod3GETFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/GET" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth216OAuth2HTTPMethod3GETFMS0_S0_">GET</a>
+                    <a name="/s:FC6OAuth220OAuth2CodeGrantAzurecFT8settingsGVs10DictionarySSP__8resourceSS_S0_"></a>
+                    <a name="//apple_ref/swift/Method/init(settings:resource:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6OAuth220OAuth2CodeGrantAzurecFT8settingsGVs10DictionarySSP__8resourceSS_S0_">init(settings:resource:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -271,47 +271,49 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p><q>GET</q> is the HTTP method of choice.</p>
+                        <p>Designated initializer.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">GET</span> <span class="o">=</span> <span class="s">"GET"</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">settings</span><span class="p">:</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a></span><span class="p">,</span> <span class="nv">resource</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO6OAuth216OAuth2HTTPMethod4POSTFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/POST" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth216OAuth2HTTPMethod4POSTFMS0_S0_">POST</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>This is a <q>POST</q> method.</p>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>settings</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The settings for this client</p>
 
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="kt">POST</span> <span class="o">=</span> <span class="s">"POST"</span></code></pre>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>resource</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The resource we want to use</p>
 
-                        </div>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>

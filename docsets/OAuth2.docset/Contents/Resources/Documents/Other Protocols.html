@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Internals  Reference</title>
+    <title>Other Protocols  Reference</title>
     <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="css/highlight.css" />
     <meta charset="utf-8">
@@ -12,25 +12,25 @@
   <body>
 
 
-    <a title="Internals  Reference"></a>
+    <a title="Other Protocols  Reference"></a>
 
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="index.html">
           OAuth2 Docs
         </a>
-         (98% documented)
+         (91% documented)
       </p>
     
         <p class="header-col header-col--secondary">
-          <a class="header-link" href="https://github.com/p2/OAuth2">
+          <a class="header-link" href="http://p2.github.io/OAuth2">
             <img class="header-icon" src="img/gh.png"/>
             View on GitHub
           </a>
         </p>
     
         <p class="header-col header-col--secondary">
-          <a class="header-link" href="dash-feed://https%3A%2F%2Fp2%2Egithub%2Eio%2Fdocsets%2FOAuth2%2Exml">
+          <a class="header-link" href="dash-feed://http%3A%2F%2Fsmart%2Don%2Dfhir%2Egithub%2Eio%2Fdocsets%2FOAuth2%2Exml">
             <img class="header-icon" src="img/dash.png"/>
             Install in Dash
           </a>
@@ -40,7 +40,7 @@
     <p class="breadcrumbs">
       <a class="breadcrumb" href="index.html">OAuth2 Reference</a>
       <img class="carat" src="img/carat.png" />
-      Internals  Reference
+      Other Protocols  Reference
     </p>
 
     <div class="content-wrapper">
@@ -54,9 +54,6 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Classes/OAuth2CodeGrantBasicAuth.html">OAuth2CodeGrantBasicAuth</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Classes/OAuth2CodeGrantAzure.html">OAuth2CodeGrantAzure</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Classes/OAuth2CodeGrantFacebook.html">OAuth2CodeGrantFacebook</a>
@@ -82,16 +79,10 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a class="nav-group-name-link" href="Errors &amp; Types.html">Errors &amp; Types</a>
+            <a class="nav-group-name-link" href="Dyn Reg.html">Dyn Reg</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Enums/OAuth2Error.html">OAuth2Error</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Errors &amp; Types.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Errors &amp; Types.html#/s:6OAuth216OAuth2StringDict">OAuth2StringDict</a>
+                <a class="nav-group-task-link" href="Classes/OAuth2DynReg.html">OAuth2DynReg</a>
               </li>
             </ul>
           </li>
@@ -108,15 +99,6 @@
                 <a class="nav-group-task-link" href="Classes/OAuth2AuthRequest.html">OAuth2AuthRequest</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Protocols/OAuth2RequestPerformer.html">OAuth2RequestPerformer</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Classes/OAuth2DataTaskRequestPerformer.html">OAuth2DataTaskRequestPerformer</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Classes/OAuth2Response.html">OAuth2Response</a>
-              </li>
-              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Requests.html#/s:6OAuth213OAuth2Headers">OAuth2Headers</a>
               </li>
               <li class="nav-group-task">
@@ -131,13 +113,14 @@
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Enums/OAuth2EndpointAuthMethod.html">OAuth2EndpointAuthMethod</a>
               </li>
-            </ul>
-          </li>
-          <li class="nav-group-name">
-            <a class="nav-group-name-link" href="Dyn Reg.html">Dyn Reg</a>
-            <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Classes/OAuth2DynReg.html">OAuth2DynReg</a>
+                <a class="nav-group-task-link" href="Classes/OAuth2Response.html">OAuth2Response</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/OAuth2RequestPerformer.html">OAuth2RequestPerformer</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/OAuth2DataTaskRequestPerformer.html">OAuth2DataTaskRequestPerformer</a>
               </li>
             </ul>
           </li>
@@ -168,10 +151,16 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a class="nav-group-name-link" href="Logging &amp; Debugging.html">Logging &amp; Debugging</a>
+            <a class="nav-group-name-link" href="Errors &amp; Types.html">Errors &amp; Types</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Protocols/OAuth2Logger.html">OAuth2Logger</a>
+                <a class="nav-group-task-link" href="Enums/OAuth2Error.html">OAuth2Error</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Errors &amp; Types.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Errors &amp; Types.html#/s:6OAuth216OAuth2StringDict">OAuth2StringDict</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Classes/OAuth2DebugLogger.html">OAuth2DebugLogger</a>
@@ -188,16 +177,18 @@
             <a class="nav-group-name-link" href="Internals.html">Internals</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Protocols/OAuth2AuthorizerUI.html">OAuth2AuthorizerUI</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Classes/OAuth2Authorizer.html">OAuth2Authorizer</a>
-              </li>
-              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Classes/OAuth2ContextStore.html">OAuth2ContextStore</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/OAuth2KeychainAccount.html">OAuth2KeychainAccount</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Other Classes.html">Other Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/OAuth2Authorizer.html">OAuth2Authorizer</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Classes/OAuth2WebViewController.html">OAuth2WebViewController</a>
@@ -235,19 +226,66 @@
               </li>
             </ul>
           </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Other Protocols.html">Other Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/OAuth2AuthorizerUI.html">OAuth2AuthorizerUI</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/OAuth2Logger.html">OAuth2Logger</a>
+              </li>
+            </ul>
+          </li>
         </ul>
       </nav>
       <article class="main-content">
 
         <section class="section">
           <div class="section-content">
-            <h1>Internals</h1>
-            
+            <h1>Other Protocols</h1>
+            <p>The following protocols are available globally.</p>
+
           </div>
         </section>
 
         <section class="section">
           <div class="section-content">
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:P6OAuth212OAuth2Logger"></a>
+                    <a name="//apple_ref/swift/Protocol/OAuth2Logger" class="dashAnchor"></a>
+                    <a class="token" href="#/s:P6OAuth212OAuth2Logger">OAuth2Logger</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A simple protocol for loggers used in OAuth2.</p>
+
+<p>The <code><a href="Classes/OAuth2DebugLogger.html">OAuth2DebugLogger</a></code> is a simple implementation that logs to stdout. If you need more sophisticated logging, just adapt this protocol
+and set your logger on the <code><a href="Classes/OAuth2.html">OAuth2</a></code> instance you&rsquo;re using.</p>
+
+                        <a href="Protocols/OAuth2Logger.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">OAuth2Logger</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
             <div class="task-group">
               <ul class="item-container">
                 <li class="item">
@@ -280,142 +318,14 @@
                 </li>
               </ul>
             </div>
-            <div class="task-group">
-              <ul class="item-container">
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:C6OAuth216OAuth2Authorizer"></a>
-                    <a name="//apple_ref/swift/Class/OAuth2Authorizer" class="dashAnchor"></a>
-                    <a class="token" href="#/s:C6OAuth216OAuth2Authorizer">OAuth2Authorizer</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The authorizer to use when on the macOS platform.</p>
-
-                        <a href="Classes/OAuth2Authorizer.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">OAuth2Authorizer</span><span class="p">:</span> <span class="kt"><a href="Protocols/OAuth2AuthorizerUI.html">OAuth2AuthorizerUI</a></span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:C6OAuth218OAuth2ContextStore"></a>
-                    <a name="//apple_ref/swift/Class/OAuth2ContextStore" class="dashAnchor"></a>
-                    <a class="token" href="#/s:C6OAuth218OAuth2ContextStore">OAuth2ContextStore</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Class, internally used, to store current authorization context, such as state and redirect-url.</p>
-
-                        <a href="Classes/OAuth2ContextStore.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">class</span> <span class="kt">OAuth2ContextStore</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:V6OAuth221OAuth2KeychainAccount"></a>
-                    <a name="//apple_ref/swift/Struct/OAuth2KeychainAccount" class="dashAnchor"></a>
-                    <a class="token" href="#/s:V6OAuth221OAuth2KeychainAccount">OAuth2KeychainAccount</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Keychain integration handler for OAuth2.</p>
-
-                        <a href="Structs/OAuth2KeychainAccount.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">struct</span> <span class="kt">OAuth2KeychainAccount</span><span class="p">:</span> <span class="kt">KeychainGenericPasswordType</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:C6OAuth223OAuth2WebViewController"></a>
-                    <a name="//apple_ref/swift/Class/OAuth2WebViewController" class="dashAnchor"></a>
-                    <a class="token" href="#/s:C6OAuth223OAuth2WebViewController">OAuth2WebViewController</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>A view controller that allows you to display the login/authorization screen.</p>
-
-                        <a href="Classes/OAuth2WebViewController.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2WebViewController</span><span class="p">:</span> <span class="kt">NSViewController</span><span class="p">,</span> <span class="kt">WKNavigationDelegate</span><span class="p">,</span> <span class="kt">NSWindowDelegate</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
           </div>
         </section>
 
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2016 <a class="link" href="https://github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2016-12-13)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>&copy; 2016 <a class="link" href="http://www.github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2016-09-15)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
 </div>

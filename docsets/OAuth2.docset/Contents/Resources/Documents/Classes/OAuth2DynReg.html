@@ -20,7 +20,7 @@
         <a class="header-link" href="../index.html">
           OAuth2 Docs
         </a>
-         (91% documented)
+         (98% documented)
       </p>
     
         <p class="header-col header-col--secondary">
@@ -55,6 +55,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Classes/OAuth2CodeGrantBasicAuth.html">OAuth2CodeGrantBasicAuth</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/OAuth2CodeGrantAzure.html">OAuth2CodeGrantAzure</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Classes/OAuth2CodeGrantFacebook.html">OAuth2CodeGrantFacebook</a>
@@ -327,14 +330,14 @@ Hence it&rsquo;s highly portable and can be instantiated when needed with ease.<
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Designated initializer.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">class</span> <span class="kt">OAuth2DynReg</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -515,16 +518,56 @@ Hence it&rsquo;s highly portable and can be instantiated when needed with ease.<
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Parse the registration data that&rsquo;s being returned.</p>
+
+<p>This implementation uses <code>OAuth2.parseJSON()</code> to convert the data to <code><a href="../Errors & Types.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a></code>.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">class</span> <span class="kt">OAuth2DynReg</span></code></pre>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">parseRegistrationResponse</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="kt">Data</span><span class="p">,</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/OAuth2.html">OAuth2</a></span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a></span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The NSData instance returned by the server</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client for which we’re doing registration</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>An OAuth2JSON representation of the registration data</p>
+
                       </div>
                     </section>
                   </div>
@@ -542,16 +585,52 @@ Hence it&rsquo;s highly portable and can be instantiated when needed with ease.<
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Called when registration has returned data and that data has been parsed.</p>
+
+<p>This implementation extracts <code>client_id</code>, <code>client_secret</code> and <code>token_endpoint_auth_method</code> and invokes the client&rsquo;s
+<code>storeClientToKeychain()</code> method.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">class</span> <span class="kt">OAuth2DynReg</span></code></pre>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">didRegisterWith</span><span class="p">(</span><span class="nv">json</span><span class="p">:</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a></span><span class="p">,</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/OAuth2.html">OAuth2</a></span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>json</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The registration data in JSON format</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client for which we’re doing registration</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -564,8 +643,8 @@ Hence it&rsquo;s highly portable and can be instantiated when needed with ease.<
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2016 <a class="link" href="https://github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2016-09-24)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.2</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>&copy; 2016 <a class="link" href="https://github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2016-12-13)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
 </div>
