@@ -42,6 +42,7 @@ open class OAuth2Securable: OAuth2Requestable {
 	open var keychainAccountForTokens = "currentTokens" {
 		didSet {
 			assert(!keychainAccountForTokens.isEmpty)
+			updateFromKeychain()
 		}
 	}
 	
