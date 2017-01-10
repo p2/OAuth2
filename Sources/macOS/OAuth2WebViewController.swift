@@ -224,7 +224,7 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 	
 	// MARK: - Web View Delegate
 	
-	public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: (WKNavigationActionPolicy) -> Void) {
+	public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
 		let request = navigationAction.request
 		
 		guard let onIntercept = onIntercept else {
@@ -281,8 +281,7 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 	
 	// MARK: - Window Delegate
 	
-	@nonobjc
-	public func windowShouldClose(_ sender: AnyObject) -> Bool {
+	public func windowShouldClose(_ sender: Any) -> Bool {
 		onWillCancel?()
 		return false
 	}
