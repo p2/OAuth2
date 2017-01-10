@@ -72,6 +72,9 @@ open class OAuth2ClientConfig {
 	/// Add custom parameters to the authorization request.
 	public var customParameters: [String: String]? = nil
 	
+	/// Most servers use UTF-8 encoding for Authorization headers, but that's not 100% true: make it configurable (see https://github.com/p2/OAuth2/issues/165).
+	open var authStringEncoding = String.Encoding.utf8
+	
 	/// There's an issue with authenticating through 'system browser', where safari says:
 	/// "Safari cannot open the page because the address is invalid." if you first selects 'Cancel' when asked to switch back to "your" app,
 	/// and then you try authenticating again. To get rid of it you must restart Safari.

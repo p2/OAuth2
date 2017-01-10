@@ -8,6 +8,7 @@ You can also refer to commit logs to get details on what was implemented, fixed 
 ### 3.0.x
 
 - Move `secretInBody` and `customParameters` from `authConfig` to `clientConfig`, where they belong
+- Allow to override default UTF-8 encoding of the _Basic_ authorization header
 
 
 ### 3.0.1

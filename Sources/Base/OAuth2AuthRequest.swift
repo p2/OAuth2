@@ -196,7 +196,7 @@ open class OAuth2AuthRequest {
 			else {
 				oauth2.logger?.debug("OAuth2", msg: "Adding “Authorization” header as “Basic client-key:client-secret”")
 				let pw = "\(clientId.wwwFormURLEncodedString):\(secret.wwwFormURLEncodedString)"
-				if let utf8 = pw.data(using: String.Encoding.utf8) {
+				if let utf8 = pw.data(using: oauth2.clientConfig.authStringEncoding) {
 					req.setValue("Basic \(utf8.base64EncodedString())", forHTTPHeaderField: "Authorization")
 				}
 				else {
