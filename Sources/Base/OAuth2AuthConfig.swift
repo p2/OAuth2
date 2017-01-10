@@ -37,17 +37,11 @@ public struct OAuth2AuthConfig {
 		public var useSafariView = true
 	}
 	
-	/// Whether the receiver should use the request body instead of the Authorization header for the client secret; defaults to `false`.
-	public var secretInBody = false
-	
 	/// Whether to use an embedded web view for authorization (true) or the OS browser (false, the default).
 	public var authorizeEmbedded = false
 	
 	/// Whether to automatically dismiss the auto-presented authorization screen.
 	public var authorizeEmbeddedAutoDismiss = true
-
-	/// Add custom parameters to the request
-	public var customParameters: [String: String]? = nil
 
 	/// Context information for the authorization flow:
 	/// - iOS:   The parent view controller to present from

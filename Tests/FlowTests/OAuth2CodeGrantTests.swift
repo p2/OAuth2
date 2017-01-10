@@ -238,7 +238,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 		XCTAssertNil(query["state"], "`state` must be empty")
 		
 		// in body
-		oauth.authConfig.secretInBody = true
+		oauth.clientConfig.secretInBody = true
 		
 		let req2 = try! oauth.accessTokenRequest(with: "pp").asURLRequest(for: oauth)
 		let comp2 = URLComponents(url: req2.url!, resolvingAgainstBaseURL: true)!
@@ -265,7 +265,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 		let query = OAuth2CodeGrant.params(fromQuery: body!)
 		XCTAssertNil(query["foo"], "`foo` should be nil")
 
-		oauth.authConfig.customParameters = [ "foo": "bar" ]
+		oauth.clientConfig.customParameters = [ "foo": "bar" ]
 
 		// in body
 		let req2 = try! oauth.accessTokenRequest(with: "pp").asURLRequest(for: oauth)

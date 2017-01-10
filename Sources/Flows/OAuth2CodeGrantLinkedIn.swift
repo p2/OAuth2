@@ -34,7 +34,7 @@ public class OAuth2CodeGrantLinkedIn: OAuth2CodeGrant {
     
 	override public init(settings: OAuth2JSON) {
 		super.init(settings: settings)
-		authConfig.secretInBody = true
+		clientConfig.secretInBody = true
 		authConfig.authorizeEmbedded = true     // necessary because only http(s) redirects are allowed
 		authConfig.ui.useSafariView = false     // must use custom web view in order to be able to intercept http(s) redirects
 	}

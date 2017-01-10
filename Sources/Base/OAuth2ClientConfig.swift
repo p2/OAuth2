@@ -59,12 +59,18 @@ open class OAuth2ClientConfig {
 	/// The URL to register a client against.
 	public final var registrationURL: URL?
 	
+	/// Whether the receiver should use the request body instead of the Authorization header for the client secret; defaults to `false`.
+	public var secretInBody = false
+	
 	/// How the client communicates the client secret with the server. Defaults to ".None" if there is no secret, ".clientSecretPost" if
-	/// "secret_in_body" is `true` and ".clientSecretBasic" otherwise. Interacts with the `authConfig.secretInBody` client setting.
+	/// "secret_in_body" is `true` and ".clientSecretBasic" otherwise. Interacts with the `secretInBody` setting.
 	public final var endpointAuthMethod = OAuth2EndpointAuthMethod.none
 	
 	/// Contains special authorization request headers, can be used to override defaults.
 	open var authHeaders: OAuth2Headers?
+	
+	/// Add custom parameters to the authorization request.
+	public var customParameters: [String: String]? = nil
 	
 	/// There's an issue with authenticating through 'system browser', where safari says:
 	/// "Safari cannot open the page because the address is invalid." if you first selects 'Cancel' when asked to switch back to "your" app,
@@ -110,7 +116,10 @@ open class OAuth2ClientConfig {
 			redirectURLs = redirs
 			redirect = redirs.first
 		}
-		if let inBody = settings["secret_in_body"] as? Bool, inBody {
+		if let inBody = settings["secret_in_body"] as? Bool {
+			secretInBody = inBody
+		}
+		if secretInBody {
 			endpointAuthMethod = .clientSecretPost
 		}
 		else if nil != clientSecret {
@@ -118,6 +127,9 @@ open class OAuth2ClientConfig {
 		}
 		if let headers = settings["headers"] as? OAuth2Headers {
 			authHeaders = headers
+		}
+		if let params = settings["parameters"] as? OAuth2StringDict {
+			customParameters = params
 		}
 		
 		// access token options

@@ -312,7 +312,7 @@ It has however become common practice to still use code grants from mobile devic
 
 This class fully supports those flows, it automatically creates a “Basic” Authorization header if the client has a non-nil client secret.
 This means that you likely **must** specify `client_secret` in your settings; if there is none (like for [Reddit](https://github.com/reddit/reddit/wiki/OAuth2#token-retrieval-code-flow)) specify the empty string.
-If the site requires client credentials in the request body, set `secretInBody` to true, as explained below.
+If the site requires client credentials in the request body, set `clientConfig.secretInBody` to true, as explained below.
 
 #### Implicit Grant
 
@@ -371,7 +371,7 @@ Similarly, if you want to take care of dismissing the login screen yourself:
 
 Some sites also want the client-id/secret combination in the request _body_, not in the _Authorization_ header:
 
-    oauth2.authConfig.secretInBody = true
+    oauth2.clientConfig.secretInBody = true
     // or in your settings:
     "secret_in_body": true
 

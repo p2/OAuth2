@@ -116,8 +116,8 @@ open class OAuth2Base: OAuth2Securable {
 	
 	/// Custom authorization parameters.
 	public var authParameters: OAuth2StringDict? {
-		get { return authConfig.customParameters }
-		set { authConfig.customParameters = newValue }
+		get { return clientConfig.customParameters }
+		set { clientConfig.customParameters = newValue }
 	}
 	
 	
@@ -184,12 +184,6 @@ open class OAuth2Base: OAuth2Securable {
 		clientConfig = OAuth2ClientConfig(settings: settings)
 		
 		// auth configuration options
-		if let inBody = settings["secret_in_body"] as? Bool {
-			authConfig.secretInBody = inBody
-		}
-		if let params = settings["parameters"] as? OAuth2StringDict {
-			authConfig.customParameters = params
-		}
 		if let ttl = settings["title"] as? String {
 			authConfig.ui.title = ttl
 		}
@@ -208,7 +202,7 @@ open class OAuth2Base: OAuth2Securable {
 		for message in clientConfig.updateFromStorableItems(items) {
 			logger?.debug("OAuth2", msg: message)
 		}
-		authConfig.secretInBody = (clientConfig.endpointAuthMethod == OAuth2EndpointAuthMethod.clientSecretPost)
+		clientConfig.secretInBody = (clientConfig.endpointAuthMethod == OAuth2EndpointAuthMethod.clientSecretPost)
 	}
 	
 	override open func storableCredentialItems() -> [String: Any]? {

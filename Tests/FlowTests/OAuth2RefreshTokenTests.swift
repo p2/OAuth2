@@ -99,7 +99,7 @@ class OAuth2RefreshTokenTests: XCTestCase {
 		let oauth = genericOAuth2()
 		oauth.clientConfig.refreshToken = "pov"
 		oauth.clientConfig.clientSecret = "uvw"
-		oauth.authConfig.secretInBody = true
+		oauth.clientConfig.secretInBody = true
 		
 		let req = try? oauth.tokenRequestForTokenRefresh(params: ["param": "fool"]).asURLRequest(for: oauth)
 		XCTAssertNotNil(req)

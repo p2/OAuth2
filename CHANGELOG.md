@@ -5,6 +5,11 @@ Version numbering represents the Swift version, plus a running number representi
 You can also refer to commit logs to get details on what was implemented, fixed and improved.
 
 
+### 3.0.x
+
+- Move `secretInBody` and `customParameters` from `authConfig` to `clientConfig`, where they belong
+
+
 ### 3.0.1
 
 - Add Azure flow (thanks @everlof)
