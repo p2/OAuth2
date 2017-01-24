@@ -174,6 +174,12 @@ public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 		}
 		
 		let navi = UINavigationController(rootViewController: web)
+
+        if let modalStyle = UIModalPresentationStyle(rawValue: self.oauth2.authConfig.ui.modalPresentationStyle)
+        {
+            navi.modalPresentationStyle = modalStyle
+        }
+
 		from.present(navi, animated: true)
 		
 		return web
