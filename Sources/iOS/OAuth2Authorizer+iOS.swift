@@ -155,6 +155,7 @@ public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 		let web = OAuth2WebViewController()
 		web.title = oauth2.authConfig.ui.title
 		web.backButton = oauth2.authConfig.ui.backButton as? UIBarButtonItem
+        web.showCancelButton = oauth2.authConfig.ui.showCancelButton
 		web.startURL = url
 		web.interceptURLString = intercept
 		web.onIntercept = { url in

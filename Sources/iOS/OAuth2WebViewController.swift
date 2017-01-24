@@ -77,7 +77,8 @@ open class OAuth2WebViewController: UIViewController, UIWebViewDelegate {
 			}
 		}
 	}
-	
+
+    var showCancelButton: Bool = true
 	var cancelButton: UIBarButtonItem?
 	
 	/// Our web view.
@@ -104,10 +105,12 @@ open class OAuth2WebViewController: UIViewController, UIWebViewDelegate {
 		
 		super.loadView()
 		view.backgroundColor = UIColor.white
-		
-		cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(OAuth2WebViewController.cancel(_:)))
-		navigationItem.rightBarButtonItem = cancelButton
-		
+
+        if showCancelButton == true {
+            cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(OAuth2WebViewController.cancel(_:)))
+            navigationItem.rightBarButtonItem = cancelButton
+        }
+
 		// create a web view
 		let web = UIWebView()
 		web.translatesAutoresizingMaskIntoConstraints = false
