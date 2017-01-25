@@ -36,8 +36,8 @@ public struct OAuth2AuthConfig {
 		/// Starting with iOS 9, `SFSafariViewController` will be used for embedded authorization instead of our custom class. You can turn this off here.
 		public var useSafariView = true
 
-        /// By assigning your own UIModalPresentationStyle (!) you can configure how the embedded authorisation is presented.
-        public var modalPresentationStyle = 0
+		/// By assigning your own UIModalPresentationStyle (!) you can configure how the embedded authorisation is presented.
+		public var modalPresentationStyle = 0
 
 	}
 	
