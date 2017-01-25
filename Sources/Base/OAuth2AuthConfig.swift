@@ -22,6 +22,10 @@
 /**
 Simple struct to hold settings describing how authorization appears to the user.
 */
+#if os(iOS)
+	import UIKit
+#endif
+
 public struct OAuth2AuthConfig {
 	
 	/// Sub-stuct holding configuration relevant to UI presentation.
@@ -37,7 +41,9 @@ public struct OAuth2AuthConfig {
 		public var useSafariView = true
 
 		/// By assigning your own UIModalPresentationStyle (!) you can configure how the embedded authorisation is presented.
-		public var modalPresentationStyle = 0
+		#if os(iOS)
+		public var modalPresentationStyle = UIModalPresentationStyle.fullScreen
+		#endif
 	}
 	
 	/// Whether to use an embedded web view for authorization (true) or the OS browser (false, the default).
