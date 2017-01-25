@@ -38,7 +38,6 @@ public struct OAuth2AuthConfig {
 
 		/// By assigning your own UIModalPresentationStyle (!) you can configure how the embedded authorisation is presented.
 		public var modalPresentationStyle = 0
-
 	}
 	
 	/// Whether to use an embedded web view for authorization (true) or the OS browser (false, the default).
