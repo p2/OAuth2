@@ -161,11 +161,11 @@ open class OAuth2WebViewController: UIViewController, WKNavigationDelegate {
 	// MARK: - Actions
 	
 	open func load(url: URL) {
-		webView?.load(URLRequest(url: url))
+		let _ = webView?.load(URLRequest(url: url))
 	}
 	
 	func goBack(_ sender: AnyObject?) {
-		webView?.goBack()
+		let _ = webView?.goBack()
 	}
 	
 	func cancel(_ sender: AnyObject?) {
@@ -187,62 +187,73 @@ open class OAuth2WebViewController: UIViewController, WKNavigationDelegate {
 	
 	
 	// MARK: - Web View Delegate
-	
-	open func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
-		guard let onIntercept = onIntercept else {
-			return true
-		}
-		
-		// we compare the scheme and host first, then check the path (if there is any). Not sure if a simple string comparison
-		// would work as there may be URL parameters attached
-		if let url = request.url, url.scheme == interceptComponents?.scheme && url.host == interceptComponents?.host {
-			let haveComponents = URLComponents(url: url, resolvingAgainstBaseURL: true)
-			if let hp = haveComponents?.path, let ip = interceptComponents?.path, hp == ip || ("/" == hp + ip) {
-				return !onIntercept(url)
-			}
-		}
-		
-		return true
-	}
-	
-	open func webViewDidStartLoad(_ webView: UIWebView) {
-		if "file" != webView.request?.url?.scheme {
-			showLoadingIndicator()
-		}
-	}
-	
-	/* Special handling for Google's `urn:ietf:wg:oauth:2.0:oob` callback */
-	open func webViewDidFinishLoad(_ webView: UIWebView) {
-		if let scheme = interceptComponents?.scheme, "urn" == scheme {
-			if let path = interceptComponents?.path, path.hasPrefix("ietf:wg:oauth:2.0:oob") {
-				if let title = webView.stringByEvaluatingJavaScript(from: "document.title"), title.hasPrefix("Success ") {
-					oauth?.logger?.debug("OAuth2", msg: "Creating redirect URL from document.title")
-					let qry = title.replacingOccurrences(of: "Success ", with: "")
-					if let url = URL(string: "http://localhost/?\(qry)") {
-						_ = onIntercept?(url)
-						return
-					}
-					else {
-						oauth?.logger?.warn("OAuth2", msg: "Failed to create a URL with query parts \"\(qry)\"")
-					}
-				}
-			}
-		}
-		
-		hideLoadingIndicator()
-		showHideBackButton(webView.canGoBack)
-	}
-	
-	open func webView(_ webView: UIWebView, didFailLoadWithError error: Error) {
-		if NSURLErrorDomain == error._domain && NSURLErrorCancelled == error._code {
-			return
-		}
-		// do we still need to intercept "WebKitErrorDomain" error 102?
-		
-		if nil != loadingView {
-			showErrorMessage(error.localizedDescription, animated: true)
-		}
-	}
+
+    open func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Swift.Void)
+    {
+        let request = navigationAction.request
+
+        guard let onIntercept = onIntercept else {
+            decisionHandler(.allow)
+            return
+        }
+
+        // we compare the scheme and host first, then check the path (if there is any). Not sure if a simple string comparison
+        // would work as there may be URL parameters attached
+        if let url = request.url, url.scheme == interceptComponents?.scheme && url.host == interceptComponents?.host {
+            let haveComponents = URLComponents(url: url, resolvingAgainstBaseURL: true)
+            if let hp = haveComponents?.path, let ip = interceptComponents?.path, hp == ip || ("/" == hp + ip) {
+                if onIntercept(url) {
+                    decisionHandler(.cancel)
+                }
+                else {
+                    decisionHandler(.allow)
+                }
+            }
+        }
+
+        decisionHandler(.allow)
+    }
+
+    open func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!)
+    {
+        if "file" != webView.url?.scheme {
+            showLoadingIndicator()
+        }
+    }
+
+    open func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!)
+    {
+        if let scheme = interceptComponents?.scheme, "urn" == scheme {
+            if let path = interceptComponents?.path, path.hasPrefix("ietf:wg:oauth:2.0:oob") {
+                if let title = webView.title, title.hasPrefix("Success ") {
+                    self.oauth?.logger?.debug("OAuth2", msg: "Creating redirect URL from document.title")
+                    let qry = title.replacingOccurrences(of: "Success ", with: "")
+                    if let url = URL(string: "http://localhost/?\(qry)") {
+                        _ = self.onIntercept?(url)
+                        return
+                    }
+
+                    self.oauth?.logger?.warn("OAuth2", msg: "Failed to create a URL with query parts \"\(qry)\"")
+                }
+            }
+        }
+        self.hideLoadingIndicator()
+        self.showHideBackButton(webView.canGoBack)
+
+    }
+
+    open func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error)
+    {
+        if NSURLErrorDomain == error._domain && NSURLErrorCancelled == error._code {
+            return
+        }
+        // do we still need to intercept "WebKitErrorDomain" error 102?
+
+        if nil != loadingView {
+            showErrorMessage(error.localizedDescription, animated: true)
+        }
+    }
+
 }
 
 #endif
