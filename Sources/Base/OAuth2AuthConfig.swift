@@ -22,6 +22,10 @@
 /**
 Simple struct to hold settings describing how authorization appears to the user.
 */
+#if os(iOS)
+	import UIKit
+#endif
+
 public struct OAuth2AuthConfig {
 	
 	/// Sub-stuct holding configuration relevant to UI presentation.
@@ -35,6 +39,11 @@ public struct OAuth2AuthConfig {
 		
 		/// Starting with iOS 9, `SFSafariViewController` will be used for embedded authorization instead of our custom class. You can turn this off here.
 		public var useSafariView = true
+
+		/// By assigning your own UIModalPresentationStyle (!) you can configure how the embedded authorisation is presented.
+		#if os(iOS)
+		public var modalPresentationStyle = UIModalPresentationStyle.fullScreen
+		#endif
 	}
 	
 	/// Whether to use an embedded web view for authorization (true) or the OS browser (false, the default).
