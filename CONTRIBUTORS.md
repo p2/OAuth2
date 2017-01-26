@@ -3,6 +3,7 @@ Contributors
 
 Contributors to the codebase, in reverse chronological order:
 
+- Lubbo, @lubbo
 - David Everlöf, @everlof
 - @aidzz
 - Vladislav Prusakov, @SpectralDragon

@@ -78,8 +78,8 @@ open class OAuth2WebViewController: UIViewController, WKNavigationDelegate {
 			}
 		}
 	}
-
-	var showCancelButton: Bool = true
+	
+	var showCancelButton = true
 	var cancelButton: UIBarButtonItem?
 	
 	/// Our web view.
@@ -106,12 +106,12 @@ open class OAuth2WebViewController: UIViewController, WKNavigationDelegate {
 		
 		super.loadView()
 		view.backgroundColor = UIColor.white
-
+		
 		if showCancelButton {
 			cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(OAuth2WebViewController.cancel(_:)))
 			navigationItem.rightBarButtonItem = cancelButton
 		}
-
+		
 		// create a web view
 		let web = WKWebView()
 		web.translatesAutoresizingMaskIntoConstraints = false
@@ -190,15 +190,14 @@ open class OAuth2WebViewController: UIViewController, WKNavigationDelegate {
 	
 	
 	// MARK: - Web View Delegate
-
+	
 	open func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Swift.Void) {
-		let request = navigationAction.request
-
 		guard let onIntercept = onIntercept else {
 			decisionHandler(.allow)
 			return
 		}
-
+		let request = navigationAction.request
+		
 		// we compare the scheme and host first, then check the path (if there is any). Not sure if a simple string comparison
 		// would work as there may be URL parameters attached
 		if let url = request.url, url.scheme == interceptComponents?.scheme && url.host == interceptComponents?.host {
@@ -212,16 +211,15 @@ open class OAuth2WebViewController: UIViewController, WKNavigationDelegate {
 				}
 			}
 		}
-
 		decisionHandler(.allow)
 	}
-
+	
 	open func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
 		if "file" != webView.url?.scheme {
 			showLoadingIndicator()
 		}
 	}
-
+	
 	open func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
 		if let scheme = interceptComponents?.scheme, "urn" == scheme {
 			if let path = interceptComponents?.path, path.hasPrefix("ietf:wg:oauth:2.0:oob") {
@@ -232,21 +230,20 @@ open class OAuth2WebViewController: UIViewController, WKNavigationDelegate {
 						_ = onIntercept?(url)
 						return
 					}
-
 					oauth?.logger?.warn("OAuth2", msg: "Failed to create a URL with query parts \"\(qry)\"")
 				}
 			}
 		}
 		hideLoadingIndicator()
 		showHideBackButton(webView.canGoBack)
-
 	}
-
+	
 	open func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
 		if NSURLErrorDomain == error._domain && NSURLErrorCancelled == error._code {
 			return
 		}
 		// do we still need to intercept "WebKitErrorDomain" error 102?
+		
 		if nil != loadingView {
 			showErrorMessage(error.localizedDescription, animated: true)
 		}
