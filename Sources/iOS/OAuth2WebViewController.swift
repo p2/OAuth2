@@ -188,8 +188,7 @@ open class OAuth2WebViewController: UIViewController, WKNavigationDelegate {
 	
 	// MARK: - Web View Delegate
 
-	open func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Swift.Void)
-	{
+	open func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Swift.Void) {
 		let request = navigationAction.request
 
 		guard let onIntercept = onIntercept else {
@@ -214,46 +213,41 @@ open class OAuth2WebViewController: UIViewController, WKNavigationDelegate {
 		decisionHandler(.allow)
 	}
 
-	open func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!)
-	{
+	open func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
 		if "file" != webView.url?.scheme {
 			showLoadingIndicator()
 		}
 	}
 
-	open func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!)
-	{
+	open func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
 		if let scheme = interceptComponents?.scheme, "urn" == scheme {
 			if let path = interceptComponents?.path, path.hasPrefix("ietf:wg:oauth:2.0:oob") {
 				if let title = webView.title, title.hasPrefix("Success ") {
-					self.oauth?.logger?.debug("OAuth2", msg: "Creating redirect URL from document.title")
+					oauth?.logger?.debug("OAuth2", msg: "Creating redirect URL from document.title")
 					let qry = title.replacingOccurrences(of: "Success ", with: "")
 					if let url = URL(string: "http://localhost/?\(qry)") {
-						_ = self.onIntercept?(url)
+						_ = onIntercept?(url)
 						return
 					}
 
-					self.oauth?.logger?.warn("OAuth2", msg: "Failed to create a URL with query parts \"\(qry)\"")
+					oauth?.logger?.warn("OAuth2", msg: "Failed to create a URL with query parts \"\(qry)\"")
 				}
 			}
 		}
-		self.hideLoadingIndicator()
-		self.showHideBackButton(webView.canGoBack)
+		hideLoadingIndicator()
+		showHideBackButton(webView.canGoBack)
 
 	}
 
-	open func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error)
-	{
+	open func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
 		if NSURLErrorDomain == error._domain && NSURLErrorCancelled == error._code {
 			return
 		}
 		// do we still need to intercept "WebKitErrorDomain" error 102?
-
 		if nil != loadingView {
 			showErrorMessage(error.localizedDescription, animated: true)
 		}
 	}
-
 }
 
 #endif
