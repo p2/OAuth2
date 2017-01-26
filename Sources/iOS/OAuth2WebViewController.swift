@@ -20,6 +20,7 @@
 #if os(iOS)
 
 import UIKit
+import WebKit
 #if !NO_MODULE_IMPORT
 import Base
 #endif
@@ -28,7 +29,7 @@ import Base
 /**
 A simple iOS web view controller that allows you to display the login/authorization screen.
 */
-open class OAuth2WebViewController: UIViewController, UIWebViewDelegate {
+open class OAuth2WebViewController: UIViewController, WKNavigationDelegate {
 	
 	/// Handle to the OAuth2 instance in play, only used for debug lugging at this time.
 	var oauth: OAuth2?
@@ -82,7 +83,7 @@ open class OAuth2WebViewController: UIViewController, UIWebViewDelegate {
 	var cancelButton: UIBarButtonItem?
 	
 	/// Our web view.
-	var webView: UIWebView?
+	var webView: WKWebView?
 	
 	/// An overlay view containing a spinner.
 	var loadingView: UIView?
@@ -112,10 +113,10 @@ open class OAuth2WebViewController: UIViewController, UIWebViewDelegate {
 		}
 
 		// create a web view
-		let web = UIWebView()
+		let web = WKWebView()
 		web.translatesAutoresizingMaskIntoConstraints = false
 		web.scrollView.decelerationRate = UIScrollViewDecelerationRateNormal
-		web.delegate = self
+		web.navigationDelegate = self
 		
 		view.addSubview(web)
 		let views = ["web": web]
@@ -163,11 +164,11 @@ open class OAuth2WebViewController: UIViewController, UIWebViewDelegate {
 	// MARK: - Actions
 	
 	open func load(url: URL) {
-		webView?.loadRequest(URLRequest(url: url))
+		let _ = webView?.load(URLRequest(url: url))
 	}
 	
 	func goBack(_ sender: AnyObject?) {
-		webView?.goBack()
+		let _ = webView?.goBack()
 	}
 	
 	func cancel(_ sender: AnyObject?) {
@@ -189,58 +190,63 @@ open class OAuth2WebViewController: UIViewController, UIWebViewDelegate {
 	
 	
 	// MARK: - Web View Delegate
-	
-	open func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
+
+	open func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Swift.Void) {
+		let request = navigationAction.request
+
 		guard let onIntercept = onIntercept else {
-			return true
+			decisionHandler(.allow)
+			return
 		}
-		
+
 		// we compare the scheme and host first, then check the path (if there is any). Not sure if a simple string comparison
 		// would work as there may be URL parameters attached
 		if let url = request.url, url.scheme == interceptComponents?.scheme && url.host == interceptComponents?.host {
 			let haveComponents = URLComponents(url: url, resolvingAgainstBaseURL: true)
 			if let hp = haveComponents?.path, let ip = interceptComponents?.path, hp == ip || ("/" == hp + ip) {
-				return !onIntercept(url)
+				if onIntercept(url) {
+					decisionHandler(.cancel)
+				}
+				else {
+					decisionHandler(.allow)
+				}
 			}
 		}
-		
-		return true
+
+		decisionHandler(.allow)
 	}
-	
-	open func webViewDidStartLoad(_ webView: UIWebView) {
-		if "file" != webView.request?.url?.scheme {
+
+	open func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+		if "file" != webView.url?.scheme {
 			showLoadingIndicator()
 		}
 	}
-	
-	/* Special handling for Google's `urn:ietf:wg:oauth:2.0:oob` callback */
-	open func webViewDidFinishLoad(_ webView: UIWebView) {
+
+	open func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
 		if let scheme = interceptComponents?.scheme, "urn" == scheme {
 			if let path = interceptComponents?.path, path.hasPrefix("ietf:wg:oauth:2.0:oob") {
-				if let title = webView.stringByEvaluatingJavaScript(from: "document.title"), title.hasPrefix("Success ") {
+				if let title = webView.title, title.hasPrefix("Success ") {
 					oauth?.logger?.debug("OAuth2", msg: "Creating redirect URL from document.title")
 					let qry = title.replacingOccurrences(of: "Success ", with: "")
 					if let url = URL(string: "http://localhost/?\(qry)") {
 						_ = onIntercept?(url)
 						return
 					}
-					else {
-						oauth?.logger?.warn("OAuth2", msg: "Failed to create a URL with query parts \"\(qry)\"")
-					}
+
+					oauth?.logger?.warn("OAuth2", msg: "Failed to create a URL with query parts \"\(qry)\"")
 				}
 			}
 		}
-		
 		hideLoadingIndicator()
 		showHideBackButton(webView.canGoBack)
+
 	}
-	
-	open func webView(_ webView: UIWebView, didFailLoadWithError error: Error) {
+
+	open func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
 		if NSURLErrorDomain == error._domain && NSURLErrorCancelled == error._code {
 			return
 		}
 		// do we still need to intercept "WebKitErrorDomain" error 102?
-		
 		if nil != loadingView {
 			showErrorMessage(error.localizedDescription, animated: true)
 		}
