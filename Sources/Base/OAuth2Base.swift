@@ -238,7 +238,7 @@ open class OAuth2Base: OAuth2Securable {
 	*/
 	open func request(forURL url: URL, cachePolicy: NSURLRequest.CachePolicy = .reloadIgnoringLocalCacheData) -> URLRequest {
 		var req = URLRequest(url: url, cachePolicy: cachePolicy, timeoutInterval: 20)
-		req.sign(with: self)
+		try? req.sign(with: self)
 		return req
 	}
 	

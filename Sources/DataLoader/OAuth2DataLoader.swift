@@ -206,8 +206,13 @@ open class OAuth2DataLoader: OAuth2Requestable {
 	func retryAll() {
 		dequeueAndApply() { req in
 			var request = req.request
-			request.sign(with: oauth2)
-			self.perform(request: request, retry: false, callback: req.callback)
+			do {
+				try request.sign(with: oauth2)
+				self.perform(request: request, retry: false, callback: req.callback)
+			}
+			catch let error {
+				NSLog("OAuth2.DataLoader.retryAll(): \(error)")
+			}
 		}
 	}
 	
