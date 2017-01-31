@@ -88,29 +88,27 @@ extension URLRequest {
 	/**
 	Signs the receiver by setting its "Authorization" header to "Bearer {token}".
 	
-	Will log an error if the OAuth2 instance does not have an access token.
+	Will throw if the OAuth2 instance does not have an access token.
 	
 	- parameter oauth2: The OAuth2 instance providing the access token to sign the request
 	*/
-	public mutating func sign(with oauth2: OAuth2Base) {
-		if let access = oauth2.clientConfig.accessToken, !access.isEmpty {
-			setValue("Bearer \(access)", forHTTPHeaderField: "Authorization")
+	public mutating func sign(with oauth2: OAuth2Base) throws {
+		guard let access = oauth2.clientConfig.accessToken, !access.isEmpty else {
+			throw OAuth2Error.noAccessToken
 		}
-		else {
-			NSLog("Cannot sign request, access token is empty")
-		}
+		setValue("Bearer \(access)", forHTTPHeaderField: "Authorization")
 	}
 	
 	/**
 	Returns a copy of the receiver, signed by setting its "Authorization" header to "Bearer {token}".
 	
-	Will log an error if the OAuth2 instance does not have an access token.
+	Will throw if the OAuth2 instance does not have an access token.
 	
 	- parameter oauth2: The OAuth2 instance providing the access token to sign the receiver
 	*/
-	public func signed(with oauth2: OAuth2Base) -> URLRequest {
+	public func signed(with oauth2: OAuth2Base) throws -> URLRequest {
 		var signed = self
-		signed.sign(with: oauth2)
+		try signed.sign(with: oauth2)
 		return signed
 	}
 }

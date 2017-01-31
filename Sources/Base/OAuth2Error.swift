@@ -67,6 +67,9 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 	/// The redirect URL is invalid; with explanation.
 	case invalidRedirectURL(String)
 	
+	/// There is no access token.
+	case noAccessToken
+	
 	/// There is no refresh token.
 	case noRefreshToken
 	
@@ -205,6 +208,8 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 			return "Invalid authorization context"
 		case .invalidRedirectURL(let url):
 			return "Invalid redirect URL: \(url)"
+		case .noAccessToken:
+			return "I don't have an access token, cannot sign request"
 		case .noRefreshToken:
 			return "I don't have a refresh token, not trying to refresh"
 		
@@ -277,6 +282,7 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 		case (.noAuthorizationContext, .noAuthorizationContext):                 return true
 		case (.invalidAuthorizationContext, .invalidAuthorizationContext):       return true
 		case (.invalidRedirectURL(let lhu), .invalidRedirectURL(let rhu)):       return lhu == rhu
+		case (.noAccessToken, .noAccessToken):                       return true
 		case (.noRefreshToken, .noRefreshToken):			         return true
 		
 		case (.notUsingTLS, .notUsingTLS):                           return true

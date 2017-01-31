@@ -22,6 +22,10 @@
 /**
 Simple struct to hold settings describing how authorization appears to the user.
 */
+#if os(iOS)
+import UIKit
+#endif
+
 public struct OAuth2AuthConfig {
 	
 	/// Sub-stuct holding configuration relevant to UI presentation.
@@ -33,21 +37,23 @@ public struct OAuth2AuthConfig {
 		/// By assigning your own UIBarButtonItem (!) you can override the back button that is shown in the iOS embedded web view (does NOT apply to `SFSafariViewController`).
 		public var backButton: AnyObject? = nil
 		
+		/// If true it makes the login cancellable, otherwise the cancel button is not shown in the embedded web view.
+		public var showCancelButton = true
+		
 		/// Starting with iOS 9, `SFSafariViewController` will be used for embedded authorization instead of our custom class. You can turn this off here.
 		public var useSafariView = true
+		
+		/// By assigning your own UIModalPresentationStyle (!) you can configure how the embedded authorisation is presented.
+		#if os(iOS)
+		public var modalPresentationStyle = UIModalPresentationStyle.fullScreen
+		#endif
 	}
-	
-	/// Whether the receiver should use the request body instead of the Authorization header for the client secret; defaults to `false`.
-	public var secretInBody = false
 	
 	/// Whether to use an embedded web view for authorization (true) or the OS browser (false, the default).
 	public var authorizeEmbedded = false
 	
 	/// Whether to automatically dismiss the auto-presented authorization screen.
 	public var authorizeEmbeddedAutoDismiss = true
-
-	/// Add custom parameters to the request
-	public var customParameters: [String: String]? = nil
 
 	/// Context information for the authorization flow:
 	/// - iOS:   The parent view controller to present from

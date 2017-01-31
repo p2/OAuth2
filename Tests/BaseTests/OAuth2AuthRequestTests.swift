@@ -147,7 +147,7 @@ class OAuth2AuthRequestTests: XCTestCase {
 		}
 		
 		// test no Auth header
-		oauth.authConfig.secretInBody = true
+		oauth.clientConfig.secretInBody = true
 		let reqB = OAuth2AuthRequest(url: URL(string: "https://auth.io")!)
 		do {
 			let request = try reqB.asURLRequest(for: oauth)

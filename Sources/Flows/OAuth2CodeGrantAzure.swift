@@ -37,8 +37,8 @@ public class OAuth2CodeGrantAzure: OAuth2CodeGrant {
 	*/
 	public init(settings: OAuth2JSON, resource: String) {
 		super.init(settings: settings)
-		authConfig.secretInBody = true
-		authConfig.customParameters = [
+		clientConfig.secretInBody = true
+		clientConfig.customParameters = [
 			"resource": resource
 		]
 	}
