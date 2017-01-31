@@ -20,7 +20,7 @@
         <a class="header-link" href="../index.html">
           OAuth2 Docs
         </a>
-         (98% documented)
+         (97% documented)
       </p>
     
         <p class="header-col header-col--secondary">
@@ -282,9 +282,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FE6OAuth2V10Foundation10URLRequest4signFT4withCS_10OAuth2Base_T_"></a>
+                    <a name="/s:FE6OAuth2V10Foundation10URLRequest4signFzT4withCS_10OAuth2Base_T_"></a>
                     <a name="//apple_ref/swift/Method/sign(with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FE6OAuth2V10Foundation10URLRequest4signFT4withCS_10OAuth2Base_T_">sign(with:)</a>
+                    <a class="token" href="#/s:FE6OAuth2V10Foundation10URLRequest4signFzT4withCS_10OAuth2Base_T_">sign(with:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -294,14 +294,14 @@
                       <div class="abstract">
                         <p>Signs the receiver by setting its <q>Authorization</q> header to <q>Bearer {token}</q>.</p>
 
-<p>Will log an error if the OAuth2 instance does not have an access token.</p>
+<p>Will throw if the OAuth2 instance does not have an access token.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">mutating</span> <span class="kd">func</span> <span class="nf">sign</span><span class="p">(</span><span class="n">with</span> <span class="nv">oauth2</span><span class="p">:</span> <span class="kt"><a href="../Classes/OAuth2Base.html">OAuth2Base</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">mutating</span> <span class="kd">func</span> <span class="nf">sign</span><span class="p">(</span><span class="n">with</span> <span class="nv">oauth2</span><span class="p">:</span> <span class="kt"><a href="../Classes/OAuth2Base.html">OAuth2Base</a></span><span class="p">)</span> <span class="k">throws</span></code></pre>
 
                         </div>
                       </div>
@@ -331,9 +331,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FE6OAuth2V10Foundation10URLRequest6signedFT4withCS_10OAuth2Base_S1_"></a>
+                    <a name="/s:FE6OAuth2V10Foundation10URLRequest6signedFzT4withCS_10OAuth2Base_S1_"></a>
                     <a name="//apple_ref/swift/Method/signed(with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FE6OAuth2V10Foundation10URLRequest6signedFT4withCS_10OAuth2Base_S1_">signed(with:)</a>
+                    <a class="token" href="#/s:FE6OAuth2V10Foundation10URLRequest6signedFzT4withCS_10OAuth2Base_S1_">signed(with:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -343,14 +343,14 @@
                       <div class="abstract">
                         <p>Returns a copy of the receiver, signed by setting its <q>Authorization</q> header to <q>Bearer {token}</q>.</p>
 
-<p>Will log an error if the OAuth2 instance does not have an access token.</p>
+<p>Will throw if the OAuth2 instance does not have an access token.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">signed</span><span class="p">(</span><span class="n">with</span> <span class="nv">oauth2</span><span class="p">:</span> <span class="kt"><a href="../Classes/OAuth2Base.html">OAuth2Base</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">URLRequest</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">signed</span><span class="p">(</span><span class="n">with</span> <span class="nv">oauth2</span><span class="p">:</span> <span class="kt"><a href="../Classes/OAuth2Base.html">OAuth2Base</a></span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">URLRequest</span></code></pre>
 
                         </div>
                       </div>
@@ -385,7 +385,7 @@
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2016 <a class="link" href="https://github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2016-12-13)</p>
+      <p>&copy; 2017 <a class="link" href="https://github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2017-01-31)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>

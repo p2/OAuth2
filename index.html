@@ -19,7 +19,7 @@
         <a class="header-link" href="index.html">
           OAuth2 Docs
         </a>
-         (98% documented)
+         (97% documented)
       </p>
     
         <p class="header-col header-col--secondary">
@@ -321,12 +321,12 @@ For details on how to configure authorization see step 4 below, in this example 
 <span class="n">loader</span><span class="o">.</span><span class="nf">perform</span><span class="p">(</span><span class="nv">request</span><span class="p">:</span> <span class="n">req</span><span class="p">)</span> <span class="p">{</span> <span class="n">response</span> <span class="k">in</span>
     <span class="k">do</span> <span class="p">{</span>
         <span class="k">let</span> <span class="nv">dict</span> <span class="o">=</span> <span class="k">try</span> <span class="n">response</span><span class="o">.</span><span class="nf">responseJSON</span><span class="p">()</span>
-        <span class="kt">DispatchQueue</span><span class="o">.</span><span class="n">main</span><span class="o">.</span><span class="n">async</span> <span class="p">{</span>
+        <span class="kt">DispatchQueue</span><span class="o">.</span><span class="n">main</span><span class="o">.</span><span class="k">as</span><span class="n">ync</span> <span class="p">{</span>
             <span class="c1">// you have received `dict` JSON data!</span>
         <span class="p">}</span>
     <span class="p">}</span>
     <span class="k">catch</span> <span class="k">let</span> <span class="nv">error</span> <span class="p">{</span>
-        <span class="kt">DispatchQueue</span><span class="o">.</span><span class="n">main</span><span class="o">.</span><span class="n">async</span> <span class="p">{</span>
+        <span class="kt">DispatchQueue</span><span class="o">.</span><span class="n">main</span><span class="o">.</span><span class="k">as</span><span class="n">ync</span> <span class="p">{</span>
             <span class="c1">// an error occurred</span>
         <span class="p">}</span>
     <span class="p">}</span>
@@ -391,7 +391,7 @@ You only need to inspect the <em>authParameters</em> dictionary if you wish to e
 
 <p>For advanced use outlined below, there is the <code>afterAuthorizeOrFail</code> block that you can use on your OAuth2 instance.
 The <code>internalAfterAuthorizeOrFail</code> closure is, as its name suggests, provided for internal purposes – it is exposed for subclassing and compilation reasons and you should not mess with it.
-Additionally, as of version 3.0, there are deprecated callback properties <code>onAuthorize</code> and <code>onFailure</code> that you should no longer use.</p>
+As of version 3.0.2, you can no longer use the <code>onAuthorize</code> and <code>onFailure</code> callback properties, they have been removed entirely.</p>
 <a href='#6-make-requests' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='6-make-requests'>6. Make Requests</h3>
 
 <p>You can now obtain an <code>OAuth2Request</code>, which is an already signed <code>MutableURLRequest</code>, to retrieve data from your server.
@@ -510,7 +510,7 @@ It has however become common practice to still use code grants from mobile devic
 
 <p>This class fully supports those flows, it automatically creates a “Basic” Authorization header if the client has a non-nil client secret.
 This means that you likely <strong>must</strong> specify <code>client_secret</code> in your settings; if there is none (like for <a href="https://github.com/reddit/reddit/wiki/OAuth2#token-retrieval-code-flow">Reddit</a>) specify the empty string.
-If the site requires client credentials in the request body, set <code>secretInBody</code> to true, as explained below.</p>
+If the site requires client credentials in the request body, set <code>clientConfig.secretInBody</code> to true, as explained below.</p>
 <a href='#implicit-grant' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='implicit-grant'>Implicit Grant</h4>
 
 <p>An implicit grant (<code>response_type=token</code>) is suitable for apps that are not capable of guarding their secret, such as distributed binaries or client-side web apps.
@@ -559,7 +559,7 @@ If you need to pass additional <strong>headers</strong> or <strong>parameters</s
 </code></pre>
 
 <p>Some sites also want the client-id/secret combination in the request <em>body</em>, not in the <em>Authorization</em> header:</p>
-<pre class="highlight plaintext"><code>oauth2.authConfig.secretInBody = true
+<pre class="highlight plaintext"><code>oauth2.clientConfig.secretInBody = true
 // or in your settings:
 "secret_in_body": true
 </code></pre>
@@ -700,7 +700,7 @@ Since there is no <code>NOTICE</code> file there is nothing that you have to inc
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2016 <a class="link" href="https://github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2016-12-13)</p>
+      <p>&copy; 2017 <a class="link" href="https://github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2017-01-31)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>

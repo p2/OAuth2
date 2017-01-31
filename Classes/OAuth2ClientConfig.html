@@ -20,7 +20,7 @@
         <a class="header-link" href="../index.html">
           OAuth2 Docs
         </a>
-         (98% documented)
+         (97% documented)
       </p>
     
         <p class="header-col header-col--secondary">
@@ -666,6 +666,33 @@
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:vC6OAuth218OAuth2ClientConfig12secretInBodySb"></a>
+                    <a name="//apple_ref/swift/Property/secretInBody" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC6OAuth218OAuth2ClientConfig12secretInBodySb">secretInBody</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Whether the receiver should use the request body instead of the Authorization header for the client secret; defaults to <code>false</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">secretInBody</span> <span class="o">=</span> <span class="kc">false</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:vC6OAuth218OAuth2ClientConfig18endpointAuthMethodOS_24OAuth2EndpointAuthMethod"></a>
                     <a name="//apple_ref/swift/Property/endpointAuthMethod" class="dashAnchor"></a>
                     <a class="token" href="#/s:vC6OAuth218OAuth2ClientConfig18endpointAuthMethodOS_24OAuth2EndpointAuthMethod">endpointAuthMethod</a>
@@ -677,7 +704,7 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>How the client communicates the client secret with the server. Defaults to <q>.None</q> if there is no secret, <q>.clientSecretPost</q> if
-<q>secret_in_body</q> is <code>true</code> and <q>.clientSecretBasic</q> otherwise. Interacts with the <code>authConfig.secretInBody</code> client setting.</p>
+<q>secret_in_body</q> is <code>true</code> and <q>.clientSecretBasic</q> otherwise. Interacts with the <code><a href="../Classes/OAuth2ClientConfig.html#/s:vC6OAuth218OAuth2ClientConfig12secretInBodySb">secretInBody</a></code> setting.</p>
 
                       </div>
                       <div class="declaration">
@@ -712,6 +739,60 @@
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="n">open</span> <span class="k">var</span> <span class="nv">authHeaders</span><span class="p">:</span> <span class="kt"><a href="../Requests.html#/s:6OAuth213OAuth2Headers">OAuth2Headers</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC6OAuth218OAuth2ClientConfig16customParametersGSqGVs10DictionarySSSS__"></a>
+                    <a name="//apple_ref/swift/Property/customParameters" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC6OAuth218OAuth2ClientConfig16customParametersGSqGVs10DictionarySSSS__">customParameters</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Add custom parameters to the authorization request.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">customParameters</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">String</span><span class="p">]?</span> <span class="o">=</span> <span class="kc">nil</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC6OAuth218OAuth2ClientConfig18authStringEncodingVE10FoundationSS8Encoding"></a>
+                    <a name="//apple_ref/swift/Property/authStringEncoding" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC6OAuth218OAuth2ClientConfig18authStringEncodingVE10FoundationSS8Encoding">authStringEncoding</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Most servers use UTF-8 encoding for Authorization headers, but that&rsquo;s not 100% true: make it configurable (see <a href="https://github.com/p2/OAuth2/issues/165">https://github.com/p2/OAuth2/issues/165</a>).</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="k">var</span> <span class="nv">authStringEncoding</span> <span class="o">=</span> <span class="kt">String</span><span class="o">.</span><span class="kt">Encoding</span><span class="o">.</span><span class="n">utf8</span></code></pre>
 
                         </div>
                       </div>
@@ -1008,7 +1089,7 @@ url.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2016 <a class="link" href="https://github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2016-12-13)</p>
+      <p>&copy; 2017 <a class="link" href="https://github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2017-01-31)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
