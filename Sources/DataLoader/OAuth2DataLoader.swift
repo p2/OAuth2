@@ -143,7 +143,7 @@ open class OAuth2DataLoader: OAuth2Requestable {
 	}
 	
 	/**
-	If not already authorizing, will use its `oauth2` instance to start authorization.
+	If not already authorizing, will use its `oauth2` instance to start authorization after forgetting any tokens (!).
 	
 	This method will ignore calls while authorization is ongoing, meaning you will only get the callback once per authorization cycle.
 	
@@ -153,6 +153,7 @@ open class OAuth2DataLoader: OAuth2Requestable {
 	open func attemptToAuthorize(callback: @escaping ((OAuth2JSON?, OAuth2Error?) -> Void)) {
 		if !isAuthorizing {
 			isAuthorizing = true
+			oauth2.forgetTokens()
 			oauth2.authorize() { authParams, error in
 				self.isAuthorizing = false
 				callback(authParams, error)
