@@ -169,7 +169,7 @@ You only need to inspect the _authParameters_ dictionary if you wish to extract 
 
 For advanced use outlined below, there is the `afterAuthorizeOrFail` block that you can use on your OAuth2 instance.
 The `internalAfterAuthorizeOrFail` closure is, as its name suggests, provided for internal purposes – it is exposed for subclassing and compilation reasons and you should not mess with it.
-Additionally, as of version 3.0, there are deprecated callback properties `onAuthorize` and `onFailure` that you should no longer use.
+As of version 3.0.2, you can no longer use the `onAuthorize` and `onFailure` callback properties, they have been removed entirely.
 
 ### 6. Make Requests
 

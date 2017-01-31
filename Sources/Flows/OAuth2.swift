@@ -86,8 +86,8 @@ open class OAuth2: OAuth2Base {
 	This method will first check if the client already has an unexpired access token (possibly from the keychain), if not and it's able to
 	use a refresh token it will try to use the refresh token. If this fails it will check whether the client has a client_id and show the
 	authorize screen if you have `authConfig` set up sufficiently. If `authConfig` is not set up sufficiently this method will end up
-	calling the `onFailure` callback. If client_id is not set but a "registration_uri" has been provided, a dynamic client registration will
-	be attempted and if it success, an access token will be requested.
+	calling the callback with a failure. If client_id is not set but a "registration_uri" has been provided, a dynamic client registration
+	will be attempted and if it success, an access token will be requested.
 	
 	- parameter params:   Optional key/value pairs to pass during authorization and token refresh
 	- parameter callback: The callback to call when authorization finishes (parameters will be non-nil but may be an empty dict), fails or

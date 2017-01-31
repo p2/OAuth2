@@ -129,14 +129,6 @@ open class OAuth2Base: OAuth2Securable {
 		return nil != didAuthorizeOrFail
 	}
 	
-	/// Closure called on successful authorization on the main thread.
-	@available(*, deprecated: 3.0, message: "Use the `authorize(params:callback:)` method and variants")
-	public final var onAuthorize: ((_ parameters: OAuth2JSON) -> Void)?
-	
-	/// When authorization fails (if error is not nil) or is cancelled, this block is executed on the main thread.
-	@available(*, deprecated: 3.0, message: "Use the `authorize(params:callback:)` method and variants")
-	public final var onFailure: ((OAuth2Error?) -> Void)?
-	
 	/**
 	Closure called after the regular authorization callback, on the main thread. You can use this callback when you're performing
 	authorization manually and/or for cleanup operations.
@@ -267,7 +259,6 @@ open class OAuth2Base: OAuth2Securable {
 			storeTokensToKeychain()
 		}
 		callOnMainThread() {
-			self.onAuthorize?(parameters)
 			self.didAuthorizeOrFail?(parameters, nil)
 			self.didAuthorizeOrFail = nil
 			self.internalAfterAuthorizeOrFail?(false, nil)
@@ -292,7 +283,6 @@ open class OAuth2Base: OAuth2Securable {
 			finalError = OAuth2Error.requestCancelled
 		}
 		callOnMainThread() {
-			self.onFailure?(finalError)
 			self.didAuthorizeOrFail?(nil, finalError)
 			self.didAuthorizeOrFail = nil
 			self.internalAfterAuthorizeOrFail?(true, finalError)

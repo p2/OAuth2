@@ -89,35 +89,6 @@ class OAuth2Tests: XCTestCase {
 		XCTAssertNil(params["state"], "Expecting no `state` in query")
 	}
 	
-	func testDeprecatedAuthorizeCall() {
-		let oa = genericOAuth2()
-		oa.verbose = false
-		XCTAssertFalse(oa.authConfig.authorizeEmbedded)
-		oa.onAuthorize = { params in
-			XCTAssertTrue(false, "Should not call success callback")
-		}
-		oa.onFailure = { error in
-			XCTAssertNotNil(error)
-			XCTAssertEqual(error, OAuth2Error.noRedirectURL)
-		}
-		oa.authorize()
-		XCTAssertFalse(oa.authConfig.authorizeEmbedded)
-		
-		// embedded
-		oa.redirect = "myapp://oauth"
-		oa.onFailure = { error in
-			XCTAssertNotNil(error)
-			XCTAssertEqual(error, OAuth2Error.invalidAuthorizationContext)
-		}
-		oa.afterAuthorizeOrFail = { params, error in
-			XCTAssertNil(params)
-			XCTAssertNotNil(error)
-			XCTAssertEqual(error, OAuth2Error.invalidAuthorizationContext)
-		}
-		oa.authorizeEmbedded(from: NSString())
-		XCTAssertTrue(oa.authConfig.authorizeEmbedded)
-	}
-	
 	func testAuthorizeCall() {
 		let oa = genericOAuth2()
 		oa.verbose = false
