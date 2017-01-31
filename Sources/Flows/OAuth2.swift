@@ -125,17 +125,6 @@ open class OAuth2: OAuth2Base {
 	}
 	
 	/**
-	This method is deprecated in version 3.0 and has been replaced with `authorize(params:callback:)`.
-	
-	- parameter params: Optional key/value pairs to pass during authorization and token refresh
-	*/
-	@available(*, deprecated: 3.0, message: "Use the `authorize(params:callback:)` method and variants")
-	public final func authorize(params: OAuth2StringDict? = nil) {
-		authorize(params: params) { parameters, error in
-		}
-	}
-	
-	/**
 	Shortcut function to start embedded authorization from the given context (a UIViewController on iOS, an NSWindow on OS X).
 	
 	This method sets `authConfig.authorizeEmbedded = true` and `authConfig.authorizeContext = <# context #>`, then calls `authorize()`
@@ -153,18 +142,6 @@ open class OAuth2: OAuth2Base {
 		authConfig.authorizeEmbedded = true
 		authConfig.authorizeContext = context
 		authorize(params: params, callback: callback)
-	}
-	
-	/**
-	This method is deprecated in version 3.0 and has been replaced with `authorizeEmbedded(from:params:callback:)`.
-	
-	- parameter from:    The context to start authorization from, depends on platform (UIViewController or NSWindow, see `authorizeContext`)
-	- parameter params:  Optional key/value pairs to pass during authorization
-	*/
-	@available(*, deprecated: 3.0, message: "Use the `authorize(params:callback:)` method and variants")
-	open func authorizeEmbedded(from context: AnyObject, params: OAuth2StringDict? = nil) {
-		authorizeEmbedded(from: context, params: params) { parameters, error in
-		}
 	}
 	
 	/**
