@@ -244,7 +244,7 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 			return "Failed to decode given data as a UTF-8 string"
 		
 		case .unauthorizedClient:
-			return "The client is not authorized to request an access token using this method."
+			return "Unauthorized"
 		case .forbidden:
 			return "Forbidden"
 		case .wrongUsernamePassword:

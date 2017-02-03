@@ -42,9 +42,8 @@ open class OAuth2DebugURLSessionDelegate: NSObject, URLSessionDelegate {
 		self.host = host
 	}
 	
-	@nonobjc
 	open func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge,
-	                       completionHandler: (Foundation.URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+	                     completionHandler: @escaping (Foundation.URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
 		if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust {
 			if challenge.protectionSpace.host == host, let trust = challenge.protectionSpace.serverTrust {
 				let credential = URLCredential(trust: trust)
@@ -52,7 +51,7 @@ open class OAuth2DebugURLSessionDelegate: NSObject, URLSessionDelegate {
 				return
 			}
 		}
-		completionHandler(.cancelAuthenticationChallenge, nil)
+		completionHandler(.performDefaultHandling, nil)
 	}
 }
 
