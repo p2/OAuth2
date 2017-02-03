@@ -5,6 +5,11 @@ Version numbering represents the Swift version, plus a running number representi
 You can also refer to commit logs to get details on what was implemented, fixed and improved.
 
 
+### x.x.x
+
+- Optionally allow `DataLoader` to follow 302 redirects automatically (on same host)
+
+
 ### 3.0.2
 
 - Move `secretInBody` and `customParameters` from `authConfig` to `clientConfig`, where they belong

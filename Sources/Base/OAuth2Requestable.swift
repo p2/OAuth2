@@ -135,7 +135,7 @@ open class OAuth2Requestable {
 		let task = performer.perform(request: request) { sessData, sessResponse, error in
 			self.abortableTask = nil
 			self.logger?.trace("OAuth2", msg: "RESPONSE\n\(sessResponse?.debugDescription ?? "no response")\n\n\(String(data: sessData ?? Data(), encoding: String.Encoding.utf8) ?? "no data")\n---")
-			let http = (sessResponse is HTTPURLResponse) ? (sessResponse as! HTTPURLResponse) : HTTPURLResponse(url: request.url!, statusCode: 499, httpVersion: nil, headerFields: nil)!
+			let http = (sessResponse as? HTTPURLResponse) ?? HTTPURLResponse(url: request.url!, statusCode: 499, httpVersion: nil, headerFields: nil)!
 			let response = OAuth2Response(data: sessData, request: request, response: http, error: error)
 			callback(response)
 		}
