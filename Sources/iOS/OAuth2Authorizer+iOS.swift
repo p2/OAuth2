@@ -26,13 +26,18 @@ import Base
 #endif
 
 
-public final class OAuth2Authorizer: OAuth2AuthorizerUI {
+/**
+This authorizer takes care of iOS-specific tasks when showing the authorization UI.
+
+You can subclass this class and override `willPresent(viewController:naviController:)` in order to further customize presentation of the UI.
+*/
+open class OAuth2Authorizer: OAuth2AuthorizerUI {
 	
 	/// The OAuth2 instance this authorizer belongs to.
 	public unowned let oauth2: OAuth2Base
 	
 	/// Used to store the `SFSafariViewControllerDelegate`.
-	var safariViewDelegate: AnyObject?
+	private var safariViewDelegate: AnyObject?
 	
 	
 	public init(oauth2: OAuth2) {
@@ -84,6 +89,16 @@ public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 		}
 	}
 	
+	/**
+	Called with the view- and (possibly) navigation-controller that is about to be presented. Useful for subclasses, default implementation
+	does nothing.
+	
+	- parameter viewController: The Safari- or web view controller that will be presented
+	- parameter naviController: The navigation controller embedding the view controller, if any
+	*/
+	open func willPresent(viewController: UIViewController, in naviController: UINavigationController?) {
+	}
+	
 	
 	// MARK: - Safari Web View Controller
 	
@@ -104,12 +119,18 @@ public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 	@available(iOS 9.0, *)
 	@discardableResult
 	public func authorizeSafariEmbedded(from controller: UIViewController, at url: URL) throws -> SFSafariViewController {
+		safariViewDelegate = OAuth2SFViewControllerDelegate(authorizer: self)
 		let web = SFSafariViewController(url: url)
 		web.title = oauth2.authConfig.ui.title
-		
-		safariViewDelegate = OAuth2SFViewControllerDelegate(authorizer: self)
 		web.delegate = safariViewDelegate as! OAuth2SFViewControllerDelegate
+		if #available(iOS 10.0, *), let barTint = oauth2.authConfig.ui.barTintColor {
+			web.preferredBarTintColor = barTint
+		}
+		if #available(iOS 10.0, *), let tint = oauth2.authConfig.ui.controlTintColor {
+			web.preferredControlTintColor = tint
+		}
 		
+		willPresent(viewController: web, in: nil)
 		controller.present(web, animated: true, completion: nil)
 		
 		return web
@@ -151,7 +172,7 @@ public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 	
 	- returns: OAuth2WebViewController, embedded in a UINavigationController being presented automatically
 	*/
-	final func presentAuthorizeView(forURL url: URL, intercept: String, from: UIViewController) -> OAuth2WebViewController {
+	final func presentAuthorizeView(forURL url: URL, intercept: String, from controller: UIViewController) -> OAuth2WebViewController {
 		let web = OAuth2WebViewController()
 		web.title = oauth2.authConfig.ui.title
 		web.backButton = oauth2.authConfig.ui.backButton as? UIBarButtonItem
@@ -176,13 +197,24 @@ public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 		
 		let navi = UINavigationController(rootViewController: web)
 		navi.modalPresentationStyle = oauth2.authConfig.ui.modalPresentationStyle
-		from.present(navi, animated: true)
+		if let barTint = oauth2.authConfig.ui.barTintColor {
+			navi.navigationBar.barTintColor = barTint
+		}
+		if let tint = oauth2.authConfig.ui.controlTintColor {
+			navi.navigationBar.tintColor = tint
+		}
+		
+		willPresent(viewController: web, in: navi)
+		controller.present(navi, animated: true)
 		
 		return web
 	}
 }
 
 
+/**
+A custom `SFSafariViewControllerDelegate` that we use with the safari view controller.
+*/
 class OAuth2SFViewControllerDelegate: NSObject, SFSafariViewControllerDelegate {
 	
 	let authorizer: OAuth2Authorizer

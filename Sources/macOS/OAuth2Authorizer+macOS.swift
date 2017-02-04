@@ -27,8 +27,11 @@ import Base
 
 /**
 The authorizer to use when on the macOS platform.
+	
+You can subclass this class and override `presentableAuthorizeViewController(url:)` and/or `windowController(controller:config:)` to further
+customize appearance.
 */
-public final class OAuth2Authorizer: OAuth2AuthorizerUI {
+open class OAuth2Authorizer: OAuth2AuthorizerUI {
 	
 	/// The OAuth2 instance this authorizer belongs to.
 	public unowned let oauth2: OAuth2Base
@@ -128,7 +131,7 @@ public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 	*/
 	@available(macOS 10.10, *)
 	@discardableResult
-	public func authorizeInNewWindow(at url: URL) throws -> NSWindowController {
+	open func authorizeInNewWindow(at url: URL) throws -> NSWindowController {
 		let controller = try presentableAuthorizeViewController(at: url)
 		let wc = windowController(forViewController: controller, with: oauth2.authConfig)
 		
@@ -145,7 +148,7 @@ public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 	- returns:      A web view controller that you can present to the user for login
 	*/
 	@available(macOS 10.10, *)
-	func presentableAuthorizeViewController(at url: URL) throws -> OAuth2WebViewController {
+	open func presentableAuthorizeViewController(at url: URL) throws -> OAuth2WebViewController {
 		let controller = OAuth2WebViewController()
 		controller.startURL = url
 		controller.interceptURLString = oauth2.redirect!
@@ -173,7 +176,7 @@ public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 	- returns:                     A window controller, ready to be presented
 	*/
 	@available(macOS 10.10, *)
-	func windowController(forViewController controller: OAuth2WebViewController, with config: OAuth2AuthConfig) -> NSWindowController {
+	open func windowController(forViewController controller: OAuth2WebViewController, with config: OAuth2AuthConfig) -> NSWindowController {
 		let rect = NSMakeRect(0, 0, OAuth2WebViewController.webViewWindowWidth, OAuth2WebViewController.webViewWindowHeight)
 		let window = NSWindow(contentRect: rect, styleMask: [.titled, .closable, .resizable, .fullSizeContentView], backing: .buffered, defer: false)
 		window.backgroundColor = NSColor.white

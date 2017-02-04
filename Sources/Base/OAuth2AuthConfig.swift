@@ -43,9 +43,15 @@ public struct OAuth2AuthConfig {
 		/// Starting with iOS 9, `SFSafariViewController` will be used for embedded authorization instead of our custom class. You can turn this off here.
 		public var useSafariView = true
 		
-		/// By assigning your own UIModalPresentationStyle (!) you can configure how the embedded authorisation is presented.
 		#if os(iOS)
+		/// By assigning your own style you can configure how the embedded authorization is presented.
 		public var modalPresentationStyle = UIModalPresentationStyle.fullScreen
+		
+		/// Assign a UIColor here, to be applied to the Safari view controller (in iOS 10.10+) or the navigation's bar tint color if using the legacy web view controller.
+		public var barTintColor: UIColor? = nil
+		
+		/// You can assign a UIColor here, which will be applied to Safari's (in iOS 10.10+) or the legacy web view controller's item tint colors (also see: `barTintColor`).
+		public var controlTintColor: UIColor? = nil
 		#endif
 	}
 	
