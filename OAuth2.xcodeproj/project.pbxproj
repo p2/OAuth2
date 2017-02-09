@@ -123,13 +123,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		19676ECE1E4A19450025157B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 19676ECA1E4A19440025157B /* OAuth2Demo.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 19676EB51E4A19440025157B;
-			remoteInfo = OAuth2Demo;
-		};
 		EE43B1551951F2440017679A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = EEDB861B193FAAE500C4EEA1 /* Project object */;
@@ -176,7 +169,6 @@
 
 /* Begin PBXFileReference section */
 		0C2F5E5A1DE2DB8500F621E0 /* OAuth2CodeGrantAzure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2CodeGrantAzure.swift; sourceTree = "<group>"; };
-		19676ECA1E4A19440025157B /* OAuth2Demo.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = OAuth2Demo.xcodeproj; path = OAuth2Demo/OAuth2Demo.xcodeproj; sourceTree = "<group>"; };
 		6598543F1C5B3B4000237D39 /* OAuth2Authorizer+tvOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "OAuth2Authorizer+tvOS.swift"; path = "Sources/tvOS/OAuth2Authorizer+tvOS.swift"; sourceTree = SOURCE_ROOT; };
 		659854461C5B3BEA00237D39 /* OAuth2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OAuth2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		65EC05DF1C9050CB00DE9186 /* OAuth2KeychainAccount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2KeychainAccount.swift; sourceTree = "<group>"; };
@@ -272,14 +264,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		19676ECB1E4A19440025157B /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				19676ECF1E4A19450025157B /* OAuth2Demo.app */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		65D294B91C57CB47009DA970 /* tvOS */ = {
 			isa = PBXGroup;
 			children = (
@@ -403,7 +387,6 @@
 		EEDB861A193FAAE500C4EEA1 = {
 			isa = PBXGroup;
 			children = (
-				19676ECA1E4A19440025157B /* OAuth2Demo.xcodeproj */,
 				EE29EABE195B0813008882C8 /* README.md */,
 				EE8EE6DA1B12AB35005B90C5 /* CHANGELOG.md */,
 				EEAC179F1CAA69110025F84B /* CONTRIBUTING.md */,
@@ -616,12 +599,6 @@
 			mainGroup = EEDB861A193FAAE500C4EEA1;
 			productRefGroup = EEDB8625193FAAE500C4EEA1 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 19676ECB1E4A19440025157B /* Products */;
-					ProjectRef = 19676ECA1E4A19440025157B /* OAuth2Demo.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				EEE209461942772800736F1A /* OAuth2macOS */,
@@ -631,16 +608,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		19676ECF1E4A19450025157B /* OAuth2Demo.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = OAuth2Demo.app;
-			remoteRef = 19676ECE1E4A19450025157B /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		659854441C5B3BEA00237D39 /* Resources */ = {
