@@ -9,16 +9,32 @@
 import UIKit
 import OAuth2
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, OAuth2LoginPresentableDelegate {
+
+	var viewModel: ViewModel!
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		// Do any additional setup after loading the view, typically from a nib.
+
+		let oauth2 = OAuth2PasswordGrantCustom(settings: [
+				"authorize_uri": "https://myAPI.com/back/oauth/token"
+		], loginControllerBuilder: self)
+
+		oauth2.verbose = true
+		oauth2.authConfig.authorizeContext = self
+
+		viewModel = ViewModel(oauth2: oauth2)
 	}
 
-	override func didReceiveMemoryWarning() {
-		super.didReceiveMemoryWarning()
-		// Dispose of any resources that can be recreated.
+	func loginController(delegate: OAuth2LoginControllerDelegate) -> OAuth2LoginController {
+		let controller = UIStoryboard(name: "Auth", bundle: nil).instantiateInitialViewController() as! OAuth2LoginController
+		controller.delegate = delegate
+		return controller
+	}
+
+
+	@IBAction func clicStartAuth(_ sender: Any) {
+		viewModel.authorize()
 	}
 }
 

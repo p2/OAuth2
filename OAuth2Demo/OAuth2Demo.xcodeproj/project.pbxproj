@@ -11,6 +11,8 @@
 		19676EC01E4A19440025157B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 19676EBF1E4A19440025157B /* Assets.xcassets */; };
 		19676ED11E4A1B4A0025157B /* OAuth2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 19676ED01E4A1B4A0025157B /* OAuth2.framework */; };
 		19676ED21E4A1B4A0025157B /* OAuth2.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 19676ED01E4A1B4A0025157B /* OAuth2.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		CCCE41E17346BA6DA357C31C /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCE40EE91FE39F4B732B540 /* ViewModel.swift */; };
+		CCCE480A3E0FF82023701B93 /* Auth.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CCCE440BF9A8EA1F7B8BAF66 /* Auth.storyboard */; };
 		CCCE4957D3617E476AB198FB /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCE4CC80410DF34A8EC4E96 /* LoginViewController.swift */; };
 		CCCE4BB07FA496D90C440928 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CCCE48DC27DD701455B50036 /* LaunchScreen.storyboard */; };
 		CCCE4EBF9F4AA83FFA28AE61 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CCCE497BCD995E94FF4CF61B /* Main.storyboard */; };
@@ -37,6 +39,8 @@
 		19676EBF1E4A19440025157B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		19676EC41E4A19440025157B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		19676ED01E4A1B4A0025157B /* OAuth2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = OAuth2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CCCE40EE91FE39F4B732B540 /* ViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		CCCE440BF9A8EA1F7B8BAF66 /* Auth.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Auth.storyboard; sourceTree = "<group>"; };
 		CCCE4679D96332693DBF93FB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = OAuth2Demo/Base.lproj/Main.storyboard; sourceTree = SOURCE_ROOT; };
 		CCCE497C20EDCC7BB3CE3AAB /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		CCCE4CC80410DF34A8EC4E96 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -89,17 +93,19 @@
 				CCCE497BCD995E94FF4CF61B /* Main.storyboard */,
 				CCCE48DC27DD701455B50036 /* LaunchScreen.storyboard */,
 				CCCE497C20EDCC7BB3CE3AAB /* ViewController.swift */,
-				CCCE46711CA1EDA682CA48D0 /* Login */,
+				CCCE46711CA1EDA682CA48D0 /* Auth */,
+				CCCE40EE91FE39F4B732B540 /* ViewModel.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
 		};
-		CCCE46711CA1EDA682CA48D0 /* Login */ = {
+		CCCE46711CA1EDA682CA48D0 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
 				CCCE4CC80410DF34A8EC4E96 /* LoginViewController.swift */,
+				CCCE440BF9A8EA1F7B8BAF66 /* Auth.storyboard */,
 			);
-			path = Login;
+			path = Auth;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -166,6 +172,7 @@
 				19676EC01E4A19440025157B /* Assets.xcassets in Resources */,
 				CCCE4EBF9F4AA83FFA28AE61 /* Main.storyboard in Resources */,
 				CCCE4BB07FA496D90C440928 /* LaunchScreen.storyboard in Resources */,
+				CCCE480A3E0FF82023701B93 /* Auth.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -179,6 +186,7 @@
 				19676EB91E4A19440025157B /* AppDelegate.swift in Sources */,
 				CCCE4EDC194205F991A8F49F /* ViewController.swift in Sources */,
 				CCCE4957D3617E476AB198FB /* LoginViewController.swift in Sources */,
+				CCCE41E17346BA6DA357C31C /* ViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
