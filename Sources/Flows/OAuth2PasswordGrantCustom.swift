@@ -24,7 +24,7 @@ import Base
 #endif
 
 /**
-A class to handle authorization for clients via password grant, using a custom view.
+A class to handle authorization for clients via password grant, using a native view.
 */
 open class OAuth2PasswordGrantCustom: OAuth2, OAuth2LoginControllerDelegate {
 
@@ -34,12 +34,18 @@ open class OAuth2PasswordGrantCustom: OAuth2, OAuth2LoginControllerDelegate {
 
 	open var loginPresenter: OAuth2LoginPresentable!
 
+	//Those params are retrieved from the OAuth2JSON and used in the accessToken request
+	private var additionalParams: OAuth2StringDict?
+
 	required public init(settings: OAuth2JSON, loginControllerBuilder: OAuth2LoginPresentableDelegate) {
 		super.init(settings: settings)
 		loginPresenter = OAuth2LoginPresenter(oauth2: self, delegate: loginControllerBuilder)
 	}
 
-	//Temporarily bypass the client registration process
+	/*
+	In this flow, the client registration process doesn't seem really relevant, hence simply bypassing it.
+	An improvement could be to register the client if a registration URI is provided and the client_id is missing.
+	*/
 	override func registerClientIfNeeded(callback: @escaping ((OAuth2JSON?, OAuth2Error?) -> Void)) {
 		callOnMainThread() {
 			callback(nil, nil)
@@ -50,26 +56,24 @@ open class OAuth2PasswordGrantCustom: OAuth2, OAuth2LoginControllerDelegate {
 	Completely bypass the default behavior because with this flow we don't want to show any web view, but a custom
 	view controller as a way for the user to provide his credentials.
 	*/
-	override open func doAuthorize(params: [String : String]? = nil) throws {
+	override open func doAuthorize(params: OAuth2StringDict? = nil) throws {
 		try loginPresenter.presentLoginController(animated: true)
+		additionalParams = params
 	}
 
 	/**
 	Creates a POST request with x-www-form-urlencoded body created from the supplied URL's query part.
 	*/
-	open func accessTokenRequest(username: String, password: String) throws -> OAuth2AuthRequest {
+	open func accessTokenRequest(username: String, password: String, params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
 
 		let req = OAuth2AuthRequest(url: (clientConfig.tokenURL ?? clientConfig.authorizeURL))
 		req.params["grant_type"] = type(of: self).grantType
 		req.params["username"] = username
 		req.params["password"] = password
-		if let clientId = clientConfig.clientId {
-			req.params["client_id"] = clientId
-		}
 		if let scope = clientConfig.scope {
 			req.params["scope"] = scope
 		}
-
+		req.add(params: params)
 		return req
 	}
 
@@ -80,9 +84,9 @@ open class OAuth2PasswordGrantCustom: OAuth2, OAuth2LoginControllerDelegate {
 
 	- parameter callback: The callback to call after the request has returned
 	*/
-	public func obtainAccessToken(username: String, password: String, callback: @escaping ((_ params: OAuth2JSON?, _ error: OAuth2Error?) -> Void)) {
+	public func obtainAccessToken(username: String, password: String, params: OAuth2StringDict? = nil, callback: @escaping ((_ params: OAuth2JSON?, _ error: OAuth2Error?) -> Void)) {
 		do {
-			let post = try accessTokenRequest(username: username, password: password).asURLRequest(for: self)
+			let post = try accessTokenRequest(username: username, password: password, params: params).asURLRequest(for: self)
 			logger?.debug("OAuth2", msg: "Requesting new access token from \(post.url?.description ?? "nil")")
 			perform(request: post) { response in
 				do {
@@ -118,7 +122,7 @@ open class OAuth2PasswordGrantCustom: OAuth2, OAuth2LoginControllerDelegate {
 		//Default implementation: no additional check on credentials
 
 		//Send the credentials to the server
-		obtainAccessToken(username: username, password: password, callback: { params, error in
+		obtainAccessToken(username: username, password: password, params: additionalParams, callback: { params, error in
 			if let error = error {
 				self.didFail(with: error)
 				completionHandler(error) //Send the error to the controller so that it can inform the user of it
@@ -135,6 +139,7 @@ open class OAuth2PasswordGrantCustom: OAuth2, OAuth2LoginControllerDelegate {
 
 		//For cases where the user wants to end the process without being authorized
 		self.didFail(with: nil)
+		additionalParams = nil
 	}
 }
 
