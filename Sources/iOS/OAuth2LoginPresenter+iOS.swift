@@ -2,7 +2,7 @@
 // Created by Amaury David on 08/02/2017.
 // Copyright (c) 2017 Pascal Pfiffner. All rights reserved.
 //
-#if os(iOS)
+#if os(iOS) || os(tvOS)
 
 import Foundation
 import UIKit
@@ -13,9 +13,7 @@ import Base
 
 #endif
 
-
-
-
+	
 public class OAuth2LoginPresenter: OAuth2LoginPresentable {
 
 	public unowned var oauth2: OAuth2PasswordGrantCustom

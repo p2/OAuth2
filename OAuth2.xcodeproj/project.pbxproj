@@ -32,6 +32,7 @@
 		CCCE40D6B4EAD9BF05C92ACE /* OAuth2LoginPresenter+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCE4C8DC3CB7713E59BC1EE /* OAuth2LoginPresenter+iOS.swift */; };
 		CCCE41770044302E5ED69299 /* OAuth2LoginPresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCE4957FF7B68129A706D3D /* OAuth2LoginPresentable.swift */; };
 		CCCE41EBA1A5AC8D1EDF5FE6 /* OAuth2LoginPresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCE4957FF7B68129A706D3D /* OAuth2LoginPresentable.swift */; };
+		CCCE434B78E3452F54E4BD33 /* OAuth2LoginPresenter+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCE4C8DC3CB7713E59BC1EE /* OAuth2LoginPresenter+iOS.swift */; };
 		CCCE461D53984F5E034009D8 /* OAuth2PasswordGrantCustom.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCE41DAC3A2EC8F3C145D43 /* OAuth2PasswordGrantCustom.swift */; };
 		CCCE46F051296B024DFCFE6D /* OAuth2LoginPresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCE4957FF7B68129A706D3D /* OAuth2LoginPresentable.swift */; };
 		CCCE4A23934BE68C57BA9AA7 /* OAuth2PasswordGrantCustom.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCE41DAC3A2EC8F3C145D43 /* OAuth2PasswordGrantCustom.swift */; };
@@ -709,6 +710,7 @@
 				6598545B1C5B3CAB00237D39 /* OAuth2DynReg.swift in Sources */,
 				CCCE41770044302E5ED69299 /* OAuth2LoginPresentable.swift in Sources */,
 				CCCE4FE093F7D90CB665AF7E /* OAuth2PasswordGrantCustom.swift in Sources */,
+				CCCE434B78E3452F54E4BD33 /* OAuth2LoginPresenter+iOS.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
