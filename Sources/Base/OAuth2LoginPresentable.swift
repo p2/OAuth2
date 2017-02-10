@@ -11,33 +11,15 @@ Platform-dependent login presenters must adopt this protocol.
 
 public protocol OAuth2LoginPresentable {
 
-	/// The OAuth2 instance this loginPresentable belongs to.
-	unowned var oauth2:   OAuth2PasswordGrantCustom { get }
-
-	/// The delegate to use to get the controller to present.
-	weak var    delegate: OAuth2LoginPresentableDelegate? { get set }
-
 	/*
 	This function is responsible of the login controller presentation.
 	*/
-	func presentLoginController(animated: Bool) throws
+	func present(loginController: OAuth2LoginController, fromContext context: AnyObject?, animated: Bool) throws
 
 	/*
 	This function is responsible of the login controller dismissal.
 	*/
 	func dismissLoginController(animated: Bool)
-}
-
-/*
-An object adopting this protocol is responsible of the creation of the login controller
-*/
-
-public protocol OAuth2LoginPresentableDelegate: class {
-	/*
-	Instanciates and configures the login controller to present.
-	Don't forget setting it's delegate with the one in parameter.
-	*/
-	func loginController(delegate: OAuth2LoginControllerDelegate) -> OAuth2LoginController
 }
 
 /*

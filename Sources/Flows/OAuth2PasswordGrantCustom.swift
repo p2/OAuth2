@@ -23,6 +23,18 @@ import Foundation
 import Base
 #endif
 
+/*
+An object adopting this protocol is responsible of the creation of the login controller
+*/
+
+public protocol OAuth2PasswordGrantCustomDelegate: class {
+	/*
+	Instanciates and configures the login controller to present.
+	Don't forget setting it's delegate with the one in parameter.
+	*/
+	func loginController(delegate: OAuth2LoginControllerDelegate) -> OAuth2LoginController
+}
+
 /**
 A class to handle authorization for clients via password grant, using a native view.
 */
@@ -32,14 +44,16 @@ open class OAuth2PasswordGrantCustom: OAuth2, OAuth2LoginControllerDelegate {
 		return "password"
 	}
 
-	open var loginPresenter: OAuth2LoginPresentable!
+	open var loginPresenter: OAuth2LoginPresentable
+	private var delegate : OAuth2PasswordGrantCustomDelegate
 
 	//Those params are retrieved from the OAuth2JSON and used in the accessToken request
 	private var additionalParams: OAuth2StringDict?
 
-	required public init(settings: OAuth2JSON, loginControllerBuilder: OAuth2LoginPresentableDelegate) {
+	required public init(settings: OAuth2JSON, delegate: OAuth2PasswordGrantCustomDelegate) {
+		loginPresenter = OAuth2LoginPresenter()
+		self.delegate = delegate
 		super.init(settings: settings)
-		loginPresenter = OAuth2LoginPresenter(oauth2: self, delegate: loginControllerBuilder)
 	}
 
 	/*
@@ -57,7 +71,10 @@ open class OAuth2PasswordGrantCustom: OAuth2, OAuth2LoginControllerDelegate {
 	view controller as a way for the user to provide his credentials.
 	*/
 	override open func doAuthorize(params: OAuth2StringDict? = nil) throws {
-		try loginPresenter.presentLoginController(animated: true)
+		logger?.debug("OAuth2", msg: "Presenting the login controller")
+		try loginPresenter.present(loginController: delegate.loginController(delegate: self),
+								   fromContext: authConfig.authorizeContext,
+								   animated: true)
 		additionalParams = params
 	}
 
@@ -135,6 +152,7 @@ open class OAuth2PasswordGrantCustom: OAuth2, OAuth2LoginControllerDelegate {
 	}
 
 	public func endAuthorization() {
+		logger?.debug("OAuth2", msg: "Dismissing the login controller")
 		loginPresenter.dismissLoginController(animated: true)
 
 		//For cases where the user wants to end the process without being authorized

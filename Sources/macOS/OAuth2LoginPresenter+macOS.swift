@@ -15,32 +15,19 @@ import Base
 
 public class OAuth2LoginPresenter: OAuth2LoginPresentable {
 
-	public unowned var oauth2: OAuth2PasswordGrantCustom
-
-	public weak var delegate: OAuth2LoginPresentableDelegate?
-
 	private var presentedController: NSViewController?
 
-	public required init(oauth2: OAuth2PasswordGrantCustom, delegate: OAuth2LoginPresentableDelegate) {
-		self.oauth2 = oauth2
-		self.delegate = delegate
-	}
-
-	public func presentLoginController(animated: Bool) throws {
+	public func present(loginController: OAuth2LoginController, fromContext context: AnyObject?, animated: Bool) throws {
 		guard #available(macOS 10.10, *) else {
 			throw OAuth2Error.generic("Native authorizing is only available in OS X 10.10 and later")
 		}
 
-		oauth2.logger?.debug("OAuth2", msg: "Presenting the login controller")
-
-		let context = oauth2.authConfig.authorizeContext
 		guard let parentController = context as? NSViewController else {
 			throw context == nil ? OAuth2Error.noAuthorizationContext : OAuth2Error.invalidAuthorizationContext
 		}
 
-		let tmpController = delegate?.loginController(delegate: oauth2)
-		guard let controller = tmpController as? NSViewController else {
-			throw OAuth2Error.invalidLoginController(actualType: String(describing: type(of: tmpController)),
+		guard let controller = loginController as? NSViewController else {
+			throw OAuth2Error.invalidLoginController(actualType: String(describing: type(of: loginController)),
 													 expectedType: String(describing: NSViewController.self))
 		}
 
