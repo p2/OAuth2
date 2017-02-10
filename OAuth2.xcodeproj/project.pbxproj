@@ -37,6 +37,7 @@
 		CCCE46F051296B024DFCFE6D /* OAuth2LoginPresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCE4957FF7B68129A706D3D /* OAuth2LoginPresentable.swift */; };
 		CCCE4A23934BE68C57BA9AA7 /* OAuth2PasswordGrantCustom.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCE41DAC3A2EC8F3C145D43 /* OAuth2PasswordGrantCustom.swift */; };
 		CCCE4B208D7B037BBC409FB8 /* OAuth2PasswordGrantCustom.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCE41DAC3A2EC8F3C145D43 /* OAuth2PasswordGrantCustom.swift */; };
+		CCCE4BC0784DDEF682F43DB4 /* OAuth2LoginController+macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCE4609AF9BAB2930F4FDA3 /* OAuth2LoginController+macOS.swift */; };
 		CCCE4F1BF1DF920E9CB4C620 /* OAuth2LoginPresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCE4957FF7B68129A706D3D /* OAuth2LoginPresentable.swift */; };
 		CCCE4FE093F7D90CB665AF7E /* OAuth2PasswordGrantCustom.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCE41DAC3A2EC8F3C145D43 /* OAuth2PasswordGrantCustom.swift */; };
 		DD0CCBAD1C4DC83A0044C4E3 /* OAuth2WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0CCBAC1C4DC83A0044C4E3 /* OAuth2WebViewController.swift */; };
@@ -114,7 +115,6 @@
 		EEC7A8C91AE47111008C30E7 /* OAuth2Authorizer+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC7A8C81AE47111008C30E7 /* OAuth2Authorizer+iOS.swift */; };
 		EEC7A8D81AE4851E008C30E7 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC7A8D01AE4851E008C30E7 /* Keychain.swift */; };
 		EEC7A8D91AE4851E008C30E7 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC7A8D01AE4851E008C30E7 /* Keychain.swift */; };
-		EEE209A819427DFE00736F1A /* OAuth2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EEE209471942772800736F1A /* OAuth2.framework */; };
 		EEF47D2B1B1E3FDD0057D838 /* OAuth2Requestable.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF47D2A1B1E3FDD0057D838 /* OAuth2Requestable.swift */; };
 		EEF47D2C1B1E3FDD0057D838 /* OAuth2Requestable.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF47D2A1B1E3FDD0057D838 /* OAuth2Requestable.swift */; };
 		EEFD23511C9ED9E400727DCF /* OAuth2ClientCredentialsReddit.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFD23501C9ED9E400727DCF /* OAuth2ClientCredentialsReddit.swift */; };
@@ -173,6 +173,7 @@
 		659854461C5B3BEA00237D39 /* OAuth2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OAuth2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		65EC05DF1C9050CB00DE9186 /* OAuth2KeychainAccount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2KeychainAccount.swift; sourceTree = "<group>"; };
 		CCCE41DAC3A2EC8F3C145D43 /* OAuth2PasswordGrantCustom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2PasswordGrantCustom.swift; sourceTree = "<group>"; };
+		CCCE4609AF9BAB2930F4FDA3 /* OAuth2LoginController+macOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "OAuth2LoginController+macOS.swift"; sourceTree = "<group>"; };
 		CCCE4957FF7B68129A706D3D /* OAuth2LoginPresentable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2LoginPresentable.swift; sourceTree = "<group>"; };
 		CCCE4C8DC3CB7713E59BC1EE /* OAuth2LoginPresenter+iOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "OAuth2LoginPresenter+iOS.swift"; sourceTree = "<group>"; };
 		DD0CCBAC1C4DC83A0044C4E3 /* OAuth2WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2WebViewController.swift; sourceTree = "<group>"; };
@@ -257,7 +258,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EEE209A819427DFE00736F1A /* OAuth2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -372,6 +372,7 @@
 			children = (
 				EEC7A8C61AE46C33008C30E7 /* OAuth2Authorizer+macOS.swift */,
 				DD0CCBAC1C4DC83A0044C4E3 /* OAuth2WebViewController.swift */,
+				CCCE4609AF9BAB2930F4FDA3 /* OAuth2LoginController+macOS.swift */,
 			);
 			path = macOS;
 			sourceTree = "<group>";
@@ -760,6 +761,7 @@
 				EE507A381B1E15E000AE02E9 /* OAuth2DynReg.swift in Sources */,
 				CCCE41EBA1A5AC8D1EDF5FE6 /* OAuth2LoginPresentable.swift in Sources */,
 				CCCE461D53984F5E034009D8 /* OAuth2PasswordGrantCustom.swift in Sources */,
+				CCCE4BC0784DDEF682F43DB4 /* OAuth2LoginController+macOS.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
