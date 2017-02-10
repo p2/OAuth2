@@ -42,11 +42,7 @@ public protocol OAuth2PasswordGrantCustomDelegate: class {
 A class to handle authorization for clients via password grant, using a native view.
 */
 
-open class OAuth2PasswordGrantCustom: OAuth2 {
-
-	override open class var grantType: String {
-		return "password"
-	}
+open class OAuth2PasswordGrantCustom: OAuth2PasswordGrant {
 
 	open var    loginPresenter:   OAuth2LoginPresentable
 	private var delegate:         OAuth2PasswordGrantCustomDelegate
@@ -62,7 +58,6 @@ open class OAuth2PasswordGrantCustom: OAuth2 {
 
 	/*
 	In this flow, the client registration process doesn't seem really relevant, hence simply bypassing it.
-	An improvement could be to register the client if a registration URI is provided and the client_id is missing.
 	*/
 	override func registerClientIfNeeded(callback: @escaping ((OAuth2JSON?, OAuth2Error?) -> Void)) {
 		callOnMainThread() {
@@ -82,65 +77,6 @@ open class OAuth2PasswordGrantCustom: OAuth2 {
 		additionalParams = params
 	}
 
-	/**
-	Creates a POST request with x-www-form-urlencoded body created from the supplied URL's query part.
-	*/
-	open func accessTokenRequest(username: String,
-								 password: String,
-								 params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
-
-		let req = OAuth2AuthRequest(url: (clientConfig.tokenURL ?? clientConfig.authorizeURL))
-		req.params["grant_type"] = type(of: self).grantType
-		req.params["username"] = username
-		req.params["password"] = password
-		if let scope = clientConfig.scope {
-			req.params["scope"] = scope
-		}
-		req.add(params: params)
-		return req
-	}
-
-	/**
-	Create a token request and execute it to receive an access token.
-
-	Uses `accessTokenRequest(params:)` to create the request, which you can subclass to change implementation specifics.
-
-	- parameter callback: The callback to call after the request has returned
-	*/
-	open func obtainAccessToken(username: String,
-								password: String,
-								params: OAuth2StringDict? = nil,
-								callback: @escaping ((_ params: OAuth2JSON?, _ error: OAuth2Error?) -> Void)) {
-		do {
-			let post = try accessTokenRequest(username: username,
-											  password: password,
-											  params: params).asURLRequest(for: self)
-			logger?.debug("OAuth2", msg: "Requesting new access token from \(post.url?.description ?? "nil")")
-			perform(request: post) { response in
-				do {
-					let data = try response.responseData()
-					let dict = try self.parseAccessTokenResponse(data: data)
-					if response.response.statusCode >= 400 {
-						throw OAuth2Error.generic("Failed with status \(response.response.statusCode)")
-					}
-					self.logger?.debug("OAuth2", msg: "Did get access token [\(nil != self.clientConfig.accessToken)]")
-					callback(dict, nil)
-				} catch OAuth2Error.unauthorizedClient {
-					// TODO: which one is it?
-					callback(nil, OAuth2Error.wrongUsernamePassword)
-				} catch OAuth2Error.forbidden {
-					// TODO: which one is it?
-					callback(nil, OAuth2Error.wrongUsernamePassword)
-				} catch let error {
-					self.logger?.debug("OAuth2", msg: "Error obtaining access token: \(error)")
-					callback(nil, error.asOAuth2Error)
-				}
-			}
-		} catch {
-			callback(nil, error.asOAuth2Error)
-		}
-	}
-
 	/*
 		In this func, user's credentials are submitted to the OAuth server.
 		The completionHandler is called once the server responded with the appropriate error or `nil` is the user is
@@ -152,7 +88,16 @@ open class OAuth2PasswordGrantCustom: OAuth2 {
 							   password: String,
 							   completionHandler: @escaping (OAuth2Error?) -> Void) {
 
-		obtainAccessToken(username: username, password: password, params: additionalParams, callback: { params, error in
+		//Set credentials properties so that the accessToken request is made properly.
+		self.username = username
+		self.password = password
+
+		obtainAccessToken(params: additionalParams, callback: { params, error in
+
+			//Reset user's credentials as we don't need them
+			self.username = nil
+			self.password = nil
+
 			if let error = error {
 				self.didFail(with: error)
 				completionHandler(error) //Send the error to the controller so that it can inform the user of it
