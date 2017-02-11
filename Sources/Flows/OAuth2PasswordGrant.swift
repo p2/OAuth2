@@ -27,6 +27,7 @@ import Base
 /**
 A class to handle authorization for clients via password grant.
 */
+@available(*, deprecated: 3.0.3, message: "OAuth2PasswordGrant uses WebViews, which is irrelevant to the flow. Use OAuth2PasswordGrantCustom instead.")
 open class OAuth2PasswordGrant: OAuth2 {
 	
 	override open class var grantType: String {
