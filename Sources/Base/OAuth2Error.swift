@@ -26,135 +26,136 @@ All errors that might occur.
 
 The response errors return a description as defined in the spec: http://tools.ietf.org/html/rfc6749#section-4.1.2.1
 */
-public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 
+public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
+	
 	/// An error for which we don't have a specific one.
 	case generic(String)
-
+	
 	/// An error holding on to an NSError.
 	case nsError(Foundation.NSError)
-
+	
 	/// Invalid URL components, failed to create a URL
 	case invalidURLComponents(URLComponents)
-
-
+	
+	
 	// MARK: - Client errors
-
+	
 	/// There is no client id.
 	case noClientId
-
+	
 	/// There is no client secret.
 	case noClientSecret
-
+	
 	/// There is no redirect URL.
 	case noRedirectURL
-
+	
 	/// There is no username.
 	case noUsername
-
+	
 	/// There is no password.
 	case noPassword
-
+	
 	/// The client is already authorizing.
 	case alreadyAuthorizing
-
+	
 	/// There is no authorization context.
 	case noAuthorizationContext
-
+	
 	/// The authorization context is invalid.
 	case invalidAuthorizationContext
-
+	
 	/// The redirect URL is invalid; with explanation.
 	case invalidRedirectURL(String)
-
+	
 	/// There is no access token.
 	case noAccessToken
-
+	
 	/// There is no refresh token.
 	case noRefreshToken
-
+	
 	/// There is no registration URL.
 	case noRegistrationURL
-
+	
 	/// The login controller does not have a valid type
 	case invalidLoginController(actualType: String, expectedType: String)
-
-
+	
+	
 	// MARK: - Request errors
-
+	
 	/// The request is not using SSL/TLS.
 	case notUsingTLS
-
+	
 	/// Unable to open the authorize URL.
 	case unableToOpenAuthorizeURL
-
+	
 	/// The request is invalid.
 	case invalidRequest
-
+	
 	/// The request was cancelled.
 	case requestCancelled
-
-
+	
+	
 	// MARK: - Response Errors
-
+	
 	/// There was no token type in the response.
 	case noTokenType
-
+	
 	/// The token type is not supported.
 	case unsupportedTokenType(String)
-
+	
 	/// There was no data in the response.
 	case noDataInResponse
-
+	
 	/// Some prerequisite failed; with explanation.
 	case prerequisiteFailed(String)
-
+	
 	/// The state parameter was missing in the response.
 	case missingState
-
+	
 	/// The state parameter was invalid.
 	case invalidState
-
+	
 	/// The JSON response could not be parsed.
 	case jsonParserError
-
+	
 	/// Unable to UTF-8 encode.
 	case utf8EncodeError
-
+	
 	/// Unable to decode to UTF-8.
 	case utf8DecodeError
-
-
+	
+	
 	// MARK: - OAuth2 errors
-
+	
 	/// The client is unauthorized (HTTP status 401).
 	case unauthorizedClient
-
+	
 	/// The request was forbidden (HTTP status 403).
 	case forbidden
-
+	
 	/// Username or password was wrong (HTTP status 403 on password grant).
 	case wrongUsernamePassword
-
+	
 	/// Access was denied.
 	case accessDenied
-
+	
 	/// Response type is not supported.
 	case unsupportedResponseType
-
+	
 	/// Scope was invalid.
 	case invalidScope
-
+	
 	/// A 500 was thrown.
 	case serverError
-
+	
 	/// The service is temporarily unavailable.
 	case temporarilyUnavailable
-
+	
 	/// Other response error, as defined in its String.
 	case responseError(String)
-
-
+	
+	
 	/**
 	Instantiate the error corresponding to the OAuth2 response code, if it is known.
 
@@ -182,7 +183,7 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 			return .responseError(fallback ?? "Authorization error: \(code)")
 		}
 	}
-
+	
 	/// Human understandable error string.
 	public var description: String {
 		switch self {
@@ -192,7 +193,7 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 			return error.localizedDescription
 		case .invalidURLComponents(let components):
 			return "Failed to create URL from components: \(components)"
-
+		
 		case .noClientId:
 			return "Client id not set"
 		case .noClientSecret:
@@ -203,7 +204,7 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 			return "No username"
 		case .noPassword:
 			return "No password"
-			case .invalidLoginController(let expectedType, let actualType):
+		case .invalidLoginController(let expectedType, let actualType):
 			return "The login controller of type \(actualType) cannot be displayed. Expecting a \(expectedType)."
 		case .alreadyAuthorizing:
 			return "The client is already authorizing, wait for it to finish or abort authorization before trying again"
@@ -217,10 +218,10 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 			return "I don't have an access token, cannot sign request"
 		case .noRefreshToken:
 			return "I don't have a refresh token, not trying to refresh"
-
+		
 		case .noRegistrationURL:
 			return "No registration URL defined"
-
+		
 		case .notUsingTLS:
 			return "You MUST use HTTPS/SSL/TLS"
 		case .unableToOpenAuthorizeURL:
@@ -247,7 +248,7 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 			return "Failed to UTF-8 encode the given string"
 		case .utf8DecodeError:
 			return "Failed to decode given data as a UTF-8 string"
-
+		
 		case .unauthorizedClient:
 			return "Unauthorized"
 		case .forbidden:
@@ -268,16 +269,16 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 			return message
 		}
 	}
-
-
+	
+	
 	// MARK: - Equatable
-
+	
 	public static func ==(lhs: OAuth2Error, rhs: OAuth2Error) -> Bool {
 		switch (lhs, rhs) {
 		case (.generic(let lhm), .generic(let rhm)):    return lhm == rhm
 		case (.nsError(let lhe), .nsError(let rhe)):    return lhe.isEqual(rhe)
 		case (.invalidURLComponents(let lhe), .invalidURLComponents(let rhe)):   return (lhe == rhe)
-
+		
 		case (.noClientId, .noClientId):                             return true
 		case (.noClientSecret, .noClientSecret):                     return true
 		case (.noRedirectURL, .noRedirectURL):                       return true
@@ -288,8 +289,8 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 		case (.invalidAuthorizationContext, .invalidAuthorizationContext):       return true
 		case (.invalidRedirectURL(let lhu), .invalidRedirectURL(let rhu)):       return lhu == rhu
 		case (.noAccessToken, .noAccessToken):                       return true
-		case (.noRefreshToken, .noRefreshToken):			         return true
-
+		case (.noRefreshToken, .noRefreshToken):                     return true
+		
 		case (.notUsingTLS, .notUsingTLS):                           return true
 		case (.unableToOpenAuthorizeURL, .unableToOpenAuthorizeURL): return true
 		case (.invalidRequest, .invalidRequest):                     return true
@@ -303,7 +304,7 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 		case (.jsonParserError, .jsonParserError):                   return true
 		case (.utf8EncodeError, .utf8EncodeError):                   return true
 		case (.utf8DecodeError, .utf8DecodeError):                   return true
-
+		
 		case (.unauthorizedClient, .unauthorizedClient):             return true
 		case (.forbidden, .forbidden):                               return true
 		case (.wrongUsernamePassword, .wrongUsernamePassword):       return true
@@ -320,7 +321,7 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 
 
 public extension Error {
-
+	
 	/**
 	Convenience getter to easily retrieve an OAuth2Error from any Error.
 	*/
