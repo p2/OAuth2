@@ -45,7 +45,7 @@ A class to handle authorization for clients via password grant, using a native v
 open class OAuth2PasswordGrantCustom: OAuth2PasswordGrant {
 
 	open var    loginPresenter:   OAuth2LoginPresentable
-	private var delegate:         OAuth2PasswordGrantCustomDelegate
+	var delegate:         OAuth2PasswordGrantCustomDelegate
 
 	//Those params are retrieved from the OAuth2JSON and used in the accessToken request
 	private var additionalParams: OAuth2StringDict?
@@ -69,12 +69,17 @@ open class OAuth2PasswordGrantCustom: OAuth2PasswordGrant {
 	Completely bypass the default behavior because with this flow we don't want to show any web view, but a custom
 	view controller as a way for the user to provide his credentials.
 	*/
-	override open func doAuthorize(params: OAuth2StringDict? = nil) throws {
+	override open func doAuthorize(params: OAuth2StringDict? = nil) {
 		logger?.debug("OAuth2", msg: "Presenting the login controller")
-		try loginPresenter.present(loginController: delegate.loginController(oauth2: self),
-								   fromContext: authConfig.authorizeContext,
-								   animated: true)
-		additionalParams = params
+		do {
+			try loginPresenter.present(loginController: delegate.loginController(oauth2: self),
+									   fromContext: authConfig.authorizeContext,
+									   animated: true)
+			additionalParams = params
+		} catch {
+			logger?.debug("OAuth2", msg: "Cannot present the login controller")
+			self.didFail(with: error as? OAuth2Error)
+		}
 	}
 
 	/*
@@ -95,8 +100,8 @@ open class OAuth2PasswordGrantCustom: OAuth2PasswordGrant {
 		obtainAccessToken(params: additionalParams, callback: { params, error in
 
 			//Reset user's credentials as we don't need them
-			self.username = nil
-			self.password = nil
+			self.username = ""
+			self.password = ""
 
 			if let error = error {
 				self.didFail(with: error)
