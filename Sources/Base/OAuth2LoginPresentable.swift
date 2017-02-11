@@ -10,12 +10,12 @@ Platform-dependent login presenters must adopt this protocol.
 */
 
 public protocol OAuth2LoginPresentable {
-
+	
 	/*
 	This function is responsible of the login controller presentation.
 	*/
 	func present(loginController: OAuth2LoginController, fromContext context: AnyObject?, animated: Bool) throws
-
+	
 	/*
 	This function is responsible of the login controller dismissal.
 	*/
