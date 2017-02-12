@@ -129,7 +129,8 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 		if #available(iOS 10.0, *), let tint = oauth2.authConfig.ui.controlTintColor {
 			web.preferredControlTintColor = tint
 		}
-		
+		web.modalPresentationStyle = oauth2.authConfig.ui.modalPresentationStyle
+        
 		willPresent(viewController: web, in: nil)
 		controller.present(web, animated: true, completion: nil)
 		
