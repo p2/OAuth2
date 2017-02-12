@@ -33,6 +33,10 @@ open class OAuth2PasswordGrant: OAuth2 {
 		return "password"
 	}
 	
+	override open class var clientIdMandatory: Bool {
+		return false
+	}
+	
 	/// Username to use during authorization.
 	open var username: String
 	
