@@ -73,15 +73,6 @@ open class OAuth2PasswordGrant: OAuth2 {
 		super.init(settings: settings)
 	}
 	
-	/*
-	In this flow, the client registration process doesn't seem really relevant, hence simply bypassing it.
-	*/
-	override func registerClientIfNeeded(callback: @escaping ((OAuth2JSON?, OAuth2Error?) -> Void)) {
-		callOnMainThread() {
-			callback(nil, nil)
-		}
-	}
-	
 	/**
 	Performs the accessTokenRequest if credentials are already provided, or ask for them with a native controller.
 	*/
