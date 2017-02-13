@@ -36,6 +36,11 @@ Base class for specific OAuth2 flow implementations.
 */
 open class OAuth2: OAuth2Base {
 	
+	/// Whether the flow type mandates client identification.
+	open class var clientIdMandatory: Bool {
+		return true
+	}
+	
 	/// If non-nil, will be called before performing dynamic client registration, giving you a chance to instantiate your own registrar.
 	public final var onBeforeDynamicClientRegistration: ((URL) -> OAuth2DynReg?)?
 	
@@ -250,22 +255,25 @@ open class OAuth2: OAuth2Base {
 	- returns:            OAuth2AuthRequest to be used to call to the authorize endpoint
 	*/
 	func authorizeRequest(withRedirect redirect: String, scope: String?, params: OAuth2StringDict?) throws -> OAuth2AuthRequest {
-		guard let clientId = clientConfig.clientId, !clientId.isEmpty else {
+		let clientId = clientConfig.clientId
+		if type(of: self).clientIdMandatory && (nil == clientId || !clientId!.isEmpty) {
 			throw OAuth2Error.noClientId
 		}
 		
 		let req = OAuth2AuthRequest(url: clientConfig.authorizeURL, method: .GET)
 		req.params["redirect_uri"] = redirect
-		req.params["client_id"] = clientId
 		req.params["state"] = context.state
-		if clientConfig.safariCancelWorkaround {
-			req.params["swa"] = "\(Date.timeIntervalSinceReferenceDate)" // Safari issue workaround
+		if let clientId = clientId {
+			req.params["client_id"] = clientId
+		}
+		if let responseType = type(of: self).responseType {
+			req.params["response_type"] = responseType
 		}
 		if let scope = scope ?? clientConfig.scope {
 			req.params["scope"] = scope
 		}
-		if let responseType = type(of: self).responseType {
-			req.params["response_type"] = responseType
+		if clientConfig.safariCancelWorkaround {
+			req.params["swa"] = "\(Date.timeIntervalSinceReferenceDate)" // Safari issue workaround
 		}
 		req.add(params: params)
 		
@@ -312,7 +320,8 @@ open class OAuth2: OAuth2Base {
 	- returns:          An `OAuth2AuthRequest` instance that is configured for token refresh
 	*/
 	open func tokenRequestForTokenRefresh(params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
-		guard let clientId = clientId, !clientId.isEmpty else {
+		let clientId = clientConfig.clientId
+		if type(of: self).clientIdMandatory && (nil == clientId || !clientId!.isEmpty) {
 			throw OAuth2Error.noClientId
 		}
 		guard let refreshToken = clientConfig.refreshToken, !refreshToken.isEmpty else {
@@ -322,7 +331,9 @@ open class OAuth2: OAuth2Base {
 		let req = OAuth2AuthRequest(url: (clientConfig.tokenURL ?? clientConfig.authorizeURL))
 		req.params["grant_type"] = "refresh_token"
 		req.params["refresh_token"] = refreshToken
-		req.params["client_id"] = clientId
+		if let clientId = clientId {
+			req.params["client_id"] = clientId
+		}
 		req.add(params: params)
 		
 		return req
@@ -374,7 +385,7 @@ open class OAuth2: OAuth2Base {
 	                      on success
 	*/
 	func registerClientIfNeeded(callback: @escaping ((OAuth2JSON?, OAuth2Error?) -> Void)) {
-		if nil != clientId {
+		if nil != clientId || !type(of: self).clientIdMandatory {
 			callOnMainThread() {
 				callback(nil, nil)
 			}
