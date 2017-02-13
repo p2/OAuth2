@@ -19,44 +19,142 @@
 //
 
 import Foundation
+
 #if !NO_MODULE_IMPORT
+
 import Base
+
 #endif
 
+/**
+An object adopting this protocol is responsible of the creation of the login controller
+*/
+
+public protocol OAuth2PasswordGrantDelegate: class {
+	/**
+	Instanciates and configures the login controller to present.
+	Don't forget setting it's oauth2 instance with the one in parameter.
+	*/
+	func loginController(oauth2: OAuth2PasswordGrant) -> OAuth2LoginController
+}
 
 /**
 A class to handle authorization for clients via password grant.
+If no credentials are set when authorizing, a native controller is shown so that the user can provide them.
 */
-@available(*, deprecated: 3.0.3, message: "OAuth2PasswordGrant uses WebViews, which is irrelevant to the flow. Use OAuth2PasswordGrantCustom instead.")
+
 open class OAuth2PasswordGrant: OAuth2 {
 	
 	override open class var grantType: String {
 		return "password"
 	}
 	
-	/// Username to use during authorization.
-	open var username: String
+	/// User's credentials to use during authorization.
+	open var username: String?
+	open var password: String?
 	
-	/// The user's password.
-	open var password: String
+	//Properties used to handle the native controller
+	lazy var loginPresenter = OAuth2LoginPresenter()
+	open var delegate: OAuth2PasswordGrantDelegate?
+	
+	private var additionalParams:      OAuth2StringDict?
+	private var authorizationResponse: OAuth2JSON?
 	
 	/**
 	Adds support for the "password" & "username" setting.
 	*/
 	override public init(settings: OAuth2JSON) {
-		username = settings["username"] as? String ?? ""
-		password = settings["password"] as? String ?? ""
+		username = settings["username"] as? String
+		password = settings["password"] as? String
 		super.init(settings: settings)
 	}
 	
-	override open func doAuthorize(params: [String : String]? = nil) {
-		self.obtainAccessToken(params: params) { params, error in
-			if let error = error {
-				self.didFail(with: error)
+	/*
+	In this flow, the client registration process doesn't seem really relevant, hence simply bypassing it.
+	*/
+	override func registerClientIfNeeded(callback: @escaping ((OAuth2JSON?, OAuth2Error?) -> Void)) {
+		callOnMainThread() {
+			callback(nil, nil)
+		}
+	}
+	
+	/**
+	Performs the accessTokenRequest if credentials are already provided, or ask for them with a native controller.
+	*/
+	override open func doAuthorize(params: OAuth2StringDict? = nil) throws {
+		
+		authorizationResponse = nil
+		
+		if username?.isEmpty ?? true || password?.isEmpty ?? true {
+			try askForCredentials()
+		} else {
+			obtainAccessToken(params: params) { params, error in
+				if let error = error {
+					self.didFail(with: error)
+				} else {
+					self.didAuthorize(withParameters: params ?? OAuth2JSON())
+				}
 			}
-			else {
-				self.didAuthorize(withParameters: params ?? OAuth2JSON())
+		}
+	}
+	
+	/**
+	Present the delegate's loginController to the user.
+	*/
+	private func askForCredentials(params: OAuth2StringDict? = nil) throws {
+		logger?.debug("OAuth2", msg: "Presenting the login controller")
+		
+		guard let delegate = delegate else {
+			throw OAuth2Error.noDelegate
+		}
+		
+		try loginPresenter.present(loginController: delegate.loginController(oauth2: self),
+								   fromContext: authConfig.authorizeContext,
+								   animated: true)
+		additionalParams = params
+	}
+	
+	/**
+		Submits loginController's provided credentials to the OAuth server.
+		The completionHandler is called once the server responded with the appropriate error or `nil` is the user is
+		now authorized.
+		This doesn't automatically call `endAuthorization` once the user is authorized, allowing the login controller to
+		perform any kind of confirmation before its dismissal.
+	*/
+	public func tryCredentials(username: String,
+							   password: String,
+							   completionHandler: @escaping (OAuth2JSON?, OAuth2Error?) -> Void) {
+		
+		self.username = username
+		self.password = password
+		
+		//Perform the request
+		obtainAccessToken(params: additionalParams, callback: { params, error in
+			//Reset credentials
+			if error != nil {
+				self.username = nil
+				self.password = nil
 			}
+			
+			completionHandler(params, error)
+		})
+	}
+	
+	/**
+	Ends the authorization process whether the user had been successfully authorized or not.
+	*/
+	public func endAuthorization(animated: Bool = true) {
+		//Some clean up
+		additionalParams = nil
+		
+		logger?.debug("OAuth2", msg: "Dismissing the login controller")
+		loginPresenter.dismissLoginController(animated: animated)
+		
+		//Call the right authorization callback according to the last server response
+		if let response = authorizationResponse {
+			self.didAuthorize(withParameters: response)
+		} else {
+			self.didFail(with: nil)
 		}
 	}
 	
@@ -64,10 +162,10 @@ open class OAuth2PasswordGrant: OAuth2 {
 	Creates a POST request with x-www-form-urlencoded body created from the supplied URL's query part.
 	*/
 	open func accessTokenRequest(params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
-		if username.isEmpty{
+		if username?.isEmpty ?? true {
 			throw OAuth2Error.noUsername
 		}
-		if password.isEmpty{
+		if password?.isEmpty ?? true {
 			throw OAuth2Error.noPassword
 		}
 		
@@ -106,6 +204,7 @@ open class OAuth2PasswordGrant: OAuth2 {
 						throw OAuth2Error.generic("Failed with status \(response.response.statusCode)")
 					}
 					self.logger?.debug("OAuth2", msg: "Did get access token [\(nil != self.clientConfig.accessToken)]")
+					self.authorizationResponse = dict
 					callback(dict, nil)
 				}
 				catch OAuth2Error.unauthorizedClient {     // TODO: which one is it?
@@ -120,9 +219,8 @@ open class OAuth2PasswordGrant: OAuth2 {
 				}
 			}
 		}
-		catch let error {
+		catch {
 			callback(nil, error.asOAuth2Error)
 		}
 	}
 }
-

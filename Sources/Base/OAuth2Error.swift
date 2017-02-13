@@ -79,6 +79,9 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 	
 	/// The login controller does not have a valid type
 	case invalidLoginController(actualType: String, expectedType: String)
+
+	/// There is no delegate.
+	case noDelegate
 	
 	
 	// MARK: - Request errors
@@ -206,6 +209,8 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 			return "No password"
 		case .invalidLoginController(let expectedType, let actualType):
 			return "The login controller of type \(actualType) cannot be displayed. Expecting a \(expectedType)."
+		case .noDelegate:
+			return "The password grant flow needs to be set a delegate to present the login controller."
 		case .alreadyAuthorizing:
 			return "The client is already authorizing, wait for it to finish or abort authorization before trying again"
 		case .noAuthorizationContext:
