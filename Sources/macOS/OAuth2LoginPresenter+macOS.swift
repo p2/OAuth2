@@ -5,18 +5,27 @@
 #if os(macOS)
 
 import Cocoa
-
 #if !NO_MODULE_IMPORT
-
 import Base
-
 #endif
 
-
+/**
+A macOS-specific implementation of the `OAuth2LoginPresentable` protocol which simply present the login controller
+as a sheet over another controller
+*/
 public class OAuth2LoginPresenter: OAuth2LoginPresentable {
 	
 	private var presentedController: NSViewController?
 	
+	/**
+	Present the given login controller as a sheet over a parent controller.
+	
+	Throws an error if called on macOS 10.9 or earlier.
+	
+	- parameter loginController: 	The controller to present as a sheet
+	- parameter fromContext:		The controller to which present the login controller. Should be a `NSViewController`
+	- parameter animated:			Whether the presentation should be animated.
+	*/
 	public func present(loginController: OAuth2LoginController,
 						fromContext context: AnyObject?,
 						animated: Bool) throws {
@@ -37,6 +46,13 @@ public class OAuth2LoginPresenter: OAuth2LoginPresentable {
 		presentedController = controller
 	}
 	
+	/**
+	Dismiss the presented login controller if any.
+	
+	Throws an error if called on macOS 10.9 or earlier.
+	
+	- parameter animated:	Whether the dismissal should be animated.
+	*/
 	public func dismissLoginController(animated: Bool) {
 		//Not throwing an error here should not be a problem because it would have been thrown when presenting the controller
 		if #available(macOS 10.10, *) {

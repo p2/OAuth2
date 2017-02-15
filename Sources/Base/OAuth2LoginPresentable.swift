@@ -22,7 +22,7 @@ public protocol OAuth2LoginPresentable {
 }
 
 /**
-	Custom login controllers must adopt this protocol.
+Custom login controllers must adopt this protocol.
 */
 public protocol OAuth2LoginController: class {
 	weak var oauth2: OAuth2PasswordGrant! { get set }

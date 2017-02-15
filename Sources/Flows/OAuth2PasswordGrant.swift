@@ -19,21 +19,18 @@
 //
 
 import Foundation
-
 #if !NO_MODULE_IMPORT
-
 import Base
-
 #endif
 
 /**
 An object adopting this protocol is responsible of the creation of the login controller
 */
-
 public protocol OAuth2PasswordGrantDelegate: class {
 	/**
 	Instanciates and configures the login controller to present.
-	Don't forget setting it's oauth2 instance with the one in parameter.
+	
+	Don't forget setting its oauth2 instance with the one in parameter.
 	*/
 	func loginController(oauth2: OAuth2PasswordGrant) -> OAuth2LoginController
 }
@@ -42,7 +39,6 @@ public protocol OAuth2PasswordGrantDelegate: class {
 A class to handle authorization for clients via password grant.
 If no credentials are set when authorizing, a native controller is shown so that the user can provide them.
 */
-
 open class OAuth2PasswordGrant: OAuth2 {
 	
 	override open class var grantType: String {
@@ -53,15 +49,22 @@ open class OAuth2PasswordGrant: OAuth2 {
 		return false
 	}
 	
-	/// User's credentials to use during authorization.
+	///The username to use during authorization.
 	open var username: String?
+	///The password to use during authorization.
 	open var password: String?
 	
 	//Properties used to handle the native controller
 	lazy var loginPresenter = OAuth2LoginPresenter()
+	
+	/**
+	If credentials are unknown when trying to authorize, the delegate will be asked a login controller to present.
+	
+	`OAuth2Error.noPasswordGrantDelegate` will be thrown if the delegate is needed but not set.
+	*/
 	open var delegate: OAuth2PasswordGrantDelegate?
 	
-	private var additionalParams:      OAuth2StringDict?
+	private var customAuthParams:      OAuth2StringDict?
 	private var authorizationResponse: OAuth2JSON?
 	
 	/**
@@ -100,21 +103,27 @@ open class OAuth2PasswordGrant: OAuth2 {
 		logger?.debug("OAuth2", msg: "Presenting the login controller")
 		
 		guard let delegate = delegate else {
-			throw OAuth2Error.noDelegate
+			throw OAuth2Error.noPasswordGrantDelegate
 		}
 		
 		try loginPresenter.present(loginController: delegate.loginController(oauth2: self),
 								   fromContext: authConfig.authorizeContext,
 								   animated: true)
-		additionalParams = params
+		customAuthParams = params
 	}
 	
 	/**
-		Submits loginController's provided credentials to the OAuth server.
-		The completionHandler is called once the server responded with the appropriate error or `nil` is the user is
-		now authorized.
-		This doesn't automatically call `endAuthorization` once the user is authorized, allowing the login controller to
-		perform any kind of confirmation before its dismissal.
+	Submits loginController's provided credentials to the OAuth server.
+	
+	This doesn't automatically dismiss the login controller once the user is authorized, allowing the login controller to
+	perform any kind of confirmation before its dismissal. Use `endAuthorization` to end the authorizing by dismissing
+	the login controller.
+	
+	- parameter username:			The username to try against the server
+	- parameter password:			The password to try against the server
+	- parameter completionHandler:	The closure to call once the server responded. The response's JSON is send if the
+									server accepted the given credentials. If the JSON is empty, see the error field for
+									more information about the failure.
 	*/
 	public func tryCredentials(username: String,
 							   password: String,
@@ -124,7 +133,7 @@ open class OAuth2PasswordGrant: OAuth2 {
 		self.password = password
 		
 		//Perform the request
-		obtainAccessToken(params: additionalParams, callback: { params, error in
+		obtainAccessToken(params: customAuthParams, callback: { params, error in
 			//Reset credentials
 			if error != nil {
 				self.username = nil
@@ -136,11 +145,14 @@ open class OAuth2PasswordGrant: OAuth2 {
 	}
 	
 	/**
-	Ends the authorization process whether the user had been successfully authorized or not.
+	Ends the authorization process by dismissing the loginController (if any), whether the user had been successfully
+	authorized or not.
+	
+	- parameter animated:	Whether the dismissal should be animated.
 	*/
 	public func endAuthorization(animated: Bool = true) {
 		//Some clean up
-		additionalParams = nil
+		customAuthParams = nil
 		
 		logger?.debug("OAuth2", msg: "Dismissing the login controller")
 		loginPresenter.dismissLoginController(animated: animated)

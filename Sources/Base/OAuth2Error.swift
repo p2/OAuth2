@@ -26,7 +26,6 @@ All errors that might occur.
 
 The response errors return a description as defined in the spec: http://tools.ietf.org/html/rfc6749#section-4.1.2.1
 */
-
 public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 	
 	/// An error for which we don't have a specific one.
@@ -80,8 +79,8 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 	/// The login controller does not have a valid type
 	case invalidLoginController(actualType: String, expectedType: String)
 
-	/// There is no delegate.
-	case noDelegate
+	/// There is no delegate associated with the password grant flow instance.
+	case noPasswordGrantDelegate
 	
 	
 	// MARK: - Request errors
@@ -161,7 +160,6 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 	
 	/**
 	Instantiate the error corresponding to the OAuth2 response code, if it is known.
-
 	- parameter code: The code, like "access_denied", that should be interpreted
 	- parameter fallback: The error string to use in case the error code is not known
 	- returns: An appropriate OAuth2Error
@@ -209,7 +207,7 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 			return "No password"
 		case .invalidLoginController(let expectedType, let actualType):
 			return "The login controller of type \(actualType) cannot be displayed. Expecting a \(expectedType)."
-		case .noDelegate:
+		case .noPasswordGrantDelegate:
 			return "The password grant flow needs to be set a delegate to present the login controller."
 		case .alreadyAuthorizing:
 			return "The client is already authorizing, wait for it to finish or abort authorization before trying again"
