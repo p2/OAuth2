@@ -65,8 +65,7 @@ open class OAuth2PasswordGrant: OAuth2 {
 	*/
 	open var delegate: OAuth2PasswordGrantDelegate?
 	
-	private var customAuthParams:      OAuth2StringDict?
-	private var authorizationResponse: OAuth2JSON?
+	private var customAuthParams: OAuth2StringDict?
 	
 	/**
 	Adds support for the "password" & "username" setting.
@@ -75,14 +74,21 @@ open class OAuth2PasswordGrant: OAuth2 {
 		username = settings["username"] as? String
 		password = settings["password"] as? String
 		super.init(settings: settings)
+		
+		self.internalAfterAuthorizeOrFail = { wasFailure , error in
+			self.customAuthParams = nil
+			
+			if self.authConfig.authorizeEmbeddedAutoDismiss,
+			   (!wasFailure || error! == OAuth2Error.requestCancelled) {
+				self.dismissLoginController()
+			}
+		}
 	}
 	
 	/**
 	Performs the accessTokenRequest if credentials are already provided, or ask for them with a native controller.
 	*/
 	override open func doAuthorize(params: OAuth2StringDict? = nil) throws {
-		
-		authorizationResponse = nil
 		
 		if username?.isEmpty ?? true || password?.isEmpty ?? true {
 			try askForCredentials()
@@ -128,42 +134,34 @@ open class OAuth2PasswordGrant: OAuth2 {
 	*/
 	public func tryCredentials(username: String,
 							   password: String,
-							   completionHandler: @escaping (OAuth2JSON?, OAuth2Error?) -> Void) {
+							   errorHandler: @escaping (OAuth2Error) -> Void) {
 		
 		self.username = username
 		self.password = password
 		
 		//Perform the request
 		obtainAccessToken(params: customAuthParams, callback: { params, error in
-			//Reset credentials
-			if error != nil {
+			
+			if let error = error {
+				//Reset credentials
 				self.username = nil
 				self.password = nil
+				errorHandler(error)
+			} else {
+				//Automatically end the authorization process with a success
+				self.didAuthorize(withParameters: params ?? OAuth2JSON())
 			}
-			
-			completionHandler(params, error)
 		})
 	}
 	
 	/**
-	Ends the authorization process by dismissing the loginController (if any), whether the user had been successfully
-	authorized or not.
+	Dismiss the login controller if any.
 	
 	- parameter animated:	Whether the dismissal should be animated.
 	*/
-	public func endAuthorization(animated: Bool = true) {
-		//Some clean up
-		customAuthParams = nil
-		
+	open func dismissLoginController(animated: Bool = true) {
 		logger?.debug("OAuth2", msg: "Dismissing the login controller")
 		loginPresenter.dismissLoginController(animated: animated)
-		
-		//Call the right authorization callback according to the last server response
-		if let response = authorizationResponse {
-			self.didAuthorize(withParameters: response)
-		} else {
-			self.didFail(with: nil)
-		}
 	}
 	
 	/**
@@ -212,7 +210,6 @@ open class OAuth2PasswordGrant: OAuth2 {
 						throw OAuth2Error.generic("Failed with status \(response.response.statusCode)")
 					}
 					self.logger?.debug("OAuth2", msg: "Did get access token [\(nil != self.clientConfig.accessToken)]")
-					self.authorizationResponse = dict
 					callback(dict, nil)
 				}
 				catch OAuth2Error.unauthorizedClient {     // TODO: which one is it?
