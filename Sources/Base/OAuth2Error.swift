@@ -160,6 +160,7 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 	
 	/**
 	Instantiate the error corresponding to the OAuth2 response code, if it is known.
+	
 	- parameter code: The code, like "access_denied", that should be interpreted
 	- parameter fallback: The error string to use in case the error code is not known
 	- returns: An appropriate OAuth2Error
