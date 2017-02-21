@@ -125,6 +125,7 @@ open class OAuth2DataLoader: OAuth2Requestable {
 			catch OAuth2Error.unauthorizedClient {
 				if retry {
 					self.enqueue(request: request, callback: callback)
+					self.oauth2.clientConfig.accessToken = nil
 					self.attemptToAuthorize() { json, error in
 						
 						// dequeue all if we're authorized, throw all away if something went wrong
@@ -159,7 +160,6 @@ open class OAuth2DataLoader: OAuth2Requestable {
 	open func attemptToAuthorize(callback: @escaping ((OAuth2JSON?, OAuth2Error?) -> Void)) {
 		if !isAuthorizing {
 			isAuthorizing = true
-			oauth2.forgetTokens()
 			oauth2.authorize() { authParams, error in
 				self.isAuthorizing = false
 				callback(authParams, error)

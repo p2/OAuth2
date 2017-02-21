@@ -342,6 +342,8 @@ open class OAuth2: OAuth2Base {
 	/**
 	If there is a refresh token, use it to receive a fresh access token.
 	
+	If the request returns an error, the refresh token is thrown away.
+	
 	- parameter params:   Optional key/value pairs to pass during token refresh
 	- parameter callback: The callback to call after the refresh token exchange has finished
 	*/
@@ -355,6 +357,7 @@ open class OAuth2: OAuth2Base {
 					let data = try response.responseData()
 					let json = try self.parseRefreshTokenResponseData(data)
 					if response.response.statusCode >= 400 {
+						self.clientConfig.refreshToken = nil
 						throw OAuth2Error.generic("Failed with status \(response.response.statusCode)")
 					}
 					self.logger?.debug("OAuth2", msg: "Did use refresh token for access token [\(nil != self.clientConfig.accessToken)]")

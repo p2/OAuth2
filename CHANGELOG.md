@@ -8,6 +8,7 @@ You can also refer to commit logs to get details on what was implemented, fixed 
 ### x.x.x
 
 - Allow more UI customization via `authConfig.UI` and making `OAuth2Authorizer` friendlier to subclassing
+- Implement custom authorization UIs for password grants (thanks @amaurydavid !)
 - Optionally allow `DataLoader` to follow 302 redirects automatically (on same host)
 
 
