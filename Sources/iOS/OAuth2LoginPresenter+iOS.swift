@@ -22,14 +22,11 @@ public class OAuth2LoginPresenter: OAuth2LoginPresentable {
 	/**
 	Modally present the login controller from the given context.
 	
-	- parameter loginController:	The controller to present modally.
-	- parameter context: 			The parent controller to use to present the login controller.
-	- parameter animated: 			Whether the presentation should be animated.
+	- parameter loginController: The controller to present modally.
+	- parameter context:         The parent controller to use to present the login controller.
+	- parameter animated:        Whether the presentation should be animated.
 	*/
-	public func present(loginController: OAuth2LoginController,
-						fromContext context: AnyObject?,
-						animated: Bool) throws {
-		
+	public func present(loginController: OAuth2LoginController, fromContext context: AnyObject?, animated: Bool) throws {
 		guard let parentController = context as? UIViewController else {
 			throw context == nil ? OAuth2Error.noAuthorizationContext : OAuth2Error.invalidAuthorizationContext
 		}
@@ -47,7 +44,7 @@ public class OAuth2LoginPresenter: OAuth2LoginPresentable {
 	/**
 	Dismiss the presented login controller if any.
 	
-	- parameter animated:	Whether the dismissal should be animated.
+	- parameter animated: Whether the dismissal should be animated.
 	*/
 	public func dismissLoginController(animated: Bool) {
 		presentingController?.dismiss(animated: animated)

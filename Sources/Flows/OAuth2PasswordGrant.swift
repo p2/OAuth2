@@ -50,12 +50,13 @@ open class OAuth2PasswordGrant: OAuth2 {
 		return false
 	}
 	
-	///The username to use during authorization.
+	/// The username to use during authorization.
 	open var username: String?
-	///The password to use during authorization.
+	
+	/// The password to use during authorization.
 	open var password: String?
 	
-	//Properties used to handle the native controller
+	// Properties used to handle the native controller
 	lazy var loginPresenter = OAuth2LoginPresenter()
 	
 	/**
@@ -89,14 +90,15 @@ open class OAuth2PasswordGrant: OAuth2 {
 	Performs the accessTokenRequest if credentials are already provided, or ask for them with a native controller.
 	*/
 	override open func doAuthorize(params: OAuth2StringDict? = nil) throws {
-		
 		if username?.isEmpty ?? true || password?.isEmpty ?? true {
 			try askForCredentials()
-		} else {
+		}
+		else {
 			obtainAccessToken(params: params) { params, error in
 				if let error = error {
 					self.didFail(with: error)
-				} else {
+				}
+				else {
 					self.didAuthorize(withParameters: params ?? OAuth2JSON())
 				}
 			}
@@ -108,7 +110,6 @@ open class OAuth2PasswordGrant: OAuth2 {
 	*/
 	private func askForCredentials(params: OAuth2StringDict? = nil) throws {
 		logger?.debug("OAuth2", msg: "Presenting the login controller")
-		
 		guard let delegate = delegate else {
 			throw OAuth2Error.noPasswordGrantDelegate
 		}
@@ -122,33 +123,32 @@ open class OAuth2PasswordGrant: OAuth2 {
 	/**
 	Submits loginController's provided credentials to the OAuth server.
 	
-	This doesn't automatically dismiss the login controller once the user is authorized, allowing the login controller to
-	perform any kind of confirmation before its dismissal. Use `endAuthorization` to end the authorizing by dismissing
-	the login controller.
+	This doesn't automatically dismiss the login controller once the user is authorized, allowing the login controller to perform any kind
+	of confirmation before its dismissal. Use `endAuthorization` to end the authorizing by dismissing the login controller.
 	
-	- parameter username:			The username to try against the server
-	- parameter password:			The password to try against the server
-	- parameter completionHandler:	The closure to call once the server responded. The response's JSON is send if the
-									server accepted the given credentials. If the JSON is empty, see the error field for
-									more information about the failure.
+	- parameter username:          The username to try against the server
+	- parameter password:          The password to try against the server
+	- parameter completionHandler: The closure to call once the server responded. The response's JSON is send if the server accepted the
+	                               given credentials. If the JSON is empty, see the error field for more information about the failure.
 	*/
 	public func tryCredentials(username: String,
 							   password: String,
 							   errorHandler: @escaping (OAuth2Error) -> Void) {
-		
 		self.username = username
 		self.password = password
 		
-		//Perform the request
+		// Perform the request
 		obtainAccessToken(params: customAuthParams, callback: { params, error in
 			
+			// Reset credentials on error
 			if let error = error {
-				//Reset credentials
 				self.username = nil
 				self.password = nil
 				errorHandler(error)
-			} else {
-				//Automatically end the authorization process with a success
+			}
+			
+			// Automatically end the authorization process with a success
+			else {
 				self.didAuthorize(withParameters: params ?? OAuth2JSON())
 			}
 		})
@@ -157,7 +157,7 @@ open class OAuth2PasswordGrant: OAuth2 {
 	/**
 	Dismiss the login controller if any.
 	
-	- parameter animated:	Whether the dismissal should be animated.
+	- parameter animated: Whether the dismissal should be animated.
 	*/
 	open func dismissLoginController(animated: Bool = true) {
 		logger?.debug("OAuth2", msg: "Dismissing the login controller")
@@ -229,3 +229,4 @@ open class OAuth2PasswordGrant: OAuth2 {
 		}
 	}
 }
+

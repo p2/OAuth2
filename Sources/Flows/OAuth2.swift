@@ -256,7 +256,7 @@ open class OAuth2: OAuth2Base {
 	*/
 	func authorizeRequest(withRedirect redirect: String, scope: String?, params: OAuth2StringDict?) throws -> OAuth2AuthRequest {
 		let clientId = clientConfig.clientId
-		if type(of: self).clientIdMandatory && (nil == clientId || !clientId!.isEmpty) {
+		if type(of: self).clientIdMandatory && (nil == clientId || clientId!.isEmpty) {
 			throw OAuth2Error.noClientId
 		}
 		
@@ -321,7 +321,7 @@ open class OAuth2: OAuth2Base {
 	*/
 	open func tokenRequestForTokenRefresh(params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
 		let clientId = clientConfig.clientId
-		if type(of: self).clientIdMandatory && (nil == clientId || !clientId!.isEmpty) {
+		if type(of: self).clientIdMandatory && (nil == clientId || clientId!.isEmpty) {
 			throw OAuth2Error.noClientId
 		}
 		guard let refreshToken = clientConfig.refreshToken, !refreshToken.isEmpty else {

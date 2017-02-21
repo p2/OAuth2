@@ -10,8 +10,8 @@ import Base
 #endif
 
 /**
-A macOS-specific implementation of the `OAuth2LoginPresentable` protocol which simply present the login controller
-as a sheet over another controller
+A macOS-specific implementation of the `OAuth2LoginPresentable` protocol which simply present the login controller as a sheet over another
+controller.
 */
 public class OAuth2LoginPresenter: OAuth2LoginPresentable {
 	
@@ -22,13 +22,11 @@ public class OAuth2LoginPresenter: OAuth2LoginPresentable {
 	
 	Throws an error if called on macOS 10.9 or earlier.
 	
-	- parameter loginController: 	The controller to present as a sheet
-	- parameter fromContext:		The controller to which present the login controller. Should be a `NSViewController`
-	- parameter animated:			Whether the presentation should be animated.
+	- parameter loginController: The controller to present as a sheet
+	- parameter fromContext:     The controller to which present the login controller. Should be a `NSViewController`
+	- parameter animated:        Whether the presentation should be animated.
 	*/
-	public func present(loginController: OAuth2LoginController,
-						fromContext context: AnyObject?,
-						animated: Bool) throws {
+	public func present(loginController: OAuth2LoginController, fromContext context: AnyObject?, animated: Bool) throws {
 		guard #available(macOS 10.10, *) else {
 			throw OAuth2Error.generic("Native authorizing is only available in OS X 10.10 and later")
 		}
@@ -51,10 +49,10 @@ public class OAuth2LoginPresenter: OAuth2LoginPresentable {
 	
 	Throws an error if called on macOS 10.9 or earlier.
 	
-	- parameter animated:	Whether the dismissal should be animated.
+	- parameter animated: Whether the dismissal should be animated.
 	*/
 	public func dismissLoginController(animated: Bool) {
-		//Not throwing an error here should not be a problem because it would have been thrown when presenting the controller
+		// Not throwing an error here should not be a problem because it would have been thrown when presenting the controller
 		if #available(macOS 10.10, *) {
 			presentedController?.dismiss(nil)
 		}
