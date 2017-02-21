@@ -6,6 +6,7 @@
 *.xcscmblueprint
 build
 .build
+DerivedData/
 
 # Documentation
 docs
