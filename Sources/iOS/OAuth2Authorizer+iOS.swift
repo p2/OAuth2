@@ -1,5 +1,5 @@
 //
-//  OAuth2+iOS.swift
+//  OAuth2Authorizer+iOS.swift
 //  OAuth2
 //
 //  Created by Pascal Pfiffner on 4/19/15.

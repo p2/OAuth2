@@ -20,20 +20,30 @@
 
 import Foundation
 #if !NO_MODULE_IMPORT
-import Base
+ import Base
+ #if os(macOS)
+  import macOS
+ #elseif os(iOS)
+  import iOS
+ #elseif os(tvOS)
+  import tvOS
+ #endif
 #endif
+
 
 /**
 An object adopting this protocol is responsible of the creation of the login controller
 */
 public protocol OAuth2PasswordGrantDelegate: class {
-	/**
-	Instanciates and configures the login controller to present.
 	
-	Don't forget setting its oauth2 instance with the one in parameter.
+	/**
+	Instantiates and configures the login controller to present.
+	
+	- returns: A view controller that can be presented on the current platform
 	*/
-	func loginController(oauth2: OAuth2PasswordGrant) -> OAuth2LoginController
+	func loginController(oauth2: OAuth2PasswordGrant) -> AnyObject
 }
+
 
 /**
 A class to handle authorization for clients via password grant.
@@ -57,7 +67,7 @@ open class OAuth2PasswordGrant: OAuth2 {
 	open var password: String?
 	
 	// Properties used to handle the native controller
-	lazy var loginPresenter = OAuth2LoginPresenter()
+	lazy var customAuthorizer: OAuth2CustomAuthorizerUI = OAuth2CustomAuthorizer()
 	
 	/**
 	If credentials are unknown when trying to authorize, the delegate will be asked a login controller to present.
@@ -66,6 +76,7 @@ open class OAuth2PasswordGrant: OAuth2 {
 	*/
 	open var delegate: OAuth2PasswordGrantDelegate?
 	
+	/// Custom authorization parameters to pass when requesting the token.
 	private var customAuthParams: OAuth2StringDict?
 	
 	/**
@@ -75,19 +86,12 @@ open class OAuth2PasswordGrant: OAuth2 {
 		username = settings["username"] as? String
 		password = settings["password"] as? String
 		super.init(settings: settings)
-		
-		self.internalAfterAuthorizeOrFail = { wasFailure , error in
-			self.customAuthParams = nil
-			
-			if self.authConfig.authorizeEmbeddedAutoDismiss,
-			   (!wasFailure || error! == OAuth2Error.requestCancelled) {
-				self.dismissLoginController()
-			}
-		}
 	}
 	
 	/**
-	Performs the accessTokenRequest if credentials are already provided, or ask for them with a native controller.
+	Performs the accessTokenRequest if credentials are already provided, or ask for them with a native view controller.
+	
+	- parameter params: Optional key/value pairs to pass during authorization
 	*/
 	override open func doAuthorize(params: OAuth2StringDict? = nil) throws {
 		if username?.isEmpty ?? true || password?.isEmpty ?? true {
@@ -107,6 +111,8 @@ open class OAuth2PasswordGrant: OAuth2 {
 	
 	/**
 	Present the delegate's loginController to the user.
+	
+	- parameter params: Optional key/value pairs to pass during authorization
 	*/
 	private func askForCredentials(params: OAuth2StringDict? = nil) throws {
 		logger?.debug("OAuth2", msg: "Presenting the login controller")
@@ -114,10 +120,20 @@ open class OAuth2PasswordGrant: OAuth2 {
 			throw OAuth2Error.noPasswordGrantDelegate
 		}
 		
-		try loginPresenter.present(loginController: delegate.loginController(oauth2: self),
-								   fromContext: authConfig.authorizeContext,
-								   animated: true)
+		// set internal after auth callback to dismiss vc if there was no error, unless configured otherwise
+		internalAfterAuthorizeOrFail = { wasFailure , error in
+			self.customAuthParams = nil
+			
+			if self.authConfig.authorizeEmbeddedAutoDismiss, (!wasFailure || error! == OAuth2Error.requestCancelled) {
+				self.logger?.debug("OAuth2", msg: "Dismissing the login controller")
+				self.customAuthorizer.dismissLoginController(animated: true)
+			}
+		}
+		
+		// tell the custom authorizer to present the login screen
 		customAuthParams = params
+		let controller = delegate.loginController(oauth2: self)
+		try customAuthorizer.present(loginController: controller, fromContext: authConfig.authorizeContext, animated: true)
 	}
 	
 	/**
@@ -131,41 +147,31 @@ open class OAuth2PasswordGrant: OAuth2 {
 	- parameter completionHandler: The closure to call once the server responded. The response's JSON is send if the server accepted the
 	                               given credentials. If the JSON is empty, see the error field for more information about the failure.
 	*/
-	public func tryCredentials(username: String,
-							   password: String,
-							   errorHandler: @escaping (OAuth2Error) -> Void) {
+	public func tryCredentials(username: String, password: String, errorHandler: @escaping (OAuth2Error) -> Void) {
 		self.username = username
 		self.password = password
 		
-		// Perform the request
-		obtainAccessToken(params: customAuthParams, callback: { params, error in
+		// perform the request
+		obtainAccessToken(params: customAuthParams) { params, error in
 			
-			// Reset credentials on error
+			// reset credentials on error
 			if let error = error {
 				self.username = nil
 				self.password = nil
 				errorHandler(error)
 			}
 			
-			// Automatically end the authorization process with a success
+			// automatically end the authorization process with a success
 			else {
 				self.didAuthorize(withParameters: params ?? OAuth2JSON())
 			}
-		})
-	}
-	
-	/**
-	Dismiss the login controller if any.
-	
-	- parameter animated: Whether the dismissal should be animated.
-	*/
-	open func dismissLoginController(animated: Bool = true) {
-		logger?.debug("OAuth2", msg: "Dismissing the login controller")
-		loginPresenter.dismissLoginController(animated: animated)
+		}
 	}
 	
 	/**
 	Creates a POST request with x-www-form-urlencoded body created from the supplied URL's query part.
+	
+	- parameter params: Optional key/value pairs to pass during authorization
 	*/
 	open func accessTokenRequest(params: OAuth2StringDict? = nil) throws -> OAuth2AuthRequest {
 		if username?.isEmpty ?? true {
@@ -195,6 +201,7 @@ open class OAuth2PasswordGrant: OAuth2 {
 	
 	Uses `accessTokenRequest(params:)` to create the request, which you can subclass to change implementation specifics.
 	
+	- parameter params: Optional key/value pairs to pass during authorization
 	- parameter callback: The callback to call after the request has returned
 	*/
 	public func obtainAccessToken(params: OAuth2StringDict? = nil, callback: @escaping ((_ params: OAuth2JSON?, _ error: OAuth2Error?) -> Void)) {
