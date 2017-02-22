@@ -88,8 +88,14 @@ open class OAuth2PasswordGrant: OAuth2 {
 		super.init(settings: settings)
 	}
 	
+	
+	// MARK: - Auth Flow
+	
 	/**
 	Performs the accessTokenRequest if credentials are already provided, or ask for them with a native view controller.
+	
+	If you choose to **not** automatically dismiss the login controller, you can do so on your own by calling
+	`dismissLoginController(animated:)`.
 	
 	- parameter params: Optional key/value pairs to pass during authorization
 	*/
@@ -125,8 +131,7 @@ open class OAuth2PasswordGrant: OAuth2 {
 			self.customAuthParams = nil
 			
 			if self.authConfig.authorizeEmbeddedAutoDismiss, (!wasFailure || error! == OAuth2Error.requestCancelled) {
-				self.logger?.debug("OAuth2", msg: "Dismissing the login controller")
-				self.customAuthorizer.dismissLoginController(animated: true)
+				self.dismissLoginController(animated: true)
 			}
 		}
 		
@@ -167,6 +172,22 @@ open class OAuth2PasswordGrant: OAuth2 {
 			}
 		}
 	}
+	
+	/**
+	Dismiss the login controller, if any.
+	
+	- parameter animated: Whether dismissal should be animated
+	*/
+	open func dismissLoginController(animated: Bool = true) {
+		logger?.debug("OAuth2", msg: "Dismissing the login controller")
+		customAuthorizer.dismissLoginController(animated: animated)
+		if isAuthorizing {
+			didFail(with: nil)
+		}
+	}
+	
+	
+	// MARK: - Access Token Request
 	
 	/**
 	Creates a POST request with x-www-form-urlencoded body created from the supplied URL's query part.
