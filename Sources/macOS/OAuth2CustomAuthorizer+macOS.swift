@@ -46,15 +46,13 @@ public class OAuth2CustomAuthorizer: OAuth2CustomAuthorizerUI {
 	- parameter fromContext:     The controller to which present the login controller. Should be a `NSViewController`
 	- parameter animated:        Whether the presentation should be animated.
 	*/
-	public func present(loginController: AnyObject?, fromContext context: AnyObject?, animated: Bool) throws {
+	public func present(loginController: AnyObject, fromContext context: AnyObject?, animated: Bool) throws {
 		guard #available(macOS 10.10, *) else {
 			throw OAuth2Error.generic("Native authorizing is only available in OS X 10.10 and later")
 		}
-		
 		guard let parentController = context as? NSViewController else {
 			throw context == nil ? OAuth2Error.noAuthorizationContext : OAuth2Error.invalidAuthorizationContext
 		}
-		
 		guard let controller = loginController as? NSViewController else {
 			throw OAuth2Error.invalidLoginController(actualType: String(describing: type(of: loginController)),
 													 expectedType: String(describing: NSViewController.self))
