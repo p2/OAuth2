@@ -20,7 +20,7 @@
         <a class="header-link" href="../index.html">
           OAuth2 Docs
         </a>
-         (97% documented)
+         (98% documented)
       </p>
     
         <p class="header-col header-col--secondary">
@@ -79,6 +79,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Classes/OAuth2PasswordGrant.html">OAuth2PasswordGrant</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/OAuth2PasswordGrantDelegate.html">OAuth2PasswordGrantDelegate</a>
               </li>
             </ul>
           </li>
@@ -195,6 +198,12 @@
                 <a class="nav-group-task-link" href="../Classes/OAuth2Authorizer.html">OAuth2Authorizer</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/OAuth2CustomAuthorizerUI.html">OAuth2CustomAuthorizerUI</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/OAuth2CustomAuthorizer.html">OAuth2CustomAuthorizer</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Classes/OAuth2ContextStore.html">OAuth2ContextStore</a>
               </li>
               <li class="nav-group-task">
@@ -202,6 +211,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Classes/OAuth2WebViewController.html">OAuth2WebViewController</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/OAuth2DataLoaderSessionTaskDelegate.html">OAuth2DataLoaderSessionTaskDelegate</a>
               </li>
             </ul>
           </li>
@@ -258,6 +270,33 @@
           <div class="section-content">
             <div class="task-group">
               <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZvC6OAuth26OAuth217clientIdMandatorySb"></a>
+                    <a name="//apple_ref/swift/Variable/clientIdMandatory" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZvC6OAuth26OAuth217clientIdMandatorySb">clientIdMandatory</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Whether the flow type mandates client identification.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">class</span> <span class="k">var</span> <span class="nv">clientIdMandatory</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
                 <li class="item">
                   <div>
                     <code>
@@ -444,53 +483,6 @@ will be attempted and if it success, an access token will be requested.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth26OAuth29authorizeFT6paramsGSqGVs10DictionarySSSS___T_"></a>
-                    <a name="//apple_ref/swift/Method/authorize(params:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth26OAuth29authorizeFT6paramsGSqGVs10DictionarySSSS___T_">authorize(params:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>This method is deprecated in version 3.0 and has been replaced with <code><a href="../Classes/OAuth2.html#/s:FC6OAuth26OAuth29authorizeFT6paramsGSqGVs10DictionarySSSS__8callbackFTGSqGS1_SSP___GSqOS_11OAuth2Error__T__T_">authorize(params:callback:)</a></code>.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">func</span> <span class="nf">authorize</span><span class="p">(</span><span class="nv">params</span><span class="p">:</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth216OAuth2StringDict">OAuth2StringDict</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>params</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>Optional key/value pairs to pass during authorization and token refresh</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
                     <a name="/s:FC6OAuth26OAuth217authorizeEmbeddedFT4fromPs9AnyObject_6paramsGSqGVs10DictionarySSSS__8callbackFTGSqGS2_SSP___GSqOS_11OAuth2Error__T__T_"></a>
                     <a name="//apple_ref/swift/Method/authorizeEmbedded(from:params:callback:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:FC6OAuth26OAuth217authorizeEmbeddedFT4fromPs9AnyObject_6paramsGSqGVs10DictionarySSSS__8callbackFTGSqGS2_SSP___GSqOS_11OAuth2Error__T__T_">authorizeEmbedded(from:params:callback:)</a>
@@ -553,66 +545,6 @@ will be attempted and if it success, an access token will be requested.</p>
                               <td>
                                 <div>
                                   <p>The callback to call when authorization finishes (parameters will be non-nil but may be an empty dict), fails or is cancelled (error will be non-nil, e.g. <code>.requestCancelled</code> if auth was aborted)</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FC6OAuth26OAuth217authorizeEmbeddedFT4fromPs9AnyObject_6paramsGSqGVs10DictionarySSSS___T_"></a>
-                    <a name="//apple_ref/swift/Method/authorizeEmbedded(from:params:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth26OAuth217authorizeEmbeddedFT4fromPs9AnyObject_6paramsGSqGVs10DictionarySSSS___T_">authorizeEmbedded(from:params:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>This method is deprecated in version 3.0 and has been replaced with <code><a href="../Classes/OAuth2.html#/s:FC6OAuth26OAuth217authorizeEmbeddedFT4fromPs9AnyObject_6paramsGSqGVs10DictionarySSSS__8callbackFTGSqGS2_SSP___GSqOS_11OAuth2Error__T__T_">authorizeEmbedded(from:params:callback:)</a></code>.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">authorizeEmbedded</span><span class="p">(</span><span class="n">from</span> <span class="nv">context</span><span class="p">:</span> <span class="kt">AnyObject</span><span class="p">,</span> <span class="nv">params</span><span class="p">:</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth216OAuth2StringDict">OAuth2StringDict</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>from</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The context to start authorization from, depends on platform (UIViewController or NSWindow, see <code>authorizeContext</code>)</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>params</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>Optional key/value pairs to pass during authorization</p>
 
                                 </div>
                               </td>
@@ -1185,6 +1117,8 @@ authorization screen. Set <code>oauth2.authConfig.authorizeContext</code> accord
                       <div class="abstract">
                         <p>If there is a refresh token, use it to receive a fresh access token.</p>
 
+<p>If the request returns an error, the refresh token is thrown away.</p>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -1300,7 +1234,7 @@ If both are nil, instantiates a blank <code><a href="../Classes/OAuth2DynReg.htm
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2017 <a class="link" href="https://github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2017-01-31)</p>
+      <p>&copy; 2017 <a class="link" href="https://github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2017-02-28)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
