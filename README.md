@@ -27,8 +27,11 @@ Usage
 
 To use OAuth2 in your own code, start with `import OAuth2` (use `p2_OAuth2` if you installed _p2.OAuth2_ via CocoaPods) in your source files.
 
-A typical code grant flow is used for demo purposes below.
+In OAuth2 there are [**different kinds of _flows_**](https://tools.ietf.org/html/rfc6749#page-2).
+This library supports all of them, make sure you're using the correct one for your use-case and authorization server.
+A typical **code grant flow** is used for demo purposes below.
 The steps for other flows are mostly the same short of instantiating a different subclass and using different client settings.
+
 Still not working?
 See [site-specific peculiarities](#site-specific-peculiarities).
 
@@ -50,7 +53,7 @@ let oauth2 = OAuth2CodeGrant(settings: [
 ```
 
 See those `redirect_uris`?
-You can use the scheme you want, but you must **a)** declare the scheme you use in your `Info.plist` and **b)** register the very same URI on the website you connect to.
+You can use the scheme you want, but you must **a)** declare the scheme you use in your `Info.plist` and **b)** register the very same URI on the authorization server you connect to.
 
 Note that **as of iOS 9**, you _should_ use [Universal Links](https://developer.apple.com/library/content/documentation/General/Conceptual/AppSearch/UniversalLinks.html) as your redirect URL, rather than a custom app scheme.
 This prevents others from re-using your URI scheme and intercept the authorization flow.
