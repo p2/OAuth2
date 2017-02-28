@@ -1,5 +1,5 @@
 //
-//  OAuth2CustomAuthorizer+iOS.swift
+//  OAuth2CustomAuthorizer+tvOS.swift
 //  OAuth2
 //
 //  Created by Amaury David on 08/02/2017.
@@ -17,7 +17,7 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 //
-#if os(iOS)
+#if os(tvOS)
 
 import Foundation
 import UIKit
