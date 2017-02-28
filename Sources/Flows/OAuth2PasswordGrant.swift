@@ -66,7 +66,7 @@ open class OAuth2PasswordGrant: OAuth2 {
 	/// The password to use during authorization.
 	open var password: String?
 	
-	// Properties used to handle the native controller
+	/// Properties used to handle the native controller.
 	lazy var customAuthorizer: OAuth2CustomAuthorizerUI = OAuth2CustomAuthorizer()
 	
 	/**

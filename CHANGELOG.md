@@ -5,11 +5,12 @@ Version numbering represents the Swift version, plus a running number representi
 You can also refer to commit logs to get details on what was implemented, fixed and improved.
 
 
-### x.x.x
+### 3.0.3
 
 - Allow more UI customization via `authConfig.UI` and making `OAuth2Authorizer` friendlier to subclassing
 - Implement custom authorization UIs for password grants (thanks @amaurydavid !)
 - Optionally allow `DataLoader` to follow 302 redirects automatically (on same host)
+- Fix a bug with data loader not using refresh tokens (#184)
 
 
 ### 3.0.2

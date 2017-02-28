@@ -32,6 +32,7 @@ public class OAuth2CustomAuthorizer: OAuth2CustomAuthorizerUI {
 	
 	private var presentedController: NSViewController?
 	
+	/** Initializer. */
 	public init() {  }
 	
 	
