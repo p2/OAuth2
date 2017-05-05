@@ -60,7 +60,7 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 					interceptComponents = URLComponents(url: url, resolvingAgainstBaseURL: true)
 				}
 				else {
-					oauth?.logger?.warn("OAuth2", msg: "Failed to parse URL \(interceptURLString), discarding")
+					oauth?.logger?.warn("OAuth2", msg: "Failed to parse URL \(interceptURLString!), discarding")
 					interceptURLString = nil
 				}
 			}
