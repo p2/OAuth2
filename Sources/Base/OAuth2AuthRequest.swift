@@ -244,7 +244,7 @@ public struct OAuth2RequestParams {
 	/// The parameters to be used.
 	public private(set) var params: OAuth2StringDict? = nil
 	
-	/** Designated initalizer. */
+	/** Designated initializer. */
 	public init() {  }
 	
 	public subscript(key: String) -> String? {

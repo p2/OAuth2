@@ -155,7 +155,7 @@ open class OAuth2DataLoader: OAuth2Requestable {
 	This method will ignore calls while authorization is ongoing, meaning you will only get the callback once per authorization cycle.
 	
 	- parameter callback: The callback passed on from `authorize(callback:)`. Authorization finishes successfully (auth parameters will be
-	                      non-nil but may be an empty dict), fails (error will be non-nil) or is cancelled (both params and error are nil)
+	                      non-nil but may be an empty dict), fails (error will be non-nil) or is canceled (both params and error are nil)
 	*/
 	open func attemptToAuthorize(callback: @escaping ((OAuth2JSON?, OAuth2Error?) -> Void)) {
 		if !isAuthorizing {
