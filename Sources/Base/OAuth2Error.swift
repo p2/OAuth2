@@ -94,7 +94,7 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 	/// The request is invalid.
 	case invalidRequest
 	
-	/// The request was cancelled.
+	/// The request was canceled.
 	case requestCancelled
 	
 	
@@ -233,7 +233,7 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 		case .invalidRequest:
 			return "The request is missing a required parameter, includes an invalid parameter value, includes a parameter more than once, or is otherwise malformed."
 		case .requestCancelled:
-			return "The request has been cancelled"
+			return "The request has been canceled"
 		case .noTokenType:
 			return "No token type received, will not use the token"
 		case .unsupportedTokenType(let message):

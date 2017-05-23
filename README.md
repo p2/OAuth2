@@ -146,7 +146,7 @@ oauth2.authorize() { authParameters, error in
         print("Authorized! Additional parameters: \(params)")
     }
     else {
-        print("Authorization was cancelled or went wrong: \(error)")   // error will not be nil
+        print("Authorization was canceled or went wrong: \(error)")   // error will not be nil
     }
 }
 

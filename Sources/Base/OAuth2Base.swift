@@ -54,7 +54,7 @@ open class OAuth2Base: OAuth2Securable {
 		set { clientConfig.clientSecret = newValue }
 	}
 	
-	/// The name of the client, as used during dynamic client registration. Use "client_name" during initalization to set.
+	/// The name of the client, as used during dynamic client registration. Use "client_name" during initialization to set.
 	open var clientName: String? {
 		get { return clientConfig.clientName }
 	}

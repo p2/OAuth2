@@ -83,7 +83,7 @@ open class OAuth2ClientConfig {
 	/// http://stackoverflow.com/questions/27739442/ios-safari-does-not-recognize-url-schemes-after-user-cancels
 	/// https://community.fitbit.com/t5/Web-API/oAuth2-authentication-page-gives-me-a-quot-Cannot-Open-Page-quot-error/td-p/1150391
 	///
-	/// Toggling `safariCancelWorkaround` to true will send an extra get-paramter to make the url unique, thus it will ask again for the new
+	/// Toggling `safariCancelWorkaround` to true will send an extra get-parameter to make the url unique, thus it will ask again for the new
 	/// url.
 	open var safariCancelWorkaround = false	
 	

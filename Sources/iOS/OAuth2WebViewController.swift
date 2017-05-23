@@ -66,7 +66,7 @@ open class OAuth2WebViewController: UIViewController, WKNavigationDelegate {
 	/// that you've intercepted the URL.
 	var onIntercept: ((URL) -> Bool)?
 	
-	/// Called when the web view is about to be dismissed. The Bool indicates whether the request was (user-)cancelled.
+	/// Called when the web view is about to be dismissed. The Bool indicates whether the request was (user-)canceled.
 	var onWillDismiss: ((_ didCancel: Bool) -> Void)?
 	
 	/// Assign to override the back button, shown when it's possible to go back in history. Will adjust target/action accordingly.
