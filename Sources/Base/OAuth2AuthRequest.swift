@@ -195,7 +195,10 @@ open class OAuth2AuthRequest {
 			// add Authorization header (if not in body)
 			else {
 				oauth2.logger?.debug("OAuth2", msg: "Adding “Authorization” header as “Basic client-key:client-secret”")
-				let pw = "\(clientId.wwwFormURLEncodedString):\(secret.wwwFormURLEncodedString)"
+                if clientId.contains(":") {
+                    oauth2.logger?.warn("OAuth2", msg: "Client-key contains colon, disallowed by RFC 7617. Authentication will probably fail")
+                }
+				let pw = "\(clientId):\(secret)"
 				if let utf8 = pw.data(using: oauth2.clientConfig.authStringEncoding) {
 					req.setValue("Basic \(utf8.base64EncodedString())", forHTTPHeaderField: "Authorization")
 				}
