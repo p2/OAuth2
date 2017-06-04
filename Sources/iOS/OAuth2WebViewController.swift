@@ -46,13 +46,13 @@ open class OAuth2WebViewController: UIViewController, WKNavigationDelegate {
 	/// The URL string to intercept and respond to.
 	var interceptURLString: String? {
 		didSet(oldURL) {
-			if nil != interceptURLString {
-				if let url = URL(string: interceptURLString!) {
+			if let interceptURLString = interceptURLString {
+				if let url = URL(string: interceptURLString) {
 					interceptComponents = URLComponents(url: url, resolvingAgainstBaseURL: true)
 				}
 				else {
 					oauth?.logger?.debug("OAuth2", msg: "Failed to parse URL \(interceptURLString!), discarding")
-					interceptURLString = nil
+					self.interceptURLString = nil
 				}
 			}
 			else {
