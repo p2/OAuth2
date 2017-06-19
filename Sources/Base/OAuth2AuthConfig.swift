@@ -55,6 +55,9 @@ public struct OAuth2AuthConfig {
 		#endif
 	}
 	
+	/// Whether to always refresh the token or to only do it when it's expired.
+	public var refreshTokenWhenUnexpired = false
+	
 	/// Whether to use an embedded web view for authorization (true) or the OS browser (false, the default).
 	public var authorizeEmbedded = false
 	
