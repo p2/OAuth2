@@ -168,7 +168,7 @@ open class OAuth2: OAuth2Base {
 	/**
 	Attempts to receive a new access token by:
 	
-	1. checking if there still is an unexpired token
+	1. checking if there still is an unexpired token (if configured like so)
 	2. attempting to use a refresh token
 	
 	Indicates, in the callback, whether the client has been able to obtain an access token that is likely to still work (but there is no
@@ -179,7 +179,7 @@ open class OAuth2: OAuth2Base {
 	                      access token is present
 	*/
 	open func tryToObtainAccessTokenIfNeeded(params: OAuth2StringDict? = nil, callback: @escaping ((OAuth2JSON?) -> Void)) {
-		if hasUnexpiredAccessToken() {
+		if !authConfig.refreshTokenWhenUnexpired && hasUnexpiredAccessToken() {
 			logger?.debug("OAuth2", msg: "Have an apparently unexpired access token")
 			callback(OAuth2JSON())
 		}
