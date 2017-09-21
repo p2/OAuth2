@@ -34,7 +34,7 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 	
 	/** Designated initializer. */
 	public init() {
-		super.init(nibName: nil, bundle: nil)!
+		super.init(nibName: nil, bundle: nil)
 	}
 	
 	/// Handle to the OAuth2 instance in play, only used for debug logging at this time.
@@ -78,7 +78,7 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 	public var onIntercept: ((URL) -> Bool)?
 	
 	/// Called when the web view is about to be dismissed manually.
-	public var onWillCancel: ((Void) -> Void)?
+	public var onWillCancel: (() -> Void)?
 	
 	/// Our web view; implicitly unwrapped so do not attempt to use it unless isViewLoaded() returns true.
 	var webView: WKWebView!
@@ -89,7 +89,7 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 		view.translatesAutoresizingMaskIntoConstraints = false
 		
 		progressIndicator = NSProgressIndicator(frame: NSZeroRect)
-		progressIndicator.style = .spinningStyle
+		progressIndicator.style = .spinning
 		progressIndicator.isDisplayedWhenStopped = false
 		progressIndicator.sizeToFit()
 		progressIndicator.translatesAutoresizingMaskIntoConstraints = false
@@ -216,7 +216,7 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 	/**
 	Tells the web view to stop loading the current page, then calls the `onWillCancel` block if it has a value.
 	*/
-	func cancel(_ sender: AnyObject?) {
+    @objc func cancel(_ sender: AnyObject?) {
 		webView.stopLoading()
 		onWillCancel?()
 	}
@@ -280,8 +280,8 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 	
 	
 	// MARK: - Window Delegate
-	
-	public func windowShouldClose(_ sender: Any) -> Bool {
+    
+	public func windowShouldClose(_ sender: NSWindow) -> Bool {
 		onWillCancel?()
 		return false
 	}
