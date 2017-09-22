@@ -216,7 +216,7 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 	/**
 	Tells the web view to stop loading the current page, then calls the `onWillCancel` block if it has a value.
 	*/
-    @objc func cancel(_ sender: AnyObject?) {
+	@objc func cancel(_ sender: AnyObject?) {
 		webView.stopLoading()
 		onWillCancel?()
 	}
