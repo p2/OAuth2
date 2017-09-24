@@ -18,3 +18,4 @@ Contributors to the codebase, in reverse chronological order:
 - Tomohiro Kumagai, @ez-net
 - Tim Sneed, @trsneed
 - Vojto Rinik, @vojto
+- Paul Wilkinson, @paulw11
