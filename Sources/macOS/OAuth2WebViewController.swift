@@ -281,9 +281,9 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 	
 	// MARK: - Window Delegate
 
-	public func windowShouldClose(_ sender: NSWindow) -> Bool {
-		onWillCancel?()
-		return false
+    public func windowShouldClose(_ sender: NSWindow) -> Bool {
+        onWillCancel?()
+        return false
 	}
 }
 
