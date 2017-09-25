@@ -167,11 +167,11 @@ open class OAuth2WebViewController: UIViewController, WKNavigationDelegate {
 		let _ = webView?.load(URLRequest(url: url))
 	}
 	
-	func goBack(_ sender: AnyObject?) {
+	@objc func goBack(_ sender: AnyObject?) {
 		let _ = webView?.goBack()
 	}
 	
-	func cancel(_ sender: AnyObject?) {
+	@objc func cancel(_ sender: AnyObject?) {
 		dismiss(asCancel: true, animated: (nil != sender) ? true : false)
 	}
 	

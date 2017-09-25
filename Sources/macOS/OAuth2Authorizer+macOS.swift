@@ -60,7 +60,7 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 	- throws:        UnableToOpenAuthorizeURL on failure
 	*/
 	public func openAuthorizeURLInBrowser(_ url: URL) throws {
-		if !NSWorkspace.shared().open(url) {
+		if !NSWorkspace.shared.open(url) {
 			throw OAuth2Error.unableToOpenAuthorizeURL
 		}
 	}
