@@ -111,7 +111,11 @@ open class OAuth2: OAuth2Base {
 				self.didAuthorize(withParameters: successParams)
 			}
 			else {
-                self.logger?.debug("OAuth2", msg: "Error obtaining token \(String(describing: error))")
+				self.logger?.debug("OAuth2", msg: "Error obtaining token \(String(describing: error))")
+				if let err = error, case .nsError(_) = err {
+					self.didFail(with: error)
+					return
+				}
 				self.registerClientIfNeeded() { json, error in
 					if let error = error {
 						self.didFail(with: error)
