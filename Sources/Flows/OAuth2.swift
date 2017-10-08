@@ -109,13 +109,11 @@ open class OAuth2: OAuth2Base {
 		tryToObtainAccessTokenIfNeeded(params: params) { successParams, error in
 			if let successParams = successParams {
 				self.didAuthorize(withParameters: successParams)
+            }
+			else if let error = error {
+				self.didFail(with: error)
 			}
 			else {
-				self.logger?.debug("OAuth2", msg: "Error obtaining token \(String(describing: error))")
-				if let err = error, case .nsError(_) = err {
-					self.didFail(with: error)
-					return
-				}
 				self.registerClientIfNeeded() { json, error in
 					if let error = error {
 						self.didFail(with: error)
@@ -196,7 +194,7 @@ open class OAuth2: OAuth2Base {
 				}
 				else {
 					if let err = error {
-						self.logger?.debug("OAuth2", msg: "\(err)")
+                        self.logger?.debug("OAuth2", msg: "Error refreshing token: \(err)")
 					}
 					callback(nil, error)
 				}
