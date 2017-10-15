@@ -196,11 +196,11 @@ open class OAuth2: OAuth2Base {
 					var returnedError: OAuth2Error? = nil
 					if let err = error {
 						self.logger?.debug("OAuth2", msg: "Error refreshing token: \(err)")
-						if case .noRefreshToken = err {
+						switch err {
+						case .noRefreshToken, .noClientId:
 							returnedError = nil
-						}
-						else {
-							returnedError = error
+						default:
+							returnedError = err
 						}
 					}
 					callback(nil, returnedError)
