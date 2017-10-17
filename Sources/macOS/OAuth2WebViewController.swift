@@ -243,6 +243,8 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 				else {
 					decisionHandler(.allow)
 				}
+                
+                return
 			}
 		}
 		
