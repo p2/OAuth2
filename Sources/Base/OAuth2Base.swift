@@ -190,7 +190,7 @@ open class OAuth2Base: OAuth2Securable {
 		return authURL.description
 	}
 	
-	override func updateFromKeychainItems(_ items: [String: Any]) {
+	override open func updateFromKeychainItems(_ items: [String: Any]) {
 		for message in clientConfig.updateFromStorableItems(items) {
 			logger?.debug("OAuth2", msg: message)
 		}
