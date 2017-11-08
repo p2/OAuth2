@@ -7,7 +7,7 @@
 
 Pod::Spec.new do |s|
   s.name         = "p2.OAuth2"
-  s.version      = "3.0.3"
+  s.version      = "4.0.1"
   s.summary      = "OAuth2 framework for macOS, iOS and tvOS, written in Swift."
   s.description  = <<-DESC
                    OAuth2 frameworks for macOS, iOS and tvOS written in Swift.
@@ -35,6 +35,5 @@ Pod::Spec.new do |s|
   s.osx.source_files = "Sources/macOS/*.swift"
   s.tvos.source_files = "Sources/tvOS/*.swift"
 
- #s.dependency "SwiftKeychain", "~> 1.0"
   s.ios.framework = "SafariServices"
 end
