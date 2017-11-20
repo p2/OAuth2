@@ -127,7 +127,7 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 		
 		view.addSubview(webView)
 		view.addConstraint(NSLayoutConstraint(item: webView, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1.0, constant: 0.0))
-		view.addConstraint(NSLayoutConstraint(item: webView, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1.0, constant: 0.0))
+		view.addConstraint(NSLayoutConstraint(item: webView, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1.0, constant: (willBecomeSheet ? -40.0 : 0.0)))
 		view.addConstraint(NSLayoutConstraint(item: webView, attribute: .left, relatedBy: .equal, toItem: view, attribute: .left, multiplier: 1.0, constant: 0.0))
 		view.addConstraint(NSLayoutConstraint(item: webView, attribute: .right, relatedBy: .equal, toItem: view, attribute: .right, multiplier: 1.0, constant: 0.0))
 		
@@ -136,6 +136,7 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 			let button = NSButton(frame: NSRect(x: 0, y: 0, width: 120, height: 20))
 			button.translatesAutoresizingMaskIntoConstraints = false
 			button.title = "Cancel"
+			button.bezelStyle = .rounded
 			button.target = self
 			button.action = #selector(OAuth2WebViewController.cancel(_:))
 			view.addSubview(button)
