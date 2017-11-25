@@ -78,7 +78,7 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 	public var onIntercept: ((URL) -> Bool)?
 	
 	/// Called when the web view is about to be dismissed manually.
-	public var onWillCancel: ((Void) -> Void)?
+	public var onWillCancel: (() -> Void)?
 	
 	/// Our web view; implicitly unwrapped so do not attempt to use it unless isViewLoaded() returns true.
 	var webView: WKWebView!
