@@ -69,6 +69,10 @@ public protocol OAuth2Logger {
 	/// The logger's logging level.
 	var level: OAuth2LogLevel { get }
 	
+	/** This is made a protocol method so it can be implemented in `extension OAuth2Logger` **and** you're able to create your own class
+	that overrides this method so you can write your own implementation. */
+	func log(_ atLevel: OAuth2LogLevel, module: String?, filename: String?, line: Int?, function: String?, msg: @autoclosure() -> String)
+
 	/** Log a message at the trace level. */
 	func trace(_ module: String?, filename: String?, line: Int?, function: String?, msg: @autoclosure() -> String)
 	
@@ -84,6 +88,8 @@ extension OAuth2Logger {
 	/**
 	The main log method, figures out whether to log the given message based on the receiver's logging level, then just uses `print`. Ignores
 	filename, line and function.
+	If you override this method in your own logger there's no need to override the `trace`, `debug` and `warn` methods implemented below as
+	they all call out to this one.
 	*/
 	public func log(_ atLevel: OAuth2LogLevel, module: String?, filename: String?, line: Int?, function: String?, msg: @autoclosure() -> String) {
 		if level != .off && atLevel.rawValue >= level.rawValue {
