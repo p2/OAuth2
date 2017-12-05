@@ -80,7 +80,7 @@ class OAuth2ImplicitGrantTests: XCTestCase
 		oauth.didAuthorizeOrFail = { authParameters, error in
 			XCTAssertNil(authParameters, "Nil auth dict expected")
 			XCTAssertNotNil(error, "Error message expected")
-			XCTAssertEqual(error, OAuth2Error.accessDenied)
+			XCTAssertEqual(error, OAuth2Error.accessDenied(nil))
 			XCTAssertEqual(error?.description, "The resource owner or authorization server denied the request.")
 		}
 		oauth.handleRedirectURL(URL(string: "https://auth.ful.io#error=access_denied")!)
