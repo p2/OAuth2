@@ -91,7 +91,7 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 	/// Unable to open the authorize URL.
 	case unableToOpenAuthorizeURL
 	
-	/// The request is invalid.
+	/// The request is invalid. Passes the underlying error_description.
 	case invalidRequest(String?)
 	
 	/// The request was canceled.
@@ -103,7 +103,7 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 	/// There was no token type in the response.
 	case noTokenType
 	
-	/// The token type is not supported.
+	/// The token type is not supported. Passes the underlying error_description.
 	case unsupportedTokenType(String)
 	
 	/// There was no data in the response.
@@ -130,7 +130,7 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 	
 	// MARK: - OAuth2 errors
 	
-	/// The client is unauthorized (HTTP status 401).
+	/// The client is unauthorized (HTTP status 401). Passes the underlying error_description.
 	case unauthorizedClient(String?)
 	
 	/// The request was forbidden (HTTP status 403).
@@ -139,22 +139,22 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 	/// Username or password was wrong (HTTP status 403 on password grant).
 	case wrongUsernamePassword
 	
-	/// Access was denied.
+	/// Access was denied. Passes the underlying error_description.
 	case accessDenied(String?)
 	
-	/// Response type is not supported.
+	/// Response type is not supported. Passes the underlying error_description.
 	case unsupportedResponseType(String?)
 	
-	/// Scope was invalid.
+	/// Scope was invalid. Passes the underlying error_description.
 	case invalidScope(String?)
 	
 	/// A 500 was thrown.
 	case serverError
 	
-	/// The service is temporarily unavailable.
+	/// The service is temporarily unavailable. Passes the underlying error_description.
 	case temporarilyUnavailable(String?)
 
-	/// Invalid grant.
+	/// Invalid grant. Passes the underlying error_description.
 	case invalidGrant(String?)
 
 	/// Other response error, as defined in its String.
