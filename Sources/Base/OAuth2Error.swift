@@ -92,7 +92,7 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 	case unableToOpenAuthorizeURL
 	
 	/// The request is invalid.
-	case invalidRequest
+	case invalidRequest(String?)
 	
 	/// The request was canceled.
 	case requestCancelled
@@ -131,7 +131,7 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 	// MARK: - OAuth2 errors
 	
 	/// The client is unauthorized (HTTP status 401).
-	case unauthorizedClient
+	case unauthorizedClient(String?)
 	
 	/// The request was forbidden (HTTP status 403).
 	case forbidden
@@ -140,20 +140,22 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 	case wrongUsernamePassword
 	
 	/// Access was denied.
-	case accessDenied
+	case accessDenied(String?)
 	
 	/// Response type is not supported.
-	case unsupportedResponseType
+	case unsupportedResponseType(String?)
 	
 	/// Scope was invalid.
-	case invalidScope
+	case invalidScope(String?)
 	
 	/// A 500 was thrown.
 	case serverError
 	
 	/// The service is temporarily unavailable.
-	case temporarilyUnavailable
-	
+	case temporarilyUnavailable(String?)
+
+    case invalidGrant(String?)
+
 	/// Other response error, as defined in its String.
 	case responseError(String)
 	
@@ -162,27 +164,30 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 	Instantiate the error corresponding to the OAuth2 response code, if it is known.
 	
 	- parameter code: The code, like "access_denied", that should be interpreted
+    - parameter description: The description provided in the response
 	- parameter fallback: The error string to use in case the error code is not known
 	- returns: An appropriate OAuth2Error
 	*/
-	public static func fromResponseError(_ code: String, fallback: String? = nil) -> OAuth2Error {
+    public static func fromResponseError(_ code: String, description: String? = nil, fallback: String? = nil) -> OAuth2Error {
 		switch code {
 		case "invalid_request":
-			return .invalidRequest
+			return .invalidRequest(description)
 		case "unauthorized_client":
-			return .unauthorizedClient
+			return .unauthorizedClient(description)
 		case "access_denied":
-			return .accessDenied
+			return .accessDenied(description)
 		case "unsupported_response_type":
-			return .unsupportedResponseType
+			return .unsupportedResponseType(description)
 		case "invalid_scope":
-			return .invalidScope
+			return .invalidScope(description)
 		case "server_error":
 			return .serverError
 		case "temporarily_unavailable":
-			return .temporarilyUnavailable
+			return .temporarilyUnavailable(description)
+        case "invalid_grant":
+            return .invalidGrant(description)
 		default:
-			return .responseError(fallback ?? "Authorization error: \(code)")
+			return .responseError(description ?? fallback ?? "Authorization error: \(code)")
 		}
 	}
 	
@@ -253,22 +258,24 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 		case .utf8DecodeError:
 			return "Failed to decode given data as a UTF-8 string"
 		
-		case .unauthorizedClient:
-			return "Unauthorized"
+		case .unauthorizedClient(let message):
+			return message ?? "Unauthorized"
 		case .forbidden:
 			return "Forbidden"
 		case .wrongUsernamePassword:
 			return "The username or password is incorrect"
-		case .accessDenied:
-			return "The resource owner or authorization server denied the request."
-		case .unsupportedResponseType:
-			return "The authorization server does not support obtaining an access token using this method."
-		case .invalidScope:
-			return "The requested scope is invalid, unknown, or malformed."
+		case .accessDenied(let message):
+			return message ?? "The resource owner or authorization server denied the request."
+		case .unsupportedResponseType(let message):
+			return message ?? "The authorization server does not support obtaining an access token using this method."
+		case .invalidScope(let message):
+			return message ?? "The requested scope is invalid, unknown, or malformed."
 		case .serverError:
 			return "The authorization server encountered an unexpected condition that prevented it from fulfilling the request."
-		case .temporarilyUnavailable:
-			return "The authorization server is currently unable to handle the request due to a temporary overloading or maintenance of the server."
+		case .temporarilyUnavailable(let message):
+			return message ?? "The authorization server is currently unable to handle the request due to a temporary overloading or maintenance of the server."
+        case .invalidGrant(let message):
+            return message ?? "The authorization grant or refresh token is invalid, expired, revoked, does not match the redirection URI used in the authorization request, or was issued to another client."
 		case .responseError(let message):
 			return message
 		}
@@ -309,14 +316,15 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 		case (.utf8EncodeError, .utf8EncodeError):                   return true
 		case (.utf8DecodeError, .utf8DecodeError):                   return true
 		
-		case (.unauthorizedClient, .unauthorizedClient):             return true
+		case (.unauthorizedClient(let lhm), .unauthorizedClient(let rhm)):       return lhm == rhm
 		case (.forbidden, .forbidden):                               return true
 		case (.wrongUsernamePassword, .wrongUsernamePassword):       return true
-		case (.accessDenied, .accessDenied):                         return true
+		case (.accessDenied(let lhm), .accessDenied(let rhm)):                   return lhm == rhm
 		case (.unsupportedResponseType, .unsupportedResponseType):   return true
-		case (.invalidScope, .invalidScope):                         return true
+		case (.invalidScope(let lhm), .invalidScope(let rhm)):                   return lhm == rhm
 		case (.serverError, .serverError):                           return true
-		case (.temporarilyUnavailable, .temporarilyUnavailable):     return true
+		case (.temporarilyUnavailable(let lhm), .temporarilyUnavailable(let rhm)):     return lhm == rhm
+        case (.invalidGrant(let lhm), .invalidGrant(let rhm)):       return lhm == rhm
 		case (.responseError(let lhm), .responseError(let rhm)):     return lhm == rhm
 		default:                                                     return false
 		}
