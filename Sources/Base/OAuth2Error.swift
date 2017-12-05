@@ -154,7 +154,8 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 	/// The service is temporarily unavailable.
 	case temporarilyUnavailable(String?)
 
-    case invalidGrant(String?)
+	/// Invalid grant.
+	case invalidGrant(String?)
 
 	/// Other response error, as defined in its String.
 	case responseError(String)
@@ -164,11 +165,11 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 	Instantiate the error corresponding to the OAuth2 response code, if it is known.
 	
 	- parameter code: The code, like "access_denied", that should be interpreted
-    - parameter description: The description provided in the response
+	- parameter description: The description provided in the response
 	- parameter fallback: The error string to use in case the error code is not known
 	- returns: An appropriate OAuth2Error
 	*/
-    public static func fromResponseError(_ code: String, description: String? = nil, fallback: String? = nil) -> OAuth2Error {
+	public static func fromResponseError(_ code: String, description: String? = nil, fallback: String? = nil) -> OAuth2Error {
 		switch code {
 		case "invalid_request":
 			return .invalidRequest(description)
@@ -184,8 +185,8 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 			return .serverError
 		case "temporarily_unavailable":
 			return .temporarilyUnavailable(description)
-        case "invalid_grant":
-            return .invalidGrant(description)
+		case "invalid_grant":
+			return .invalidGrant(description)
 		default:
 			return .responseError(description ?? fallback ?? "Authorization error: \(code)")
 		}
@@ -274,8 +275,8 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 			return "The authorization server encountered an unexpected condition that prevented it from fulfilling the request."
 		case .temporarilyUnavailable(let message):
 			return message ?? "The authorization server is currently unable to handle the request due to a temporary overloading or maintenance of the server."
-        case .invalidGrant(let message):
-            return message ?? "The authorization grant or refresh token is invalid, expired, revoked, does not match the redirection URI used in the authorization request, or was issued to another client."
+		case .invalidGrant(let message):
+			return message ?? "The authorization grant or refresh token is invalid, expired, revoked, does not match the redirection URI used in the authorization request, or was issued to another client."
 		case .responseError(let message):
 			return message
 		}
@@ -324,7 +325,7 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 		case (.invalidScope(let lhm), .invalidScope(let rhm)):                   return lhm == rhm
 		case (.serverError, .serverError):                           return true
 		case (.temporarilyUnavailable(let lhm), .temporarilyUnavailable(let rhm)):     return lhm == rhm
-        case (.invalidGrant(let lhm), .invalidGrant(let rhm)):       return lhm == rhm
+		case (.invalidGrant(let lhm), .invalidGrant(let rhm)):       return lhm == rhm
 		case (.responseError(let lhm), .responseError(let rhm)):     return lhm == rhm
 		default:                                                     return false
 		}
