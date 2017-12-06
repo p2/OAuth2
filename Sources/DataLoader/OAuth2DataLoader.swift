@@ -115,7 +115,7 @@ open class OAuth2DataLoader: OAuth2Requestable {
 		super.perform(request: request) { response in
 			do {
 				if self.alsoIntercept403, 403 == response.response.statusCode {
-					throw OAuth2Error.unauthorizedClient
+					throw OAuth2Error.unauthorizedClient(nil)
 				}
 				let _ = try response.responseData()
 				callback(response)
