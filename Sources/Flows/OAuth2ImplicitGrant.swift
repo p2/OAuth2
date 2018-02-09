@@ -42,7 +42,7 @@ open class OAuth2ImplicitGrant: OAuth2 {
 		do {
 			// token should be in the URL fragment
 			let comp = URLComponents(url: redirect, resolvingAgainstBaseURL: true)
-			guard let fragment = comp?.percentEncodedFragment, fragment.characters.count > 0 else {
+			guard let fragment = comp?.percentEncodedFragment, fragment.count > 0 else {
 				throw OAuth2Error.invalidRedirectURL(redirect.description)
 			}
 			

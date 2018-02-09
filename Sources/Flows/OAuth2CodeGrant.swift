@@ -133,7 +133,7 @@ open class OAuth2CodeGrant: OAuth2 {
 		if !(redirect.absoluteString.hasPrefix(expectRedirect)) && (!(redirect.absoluteString.hasPrefix("urn:ietf:wg:oauth:2.0:oob")) && "localhost" != comp?.host) {
 			throw OAuth2Error.invalidRedirectURL("Expecting «\(expectRedirect)» but received «\(redirect)»")
 		}
-		if let compQuery = comp?.query, compQuery.characters.count > 0 {
+		if let compQuery = comp?.query, compQuery.count > 0 {
 			let query = OAuth2CodeGrant.params(fromQuery: comp!.percentEncodedQuery!)
 			try assureNoErrorInResponse(query as OAuth2JSON)
 			if let cd = query["code"] {
