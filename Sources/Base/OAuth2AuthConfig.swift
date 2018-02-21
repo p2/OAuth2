@@ -65,6 +65,16 @@ public struct OAuth2AuthConfig {
 	/// - iOS:   The parent view controller to present from
 	/// - macOS: An NSWindow from which to present a modal sheet _or_ `nil` to present in a new window
 	public var authorizeContext: AnyObject? = nil
+
+    /// Decider function that allows the user to decide if one type of error should
+    /// trigger an `doAuthorize`-call instead of round-tripping the error back to the user.
+    ///
+    /// It is useful to return `true` for handling cases when the `refreshToken` is expired due to the
+    /// user changing password.
+    ///
+    /// It is *NOT* useful to return `true` if you are performing requests in the background, and don't
+    /// want these requests to trigger an authentication flow (which would disturb the UI).
+    public var shouldTriggerAuthentication: ((OAuth2Error) -> Bool) = { _ in return false }
 	
 	/// UI-specific configuration.
 	public var ui = UI()

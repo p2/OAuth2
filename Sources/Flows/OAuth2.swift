@@ -106,21 +106,36 @@ open class OAuth2: OAuth2Base {
 		
 		didAuthorizeOrFail = callback
 		logger?.debug("OAuth2", msg: "Starting authorization")
+
 		tryToObtainAccessTokenIfNeeded(params: params) { successParams, error in
 			if let successParams = successParams {
 				self.didAuthorize(withParameters: successParams)
 			}
+            else if let error = error, self.authConfig.shouldTriggerAuthentication(error) {
+                DispatchQueue.main.async {
+                    do {
+                        self.logger?.debug("OAuth2", msg: "Saw error (\(error)) while obtaining `accessToken`, will try `doAuthorize` to solve it due to `authConfig.shouldTriggerAuthentication`")
+                        try self.doAuthorize(params: params)
+                    }
+                    catch let error {
+                        self.didFail(with: error.asOAuth2Error)
+                    }
+                }
+            }
 			else if let error = error {
 				self.didFail(with: error)
 			}
 			else {
 				self.registerClientIfNeeded() { json, error in
-					if let error = error {
+					if let error = error, !self.authConfig.shouldTriggerAuthentication(error) {
 						self.didFail(with: error)
 					}
 					else {
 						do {
 							assert(Thread.isMainThread)
+                            if let error = error {
+                                self.logger?.debug("OAuth2", msg: "Saw error \(error), but will start auth due to `authConfig.shouldTriggerAuthentication`")
+                            }
 							try self.doAuthorize(params: params)
 						}
 						catch let error {
