@@ -86,7 +86,7 @@ open class OAuth2Response {
 			throw error
 		}
 		else if 401 == response.statusCode {
-			throw OAuth2Error.unauthorizedClient
+			throw OAuth2Error.unauthorizedClient(nil)
 		}
 		else if 403 == response.statusCode {
 			throw OAuth2Error.forbidden

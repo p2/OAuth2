@@ -94,7 +94,7 @@ class OAuth2CodeGrantTests: XCTestCase {
 		XCTAssertNil(query["client_secret"], "Must not have `client_secret`")
 		XCTAssertEqual(query["response_type"]!, "code", "Expecting correct `response_type`")
 		XCTAssertEqual(query["redirect_uri"]!, "oauth2://callback", "Expecting correct `redirect_uri`")
-		XCTAssertTrue(8 == (query["state"]!).characters.count, "Expecting an auto-generated UUID for `state`")
+		XCTAssertTrue(8 == (query["state"]!).count, "Expecting an auto-generated UUID for `state`")
 	}
 	
 	func testRedirectURI() {

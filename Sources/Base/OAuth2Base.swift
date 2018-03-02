@@ -311,15 +311,17 @@ open class OAuth2Base: OAuth2Securable {
 	- returns: An OAuth2Error
 	*/
 	open func assureNoErrorInResponse(_ params: OAuth2JSON, fallback: String? = nil) throws {
-		
-		// "error_description" is optional, we prefer it if it's present
-		if let err_msg = params["error_description"] as? String, err_msg.count > 0 {
-			throw OAuth2Error.responseError(err_msg)
+		let err_code = params["error"] as? String
+		let err_msg = params["error_description"] as? String
+
+		// "error_description" is optional, we use it if it's present and code is not.
+		if let message = err_msg, message.count > 0 && (err_code?.isEmpty ?? true) {
+			throw OAuth2Error.responseError(message)
 		}
-		
+
 		// the "error" response is required for error responses, so it should be present
-		if let err_code = params["error"] as? String {
-			throw OAuth2Error.fromResponseError(err_code, fallback: fallback)
+		if let code = err_code, code.count > 0 {
+			throw OAuth2Error.fromResponseError(code, description: err_msg, fallback: fallback)
 		}
 	}
 	
