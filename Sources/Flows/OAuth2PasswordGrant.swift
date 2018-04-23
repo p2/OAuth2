@@ -243,9 +243,6 @@ open class OAuth2PasswordGrant: OAuth2 {
 				catch OAuth2Error.unauthorizedClient {
 					callback(nil, OAuth2Error.unauthorizedClient)
 				}
-				catch OAuth2Error.grantType {
-					callback(nil, OAuth2Error.grantType)
-				}
 				catch OAuth2Error.wrongUsernamePassword {
 					callback(nil, OAuth2Error.wrongUsernamePassword)
 				}
