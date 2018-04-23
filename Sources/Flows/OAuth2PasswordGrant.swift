@@ -240,11 +240,17 @@ open class OAuth2PasswordGrant: OAuth2 {
 					self.logger?.debug("OAuth2", msg: "Did get access token [\(nil != self.clientConfig.accessToken)]")
 					callback(dict, nil)
 				}
-				catch OAuth2Error.unauthorizedClient {     // TODO: which one is it?
+				catch OAuth2Error.unauthorizedClient {
+					callback(nil, OAuth2Error.unauthorizedClient)
+				}
+				catch OAuth2Error.grantType {
+					callback(nil, OAuth2Error.grantType)
+				}
+				catch OAuth2Error.wrongUsernamePassword {
 					callback(nil, OAuth2Error.wrongUsernamePassword)
 				}
-				catch OAuth2Error.forbidden {              // TODO: which one is it?
-					callback(nil, OAuth2Error.wrongUsernamePassword)
+				catch OAuth2Error.forbidden {
+					callback(nil, OAuth2Error.forbidden)
 				}
 				catch let error {
 					self.logger?.debug("OAuth2", msg: "Error obtaining access token: \(error)")

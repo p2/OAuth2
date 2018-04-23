@@ -21,3 +21,4 @@ Contributors to the codebase, in reverse chronological order:
 - Tim Sneed, @trsneed
 - Vojto Rinik, @vojto
 - Paul Wilkinson, @paulw11
+- Jay Cohen, @theswiftycoder
