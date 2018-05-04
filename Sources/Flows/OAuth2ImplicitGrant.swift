@@ -42,11 +42,16 @@ open class OAuth2ImplicitGrant: OAuth2 {
 		do {
 			// token should be in the URL fragment
 			let comp = URLComponents(url: redirect, resolvingAgainstBaseURL: true)
-			guard let fragment = comp?.percentEncodedFragment, fragment.count > 0 else {
+            		let queryComponent: String
+			if let fragment = comp?.percentEncodedFragment, fragment.count > 0 {
+                		queryComponent = fragment
+            		} else if let query = comp?.query, query.count > 0 {
+                		queryComponent = query
+            		} else {
 				throw OAuth2Error.invalidRedirectURL(redirect.description)
 			}
 			
-			let params = type(of: self).params(fromQuery: fragment)
+			let params = type(of: self).params(fromQuery: queryComponent)
 			let dict = try parseAccessTokenResponse(params: params)
 			logger?.debug("OAuth2", msg: "Successfully extracted access token")
 			didAuthorize(withParameters: dict)
