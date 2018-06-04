@@ -3,6 +3,7 @@ Contributors
 
 Contributors to the codebase, in reverse chronological order:
 
+- Max Bruckner, @FSMaxB-divae
 - Seb Skuse, @sebskuse
 - David Hardiman, @dhardiman
 - Amaury David, @amaurydavid
