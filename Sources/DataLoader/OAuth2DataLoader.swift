@@ -35,7 +35,9 @@ open class OAuth2DataLoader: OAuth2Requestable {
 	
 	/// If set to true, a 403 is treated as a 401. The default is false.
 	public var alsoIntercept403: Bool = false
-	
+    
+    /// If set to true, a 400 is treated as a 401. The default is false.
+    public var alsoIntercept400: Bool = false
 	
 	/**
 	Designated initializer.
@@ -103,7 +105,7 @@ open class OAuth2DataLoader: OAuth2Requestable {
 	    }
 	
 	- parameter request:  The request to execute
-	- parameter retry:    Whether the request should be retried on 401 (and possibly 403)
+	- parameter retry:    Whether the request should be retried on 401 (and possibly 400, 403)
 	- parameter callback: The callback to call when the request completes/fails
 	*/
 	open func perform(request: URLRequest, retry: Bool, callback: @escaping ((OAuth2Response) -> Void)) {
@@ -117,7 +119,10 @@ open class OAuth2DataLoader: OAuth2Requestable {
 				if self.alsoIntercept403, 403 == response.response.statusCode {
 					throw OAuth2Error.unauthorizedClient(nil)
 				}
-				let _ = try response.responseData()
+                if self.alsoIntercept400, 400 == response.response.statusCode {
+                    throw OAuth2Error.unauthorizedClient(nil)
+                }
+                let _ = try response.responseData()
 				callback(response)
 			}
 			
