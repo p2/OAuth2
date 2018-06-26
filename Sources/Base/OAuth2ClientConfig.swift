@@ -139,6 +139,10 @@ open class OAuth2ClientConfig {
 		if let assume = settings["token_assume_unexpired"] as? Bool {
 			accessTokenAssumeUnexpired = assume
 		}
+
+		guard (clientSecret == nil) || (clientId != nil) else {
+			fatalError("clientSecret is set but clientId is missing.")
+		}
 	}
 	
 	
