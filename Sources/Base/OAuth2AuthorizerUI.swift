@@ -27,7 +27,7 @@ Platform-dependent authorizers must adopt this protocol.
 public protocol OAuth2AuthorizerUI {
 	
 	/// The OAuth2 instance this authorizer belongs to.
-	unowned var oauth2: OAuth2Base { get }
+	var oauth2: OAuth2Base { get }
 	
 	/**
 	Open the authorize URL in the OS browser.
