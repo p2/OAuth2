@@ -6,6 +6,9 @@ You can also refer to commit logs to get details on what was implemented, fixed 
 
 ### Master
 
+- Swift 4.2 support.  
+  [djbe](https://github.com/djbe)
+  [#273](https://github.com/p2/OAuth2/pull/273)
 - Fix crash due to memory ownership.  
   [foldericon](https://github.com/foldericon)
   [#271](https://github.com/p2/OAuth2/pull/271)

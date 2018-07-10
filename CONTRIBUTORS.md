@@ -3,6 +3,7 @@ Contributors
 
 Contributors to the codebase, in reverse chronological order:
 
+- David Jennes, @davidjennes
 - Tim Schmitz, @tschmitz
 - Seb Skuse, @sebskuse
 - David Hardiman, @dhardiman
