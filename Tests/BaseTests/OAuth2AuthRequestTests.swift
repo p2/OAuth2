@@ -79,7 +79,9 @@ class OAuth2AuthRequestTests: XCTestCase {
 		req.params.removeValue(forKey: "b")
 		XCTAssertTrue(2 == req.params.count)
 		let str = req.params.percentEncodedQueryString()
-		XCTAssertEqual("a=AA&c=A+complicated%2Fsurprising+name+%26+character%3Dfun", str)
+
+		let parts = Set(str.split(separator: "&"))
+		XCTAssertEqual(parts, Set(["a=AA", "c=A+complicated%2Fsurprising+name+%26+character%3Dfun"]))
 	}
 	
 	func testURLComponents() {
