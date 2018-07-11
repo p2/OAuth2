@@ -37,7 +37,7 @@ open class OAuth2Base: OAuth2Securable {
 	}
 	
 	/// Settings related to the client-server relationship.
-	open let clientConfig: OAuth2ClientConfig
+	public let clientConfig: OAuth2ClientConfig
 	
 	/// Client-side authorization options.
 	open var authConfig = OAuth2AuthConfig()

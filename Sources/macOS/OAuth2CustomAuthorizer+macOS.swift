@@ -59,7 +59,7 @@ public class OAuth2CustomAuthorizer: OAuth2CustomAuthorizerUI {
 													 expectedType: String(describing: NSViewController.self))
 		}
 		
-		parentController.presentViewControllerAsSheet(controller)
+		parentController.presentAsSheet(controller)
 		presentedController = controller
 	}
 	
@@ -78,5 +78,15 @@ public class OAuth2CustomAuthorizer: OAuth2CustomAuthorizerUI {
 		presentedController = nil
 	}
 }
+
+/// Swift < 4.2 support
+#if !(swift(>=4.2))
+private extension NSViewController {
+	@available(OSXApplicationExtension 10.10, *)
+	func presentAsSheet(_ viewController: NSViewController) {
+		presentViewControllerAsSheet(viewController)
+	}
+}
+#endif
 
 #endif
