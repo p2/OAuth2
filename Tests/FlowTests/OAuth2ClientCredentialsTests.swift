@@ -72,7 +72,8 @@ class OAuth2ClientCredentialsTests: XCTestCase {
 		
 		let body = String(data: request.httpBody!, encoding: String.Encoding.utf8)
 		XCTAssertNotNil(body, "Body data must be present")
-		XCTAssertEqual(body!, "grant_type=client_credentials&scope=login+and+more", "Must create correct request body")
+		let parts = Set((body ?? "").split(separator: "&"))
+		XCTAssertEqual(parts, Set(["grant_type=client_credentials", "scope=login+and+more"]), "Must create correct request body")
 	}
 	
 	func testFailedTokenRequest() {

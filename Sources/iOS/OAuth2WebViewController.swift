@@ -115,7 +115,7 @@ open class OAuth2WebViewController: UIViewController, WKNavigationDelegate {
 		// create a web view
 		let web = WKWebView()
 		web.translatesAutoresizingMaskIntoConstraints = false
-		web.scrollView.decelerationRate = UIScrollViewDecelerationRateNormal
+		web.scrollView.decelerationRate = UIScrollView.DecelerationRate.normal
 		web.navigationDelegate = self
 		
 		view.addSubview(web)
@@ -250,5 +250,14 @@ open class OAuth2WebViewController: UIViewController, WKNavigationDelegate {
 		}
 	}
 }
+
+/// Swift < 4.2 support
+#if !(swift(>=4.2))
+private extension UIScrollView {
+	enum DecelerationRate {
+		static let normal = UIScrollViewDecelerationRateNormal
+	}
+}
+#endif
 
 #endif
