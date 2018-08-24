@@ -67,6 +67,8 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 		if !application.openURL(url) {
 			throw OAuth2Error.unableToOpenAuthorizeURL
 		}
+		#else
+		throw OAuth2Error.unableToOpenAuthorizeURL
 		#endif
 	}
 	
