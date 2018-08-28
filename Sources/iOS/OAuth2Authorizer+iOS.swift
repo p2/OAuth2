@@ -55,17 +55,13 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 	*/
 	public func openAuthorizeURLInBrowser(_ url: URL) throws {
 		
-		// By asking for the shared instance method by using the "value for key" method on UIApplication, we are able to
-		// bypass the Swift compilation restriction that blocks the library from being compiled for an extension when 
-		// directly referencing it. We do it as an optional so in the advent of this method being called, like in an 
-		// extension, we handle it as though its not supported.
-		guard let application = UIApplication.value(forKey: "sharedApplication") as? UIApplication else {
+		#if !P2_APP_EXTENSIONS
+		if !UIApplication.shared.openURL(url) {
 			throw OAuth2Error.unableToOpenAuthorizeURL
 		}
-		
-		if !application.openURL(url) {
-			throw OAuth2Error.unableToOpenAuthorizeURL
-		}
+		#else
+		throw OAuth2Error.unableToOpenAuthorizeURL
+		#endif
 	}
 	
 	/**
