@@ -352,7 +352,7 @@ open class OAuth2: OAuth2Base {
 	/**
 	If there is a refresh token, use it to receive a fresh access token.
 	
-	If the request returns an error, the refresh token is thrown away.
+	If the request returns an client error, the refresh token is thrown away.
 	
 	- parameter params:   Optional key/value pairs to pass during token refresh
 	- parameter callback: The callback to call after the refresh token exchange has finished
