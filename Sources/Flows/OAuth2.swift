@@ -366,9 +366,14 @@ open class OAuth2: OAuth2Base {
 				do {
 					let data = try response.responseData()
 					let json = try self.parseRefreshTokenResponseData(data)
-					if response.response.statusCode >= 400 {
+					switch response.response.statusCode {
+					case 400..<500:
 						self.clientConfig.refreshToken = nil
 						throw OAuth2Error.generic("Failed with status \(response.response.statusCode)")
+					case 500...599:
+						throw OAuth2Error.generic("Failed with status \(response.response.statusCode)")
+					default:
+						break
 					}
 					self.logger?.debug("OAuth2", msg: "Did use refresh token for access token [\(nil != self.clientConfig.accessToken)]")
 					callback(json, nil)
