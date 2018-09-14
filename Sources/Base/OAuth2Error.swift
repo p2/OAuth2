@@ -82,6 +82,8 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 	/// There is no delegate associated with the password grant flow instance.
 	case noPasswordGrantDelegate
 	
+	case clientError(Int)
+	
 	
 	// MARK: - Request errors
 	
