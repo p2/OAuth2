@@ -71,6 +71,9 @@ open class OAuth2ClientConfig {
 	
 	/// Add custom parameters to the authorization request.
 	public var customParameters: [String: String]? = nil
+
+	/// Whether the state parameter is optional
+	public var stateParameterOptional = false
 	
 	/// Most servers use UTF-8 encoding for Authorization headers, but that's not 100% true: make it configurable (see https://github.com/p2/OAuth2/issues/165).
 	open var authStringEncoding = String.Encoding.utf8
@@ -134,7 +137,9 @@ open class OAuth2ClientConfig {
 		if let params = settings["parameters"] as? OAuth2StringDict {
 			customParameters = params
 		}
-		
+		if let stateOptional = settings["state_parameter_optional"] as? Bool {
+			stateParameterOptional = stateOptional
+		}
 		// access token options
 		if let assume = settings["token_assume_unexpired"] as? Bool {
 			accessTokenAssumeUnexpired = assume

@@ -179,6 +179,28 @@ class OAuth2CodeGrantTests: XCTestCase {
 			XCTAssertTrue(false, "Should not throw, but threw \(error)")
 		}
 	}
+
+	func testRedirectURINoStateParameterAllowed() {
+		let settings: OAuth2JSON = [
+			"client_id": "abc",
+			"client_secret": "xyz",
+			"authorize_uri": "https://auth.ful.io",
+			"token_uri": "https://token.ful.io",
+			"keychain": false,
+			"state_parameter_optional": true
+		]
+		let oauth = OAuth2CodeGrant(settings: settings)
+		oauth.redirect = "oauth2://callback"
+		oauth.context.redirectURL = oauth.redirect
+		// parse no state
+		let redirect = URL(string: "oauth2://callback?code=C0D3")!
+		do {
+			_ = try oauth.validateRedirectURL(redirect)
+		}
+		catch let error {
+			XCTAssertTrue(false, "Must not end up here with \(error)")
+		}
+	}
 	
 	func testTokenRequest() {
 		let oauth = OAuth2CodeGrant(settings: [
