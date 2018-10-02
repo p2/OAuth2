@@ -82,10 +82,7 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 	/// There is no delegate associated with the password grant flow instance.
 	case noPasswordGrantDelegate
 	
-	/// Generic client error 400<..500
-	case clientErrorWithStatus(Int)
-	
-	/// Generic server error <=501
+	/// Generic server error 5xx
 	case serverErrorWithStatus(Int)
 	
 	// MARK: - Request errors
@@ -280,8 +277,6 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 			return "The authorization server encountered an unexpected condition that prevented it from fulfilling the request."
 		case .serverErrorWithStatus(let statusCode):
 			return "The authorization server encountered an unexpected condition, returning \(statusCode)"
-		case .clientErrorWithStatus(let statusCode):
-			return "The authorization server returned \(statusCode)"
 		case .temporarilyUnavailable(let message):
 			return message ?? "The authorization server is currently unable to handle the request due to a temporary overloading or maintenance of the server."
 		case .invalidGrant(let message):

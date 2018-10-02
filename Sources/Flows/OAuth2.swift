@@ -352,7 +352,7 @@ open class OAuth2: OAuth2Base {
 	/**
 	If there is a refresh token, use it to receive a fresh access token.
 	
-	Does not remove the refresh_token in case of a failure. For client errors (4xx), the callback will provide the status code in the .clientErrorWithStatus(Int). For server errors (5xx), the callback provides the status code in .serverErrorWithStatus(Int)
+	Does not remove the refresh_token in case of a failure. For server errors (5xx), the callback provides the status code in .serverErrorWithStatus(Int)
 	
 	- parameter params:   Optional key/value pairs to pass during token refresh
 	- parameter callback: The callback to call after the refresh token exchange has finished
@@ -366,11 +366,10 @@ open class OAuth2: OAuth2Base {
 				do {
 					let statusCode = response.response.statusCode
 					switch statusCode {
-					case 400..<500:
-						throw OAuth2Error.clientErrorWithStatus(statusCode)
 					case 500...599:
 						throw OAuth2Error.serverErrorWithStatus(statusCode)
-					case 200..<300:
+					// 2xx and 4xx responses should contain valid json data which can be parsed
+					case 200..<300, 400..<500:
 						let data = try response.responseData()
 						let json = try self.parseRefreshTokenResponseData(data)
 						self.logger?.debug("OAuth2", msg: "Did use refresh token for access token [\(nil != self.clientConfig.accessToken)]")
