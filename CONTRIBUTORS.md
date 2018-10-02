@@ -3,6 +3,7 @@ Contributors
 
 Contributors to the codebase, in reverse chronological order:
 
+- Catalina Turlea @catalinaturlea
 - Maxime Le Moine, @MaximeLM
 - Seb Skuse, @sebskuse
 - David Hardiman, @dhardiman
