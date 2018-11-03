@@ -96,7 +96,21 @@ extension URLRequest {
 		guard let access = oauth2.clientConfig.accessToken, !access.isEmpty else {
 			throw OAuth2Error.noAccessToken
 		}
-		setValue("Bearer \(access)", forHTTPHeaderField: "Authorization")
+        
+        switch oauth2.clientConfig.requestAccessTokenPlacement {
+        case .header:
+            setValue("Bearer \(access)", forHTTPHeaderField: "Authorization")
+        case .uri:
+            if let theUrl = url {
+                var components = URLComponents(url: theUrl, resolvingAgainstBaseURL: false)!
+                if let queryItems = components.queryItems {
+                    var items = queryItems.filter { $0.name != "access_token" }
+                    items.append(URLQueryItem(name: "access_token", value: access))
+                    components.queryItems = items
+                    self.url = components.url
+                }
+            }
+        }
 	}
 	
 	/**

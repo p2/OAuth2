@@ -167,6 +167,7 @@ open class OAuth2Base: OAuth2Securable {
 	- keychain_account_for_client_credentials(String, "clientCredentials" by default)
 	- keychain_account_for_tokens(String, "currentTokens" by default)
 	- secret_in_body (Bool, false by default, forces the flow to use the request body for the client secret)
+    - request_access_token_placement (String, "header" or "uri", "header" by default, put access token into header or URI for requests)
 	- parameters ([String: String], custom request parameters to be added during authorization)
 	- token_assume_unexpired (Bool, true by default, whether to use access tokens that do not come with an "expires_in" parameter)
 	

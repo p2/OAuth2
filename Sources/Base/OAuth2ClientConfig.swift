@@ -62,6 +62,22 @@ open class OAuth2ClientConfig {
 	/// Whether the receiver should use the request body instead of the Authorization header for the client secret; defaults to `false`.
 	public var secretInBody = false
 	
+    /**
+     Placement of access token when performing a URL request.
+     */
+    public enum RequestAccessTokenPlacement: String {
+
+        /// uri will put the access token as uri query parameter
+        case uri = "uri"
+        
+        /// header will put the access token into the header using the bearer access scheme
+        case header = "header"
+        
+    }
+    
+    /// Whether the receiver should place the access token into the URI or the Header for requests
+    public var requestAccessTokenPlacement = RequestAccessTokenPlacement.header
+    
 	/// How the client communicates the client secret with the server. Defaults to ".None" if there is no secret, ".clientSecretPost" if
 	/// "secret_in_body" is `true` and ".clientSecretBasic" otherwise. Interacts with the `secretInBody` setting.
 	public final var endpointAuthMethod = OAuth2EndpointAuthMethod.none
@@ -128,6 +144,10 @@ open class OAuth2ClientConfig {
 		else if nil != clientSecret {
 			endpointAuthMethod = .clientSecretBasic
 		}
+        if let tokenPlace = settings["request_access_token_placement"] as? String,
+            let place = RequestAccessTokenPlacement(rawValue: tokenPlace) {
+            requestAccessTokenPlacement = place
+        }
 		if let headers = settings["headers"] as? OAuth2Headers {
 			authHeaders = headers
 		}
