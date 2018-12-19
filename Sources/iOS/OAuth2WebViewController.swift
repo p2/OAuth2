@@ -211,8 +211,9 @@ open class OAuth2WebViewController: UIViewController, WKNavigationDelegate {
 				}
 				return
 			}
-		}
-		decisionHandler(.allow)
+        } else {
+            decisionHandler(.allow)
+        }
 	}
 	
 	open func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
