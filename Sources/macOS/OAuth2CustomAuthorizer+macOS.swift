@@ -59,7 +59,7 @@ public class OAuth2CustomAuthorizer: OAuth2CustomAuthorizerUI {
 													 expectedType: String(describing: NSViewController.self))
 		}
 		
-		parentController.presentViewControllerAsSheet(controller)
+		parentController.presentAsSheet(controller)
 		presentedController = controller
 	}
 	
