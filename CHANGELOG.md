@@ -4,7 +4,7 @@ Changelog
 Version numbering represents the Swift version, plus a running number representing updates, fixes and new features at the same time.
 You can also refer to commit logs to get details on what was implemented, fixed and improved.
 
-### Master
+### 4.2.0
 
 - Swift 4.2 support.  
   [djbe](https://github.com/djbe)
