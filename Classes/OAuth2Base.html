@@ -8,6 +8,9 @@
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
     
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
   </head>
   <body>
 
@@ -21,6 +24,12 @@
           OAuth2 Docs
         </a>
          (98% documented)
+      </p>
+    
+      <p class="header-col--secondary">
+        <form role="search" action="../search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
       </p>
     
         <p class="header-col header-col--secondary">
@@ -92,10 +101,10 @@
                 <a class="nav-group-task-link" href="../Enums/OAuth2Error.html">OAuth2Error</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Errors &amp; Types.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a>
+                <a class="nav-group-task-link" href="../Errors &amp; Types.html#/s:6OAuth20A4JSONa">OAuth2JSON</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Errors &amp; Types.html#/s:6OAuth216OAuth2StringDict">OAuth2StringDict</a>
+                <a class="nav-group-task-link" href="../Errors &amp; Types.html#/s:6OAuth20A10StringDicta">OAuth2StringDict</a>
               </li>
             </ul>
           </li>
@@ -121,7 +130,7 @@
                 <a class="nav-group-task-link" href="../Classes/OAuth2Response.html">OAuth2Response</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Requests.html#/s:6OAuth213OAuth2Headers">OAuth2Headers</a>
+                <a class="nav-group-task-link" href="../Requests.html#/s:6OAuth20A7Headersa">OAuth2Headers</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/OAuth2RequestParams.html">OAuth2RequestParams</a>
@@ -244,7 +253,7 @@
             <a class="nav-group-name-link" href="../Other Functions.html">Other Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Other Functions.html#/s:F6OAuth216callOnMainThreadFFT_T_T_">callOnMainThread(_:)</a>
+                <a class="nav-group-task-link" href="../Other Functions.html#/s:6OAuth216callOnMainThreadyyyyXEF">callOnMainThread(_:)</a>
               </li>
             </ul>
           </li>
@@ -257,7 +266,7 @@
             <h1>OAuth2Base</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="n">open</span> <span class="kd">class</span> <span class="kt">OAuth2Base</span><span class="p">:</span> <span class="kt"><a href="../Classes/OAuth2Securable.html">OAuth2Securable</a></span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">class</span> <span class="kt">OAuth2Base</span> <span class="p">:</span> <span class="kt"><a href="../Classes/OAuth2Securable.html">OAuth2Securable</a></span></code></pre>
 
                 </div>
               </div>
@@ -273,9 +282,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ZvC6OAuth210OAuth2Base9grantTypeSS"></a>
+                    <a name="/s:6OAuth20A4BaseC9grantTypeSSvpZ"></a>
                     <a name="//apple_ref/swift/Variable/grantType" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZvC6OAuth210OAuth2Base9grantTypeSS">grantType</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC9grantTypeSSvpZ">grantType</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -290,7 +299,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">class</span> <span class="k">var</span> <span class="nv">grantType</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">class</span> <span class="k">var</span> <span class="nv">grantType</span><span class="p">:</span> <span class="kt">String</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -300,9 +309,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ZvC6OAuth210OAuth2Base12responseTypeGSqSS_"></a>
+                    <a name="/s:6OAuth20A4BaseC12responseTypeSSSgvpZ"></a>
                     <a name="//apple_ref/swift/Variable/responseType" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZvC6OAuth210OAuth2Base12responseTypeGSqSS_">responseType</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC12responseTypeSSSgvpZ">responseType</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -317,7 +326,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">class</span> <span class="k">var</span> <span class="nv">responseType</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">class</span> <span class="k">var</span> <span class="nv">responseType</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -327,9 +336,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC6OAuth210OAuth2Base12clientConfigCS_18OAuth2ClientConfig"></a>
+                    <a name="/s:6OAuth20A4BaseC12clientConfigAA0a6ClientD0Cvp"></a>
                     <a name="//apple_ref/swift/Property/clientConfig" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC6OAuth210OAuth2Base12clientConfigCS_18OAuth2ClientConfig">clientConfig</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC12clientConfigAA0a6ClientD0Cvp">clientConfig</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -344,7 +353,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="k">let</span> <span class="nv">clientConfig</span><span class="p">:</span> <span class="kt"><a href="../Classes/OAuth2ClientConfig.html">OAuth2ClientConfig</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">clientConfig</span><span class="p">:</span> <span class="kt"><a href="../Classes/OAuth2ClientConfig.html">OAuth2ClientConfig</a></span></code></pre>
 
                         </div>
                       </div>
@@ -354,9 +363,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC6OAuth210OAuth2Base10authConfigVS_16OAuth2AuthConfig"></a>
+                    <a name="/s:6OAuth20A4BaseC10authConfigAA0a4AuthD0Vvp"></a>
                     <a name="//apple_ref/swift/Property/authConfig" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC6OAuth210OAuth2Base10authConfigVS_16OAuth2AuthConfig">authConfig</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC10authConfigAA0a4AuthD0Vvp">authConfig</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -371,7 +380,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="k">var</span> <span class="nv">authConfig</span> <span class="o">=</span> <span class="kt"><a href="../Structs/OAuth2AuthConfig.html">OAuth2AuthConfig</a></span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">authConfig</span><span class="p">:</span> <span class="kt"><a href="../Structs/OAuth2AuthConfig.html">OAuth2AuthConfig</a></span></code></pre>
 
                         </div>
                       </div>
@@ -381,9 +390,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC6OAuth210OAuth2Base8clientIdGSqSS_"></a>
+                    <a name="/s:6OAuth20A4BaseC8clientIdSSSgvp"></a>
                     <a name="//apple_ref/swift/Property/clientId" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC6OAuth210OAuth2Base8clientIdGSqSS_">clientId</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC8clientIdSSSgvp">clientId</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -398,7 +407,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">clientId</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">clientId</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -408,9 +417,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC6OAuth210OAuth2Base12clientSecretGSqSS_"></a>
+                    <a name="/s:6OAuth20A4BaseC12clientSecretSSSgvp"></a>
                     <a name="//apple_ref/swift/Property/clientSecret" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC6OAuth210OAuth2Base12clientSecretGSqSS_">clientSecret</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC12clientSecretSSSgvp">clientSecret</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -425,7 +434,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">clientSecret</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">clientSecret</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -435,9 +444,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC6OAuth210OAuth2Base10clientNameGSqSS_"></a>
+                    <a name="/s:6OAuth20A4BaseC10clientNameSSSgvp"></a>
                     <a name="//apple_ref/swift/Property/clientName" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC6OAuth210OAuth2Base10clientNameGSqSS_">clientName</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC10clientNameSSSgvp">clientName</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -445,14 +454,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The name of the client, as used during dynamic client registration. Use <q>client_name</q> during initalization to set.</p>
+                        <p>The name of the client, as used during dynamic client registration. Use <q>client_name</q> during initialization to set.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="k">var</span> <span class="nv">clientName</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">clientName</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -462,9 +471,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC6OAuth210OAuth2Base7authURLV10Foundation3URL"></a>
+                    <a name="/s:6OAuth20A4BaseC7authURL10Foundation0D0Vvp"></a>
                     <a name="//apple_ref/swift/Property/authURL" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC6OAuth210OAuth2Base7authURLV10Foundation3URL">authURL</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC7authURL10Foundation0D0Vvp">authURL</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -479,7 +488,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">authURL</span><span class="p">:</span> <span class="kt">URL</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">authURL</span><span class="p">:</span> <span class="kt">URL</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -489,9 +498,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC6OAuth210OAuth2Base8tokenURLGSqV10Foundation3URL_"></a>
+                    <a name="/s:6OAuth20A4BaseC8tokenURL10Foundation0D0VSgvp"></a>
                     <a name="//apple_ref/swift/Property/tokenURL" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC6OAuth210OAuth2Base8tokenURLGSqV10Foundation3URL_">tokenURL</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC8tokenURL10Foundation0D0VSgvp">tokenURL</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -499,14 +508,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The URL string where we can exchange a code for a token; if nil <code><a href="../Classes/OAuth2Base.html#/s:vC6OAuth210OAuth2Base7authURLV10Foundation3URL">authURL</a></code> will be used.</p>
+                        <p>The URL string where we can exchange a code for a token; if nil <code><a href="../Classes/OAuth2Base.html#/s:6OAuth20A4BaseC7authURL10Foundation0D0Vvp">authURL</a></code> will be used.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">tokenURL</span><span class="p">:</span> <span class="kt">URL</span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">tokenURL</span><span class="p">:</span> <span class="kt">URL</span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -516,9 +525,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC6OAuth210OAuth2Base5scopeGSqSS_"></a>
+                    <a name="/s:6OAuth20A4BaseC5scopeSSSgvp"></a>
                     <a name="//apple_ref/swift/Property/scope" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC6OAuth210OAuth2Base5scopeGSqSS_">scope</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC5scopeSSSgvp">scope</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -533,7 +542,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">scope</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">scope</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -543,9 +552,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC6OAuth210OAuth2Base8redirectGSqSS_"></a>
+                    <a name="/s:6OAuth20A4BaseC8redirectSSSgvp"></a>
                     <a name="//apple_ref/swift/Property/redirect" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC6OAuth210OAuth2Base8redirectGSqSS_">redirect</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC8redirectSSSgvp">redirect</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -560,7 +569,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">redirect</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">redirect</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -570,9 +579,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC6OAuth210OAuth2Base7contextCS_18OAuth2ContextStore"></a>
+                    <a name="/s:6OAuth20A4BaseC7contextAA0A12ContextStoreCvp"></a>
                     <a name="//apple_ref/swift/Property/context" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC6OAuth210OAuth2Base7contextCS_18OAuth2ContextStore">context</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC7contextAA0A12ContextStoreCvp">context</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -587,7 +596,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="k">var</span> <span class="nv">context</span> <span class="o">=</span> <span class="kt"><a href="../Classes/OAuth2ContextStore.html">OAuth2ContextStore</a></span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">context</span><span class="p">:</span> <span class="kt"><a href="../Classes/OAuth2ContextStore.html">OAuth2ContextStore</a></span></code></pre>
 
                         </div>
                       </div>
@@ -597,9 +606,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC6OAuth210OAuth2Base11accessTokenGSqSS_"></a>
+                    <a name="/s:6OAuth20A4BaseC11accessTokenSSSgvp"></a>
                     <a name="//apple_ref/swift/Property/accessToken" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC6OAuth210OAuth2Base11accessTokenGSqSS_">accessToken</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC11accessTokenSSSgvp">accessToken</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -614,7 +623,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="k">var</span> <span class="nv">accessToken</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">accessToken</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -624,9 +633,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC6OAuth210OAuth2Base7idTokenGSqSS_"></a>
+                    <a name="/s:6OAuth20A4BaseC7idTokenSSSgvp"></a>
                     <a name="//apple_ref/swift/Property/idToken" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC6OAuth210OAuth2Base7idTokenGSqSS_">idToken</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC7idTokenSSSgvp">idToken</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -641,7 +650,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="k">var</span> <span class="nv">idToken</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">idToken</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -651,9 +660,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC6OAuth210OAuth2Base17accessTokenExpiryGSqV10Foundation4Date_"></a>
+                    <a name="/s:6OAuth20A4BaseC17accessTokenExpiry10Foundation4DateVSgvp"></a>
                     <a name="//apple_ref/swift/Property/accessTokenExpiry" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC6OAuth210OAuth2Base17accessTokenExpiryGSqV10Foundation4Date_">accessTokenExpiry</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC17accessTokenExpiry10Foundation4DateVSgvp">accessTokenExpiry</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -668,7 +677,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="k">var</span> <span class="nv">accessTokenExpiry</span><span class="p">:</span> <span class="kt">Date</span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">accessTokenExpiry</span><span class="p">:</span> <span class="kt">Date</span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -678,9 +687,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC6OAuth210OAuth2Base12refreshTokenGSqSS_"></a>
+                    <a name="/s:6OAuth20A4BaseC12refreshTokenSSSgvp"></a>
                     <a name="//apple_ref/swift/Property/refreshToken" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC6OAuth210OAuth2Base12refreshTokenGSqSS_">refreshToken</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC12refreshTokenSSSgvp">refreshToken</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -695,7 +704,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="k">var</span> <span class="nv">refreshToken</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">refreshToken</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -705,9 +714,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC6OAuth210OAuth2Base11authHeadersGSqGVs10DictionarySSSS__"></a>
+                    <a name="/s:6OAuth20A4BaseC11authHeadersSDyS2SGSgvp"></a>
                     <a name="//apple_ref/swift/Property/authHeaders" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC6OAuth210OAuth2Base11authHeadersGSqGVs10DictionarySSSS__">authHeaders</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC11authHeadersSDyS2SGSgvp">authHeaders</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -722,7 +731,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">authHeaders</span><span class="p">:</span> <span class="kt"><a href="../Requests.html#/s:6OAuth213OAuth2Headers">OAuth2Headers</a></span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">authHeaders</span><span class="p">:</span> <span class="kt"><a href="../Requests.html#/s:6OAuth20A7Headersa">OAuth2Headers</a></span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -732,9 +741,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC6OAuth210OAuth2Base14authParametersGSqGVs10DictionarySSSS__"></a>
+                    <a name="/s:6OAuth20A4BaseC14authParametersSDyS2SGSgvp"></a>
                     <a name="//apple_ref/swift/Property/authParameters" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC6OAuth210OAuth2Base14authParametersGSqGVs10DictionarySSSS__">authParameters</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC14authParametersSDyS2SGSgvp">authParameters</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -749,7 +758,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">authParameters</span><span class="p">:</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth216OAuth2StringDict">OAuth2StringDict</a></span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">authParameters</span><span class="p">:</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth20A10StringDicta">OAuth2StringDict</a></span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -759,9 +768,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC6OAuth210OAuth2Base18didAuthorizeOrFailGSqFTGSqGVs10DictionarySSP___GSqOS_11OAuth2Error__T__"></a>
+                    <a name="/s:6OAuth20A4BaseC18didAuthorizeOrFailySDySSypGSg_AA0A5ErrorOSgtcSgvp"></a>
                     <a name="//apple_ref/swift/Property/didAuthorizeOrFail" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC6OAuth210OAuth2Base18didAuthorizeOrFailGSqFTGSqGVs10DictionarySSP___GSqOS_11OAuth2Error__T__">didAuthorizeOrFail</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC18didAuthorizeOrFailySDySSypGSg_AA0A5ErrorOSgtcSgvp">didAuthorizeOrFail</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -776,7 +785,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">didAuthorizeOrFail</span><span class="p">:</span> <span class="p">((</span><span class="n">_</span> <span class="nv">parameters</span><span class="p">:</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a></span><span class="p">?,</span> <span class="n">_</span> <span class="nv">error</span><span class="p">:</span> <span class="kt"><a href="../Enums/OAuth2Error.html">OAuth2Error</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">didAuthorizeOrFail</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Errors & Types.html#/s:6OAuth20A4JSONa">OAuth2JSON</a></span><span class="p">?,</span> <span class="kt"><a href="../Enums/OAuth2Error.html">OAuth2Error</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span></code></pre>
 
                         </div>
                       </div>
@@ -786,9 +795,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC6OAuth210OAuth2Base13isAuthorizingSb"></a>
+                    <a name="/s:6OAuth20A4BaseC13isAuthorizingSbvp"></a>
                     <a name="//apple_ref/swift/Property/isAuthorizing" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC6OAuth210OAuth2Base13isAuthorizingSb">isAuthorizing</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC13isAuthorizingSbvp">isAuthorizing</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -803,7 +812,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">isAuthorizing</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">isAuthorizing</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -813,9 +822,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC6OAuth210OAuth2Base20afterAuthorizeOrFailGSqFTGSqGVs10DictionarySSP___GSqOS_11OAuth2Error__T__"></a>
+                    <a name="/s:6OAuth20A4BaseC20afterAuthorizeOrFailySDySSypGSg_AA0A5ErrorOSgtcSgvp"></a>
                     <a name="//apple_ref/swift/Property/afterAuthorizeOrFail" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC6OAuth210OAuth2Base20afterAuthorizeOrFailGSqFTGSqGVs10DictionarySSP___GSqOS_11OAuth2Error__T__">afterAuthorizeOrFail</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC20afterAuthorizeOrFailySDySSypGSg_AA0A5ErrorOSgtcSgvp">afterAuthorizeOrFail</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -831,7 +840,7 @@ authorization manually and/or for cleanup operations.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">afterAuthorizeOrFail</span><span class="p">:</span> <span class="p">((</span><span class="n">_</span> <span class="nv">authParameters</span><span class="p">:</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a></span><span class="p">?,</span> <span class="n">_</span> <span class="nv">error</span><span class="p">:</span> <span class="kt"><a href="../Enums/OAuth2Error.html">OAuth2Error</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">afterAuthorizeOrFail</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Errors & Types.html#/s:6OAuth20A4JSONa">OAuth2JSON</a></span><span class="p">?,</span> <span class="kt"><a href="../Enums/OAuth2Error.html">OAuth2Error</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span></code></pre>
 
                         </div>
                       </div>
@@ -848,7 +857,6 @@ authorization manually and/or for cleanup operations.</p>
                               <td>
                                 <div>
                                   <p>All authorization parameters; non-nil (but possibly empty) on success, nil on error</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -860,8 +868,7 @@ authorization manually and/or for cleanup operations.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>OAuth2Error giving the failure reason; if nil and <code>authParameters</code> is also nil, the process was aborted.</p>
-
+                                  <p>OAuth2Error giving the failure reason; if nil and <code><a href="../Classes/OAuth2Base.html#/s:6OAuth20A4BaseC14authParametersSDyS2SGSgvp">authParameters</a></code> is also nil, the process was aborted.</p>
                                 </div>
                               </td>
                             </tr>
@@ -874,9 +881,9 @@ authorization manually and/or for cleanup operations.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC6OAuth210OAuth2Base28internalAfterAuthorizeOrFailGSqFTSbGSqOS_11OAuth2Error__T__"></a>
+                    <a name="/s:6OAuth20A4BaseC28internalAfterAuthorizeOrFailySb_AA0A5ErrorOSgtcSgvp"></a>
                     <a name="//apple_ref/swift/Property/internalAfterAuthorizeOrFail" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC6OAuth210OAuth2Base28internalAfterAuthorizeOrFailGSqFTSbGSqOS_11OAuth2Error__T__">internalAfterAuthorizeOrFail</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC28internalAfterAuthorizeOrFailySb_AA0A5ErrorOSgtcSgvp">internalAfterAuthorizeOrFail</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -885,14 +892,14 @@ authorization manually and/or for cleanup operations.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>For internal use, don&rsquo;t mess with it, it&rsquo;s public only for subclassing and compilation reasons. Executed right before
-<code><a href="../Classes/OAuth2Base.html#/s:vC6OAuth210OAuth2Base20afterAuthorizeOrFailGSqFTGSqGVs10DictionarySSP___GSqOS_11OAuth2Error__T__">afterAuthorizeOrFail</a></code>.</p>
+<code><a href="../Classes/OAuth2Base.html#/s:6OAuth20A4BaseC20afterAuthorizeOrFailySDySSypGSg_AA0A5ErrorOSgtcSgvp">afterAuthorizeOrFail</a></code>.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">internalAfterAuthorizeOrFail</span><span class="p">:</span> <span class="p">((</span><span class="n">_</span> <span class="nv">wasFailure</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">,</span> <span class="n">_</span> <span class="nv">error</span><span class="p">:</span> <span class="kt"><a href="../Enums/OAuth2Error.html">OAuth2Error</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">var</span> <span class="nv">internalAfterAuthorizeOrFail</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">,</span> <span class="kt"><a href="../Enums/OAuth2Error.html">OAuth2Error</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span></code></pre>
 
                         </div>
                       </div>
@@ -902,9 +909,9 @@ authorization manually and/or for cleanup operations.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth210OAuth2BasecFT8settingsGVs10DictionarySSP___S0_"></a>
+                    <a name="/s:6OAuth20A4BaseC8settingsACSDySSypG_tcfc"></a>
                     <a name="//apple_ref/swift/Method/init(settings:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth210OAuth2BasecFT8settingsGVs10DictionarySSP___S0_">init(settings:)</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC8settingsACSDySSypG_tcfc">init(settings:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -932,7 +939,6 @@ authorization manually and/or for cleanup operations.</p>
 <li><p>keychain_account_for_client_credentials(String, <q>clientCredentials</q> by default)</p></li>
 <li><p>keychain_account_for_tokens(String, <q>currentTokens</q> by default)</p></li>
 <li><p>secret_in_body (Bool, false by default, forces the flow to use the request body for the client secret)</p></li>
-<li><p>parameters ([String: String], custom request parameters to be added during authorization)</p></li>
 <li><p>token_assume_unexpired (Bool, true by default, whether to use access tokens that do not come with an <q>expires_in</q> parameter)</p></li>
 <li><p>verbose (Bool, false by default, applies to client logging)</p></li>
 </ul>
@@ -942,7 +948,7 @@ authorization manually and/or for cleanup operations.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">override</span> <span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">settings</span><span class="p">:</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">override</span> <span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">settings</span><span class="p">:</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth20A4JSONa">OAuth2JSON</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -963,9 +969,9 @@ authorization manually and/or for cleanup operations.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth210OAuth2Base19keychainServiceNameFT_SS"></a>
+                    <a name="/s:6OAuth20A4BaseC19keychainServiceNameSSyF"></a>
                     <a name="//apple_ref/swift/Method/keychainServiceName()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth210OAuth2Base19keychainServiceNameFT_SS">keychainServiceName()</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC19keychainServiceNameSSyF">keychainServiceName()</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -980,7 +986,7 @@ authorization manually and/or for cleanup operations.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">override</span> <span class="n">open</span> <span class="kd">func</span> <span class="nf">keychainServiceName</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">String</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">override</span> <span class="kd">open</span> <span class="kd">func</span> <span class="nf">keychainServiceName</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">String</span></code></pre>
 
                         </div>
                       </div>
@@ -990,9 +996,9 @@ authorization manually and/or for cleanup operations.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth210OAuth2Base23updateFromKeychainItemsFGVs10DictionarySSP__T_"></a>
+                    <a name="/s:6OAuth20A4BaseC23updateFromKeychainItemsyySDySSypGF"></a>
                     <a name="//apple_ref/swift/Method/updateFromKeychainItems(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth210OAuth2Base23updateFromKeychainItemsFGVs10DictionarySSP__T_">updateFromKeychainItems(_:)</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC23updateFromKeychainItemsyySDySSypGF">updateFromKeychainItems(_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1000,14 +1006,13 @@ authorization manually and/or for cleanup operations.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Overrides base implementation to return the authorize URL.</p>
-
+                        
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">override</span> <span class="kd">func</span> <span class="nf">updateFromKeychainItems</span><span class="p">(</span><span class="n">_</span> <span class="nv">items</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">])</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">override</span> <span class="kd">open</span> <span class="kd">func</span> <span class="nf">updateFromKeychainItems</span><span class="p">(</span><span class="n">_</span> <span class="nv">items</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">])</span></code></pre>
 
                         </div>
                       </div>
@@ -1017,9 +1022,9 @@ authorization manually and/or for cleanup operations.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth210OAuth2Base23storableCredentialItemsFT_GSqGVs10DictionarySSP___"></a>
+                    <a name="/s:6OAuth20A4BaseC23storableCredentialItemsSDySSypGSgyF"></a>
                     <a name="//apple_ref/swift/Method/storableCredentialItems()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth210OAuth2Base23storableCredentialItemsFT_GSqGVs10DictionarySSP___">storableCredentialItems()</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC23storableCredentialItemsSDySSypGSgyF">storableCredentialItems()</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1027,21 +1032,15 @@ authorization manually and/or for cleanup operations.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Overrides base implementation to return the authorize URL.</p>
-
+                        
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">override</span> <span class="n">open</span> <span class="kd">func</span> <span class="nf">storableCredentialItems</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">]?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">override</span> <span class="kd">open</span> <span class="kd">func</span> <span class="nf">storableCredentialItems</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">String</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">]?</span></code></pre>
 
                         </div>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>A dictionary with <code>String</code> keys and <code>Any</code> items</p>
-
                       </div>
                     </section>
                   </div>
@@ -1049,9 +1048,9 @@ authorization manually and/or for cleanup operations.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth210OAuth2Base18storableTokenItemsFT_GSqGVs10DictionarySSP___"></a>
+                    <a name="/s:6OAuth20A4BaseC18storableTokenItemsSDySSypGSgyF"></a>
                     <a name="//apple_ref/swift/Method/storableTokenItems()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth210OAuth2Base18storableTokenItemsFT_GSqGVs10DictionarySSP___">storableTokenItems()</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC18storableTokenItemsSDySSypGSgyF">storableTokenItems()</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1059,21 +1058,15 @@ authorization manually and/or for cleanup operations.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Overrides base implementation to return the authorize URL.</p>
-
+                        
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">override</span> <span class="n">open</span> <span class="kd">func</span> <span class="nf">storableTokenItems</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">]?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">override</span> <span class="kd">open</span> <span class="kd">func</span> <span class="nf">storableTokenItems</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">String</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">]?</span></code></pre>
 
                         </div>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>A dictionary with <code>String</code> keys and <code>Any</code> items</p>
-
                       </div>
                     </section>
                   </div>
@@ -1081,9 +1074,9 @@ authorization manually and/or for cleanup operations.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth210OAuth2Base12forgetClientFT_T_"></a>
+                    <a name="/s:6OAuth20A4BaseC12forgetClientyyF"></a>
                     <a name="//apple_ref/swift/Method/forgetClient()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth210OAuth2Base12forgetClientFT_T_">forgetClient()</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC12forgetClientyyF">forgetClient()</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1091,14 +1084,13 @@ authorization manually and/or for cleanup operations.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Overrides base implementation to return the authorize URL.</p>
-
+                        
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">override</span> <span class="n">open</span> <span class="kd">func</span> <span class="nf">forgetClient</span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">override</span> <span class="kd">open</span> <span class="kd">func</span> <span class="nf">forgetClient</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -1108,9 +1100,9 @@ authorization manually and/or for cleanup operations.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth210OAuth2Base12forgetTokensFT_T_"></a>
+                    <a name="/s:6OAuth20A4BaseC12forgetTokensyyF"></a>
                     <a name="//apple_ref/swift/Method/forgetTokens()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth210OAuth2Base12forgetTokensFT_T_">forgetTokens()</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC12forgetTokensyyF">forgetTokens()</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1118,14 +1110,13 @@ authorization manually and/or for cleanup operations.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Overrides base implementation to return the authorize URL.</p>
-
+                        
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">override</span> <span class="n">open</span> <span class="kd">func</span> <span class="nf">forgetTokens</span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">override</span> <span class="kd">open</span> <span class="kd">func</span> <span class="nf">forgetTokens</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -1146,9 +1137,9 @@ authorization manually and/or for cleanup operations.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth210OAuth2Base7requestFT6forURLV10Foundation3URL11cachePolicyOCSo12NSURLRequest11CachePolicy_VS1_10URLRequest"></a>
+                    <a name="/s:6OAuth20A4BaseC7request6forURL11cachePolicy10Foundation10URLRequestVAG0E0V_So017NSURLRequestCacheG0VtF"></a>
                     <a name="//apple_ref/swift/Method/request(forURL:cachePolicy:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth210OAuth2Base7requestFT6forURLV10Foundation3URL11cachePolicyOCSo12NSURLRequest11CachePolicy_VS1_10URLRequest">request(forURL:cachePolicy:)</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC7request6forURL11cachePolicy10Foundation10URLRequestVAG0E0V_So017NSURLRequestCacheG0VtF">request(forURL:cachePolicy:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1166,7 +1157,7 @@ data requests, but you probably don&rsquo;t want to disable cache for binary dat
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">request</span><span class="p">(</span><span class="n">forURL</span> <span class="nv">url</span><span class="p">:</span> <span class="kt">URL</span><span class="p">,</span> <span class="nv">cachePolicy</span><span class="p">:</span> <span class="kt">NSURLRequest</span><span class="o">.</span><span class="kt">CachePolicy</span> <span class="o">=</span> <span class="o">.</span><span class="n">reloadIgnoringLocalCacheData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">URLRequest</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">request</span><span class="p">(</span><span class="n">forURL</span> <span class="nv">url</span><span class="p">:</span> <span class="kt">URL</span><span class="p">,</span> <span class="nv">cachePolicy</span><span class="p">:</span> <span class="kt">NSURLRequest</span><span class="o">.</span><span class="kt">CachePolicy</span> <span class="o">=</span> <span class="o">.</span><span class="n">reloadIgnoringLocalCacheData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">URLRequest</span></code></pre>
 
                         </div>
                       </div>
@@ -1183,7 +1174,6 @@ data requests, but you probably don&rsquo;t want to disable cache for binary dat
                               <td>
                                 <div>
                                   <p>The URL to create a request for</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -1196,7 +1186,6 @@ data requests, but you probably don&rsquo;t want to disable cache for binary dat
                               <td>
                                 <div>
                                   <p>The cache policy to use, defaults to <code>NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData</code></p>
-
                                 </div>
                               </td>
                             </tr>
@@ -1206,7 +1195,6 @@ data requests, but you probably don&rsquo;t want to disable cache for binary dat
                       <div>
                         <h4>Return Value</h4>
                         <p>OAuth2Request for the given URL</p>
-
                       </div>
                     </section>
                   </div>
@@ -1225,9 +1213,9 @@ data requests, but you probably don&rsquo;t want to disable cache for binary dat
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth210OAuth2Base17handleRedirectURLFzV10Foundation3URLT_"></a>
+                    <a name="/s:6OAuth20A4BaseC17handleRedirectURLyy10Foundation0E0VKF"></a>
                     <a name="//apple_ref/swift/Method/handleRedirectURL(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth210OAuth2Base17handleRedirectURLFzV10Foundation3URLT_">handleRedirectURL(_:)</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC17handleRedirectURLyy10Foundation0E0VKF">handleRedirectURL(_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1242,7 +1230,7 @@ data requests, but you probably don&rsquo;t want to disable cache for binary dat
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">handleRedirectURL</span><span class="p">(</span><span class="n">_</span> <span class="nv">redirect</span><span class="p">:</span> <span class="kt">URL</span><span class="p">)</span> <span class="k">throws</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">handleRedirectURL</span><span class="p">(</span><span class="n">_</span> <span class="nv">redirect</span><span class="p">:</span> <span class="kt">URL</span><span class="p">)</span> <span class="k">throws</span></code></pre>
 
                         </div>
                       </div>
@@ -1259,7 +1247,6 @@ data requests, but you probably don&rsquo;t want to disable cache for binary dat
                               <td>
                                 <div>
                                   <p>The redirect URL returned by the server that you want to handle</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -1272,9 +1259,9 @@ data requests, but you probably don&rsquo;t want to disable cache for binary dat
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth210OAuth2Base12didAuthorizeFT14withParametersGVs10DictionarySSP___T_"></a>
+                    <a name="/s:6OAuth20A4BaseC12didAuthorize14withParametersySDySSypG_tF"></a>
                     <a name="//apple_ref/swift/Method/didAuthorize(withParameters:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth210OAuth2Base12didAuthorizeFT14withParametersGVs10DictionarySSP___T_">didAuthorize(withParameters:)</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC12didAuthorize14withParametersySDySSypG_tF">didAuthorize(withParameters:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1292,7 +1279,7 @@ call this method yourself on your OAuth2 instance you might screw things up badl
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">func</span> <span class="nf">didAuthorize</span><span class="p">(</span><span class="n">withParameters</span> <span class="nv">parameters</span><span class="p">:</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">func</span> <span class="nf">didAuthorize</span><span class="p">(</span><span class="n">withParameters</span> <span class="nv">parameters</span><span class="p">:</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth20A4JSONa">OAuth2JSON</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1309,7 +1296,6 @@ call this method yourself on your OAuth2 instance you might screw things up badl
                               <td>
                                 <div>
                                   <p>The parameters received during authorization</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -1322,9 +1308,9 @@ call this method yourself on your OAuth2 instance you might screw things up badl
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth210OAuth2Base7didFailFT4withGSqOS_11OAuth2Error__T_"></a>
+                    <a name="/s:6OAuth20A4BaseC7didFail4withyAA0A5ErrorOSg_tF"></a>
                     <a name="//apple_ref/swift/Method/didFail(with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth210OAuth2Base7didFailFT4withGSqOS_11OAuth2Error__T_">didFail(with:)</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC7didFail4withyAA0A5ErrorOSg_tF">didFail(with:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1342,7 +1328,7 @@ call this method yourself on your OAuth2 instance you might screw things up roya
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">func</span> <span class="nf">didFail</span><span class="p">(</span><span class="n">with</span> <span class="nv">error</span><span class="p">:</span> <span class="kt"><a href="../Enums/OAuth2Error.html">OAuth2Error</a></span><span class="p">?)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">func</span> <span class="nf">didFail</span><span class="p">(</span><span class="n">with</span> <span class="nv">error</span><span class="p">:</span> <span class="kt"><a href="../Enums/OAuth2Error.html">OAuth2Error</a></span><span class="p">?)</span></code></pre>
 
                         </div>
                       </div>
@@ -1359,7 +1345,6 @@ call this method yourself on your OAuth2 instance you might screw things up roya
                               <td>
                                 <div>
                                   <p>The error that led to authorization failure; will use <code>.requestCancelled</code> on the callbacks if nil is passed</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -1372,9 +1357,9 @@ call this method yourself on your OAuth2 instance you might screw things up roya
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth210OAuth2Base18abortAuthorizationFT_T_"></a>
+                    <a name="/s:6OAuth20A4BaseC18abortAuthorizationyyF"></a>
                     <a name="//apple_ref/swift/Method/abortAuthorization()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth210OAuth2Base18abortAuthorizationFT_T_">abortAuthorization()</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC18abortAuthorizationyyF">abortAuthorization()</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1389,7 +1374,7 @@ call this method yourself on your OAuth2 instance you might screw things up roya
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">abortAuthorization</span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">abortAuthorization</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -1410,9 +1395,9 @@ call this method yourself on your OAuth2 instance you might screw things up roya
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth210OAuth2Base23assureNoErrorInResponseFzTGVs10DictionarySSP__8fallbackGSqSS__T_"></a>
+                    <a name="/s:6OAuth20A4BaseC23assureNoErrorInResponse_8fallbackySDySSypG_SSSgtKF"></a>
                     <a name="//apple_ref/swift/Method/assureNoErrorInResponse(_:fallback:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth210OAuth2Base23assureNoErrorInResponseFzTGVs10DictionarySSP__8fallbackGSqSS__T_">assureNoErrorInResponse(_:fallback:)</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC23assureNoErrorInResponse_8fallbackySDySSypG_SSSgtKF">assureNoErrorInResponse(_:fallback:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1427,7 +1412,7 @@ call this method yourself on your OAuth2 instance you might screw things up roya
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">assureNoErrorInResponse</span><span class="p">(</span><span class="n">_</span> <span class="nv">params</span><span class="p">:</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a></span><span class="p">,</span> <span class="nv">fallback</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="k">throws</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">assureNoErrorInResponse</span><span class="p">(</span><span class="n">_</span> <span class="nv">params</span><span class="p">:</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth20A4JSONa">OAuth2JSON</a></span><span class="p">,</span> <span class="nv">fallback</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="k">throws</span></code></pre>
 
                         </div>
                       </div>
@@ -1444,7 +1429,6 @@ call this method yourself on your OAuth2 instance you might screw things up roya
                               <td>
                                 <div>
                                   <p>The URL parameters returned from the server</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -1457,7 +1441,6 @@ call this method yourself on your OAuth2 instance you might screw things up roya
                               <td>
                                 <div>
                                   <p>The message string to use in case no error description is found in the parameters</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -1467,7 +1450,6 @@ call this method yourself on your OAuth2 instance you might screw things up roya
                       <div>
                         <h4>Return Value</h4>
                         <p>An OAuth2Error</p>
-
                       </div>
                     </section>
                   </div>
@@ -1475,9 +1457,9 @@ call this method yourself on your OAuth2 instance you might screw things up roya
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth210OAuth2Base24parseAccessTokenResponseFzT4dataV10Foundation4Data_GVs10DictionarySSP__"></a>
+                    <a name="/s:6OAuth20A4BaseC24parseAccessTokenResponse4dataSDySSypG10Foundation4DataV_tKF"></a>
                     <a name="//apple_ref/swift/Method/parseAccessTokenResponse(data:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth210OAuth2Base24parseAccessTokenResponseFzT4dataV10Foundation4Data_GVs10DictionarySSP__">parseAccessTokenResponse(data:)</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC24parseAccessTokenResponse4dataSDySSypG10Foundation4DataV_tKF">parseAccessTokenResponse(data:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1495,7 +1477,7 @@ call this method yourself on your OAuth2 instance you might screw things up roya
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">parseAccessTokenResponse</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="kt">Data</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">parseAccessTokenResponse</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="kt">Data</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth20A4JSONa">OAuth2JSON</a></span></code></pre>
 
                         </div>
                       </div>
@@ -1512,7 +1494,6 @@ call this method yourself on your OAuth2 instance you might screw things up roya
                               <td>
                                 <div>
                                   <p>NSData returned from the call</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -1522,7 +1503,6 @@ call this method yourself on your OAuth2 instance you might screw things up roya
                       <div>
                         <h4>Return Value</h4>
                         <p>An OAuth2JSON instance with token data; may contain additional information</p>
-
                       </div>
                     </section>
                   </div>
@@ -1530,9 +1510,9 @@ call this method yourself on your OAuth2 instance you might screw things up roya
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth210OAuth2Base24parseAccessTokenResponseFzT6paramsGVs10DictionarySSP___GS1_SSP__"></a>
+                    <a name="/s:6OAuth20A4BaseC24parseAccessTokenResponse6paramsSDySSypGAF_tKF"></a>
                     <a name="//apple_ref/swift/Method/parseAccessTokenResponse(params:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth210OAuth2Base24parseAccessTokenResponseFzT6paramsGVs10DictionarySSP___GS1_SSP__">parseAccessTokenResponse(params:)</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC24parseAccessTokenResponse6paramsSDySSypGAF_tKF">parseAccessTokenResponse(params:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1551,7 +1531,7 @@ is not possible in overrides. Instead, override the various <code>assureXy(dict:
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">func</span> <span class="nf">parseAccessTokenResponse</span><span class="p">(</span><span class="nv">params</span><span class="p">:</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a></span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">func</span> <span class="nf">parseAccessTokenResponse</span><span class="p">(</span><span class="nv">params</span><span class="p">:</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth20A4JSONa">OAuth2JSON</a></span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth20A4JSONa">OAuth2JSON</a></span></code></pre>
 
                         </div>
                       </div>
@@ -1568,7 +1548,6 @@ is not possible in overrides. Instead, override the various <code>assureXy(dict:
                               <td>
                                 <div>
                                   <p>Dictionary data parsed from the response</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -1578,7 +1557,6 @@ is not possible in overrides. Instead, override the various <code>assureXy(dict:
                       <div>
                         <h4>Return Value</h4>
                         <p>An OAuth2JSON instance with token data; may contain additional information</p>
-
                       </div>
                     </section>
                   </div>
@@ -1586,9 +1564,9 @@ is not possible in overrides. Instead, override the various <code>assureXy(dict:
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth210OAuth2Base32normalizeAccessTokenResponseKeysFGVs10DictionarySSP__GS1_SSP__"></a>
+                    <a name="/s:6OAuth20A4BaseC32normalizeAccessTokenResponseKeysySDySSypGAEF"></a>
                     <a name="//apple_ref/swift/Method/normalizeAccessTokenResponseKeys(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth210OAuth2Base32normalizeAccessTokenResponseKeysFGVs10DictionarySSP__GS1_SSP__">normalizeAccessTokenResponseKeys(_:)</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC32normalizeAccessTokenResponseKeysySDySSypGAEF">normalizeAccessTokenResponseKeys(_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1604,7 +1582,7 @@ is not possible in overrides. Instead, override the various <code>assureXy(dict:
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">normalizeAccessTokenResponseKeys</span><span class="p">(</span><span class="n">_</span> <span class="nv">dict</span><span class="p">:</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">normalizeAccessTokenResponseKeys</span><span class="p">(</span><span class="n">_</span> <span class="nv">dict</span><span class="p">:</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth20A4JSONa">OAuth2JSON</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth20A4JSONa">OAuth2JSON</a></span></code></pre>
 
                         </div>
                       </div>
@@ -1621,7 +1599,6 @@ is not possible in overrides. Instead, override the various <code>assureXy(dict:
                               <td>
                                 <div>
                                   <p>The dictionary that was returned from an access token response</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -1631,7 +1608,6 @@ is not possible in overrides. Instead, override the various <code>assureXy(dict:
                       <div>
                         <h4>Return Value</h4>
                         <p>The dictionary with fixed key names</p>
-
                       </div>
                     </section>
                   </div>
@@ -1639,9 +1615,9 @@ is not possible in overrides. Instead, override the various <code>assureXy(dict:
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth210OAuth2Base29parseRefreshTokenResponseDataFzV10Foundation4DataGVs10DictionarySSP__"></a>
+                    <a name="/s:6OAuth20A4BaseC29parseRefreshTokenResponseDataySDySSypG10Foundation0G0VKF"></a>
                     <a name="//apple_ref/swift/Method/parseRefreshTokenResponseData(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth210OAuth2Base29parseRefreshTokenResponseDataFzV10Foundation4DataGVs10DictionarySSP__">parseRefreshTokenResponseData(_:)</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC29parseRefreshTokenResponseDataySDySSypG10Foundation0G0VKF">parseRefreshTokenResponseData(_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1659,7 +1635,7 @@ is not possible in overrides. Instead, override the various <code>assureXy(dict:
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">parseRefreshTokenResponseData</span><span class="p">(</span><span class="n">_</span> <span class="nv">data</span><span class="p">:</span> <span class="kt">Data</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">parseRefreshTokenResponseData</span><span class="p">(</span><span class="n">_</span> <span class="nv">data</span><span class="p">:</span> <span class="kt">Data</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth20A4JSONa">OAuth2JSON</a></span></code></pre>
 
                         </div>
                       </div>
@@ -1676,7 +1652,6 @@ is not possible in overrides. Instead, override the various <code>assureXy(dict:
                               <td>
                                 <div>
                                   <p>NSData returned from the call</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -1686,7 +1661,6 @@ is not possible in overrides. Instead, override the various <code>assureXy(dict:
                       <div>
                         <h4>Return Value</h4>
                         <p>An OAuth2JSON instance with token data; may contain additional information</p>
-
                       </div>
                     </section>
                   </div>
@@ -1694,9 +1668,9 @@ is not possible in overrides. Instead, override the various <code>assureXy(dict:
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth210OAuth2Base25parseRefreshTokenResponseFzGVs10DictionarySSP__GS1_SSP__"></a>
+                    <a name="/s:6OAuth20A4BaseC25parseRefreshTokenResponseySDySSypGAEKF"></a>
                     <a name="//apple_ref/swift/Method/parseRefreshTokenResponse(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth210OAuth2Base25parseRefreshTokenResponseFzGVs10DictionarySSP__GS1_SSP__">parseRefreshTokenResponse(_:)</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC25parseRefreshTokenResponseySDySSypGAEKF">parseRefreshTokenResponse(_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1715,7 +1689,7 @@ is not possible in overrides. Instead, override the various <code>assureXy(dict:
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">final</span> <span class="kd">func</span> <span class="nf">parseRefreshTokenResponse</span><span class="p">(</span><span class="n">_</span> <span class="nv">dict</span><span class="p">:</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a></span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">final</span> <span class="kd">func</span> <span class="nf">parseRefreshTokenResponse</span><span class="p">(</span><span class="n">_</span> <span class="nv">dict</span><span class="p">:</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth20A4JSONa">OAuth2JSON</a></span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth20A4JSONa">OAuth2JSON</a></span></code></pre>
 
                         </div>
                       </div>
@@ -1732,7 +1706,6 @@ is not possible in overrides. Instead, override the various <code>assureXy(dict:
                               <td>
                                 <div>
                                   <p>Dictionary data parsed from the response</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -1742,7 +1715,6 @@ is not possible in overrides. Instead, override the various <code>assureXy(dict:
                       <div>
                         <h4>Return Value</h4>
                         <p>An OAuth2JSON instance with token data; may contain additional information</p>
-
                       </div>
                     </section>
                   </div>
@@ -1750,9 +1722,9 @@ is not possible in overrides. Instead, override the various <code>assureXy(dict:
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth210OAuth2Base33normalizeRefreshTokenResponseKeysFGVs10DictionarySSP__GS1_SSP__"></a>
+                    <a name="/s:6OAuth20A4BaseC33normalizeRefreshTokenResponseKeysySDySSypGAEF"></a>
                     <a name="//apple_ref/swift/Method/normalizeRefreshTokenResponseKeys(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth210OAuth2Base33normalizeRefreshTokenResponseKeysFGVs10DictionarySSP__GS1_SSP__">normalizeRefreshTokenResponseKeys(_:)</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC33normalizeRefreshTokenResponseKeysySDySSypGAEF">normalizeRefreshTokenResponseKeys(_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1768,7 +1740,7 @@ is not possible in overrides. Instead, override the various <code>assureXy(dict:
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">normalizeRefreshTokenResponseKeys</span><span class="p">(</span><span class="n">_</span> <span class="nv">dict</span><span class="p">:</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">normalizeRefreshTokenResponseKeys</span><span class="p">(</span><span class="n">_</span> <span class="nv">dict</span><span class="p">:</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth20A4JSONa">OAuth2JSON</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth20A4JSONa">OAuth2JSON</a></span></code></pre>
 
                         </div>
                       </div>
@@ -1785,7 +1757,6 @@ is not possible in overrides. Instead, override the various <code>assureXy(dict:
                               <td>
                                 <div>
                                   <p>The dictionary that was returned from a refresh token response</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -1795,7 +1766,6 @@ is not possible in overrides. Instead, override the various <code>assureXy(dict:
                       <div>
                         <h4>Return Value</h4>
                         <p>The dictionary with fixed key names</p>
-
                       </div>
                     </section>
                   </div>
@@ -1803,9 +1773,9 @@ is not possible in overrides. Instead, override the various <code>assureXy(dict:
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth210OAuth2Base18assureMatchesStateFzGVs10DictionarySSP__T_"></a>
+                    <a name="/s:6OAuth20A4BaseC18assureMatchesStateyySDySSypGKF"></a>
                     <a name="//apple_ref/swift/Method/assureMatchesState(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth210OAuth2Base18assureMatchesStateFzGVs10DictionarySSP__T_">assureMatchesState(_:)</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC18assureMatchesStateyySDySSypGKF">assureMatchesState(_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1813,14 +1783,14 @@ is not possible in overrides. Instead, override the various <code>assureXy(dict:
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>This method checks <code>state</code>, throws <code><a href="../Enums/OAuth2Error.html#/s:FO6OAuth211OAuth2Error12missingStateFMS0_S0_">OAuth2Error.missingState</a></code> or <code><a href="../Enums/OAuth2Error.html#/s:FO6OAuth211OAuth2Error12invalidStateFMS0_S0_">OAuth2Error.invalidState</a></code>. Resets state if it matches.</p>
+                        <p>This method checks <code>state</code>, throws <code><a href="../Enums/OAuth2Error.html#/s:6OAuth20A5ErrorO12missingStateyA2CmF">OAuth2Error.missingState</a></code> or <code><a href="../Enums/OAuth2Error.html#/s:6OAuth20A5ErrorO12invalidStateyA2CmF">OAuth2Error.invalidState</a></code>. Resets state if it matches.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">func</span> <span class="nf">assureMatchesState</span><span class="p">(</span><span class="n">_</span> <span class="nv">params</span><span class="p">:</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a></span><span class="p">)</span> <span class="k">throws</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">func</span> <span class="nf">assureMatchesState</span><span class="p">(</span><span class="n">_</span> <span class="nv">params</span><span class="p">:</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth20A4JSONa">OAuth2JSON</a></span><span class="p">)</span> <span class="k">throws</span></code></pre>
 
                         </div>
                       </div>
@@ -1830,9 +1800,9 @@ is not possible in overrides. Instead, override the various <code>assureXy(dict:
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth210OAuth2Base23assureCorrectBearerTypeFzGVs10DictionarySSP__T_"></a>
+                    <a name="/s:6OAuth20A4BaseC23assureCorrectBearerTypeyySDySSypGKF"></a>
                     <a name="//apple_ref/swift/Method/assureCorrectBearerType(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth210OAuth2Base23assureCorrectBearerTypeFzGVs10DictionarySSP__T_">assureCorrectBearerType(_:)</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC23assureCorrectBearerTypeyySDySSypGKF">assureCorrectBearerType(_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1847,7 +1817,7 @@ is not possible in overrides. Instead, override the various <code>assureXy(dict:
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">assureCorrectBearerType</span><span class="p">(</span><span class="n">_</span> <span class="nv">params</span><span class="p">:</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a></span><span class="p">)</span> <span class="k">throws</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">assureCorrectBearerType</span><span class="p">(</span><span class="n">_</span> <span class="nv">params</span><span class="p">:</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth20A4JSONa">OAuth2JSON</a></span><span class="p">)</span> <span class="k">throws</span></code></pre>
 
                         </div>
                       </div>
@@ -1857,9 +1827,9 @@ is not possible in overrides. Instead, override the various <code>assureXy(dict:
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth210OAuth2Base31assureAccessTokenParamsAreValidFzGVs10DictionarySSP__T_"></a>
+                    <a name="/s:6OAuth20A4BaseC31assureAccessTokenParamsAreValidyySDySSypGKF"></a>
                     <a name="//apple_ref/swift/Method/assureAccessTokenParamsAreValid(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth210OAuth2Base31assureAccessTokenParamsAreValidFzGVs10DictionarySSP__T_">assureAccessTokenParamsAreValid(_:)</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC31assureAccessTokenParamsAreValidyySDySSypGKF">assureAccessTokenParamsAreValid(_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1874,7 +1844,7 @@ is not possible in overrides. Instead, override the various <code>assureXy(dict:
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">assureAccessTokenParamsAreValid</span><span class="p">(</span><span class="n">_</span> <span class="nv">params</span><span class="p">:</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a></span><span class="p">)</span> <span class="k">throws</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">assureAccessTokenParamsAreValid</span><span class="p">(</span><span class="n">_</span> <span class="nv">params</span><span class="p">:</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth20A4JSONa">OAuth2JSON</a></span><span class="p">)</span> <span class="k">throws</span></code></pre>
 
                         </div>
                       </div>
@@ -1884,9 +1854,9 @@ is not possible in overrides. Instead, override the various <code>assureXy(dict:
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth210OAuth2Base32assureRefreshTokenParamsAreValidFzGVs10DictionarySSP__T_"></a>
+                    <a name="/s:6OAuth20A4BaseC32assureRefreshTokenParamsAreValidyySDySSypGKF"></a>
                     <a name="//apple_ref/swift/Method/assureRefreshTokenParamsAreValid(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth210OAuth2Base32assureRefreshTokenParamsAreValidFzGVs10DictionarySSP__T_">assureRefreshTokenParamsAreValid(_:)</a>
+                    <a class="token" href="#/s:6OAuth20A4BaseC32assureRefreshTokenParamsAreValidyySDySSypGKF">assureRefreshTokenParamsAreValid(_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1901,7 +1871,7 @@ is not possible in overrides. Instead, override the various <code>assureXy(dict:
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">assureRefreshTokenParamsAreValid</span><span class="p">(</span><span class="n">_</span> <span class="nv">params</span><span class="p">:</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a></span><span class="p">)</span> <span class="k">throws</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">assureRefreshTokenParamsAreValid</span><span class="p">(</span><span class="n">_</span> <span class="nv">params</span><span class="p">:</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth20A4JSONa">OAuth2JSON</a></span><span class="p">)</span> <span class="k">throws</span></code></pre>
 
                         </div>
                       </div>
@@ -1916,8 +1886,8 @@ is not possible in overrides. Instead, override the various <code>assureXy(dict:
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2017 <a class="link" href="https://github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2017-02-28)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>&copy; 2019 <a class="link" href="https://github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2019-01-10)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
 </div>

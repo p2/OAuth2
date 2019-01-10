@@ -8,6 +8,9 @@
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
     
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
   </head>
   <body>
 
@@ -21,6 +24,12 @@
           OAuth2 Docs
         </a>
          (98% documented)
+      </p>
+    
+      <p class="header-col--secondary">
+        <form role="search" action="../search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
       </p>
     
         <p class="header-col header-col--secondary">
@@ -92,10 +101,10 @@
                 <a class="nav-group-task-link" href="../Enums/OAuth2Error.html">OAuth2Error</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Errors &amp; Types.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a>
+                <a class="nav-group-task-link" href="../Errors &amp; Types.html#/s:6OAuth20A4JSONa">OAuth2JSON</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Errors &amp; Types.html#/s:6OAuth216OAuth2StringDict">OAuth2StringDict</a>
+                <a class="nav-group-task-link" href="../Errors &amp; Types.html#/s:6OAuth20A10StringDicta">OAuth2StringDict</a>
               </li>
             </ul>
           </li>
@@ -121,7 +130,7 @@
                 <a class="nav-group-task-link" href="../Classes/OAuth2Response.html">OAuth2Response</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Requests.html#/s:6OAuth213OAuth2Headers">OAuth2Headers</a>
+                <a class="nav-group-task-link" href="../Requests.html#/s:6OAuth20A7Headersa">OAuth2Headers</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/OAuth2RequestParams.html">OAuth2RequestParams</a>
@@ -244,7 +253,7 @@
             <a class="nav-group-name-link" href="../Other Functions.html">Other Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Other Functions.html#/s:F6OAuth216callOnMainThreadFFT_T_T_">callOnMainThread(_:)</a>
+                <a class="nav-group-task-link" href="../Other Functions.html#/s:6OAuth216callOnMainThreadyyyyXEF">callOnMainThread(_:)</a>
               </li>
             </ul>
           </li>
@@ -257,7 +266,7 @@
             <h1>OAuth2DataLoader</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="n">open</span> <span class="kd">class</span> <span class="kt">OAuth2DataLoader</span><span class="p">:</span> <span class="kt"><a href="../Classes/OAuth2Requestable.html">OAuth2Requestable</a></span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">class</span> <span class="kt">OAuth2DataLoader</span> <span class="p">:</span> <span class="kt"><a href="../Classes/OAuth2Requestable.html">OAuth2Requestable</a></span></code></pre>
 
                 </div>
               </div>
@@ -273,9 +282,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC6OAuth216OAuth2DataLoader6oauth2CS_6OAuth2"></a>
+                    <a name="/s:6OAuth20A10DataLoaderC6oauth2A2ACvp"></a>
                     <a name="//apple_ref/swift/Property/oauth2" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC6OAuth216OAuth2DataLoader6oauth2CS_6OAuth2">oauth2</a>
+                    <a class="token" href="#/s:6OAuth20A10DataLoaderC6oauth2A2ACvp">oauth2</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -290,7 +299,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">oauth2</span><span class="p">:</span> <span class="kt"><a href="../Classes/OAuth2.html">OAuth2</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">oauth2</span><span class="p">:</span> <span class="kt"><a href="../Classes/OAuth2.html">OAuth2</a></span></code></pre>
 
                         </div>
                       </div>
@@ -300,9 +309,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC6OAuth216OAuth2DataLoader16alsoIntercept403Sb"></a>
+                    <a name="/s:6OAuth20A10DataLoaderC16alsoIntercept403Sbvp"></a>
                     <a name="//apple_ref/swift/Property/alsoIntercept403" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC6OAuth216OAuth2DataLoader16alsoIntercept403Sb">alsoIntercept403</a>
+                    <a class="token" href="#/s:6OAuth20A10DataLoaderC16alsoIntercept403Sbvp">alsoIntercept403</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -317,7 +326,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">alsoIntercept403</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">alsoIntercept403</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -327,9 +336,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth216OAuth2DataLoadercFT6oauth2CS_6OAuth24hostGSqSS__S0_"></a>
+                    <a name="/s:6OAuth20A10DataLoaderC6oauth24hostAc2AC_SSSgtcfc"></a>
                     <a name="//apple_ref/swift/Method/init(oauth2:host:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth216OAuth2DataLoadercFT6oauth2CS_6OAuth24hostGSqSS__S0_">init(oauth2:host:)</a>
+                    <a class="token" href="#/s:6OAuth20A10DataLoaderC6oauth24hostAc2AC_SSSgtcfc">init(oauth2:host:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -346,7 +355,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">oauth2</span><span class="p">:</span> <span class="kt"><a href="../Classes/OAuth2.html">OAuth2</a></span><span class="p">,</span> <span class="nv">host</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">oauth2</span><span class="p">:</span> <span class="kt"><a href="../Classes/OAuth2.html">OAuth2</a></span><span class="p">,</span> <span class="nv">host</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -363,7 +372,6 @@
                               <td>
                                 <div>
                                   <p>The OAuth2 instance to use for authorization when loading data.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -375,8 +383,7 @@
                               </td>
                               <td>
                                 <div>
-                                  <p>If given will handle redirects within the same host by way of <code>OAuth2DataLoaderSessionTaskDelegate</code></p>
-
+                                  <p>If given will handle redirects within the same host by way of <code><a href="../Classes/OAuth2DataLoaderSessionTaskDelegate.html">OAuth2DataLoaderSessionTaskDelegate</a></code></p>
                                 </div>
                               </td>
                             </tr>
@@ -400,9 +407,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth216OAuth2DataLoader7performFT7requestV10Foundation10URLRequest8callbackFCS_14OAuth2ResponseT__T_"></a>
+                    <a name="/s:6OAuth20A10DataLoaderC7perform7request8callbacky10Foundation10URLRequestV_yAA0A8ResponseCctF"></a>
                     <a name="//apple_ref/swift/Method/perform(request:callback:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth216OAuth2DataLoader7performFT7requestV10Foundation10URLRequest8callbackFCS_14OAuth2ResponseT__T_">perform(request:callback:)</a>
+                    <a class="token" href="#/s:6OAuth20A10DataLoaderC7perform7request8callbacky10Foundation10URLRequestV_yAA0A8ResponseCctF">perform(request:callback:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -414,16 +421,15 @@
 success, resumes all enqueued calls.</p>
 
 <p>The callback is easy to use, like so:</p>
-
-<pre class="highlight plaintext"><code>perform(request: req) { dataStatusResponse in
-    do {
-        let (data, status) = try dataStatusResponse()
-        // do what you must with `data` as Data and `status` as Int
-    }
-    catch let error {
-        // the request failed because of `error`
-    }
-}
+<pre class="highlight swift"><code><span class="nf">perform</span><span class="p">(</span><span class="nv">request</span><span class="p">:</span> <span class="n">req</span><span class="p">)</span> <span class="p">{</span> <span class="n">dataStatusResponse</span> <span class="k">in</span>
+    <span class="k">do</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="p">(</span><span class="nv">data</span><span class="p">,</span> <span class="nv">status</span><span class="p">)</span> <span class="o">=</span> <span class="k">try</span> <span class="nf">dataStatusResponse</span><span class="p">()</span>
+        <span class="c1">// do what you must with `data` as Data and `status` as Int</span>
+    <span class="p">}</span>
+    <span class="k">catch</span> <span class="k">let</span> <span class="nv">error</span> <span class="p">{</span>
+        <span class="c1">// the request failed because of `error`</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </code></pre>
 
                       </div>
@@ -431,7 +437,7 @@ success, resumes all enqueued calls.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">override</span> <span class="n">open</span> <span class="kd">func</span> <span class="nf">perform</span><span class="p">(</span><span class="nv">request</span><span class="p">:</span> <span class="kt">URLRequest</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">((</span><span class="kt"><a href="../Classes/OAuth2Response.html">OAuth2Response</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">))</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">override</span> <span class="kd">open</span> <span class="kd">func</span> <span class="nf">perform</span><span class="p">(</span><span class="nv">request</span><span class="p">:</span> <span class="kt">URLRequest</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">((</span><span class="kt"><a href="../Classes/OAuth2Response.html">OAuth2Response</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">))</span></code></pre>
 
                         </div>
                       </div>
@@ -448,7 +454,6 @@ success, resumes all enqueued calls.</p>
                               <td>
                                 <div>
                                   <p>The request to execute</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -461,7 +466,6 @@ success, resumes all enqueued calls.</p>
                               <td>
                                 <div>
                                   <p>The callback to call when the request completes/fails. Looks terrifying, see above on how to use it</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -474,9 +478,9 @@ success, resumes all enqueued calls.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth216OAuth2DataLoader7performFT7requestV10Foundation10URLRequest5retrySb8callbackFCS_14OAuth2ResponseT__T_"></a>
+                    <a name="/s:6OAuth20A10DataLoaderC7perform7request5retry8callbacky10Foundation10URLRequestV_SbyAA0A8ResponseCctF"></a>
                     <a name="//apple_ref/swift/Method/perform(request:retry:callback:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth216OAuth2DataLoader7performFT7requestV10Foundation10URLRequest5retrySb8callbackFCS_14OAuth2ResponseT__T_">perform(request:retry:callback:)</a>
+                    <a class="token" href="#/s:6OAuth20A10DataLoaderC7perform7request5retry8callbacky10Foundation10URLRequestV_SbyAA0A8ResponseCctF">perform(request:retry:callback:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -484,22 +488,21 @@ success, resumes all enqueued calls.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>This method takes an additional <code>retry</code> flag, then uses the base implementation of <code><a href="../Classes/OAuth2DataLoader.html#/s:FC6OAuth216OAuth2DataLoader7performFT7requestV10Foundation10URLRequest8callbackFCS_14OAuth2ResponseT__T_">perform(request:callback:)</a></code> to perform the given
-request. It intercepts 401 (and 403, if <code><a href="../Classes/OAuth2DataLoader.html#/s:vC6OAuth216OAuth2DataLoader16alsoIntercept403Sb">alsoIntercept403</a></code> is true), enqueues the request and performs authorization. During
+                        <p>This method takes an additional <code>retry</code> flag, then uses the base implementation of <code><a href="../Classes/OAuth2DataLoader.html#/s:6OAuth20A10DataLoaderC7perform7request8callbacky10Foundation10URLRequestV_yAA0A8ResponseCctF">perform(request:callback:)</a></code> to perform the given
+request. It intercepts 401 (and 403, if <code><a href="../Classes/OAuth2DataLoader.html#/s:6OAuth20A10DataLoaderC16alsoIntercept403Sbvp">alsoIntercept403</a></code> is true), enqueues the request and performs authorization. During
 authorization, all requests to be performed are enqueued and they are all dequeued once authorization finishes, either by retrying
 them on authorization success or by aborting them all with the same error.</p>
 
 <p>The callback is easy to use, like so:</p>
-
-<pre class="highlight plaintext"><code>perform(request: req) { dataStatusResponse in
-    do {
-        let (data, status) = try dataStatusResponse()
-        // do what you must with `data` as Data and `status` as Int
-    }
-    catch let error {
-        // the request failed because of `error`
-    }
-}
+<pre class="highlight swift"><code><span class="nf">perform</span><span class="p">(</span><span class="nv">request</span><span class="p">:</span> <span class="n">req</span><span class="p">)</span> <span class="p">{</span> <span class="n">dataStatusResponse</span> <span class="k">in</span>
+    <span class="k">do</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="p">(</span><span class="nv">data</span><span class="p">,</span> <span class="nv">status</span><span class="p">)</span> <span class="o">=</span> <span class="k">try</span> <span class="nf">dataStatusResponse</span><span class="p">()</span>
+        <span class="c1">// do what you must with `data` as Data and `status` as Int</span>
+    <span class="p">}</span>
+    <span class="k">catch</span> <span class="k">let</span> <span class="nv">error</span> <span class="p">{</span>
+        <span class="c1">// the request failed because of `error`</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </code></pre>
 
                       </div>
@@ -507,7 +510,7 @@ them on authorization success or by aborting them all with the same error.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">perform</span><span class="p">(</span><span class="nv">request</span><span class="p">:</span> <span class="kt">URLRequest</span><span class="p">,</span> <span class="nv">retry</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">((</span><span class="kt"><a href="../Classes/OAuth2Response.html">OAuth2Response</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">))</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">perform</span><span class="p">(</span><span class="nv">request</span><span class="p">:</span> <span class="kt">URLRequest</span><span class="p">,</span> <span class="nv">retry</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">((</span><span class="kt"><a href="../Classes/OAuth2Response.html">OAuth2Response</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">))</span></code></pre>
 
                         </div>
                       </div>
@@ -524,7 +527,6 @@ them on authorization success or by aborting them all with the same error.</p>
                               <td>
                                 <div>
                                   <p>The request to execute</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -537,7 +539,6 @@ them on authorization success or by aborting them all with the same error.</p>
                               <td>
                                 <div>
                                   <p>Whether the request should be retried on 401 (and possibly 403)</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -550,7 +551,6 @@ them on authorization success or by aborting them all with the same error.</p>
                               <td>
                                 <div>
                                   <p>The callback to call when the request completes/fails</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -563,9 +563,9 @@ them on authorization success or by aborting them all with the same error.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth216OAuth2DataLoader18attemptToAuthorizeFT8callbackFTGSqGVs10DictionarySSP___GSqOS_11OAuth2Error__T__T_"></a>
+                    <a name="/s:6OAuth20A10DataLoaderC18attemptToAuthorize8callbackyySDySSypGSg_AA0A5ErrorOSgtc_tF"></a>
                     <a name="//apple_ref/swift/Method/attemptToAuthorize(callback:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth216OAuth2DataLoader18attemptToAuthorizeFT8callbackFTGSqGVs10DictionarySSP___GSqOS_11OAuth2Error__T__T_">attemptToAuthorize(callback:)</a>
+                    <a class="token" href="#/s:6OAuth20A10DataLoaderC18attemptToAuthorize8callbackyySDySSypGSg_AA0A5ErrorOSgtc_tF">attemptToAuthorize(callback:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -573,7 +573,7 @@ them on authorization success or by aborting them all with the same error.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>If not already authorizing, will use its <code><a href="../Classes/OAuth2DataLoader.html#/s:vC6OAuth216OAuth2DataLoader6oauth2CS_6OAuth2">oauth2</a></code> instance to start authorization after forgetting any tokens (!).</p>
+                        <p>If not already authorizing, will use its <code><a href="../Classes/OAuth2DataLoader.html#/s:6OAuth20A10DataLoaderC6oauth2A2ACvp">oauth2</a></code> instance to start authorization after forgetting any tokens (!).</p>
 
 <p>This method will ignore calls while authorization is ongoing, meaning you will only get the callback once per authorization cycle.</p>
 
@@ -582,7 +582,7 @@ them on authorization success or by aborting them all with the same error.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">attemptToAuthorize</span><span class="p">(</span><span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">((</span><span class="kt"><a href="../Errors & Types.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a></span><span class="p">?,</span> <span class="kt"><a href="../Enums/OAuth2Error.html">OAuth2Error</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">))</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">attemptToAuthorize</span><span class="p">(</span><span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">((</span><span class="kt"><a href="../Errors & Types.html#/s:6OAuth20A4JSONa">OAuth2JSON</a></span><span class="p">?,</span> <span class="kt"><a href="../Enums/OAuth2Error.html">OAuth2Error</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">))</span></code></pre>
 
                         </div>
                       </div>
@@ -598,8 +598,8 @@ them on authorization success or by aborting them all with the same error.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>The callback passed on from <code>authorize(callback:)</code>. Authorization finishes successfully (auth parameters will be non-nil but may be an empty dict), fails (error will be non-nil) or is cancelled (both params and error are nil)</p>
-
+                                  <p>The callback passed on from <code>authorize(callback:)</code>. Authorization finishes successfully (auth parameters will be
+                  non-nil but may be an empty dict), fails (error will be non-nil) or is canceled (both params and error are nil)</p>
                                 </div>
                               </td>
                             </tr>
@@ -623,9 +623,9 @@ them on authorization success or by aborting them all with the same error.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth216OAuth2DataLoader7enqueueFT7requestV10Foundation10URLRequest8callbackFCS_14OAuth2ResponseT__T_"></a>
+                    <a name="/s:6OAuth20A10DataLoaderC7enqueue7request8callbacky10Foundation10URLRequestV_yAA0A8ResponseCctF"></a>
                     <a name="//apple_ref/swift/Method/enqueue(request:callback:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth216OAuth2DataLoader7enqueueFT7requestV10Foundation10URLRequest8callbackFCS_14OAuth2ResponseT__T_">enqueue(request:callback:)</a>
+                    <a class="token" href="#/s:6OAuth20A10DataLoaderC7enqueue7request8callbacky10Foundation10URLRequestV_yAA0A8ResponseCctF">enqueue(request:callback:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -640,7 +640,7 @@ them on authorization success or by aborting them all with the same error.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">enqueue</span><span class="p">(</span><span class="nv">request</span><span class="p">:</span> <span class="kt">URLRequest</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">((</span><span class="kt"><a href="../Classes/OAuth2Response.html">OAuth2Response</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">))</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">enqueue</span><span class="p">(</span><span class="nv">request</span><span class="p">:</span> <span class="kt">URLRequest</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">((</span><span class="kt"><a href="../Classes/OAuth2Response.html">OAuth2Response</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">))</span></code></pre>
 
                         </div>
                       </div>
@@ -657,7 +657,6 @@ them on authorization success or by aborting them all with the same error.</p>
                               <td>
                                 <div>
                                   <p>The URLRequest to enqueue for later execution</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -670,7 +669,6 @@ them on authorization success or by aborting them all with the same error.</p>
                               <td>
                                 <div>
                                   <p>The closure to call when the request has been executed</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -683,9 +681,9 @@ them on authorization success or by aborting them all with the same error.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth216OAuth2DataLoader7enqueueFT7requestVS_17OAuth2DataRequest_T_"></a>
+                    <a name="/s:6OAuth20A10DataLoaderC7enqueue7requestyAA0aB7RequestV_tF"></a>
                     <a name="//apple_ref/swift/Method/enqueue(request:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth216OAuth2DataLoader7enqueueFT7requestVS_17OAuth2DataRequest_T_">enqueue(request:)</a>
+                    <a class="token" href="#/s:6OAuth20A10DataLoaderC7enqueue7requestyAA0aB7RequestV_tF">enqueue(request:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -700,7 +698,7 @@ them on authorization success or by aborting them all with the same error.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">enqueue</span><span class="p">(</span><span class="nv">request</span><span class="p">:</span> <span class="kt"><a href="../Structs/OAuth2DataRequest.html">OAuth2DataRequest</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">enqueue</span><span class="p">(</span><span class="nv">request</span><span class="p">:</span> <span class="kt"><a href="../Structs/OAuth2DataRequest.html">OAuth2DataRequest</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -717,7 +715,6 @@ them on authorization success or by aborting them all with the same error.</p>
                               <td>
                                 <div>
                                   <p>The OAuth2DataRequest to enqueue for later execution</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -730,9 +727,9 @@ them on authorization success or by aborting them all with the same error.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth216OAuth2DataLoader15dequeueAndApplyFT7closureFVS_17OAuth2DataRequestT__T_"></a>
+                    <a name="/s:6OAuth20A10DataLoaderC15dequeueAndApply7closureyyAA0aB7RequestVXE_tF"></a>
                     <a name="//apple_ref/swift/Method/dequeueAndApply(closure:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth216OAuth2DataLoader15dequeueAndApplyFT7closureFVS_17OAuth2DataRequestT__T_">dequeueAndApply(closure:)</a>
+                    <a class="token" href="#/s:6OAuth20A10DataLoaderC15dequeueAndApply7closureyyAA0aB7RequestVXE_tF">dequeueAndApply(closure:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -747,7 +744,7 @@ them on authorization success or by aborting them all with the same error.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">dequeueAndApply</span><span class="p">(</span><span class="nv">closure</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Structs/OAuth2DataRequest.html">OAuth2DataRequest</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">))</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">dequeueAndApply</span><span class="p">(</span><span class="nv">closure</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Structs/OAuth2DataRequest.html">OAuth2DataRequest</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">))</span></code></pre>
 
                         </div>
                       </div>
@@ -764,7 +761,6 @@ them on authorization success or by aborting them all with the same error.</p>
                               <td>
                                 <div>
                                   <p>The closure to apply to each enqueued request</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -777,9 +773,9 @@ them on authorization success or by aborting them all with the same error.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth216OAuth2DataLoader8retryAllFT_T_"></a>
+                    <a name="/s:6OAuth20A10DataLoaderC8retryAllyyF"></a>
                     <a name="//apple_ref/swift/Method/retryAll()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth216OAuth2DataLoader8retryAllFT_T_">retryAll()</a>
+                    <a class="token" href="#/s:6OAuth20A10DataLoaderC8retryAllyyF">retryAll()</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -794,7 +790,7 @@ them on authorization success or by aborting them all with the same error.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">retryAll</span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">retryAll</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -804,9 +800,9 @@ them on authorization success or by aborting them all with the same error.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth216OAuth2DataLoader12throwAllAwayFT4withOS_11OAuth2Error_T_"></a>
+                    <a name="/s:6OAuth20A10DataLoaderC12throwAllAway4withyAA0A5ErrorO_tF"></a>
                     <a name="//apple_ref/swift/Method/throwAllAway(with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth216OAuth2DataLoader12throwAllAwayFT4withOS_11OAuth2Error_T_">throwAllAway(with:)</a>
+                    <a class="token" href="#/s:6OAuth20A10DataLoaderC12throwAllAway4withyAA0A5ErrorO_tF">throwAllAway(with:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -821,7 +817,7 @@ them on authorization success or by aborting them all with the same error.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">throwAllAway</span><span class="p">(</span><span class="n">with</span> <span class="nv">error</span><span class="p">:</span> <span class="kt"><a href="../Enums/OAuth2Error.html">OAuth2Error</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">throwAllAway</span><span class="p">(</span><span class="n">with</span> <span class="nv">error</span><span class="p">:</span> <span class="kt"><a href="../Enums/OAuth2Error.html">OAuth2Error</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -838,7 +834,6 @@ them on authorization success or by aborting them all with the same error.</p>
                               <td>
                                 <div>
                                   <p>The error with which to finalize all enqueued requests</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -856,8 +851,8 @@ them on authorization success or by aborting them all with the same error.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2017 <a class="link" href="https://github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2017-02-28)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>&copy; 2019 <a class="link" href="https://github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2019-01-10)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
 </div>

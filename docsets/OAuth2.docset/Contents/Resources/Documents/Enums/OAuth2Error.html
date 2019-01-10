@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>OAuth2Error Enum Reference</title>
+    <title>OAuth2Error Enumeration Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset="utf-8">
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
     
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
   </head>
   <body>
 
     <a name="//apple_ref/swift/Enum/OAuth2Error" class="dashAnchor"></a>
 
-    <a title="OAuth2Error Enum Reference"></a>
+    <a title="OAuth2Error Enumeration Reference"></a>
 
     <header class="header">
       <p class="header-col header-col--primary">
@@ -21,6 +24,12 @@
           OAuth2 Docs
         </a>
          (98% documented)
+      </p>
+    
+      <p class="header-col--secondary">
+        <form role="search" action="../search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
       </p>
     
         <p class="header-col header-col--secondary">
@@ -41,7 +50,7 @@
     <p class="breadcrumbs">
       <a class="breadcrumb" href="../index.html">OAuth2 Reference</a>
       <img class="carat" src="../img/carat.png" />
-      OAuth2Error Enum Reference
+      OAuth2Error Enumeration Reference
     </p>
 
     <div class="content-wrapper">
@@ -92,10 +101,10 @@
                 <a class="nav-group-task-link" href="../Enums/OAuth2Error.html">OAuth2Error</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Errors &amp; Types.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a>
+                <a class="nav-group-task-link" href="../Errors &amp; Types.html#/s:6OAuth20A4JSONa">OAuth2JSON</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Errors &amp; Types.html#/s:6OAuth216OAuth2StringDict">OAuth2StringDict</a>
+                <a class="nav-group-task-link" href="../Errors &amp; Types.html#/s:6OAuth20A10StringDicta">OAuth2StringDict</a>
               </li>
             </ul>
           </li>
@@ -121,7 +130,7 @@
                 <a class="nav-group-task-link" href="../Classes/OAuth2Response.html">OAuth2Response</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Requests.html#/s:6OAuth213OAuth2Headers">OAuth2Headers</a>
+                <a class="nav-group-task-link" href="../Requests.html#/s:6OAuth20A7Headersa">OAuth2Headers</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/OAuth2RequestParams.html">OAuth2RequestParams</a>
@@ -244,7 +253,7 @@
             <a class="nav-group-name-link" href="../Other Functions.html">Other Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Other Functions.html#/s:F6OAuth216callOnMainThreadFFT_T_T_">callOnMainThread(_:)</a>
+                <a class="nav-group-task-link" href="../Other Functions.html#/s:6OAuth216callOnMainThreadyyyyXEF">callOnMainThread(_:)</a>
               </li>
             </ul>
           </li>
@@ -257,7 +266,7 @@
             <h1>OAuth2Error</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OAuth2Error</span><span class="p">:</span> <span class="kt">Error</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OAuth2Error</span> <span class="p">:</span> <span class="kt">Error</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
 
                 </div>
               </div>
@@ -275,9 +284,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO6OAuth211OAuth2Error7genericFMS0_FSSS0_"></a>
-                    <a name="//apple_ref/swift/Element/generic" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth211OAuth2Error7genericFMS0_FSSS0_">generic</a>
+                    <a name="/s:6OAuth20A5ErrorO7genericyACSScACmF"></a>
+                    <a name="//apple_ref/swift/Element/generic(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO7genericyACSScACmF">generic(_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -292,23 +301,19 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="nf">generic</span><span class="p">(</span><span class="kt">String</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="nf">generic</span><span class="p">(</span><span class="kt">String</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO6OAuth211OAuth2Error7nsErrorFMS0_FCSo7NSErrorS0_"></a>
-                    <a name="//apple_ref/swift/Element/nsError" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth211OAuth2Error7nsErrorFMS0_FCSo7NSErrorS0_">nsError</a>
+                    <a name="/s:6OAuth20A5ErrorO02nsB0yACSo7NSErrorCcACmF"></a>
+                    <a name="//apple_ref/swift/Element/nsError(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO02nsB0yACSo7NSErrorCcACmF">nsError(_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -323,23 +328,19 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="nf">nsError</span><span class="p">(</span><span class="kt">Foundation</span><span class="o">.</span><span class="kt">NSError</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="nf">nsError</span><span class="p">(</span><span class="kt">Foundation</span><span class="o">.</span><span class="kt">NSError</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO6OAuth211OAuth2Error20invalidURLComponentsFMS0_FV10Foundation13URLComponentsS0_"></a>
-                    <a name="//apple_ref/swift/Element/invalidURLComponents" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth211OAuth2Error20invalidURLComponentsFMS0_FV10Foundation13URLComponentsS0_">invalidURLComponents</a>
+                    <a name="/s:6OAuth20A5ErrorO20invalidURLComponentsyAC10Foundation0D0VcACmF"></a>
+                    <a name="//apple_ref/swift/Element/invalidURLComponents(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO20invalidURLComponentsyAC10Foundation0D0VcACmF">invalidURLComponents(_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -354,7 +355,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="nf">invalidURLComponents</span><span class="p">(</span><span class="kt">URLComponents</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="nf">invalidURLComponents</span><span class="p">(</span><span class="kt">URLComponents</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -364,13 +365,20 @@
               </ul>
             </div>
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Client%20errors"></a>
+                <a name="//apple_ref/swift/Section/Client errors" class="dashAnchor"></a>
+                <a href="#/Client%20errors">
+                  <h3 class="section-name">Client errors</h3>
+                </a>
+              </div>
               <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO6OAuth211OAuth2Error10noClientIdFMS0_S0_"></a>
+                    <a name="/s:6OAuth20A5ErrorO10noClientIdyA2CmF"></a>
                     <a name="//apple_ref/swift/Element/noClientId" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth211OAuth2Error10noClientIdFMS0_S0_">noClientId</a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO10noClientIdyA2CmF">noClientId</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -385,23 +393,19 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">noClientId</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">noClientId</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO6OAuth211OAuth2Error14noClientSecretFMS0_S0_"></a>
+                    <a name="/s:6OAuth20A5ErrorO14noClientSecretyA2CmF"></a>
                     <a name="//apple_ref/swift/Element/noClientSecret" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth211OAuth2Error14noClientSecretFMS0_S0_">noClientSecret</a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO14noClientSecretyA2CmF">noClientSecret</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -416,23 +420,19 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">noClientSecret</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">noClientSecret</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO6OAuth211OAuth2Error13noRedirectURLFMS0_S0_"></a>
+                    <a name="/s:6OAuth20A5ErrorO13noRedirectURLyA2CmF"></a>
                     <a name="//apple_ref/swift/Element/noRedirectURL" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth211OAuth2Error13noRedirectURLFMS0_S0_">noRedirectURL</a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO13noRedirectURLyA2CmF">noRedirectURL</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -447,23 +447,19 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">noRedirectURL</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">noRedirectURL</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO6OAuth211OAuth2Error10noUsernameFMS0_S0_"></a>
+                    <a name="/s:6OAuth20A5ErrorO10noUsernameyA2CmF"></a>
                     <a name="//apple_ref/swift/Element/noUsername" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth211OAuth2Error10noUsernameFMS0_S0_">noUsername</a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO10noUsernameyA2CmF">noUsername</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -478,23 +474,19 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">noUsername</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">noUsername</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO6OAuth211OAuth2Error10noPasswordFMS0_S0_"></a>
+                    <a name="/s:6OAuth20A5ErrorO10noPasswordyA2CmF"></a>
                     <a name="//apple_ref/swift/Element/noPassword" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth211OAuth2Error10noPasswordFMS0_S0_">noPassword</a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO10noPasswordyA2CmF">noPassword</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -509,23 +501,19 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">noPassword</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">noPassword</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO6OAuth211OAuth2Error18alreadyAuthorizingFMS0_S0_"></a>
+                    <a name="/s:6OAuth20A5ErrorO18alreadyAuthorizingyA2CmF"></a>
                     <a name="//apple_ref/swift/Element/alreadyAuthorizing" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth211OAuth2Error18alreadyAuthorizingFMS0_S0_">alreadyAuthorizing</a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO18alreadyAuthorizingyA2CmF">alreadyAuthorizing</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -540,23 +528,19 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">alreadyAuthorizing</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">alreadyAuthorizing</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO6OAuth211OAuth2Error22noAuthorizationContextFMS0_S0_"></a>
+                    <a name="/s:6OAuth20A5ErrorO22noAuthorizationContextyA2CmF"></a>
                     <a name="//apple_ref/swift/Element/noAuthorizationContext" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth211OAuth2Error22noAuthorizationContextFMS0_S0_">noAuthorizationContext</a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO22noAuthorizationContextyA2CmF">noAuthorizationContext</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -571,23 +555,19 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">noAuthorizationContext</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">noAuthorizationContext</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO6OAuth211OAuth2Error27invalidAuthorizationContextFMS0_S0_"></a>
+                    <a name="/s:6OAuth20A5ErrorO27invalidAuthorizationContextyA2CmF"></a>
                     <a name="//apple_ref/swift/Element/invalidAuthorizationContext" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth211OAuth2Error27invalidAuthorizationContextFMS0_S0_">invalidAuthorizationContext</a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO27invalidAuthorizationContextyA2CmF">invalidAuthorizationContext</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -602,23 +582,19 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">invalidAuthorizationContext</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">invalidAuthorizationContext</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO6OAuth211OAuth2Error18invalidRedirectURLFMS0_FSSS0_"></a>
-                    <a name="//apple_ref/swift/Element/invalidRedirectURL" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth211OAuth2Error18invalidRedirectURLFMS0_FSSS0_">invalidRedirectURL</a>
+                    <a name="/s:6OAuth20A5ErrorO18invalidRedirectURLyACSScACmF"></a>
+                    <a name="//apple_ref/swift/Element/invalidRedirectURL(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO18invalidRedirectURLyACSScACmF">invalidRedirectURL(_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -633,23 +609,19 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="nf">invalidRedirectURL</span><span class="p">(</span><span class="kt">String</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="nf">invalidRedirectURL</span><span class="p">(</span><span class="kt">String</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO6OAuth211OAuth2Error13noAccessTokenFMS0_S0_"></a>
+                    <a name="/s:6OAuth20A5ErrorO13noAccessTokenyA2CmF"></a>
                     <a name="//apple_ref/swift/Element/noAccessToken" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth211OAuth2Error13noAccessTokenFMS0_S0_">noAccessToken</a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO13noAccessTokenyA2CmF">noAccessToken</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -664,23 +636,19 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">noAccessToken</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">noAccessToken</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO6OAuth211OAuth2Error14noRefreshTokenFMS0_S0_"></a>
+                    <a name="/s:6OAuth20A5ErrorO14noRefreshTokenyA2CmF"></a>
                     <a name="//apple_ref/swift/Element/noRefreshToken" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth211OAuth2Error14noRefreshTokenFMS0_S0_">noRefreshToken</a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO14noRefreshTokenyA2CmF">noRefreshToken</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -695,23 +663,19 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">noRefreshToken</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">noRefreshToken</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO6OAuth211OAuth2Error17noRegistrationURLFMS0_S0_"></a>
+                    <a name="/s:6OAuth20A5ErrorO17noRegistrationURLyA2CmF"></a>
                     <a name="//apple_ref/swift/Element/noRegistrationURL" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth211OAuth2Error17noRegistrationURLFMS0_S0_">noRegistrationURL</a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO17noRegistrationURLyA2CmF">noRegistrationURL</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -726,23 +690,19 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">noRegistrationURL</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">noRegistrationURL</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO6OAuth211OAuth2Error22invalidLoginControllerFMS0_FT10actualTypeSS12expectedTypeSS_S0_"></a>
-                    <a name="//apple_ref/swift/Element/invalidLoginController" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth211OAuth2Error22invalidLoginControllerFMS0_FT10actualTypeSS12expectedTypeSS_S0_">invalidLoginController</a>
+                    <a name="/s:6OAuth20A5ErrorO22invalidLoginControlleryACSS_SStcACmF"></a>
+                    <a name="//apple_ref/swift/Element/invalidLoginController(actualType:expectedType:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO22invalidLoginControlleryACSS_SStcACmF">invalidLoginController(actualType:expectedType:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -757,23 +717,19 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="nf">invalidLoginController</span><span class="p">(</span><span class="nv">actualType</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">expectedType</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="nf">invalidLoginController</span><span class="p">(</span><span class="nv">actualType</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">expectedType</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO6OAuth211OAuth2Error23noPasswordGrantDelegateFMS0_S0_"></a>
+                    <a name="/s:6OAuth20A5ErrorO23noPasswordGrantDelegateyA2CmF"></a>
                     <a name="//apple_ref/swift/Element/noPasswordGrantDelegate" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth211OAuth2Error23noPasswordGrantDelegateFMS0_S0_">noPasswordGrantDelegate</a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO23noPasswordGrantDelegateyA2CmF">noPasswordGrantDelegate</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -788,7 +744,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">noPasswordGrantDelegate</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">noPasswordGrantDelegate</span></code></pre>
 
                         </div>
                       </div>
@@ -798,13 +754,20 @@
               </ul>
             </div>
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Request%20errors"></a>
+                <a name="//apple_ref/swift/Section/Request errors" class="dashAnchor"></a>
+                <a href="#/Request%20errors">
+                  <h3 class="section-name">Request errors</h3>
+                </a>
+              </div>
               <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO6OAuth211OAuth2Error11notUsingTLSFMS0_S0_"></a>
+                    <a name="/s:6OAuth20A5ErrorO11notUsingTLSyA2CmF"></a>
                     <a name="//apple_ref/swift/Element/notUsingTLS" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth211OAuth2Error11notUsingTLSFMS0_S0_">notUsingTLS</a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO11notUsingTLSyA2CmF">notUsingTLS</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -819,23 +782,19 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">notUsingTLS</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">notUsingTLS</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO6OAuth211OAuth2Error24unableToOpenAuthorizeURLFMS0_S0_"></a>
+                    <a name="/s:6OAuth20A5ErrorO24unableToOpenAuthorizeURLyA2CmF"></a>
                     <a name="//apple_ref/swift/Element/unableToOpenAuthorizeURL" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth211OAuth2Error24unableToOpenAuthorizeURLFMS0_S0_">unableToOpenAuthorizeURL</a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO24unableToOpenAuthorizeURLyA2CmF">unableToOpenAuthorizeURL</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -850,23 +809,19 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">unableToOpenAuthorizeURL</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">unableToOpenAuthorizeURL</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO6OAuth211OAuth2Error14invalidRequestFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/invalidRequest" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth211OAuth2Error14invalidRequestFMS0_S0_">invalidRequest</a>
+                    <a name="/s:6OAuth20A5ErrorO14invalidRequestyACSSSgcACmF"></a>
+                    <a name="//apple_ref/swift/Element/invalidRequest(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO14invalidRequestyACSSSgcACmF">invalidRequest(_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -874,30 +829,26 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The request is invalid.</p>
+                        <p>The request is invalid. Passes the underlying error_description.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">invalidRequest</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="nf">invalidRequest</span><span class="p">(</span><span class="kt">String</span><span class="p">?)</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO6OAuth211OAuth2Error16requestCancelledFMS0_S0_"></a>
+                    <a name="/s:6OAuth20A5ErrorO16requestCancelledyA2CmF"></a>
                     <a name="//apple_ref/swift/Element/requestCancelled" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth211OAuth2Error16requestCancelledFMS0_S0_">requestCancelled</a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO16requestCancelledyA2CmF">requestCancelled</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -905,14 +856,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The request was cancelled.</p>
+                        <p>The request was canceled.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">requestCancelled</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">requestCancelled</span></code></pre>
 
                         </div>
                       </div>
@@ -922,13 +873,20 @@
               </ul>
             </div>
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Response%20Errors"></a>
+                <a name="//apple_ref/swift/Section/Response Errors" class="dashAnchor"></a>
+                <a href="#/Response%20Errors">
+                  <h3 class="section-name">Response Errors</h3>
+                </a>
+              </div>
               <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO6OAuth211OAuth2Error11noTokenTypeFMS0_S0_"></a>
+                    <a name="/s:6OAuth20A5ErrorO11noTokenTypeyA2CmF"></a>
                     <a name="//apple_ref/swift/Element/noTokenType" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth211OAuth2Error11noTokenTypeFMS0_S0_">noTokenType</a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO11noTokenTypeyA2CmF">noTokenType</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -943,23 +901,19 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">noTokenType</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">noTokenType</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO6OAuth211OAuth2Error20unsupportedTokenTypeFMS0_FSSS0_"></a>
-                    <a name="//apple_ref/swift/Element/unsupportedTokenType" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth211OAuth2Error20unsupportedTokenTypeFMS0_FSSS0_">unsupportedTokenType</a>
+                    <a name="/s:6OAuth20A5ErrorO20unsupportedTokenTypeyACSScACmF"></a>
+                    <a name="//apple_ref/swift/Element/unsupportedTokenType(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO20unsupportedTokenTypeyACSScACmF">unsupportedTokenType(_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -967,30 +921,26 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The token type is not supported.</p>
+                        <p>The token type is not supported. Passes the underlying error_description.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="nf">unsupportedTokenType</span><span class="p">(</span><span class="kt">String</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="nf">unsupportedTokenType</span><span class="p">(</span><span class="kt">String</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO6OAuth211OAuth2Error16noDataInResponseFMS0_S0_"></a>
+                    <a name="/s:6OAuth20A5ErrorO16noDataInResponseyA2CmF"></a>
                     <a name="//apple_ref/swift/Element/noDataInResponse" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth211OAuth2Error16noDataInResponseFMS0_S0_">noDataInResponse</a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO16noDataInResponseyA2CmF">noDataInResponse</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1005,23 +955,19 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">noDataInResponse</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">noDataInResponse</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO6OAuth211OAuth2Error18prerequisiteFailedFMS0_FSSS0_"></a>
-                    <a name="//apple_ref/swift/Element/prerequisiteFailed" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth211OAuth2Error18prerequisiteFailedFMS0_FSSS0_">prerequisiteFailed</a>
+                    <a name="/s:6OAuth20A5ErrorO18prerequisiteFailedyACSScACmF"></a>
+                    <a name="//apple_ref/swift/Element/prerequisiteFailed(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO18prerequisiteFailedyACSScACmF">prerequisiteFailed(_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1036,23 +982,19 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="nf">prerequisiteFailed</span><span class="p">(</span><span class="kt">String</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="nf">prerequisiteFailed</span><span class="p">(</span><span class="kt">String</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO6OAuth211OAuth2Error12missingStateFMS0_S0_"></a>
+                    <a name="/s:6OAuth20A5ErrorO12missingStateyA2CmF"></a>
                     <a name="//apple_ref/swift/Element/missingState" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth211OAuth2Error12missingStateFMS0_S0_">missingState</a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO12missingStateyA2CmF">missingState</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1067,23 +1009,19 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">missingState</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">missingState</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO6OAuth211OAuth2Error12invalidStateFMS0_S0_"></a>
+                    <a name="/s:6OAuth20A5ErrorO12invalidStateyA2CmF"></a>
                     <a name="//apple_ref/swift/Element/invalidState" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth211OAuth2Error12invalidStateFMS0_S0_">invalidState</a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO12invalidStateyA2CmF">invalidState</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1098,23 +1036,19 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">invalidState</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">invalidState</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO6OAuth211OAuth2Error15jsonParserErrorFMS0_S0_"></a>
+                    <a name="/s:6OAuth20A5ErrorO010jsonParserB0yA2CmF"></a>
                     <a name="//apple_ref/swift/Element/jsonParserError" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth211OAuth2Error15jsonParserErrorFMS0_S0_">jsonParserError</a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO010jsonParserB0yA2CmF">jsonParserError</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1129,23 +1063,19 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">jsonParserError</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">jsonParserError</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO6OAuth211OAuth2Error15utf8EncodeErrorFMS0_S0_"></a>
+                    <a name="/s:6OAuth20A5ErrorO010utf8EncodeB0yA2CmF"></a>
                     <a name="//apple_ref/swift/Element/utf8EncodeError" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth211OAuth2Error15utf8EncodeErrorFMS0_S0_">utf8EncodeError</a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO010utf8EncodeB0yA2CmF">utf8EncodeError</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1160,23 +1090,19 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">utf8EncodeError</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">utf8EncodeError</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO6OAuth211OAuth2Error15utf8DecodeErrorFMS0_S0_"></a>
+                    <a name="/s:6OAuth20A5ErrorO010utf8DecodeB0yA2CmF"></a>
                     <a name="//apple_ref/swift/Element/utf8DecodeError" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth211OAuth2Error15utf8DecodeErrorFMS0_S0_">utf8DecodeError</a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO010utf8DecodeB0yA2CmF">utf8DecodeError</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1191,286 +1117,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">utf8DecodeError</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO6OAuth211OAuth2Error18unauthorizedClientFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/unauthorizedClient" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth211OAuth2Error18unauthorizedClientFMS0_S0_">unauthorizedClient</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The client is unauthorized (HTTP status 401).</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">unauthorizedClient</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO6OAuth211OAuth2Error9forbiddenFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/forbidden" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth211OAuth2Error9forbiddenFMS0_S0_">forbidden</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The request was forbidden (HTTP status 403).</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">forbidden</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO6OAuth211OAuth2Error21wrongUsernamePasswordFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/wrongUsernamePassword" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth211OAuth2Error21wrongUsernamePasswordFMS0_S0_">wrongUsernamePassword</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Username or password was wrong (HTTP status 403 on password grant).</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">wrongUsernamePassword</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO6OAuth211OAuth2Error12accessDeniedFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/accessDenied" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth211OAuth2Error12accessDeniedFMS0_S0_">accessDenied</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Access was denied.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">accessDenied</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO6OAuth211OAuth2Error23unsupportedResponseTypeFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/unsupportedResponseType" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth211OAuth2Error23unsupportedResponseTypeFMS0_S0_">unsupportedResponseType</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Response type is not supported.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">unsupportedResponseType</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO6OAuth211OAuth2Error12invalidScopeFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/invalidScope" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth211OAuth2Error12invalidScopeFMS0_S0_">invalidScope</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Scope was invalid.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">invalidScope</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO6OAuth211OAuth2Error11serverErrorFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/serverError" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth211OAuth2Error11serverErrorFMS0_S0_">serverError</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>A 500 was thrown.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">serverError</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO6OAuth211OAuth2Error22temporarilyUnavailableFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/temporarilyUnavailable" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth211OAuth2Error22temporarilyUnavailableFMS0_S0_">temporarilyUnavailable</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The service is temporarily unavailable.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">temporarilyUnavailable</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO6OAuth211OAuth2Error13responseErrorFMS0_FSSS0_"></a>
-                    <a name="//apple_ref/swift/Element/responseError" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO6OAuth211OAuth2Error13responseErrorFMS0_FSSS0_">responseError</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Other response error, as defined in its String.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="nf">responseError</span><span class="p">(</span><span class="kt">String</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">utf8DecodeError</span></code></pre>
 
                         </div>
                       </div>
@@ -1491,9 +1138,279 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ZFO6OAuth211OAuth2Error17fromResponseErrorFTSS8fallbackGSqSS__S0_"></a>
-                    <a name="//apple_ref/swift/Method/fromResponseError(_:fallback:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFO6OAuth211OAuth2Error17fromResponseErrorFTSS8fallbackGSqSS__S0_">fromResponseError(_:fallback:)</a>
+                    <a name="/s:6OAuth20A5ErrorO18unauthorizedClientyACSSSgcACmF"></a>
+                    <a name="//apple_ref/swift/Element/unauthorizedClient(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO18unauthorizedClientyACSSSgcACmF">unauthorizedClient(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The client is unauthorized (HTTP status 401). Passes the underlying error_description.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="nf">unauthorizedClient</span><span class="p">(</span><span class="kt">String</span><span class="p">?)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6OAuth20A5ErrorO9forbiddenyA2CmF"></a>
+                    <a name="//apple_ref/swift/Element/forbidden" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO9forbiddenyA2CmF">forbidden</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The request was forbidden (HTTP status 403).</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">forbidden</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6OAuth20A5ErrorO21wrongUsernamePasswordyA2CmF"></a>
+                    <a name="//apple_ref/swift/Element/wrongUsernamePassword" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO21wrongUsernamePasswordyA2CmF">wrongUsernamePassword</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Username or password was wrong (HTTP status 403 on password grant).</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">wrongUsernamePassword</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6OAuth20A5ErrorO12accessDeniedyACSSSgcACmF"></a>
+                    <a name="//apple_ref/swift/Element/accessDenied(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO12accessDeniedyACSSSgcACmF">accessDenied(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Access was denied. Passes the underlying error_description.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="nf">accessDenied</span><span class="p">(</span><span class="kt">String</span><span class="p">?)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6OAuth20A5ErrorO23unsupportedResponseTypeyACSSSgcACmF"></a>
+                    <a name="//apple_ref/swift/Element/unsupportedResponseType(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO23unsupportedResponseTypeyACSSSgcACmF">unsupportedResponseType(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Response type is not supported. Passes the underlying error_description.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="nf">unsupportedResponseType</span><span class="p">(</span><span class="kt">String</span><span class="p">?)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6OAuth20A5ErrorO12invalidScopeyACSSSgcACmF"></a>
+                    <a name="//apple_ref/swift/Element/invalidScope(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO12invalidScopeyACSSSgcACmF">invalidScope(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Scope was invalid. Passes the underlying error_description.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="nf">invalidScope</span><span class="p">(</span><span class="kt">String</span><span class="p">?)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6OAuth20A5ErrorO06serverB0yA2CmF"></a>
+                    <a name="//apple_ref/swift/Element/serverError" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO06serverB0yA2CmF">serverError</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A 500 was thrown.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">serverError</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6OAuth20A5ErrorO22temporarilyUnavailableyACSSSgcACmF"></a>
+                    <a name="//apple_ref/swift/Element/temporarilyUnavailable(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO22temporarilyUnavailableyACSSSgcACmF">temporarilyUnavailable(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The service is temporarily unavailable. Passes the underlying error_description.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="nf">temporarilyUnavailable</span><span class="p">(</span><span class="kt">String</span><span class="p">?)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6OAuth20A5ErrorO12invalidGrantyACSSSgcACmF"></a>
+                    <a name="//apple_ref/swift/Element/invalidGrant(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO12invalidGrantyACSSSgcACmF">invalidGrant(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Invalid grant. Passes the underlying error_description.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="nf">invalidGrant</span><span class="p">(</span><span class="kt">String</span><span class="p">?)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6OAuth20A5ErrorO08responseB0yACSScACmF"></a>
+                    <a name="//apple_ref/swift/Element/responseError(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO08responseB0yACSScACmF">responseError(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Other response error, as defined in its String.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="nf">responseError</span><span class="p">(</span><span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6OAuth20A5ErrorO012fromResponseB0_11description8fallbackACSS_SSSgAGtFZ"></a>
+                    <a name="//apple_ref/swift/Method/fromResponseError(_:description:fallback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO012fromResponseB0_11description8fallbackACSS_SSSgAGtFZ">fromResponseError(_:description:fallback:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1508,7 +1425,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">fromResponseError</span><span class="p">(</span><span class="n">_</span> <span class="nv">code</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">fallback</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">OAuth2Error</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">fromResponseError</span><span class="p">(</span><span class="n">_</span> <span class="nv">code</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">description</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">fallback</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">OAuth2Error</span></code></pre>
 
                         </div>
                       </div>
@@ -1524,8 +1441,19 @@
                               </td>
                               <td>
                                 <div>
-                                  <p>The code, like “access_denied”, that should be interpreted</p>
-
+                                  <p>The code, like <q>access_denied</q>, that should be interpreted</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>description</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The description provided in the response</p>
                                 </div>
                               </td>
                             </tr>
@@ -1538,7 +1466,6 @@
                               <td>
                                 <div>
                                   <p>The error string to use in case the error code is not known</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -1548,7 +1475,6 @@
                       <div>
                         <h4>Return Value</h4>
                         <p>An appropriate OAuth2Error</p>
-
                       </div>
                     </section>
                   </div>
@@ -1556,9 +1482,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vO6OAuth211OAuth2Error11descriptionSS"></a>
+                    <a name="/s:6OAuth20A5ErrorO11descriptionSSvp"></a>
                     <a name="//apple_ref/swift/Property/description" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vO6OAuth211OAuth2Error11descriptionSS">description</a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO11descriptionSSvp">description</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1573,7 +1499,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">description</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">description</span><span class="p">:</span> <span class="kt">String</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -1594,9 +1520,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ZFPs9Equatableoi2eeFTxx_Sb"></a>
+                    <a name="/s:SQ2eeoiySbx_xtFZ"></a>
                     <a name="//apple_ref/swift/Method/==(_:_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFPs9Equatableoi2eeFTxx_Sb">==(_:_:)</a>
+                    <a class="token" href="#/s:SQ2eeoiySbx_xtFZ">==(_:_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1610,42 +1536,9 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="o">==</span><span class="p">(</span><span class="nv">lhs</span><span class="p">:</span> <span class="kt">OAuth2Error</span><span class="p">,</span> <span class="nv">rhs</span><span class="p">:</span> <span class="kt">OAuth2Error</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="o">==</span> <span class="p">(</span><span class="nv">lhs</span><span class="p">:</span> <span class="kt">OAuth2Error</span><span class="p">,</span> <span class="nv">rhs</span><span class="p">:</span> <span class="kt">OAuth2Error</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>lhs</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A value to compare.</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>rhs</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>Another value to compare.</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
                       </div>
                     </section>
                   </div>
@@ -1658,8 +1551,8 @@
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2017 <a class="link" href="https://github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2017-02-28)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>&copy; 2019 <a class="link" href="https://github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2019-01-10)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
 </div>

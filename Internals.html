@@ -8,9 +8,13 @@
     <script src="js/jquery.min.js" defer></script>
     <script src="js/jazzy.js" defer></script>
     
+    <script src="js/lunr.min.js" defer></script>
+    <script src="js/typeahead.jquery.js" defer></script>
+    <script src="js/jazzy.search.js" defer></script>
   </head>
   <body>
 
+    <a name="//apple_ref/swift/Section/Internals" class="dashAnchor"></a>
 
     <a title="Internals  Reference"></a>
 
@@ -20,6 +24,12 @@
           OAuth2 Docs
         </a>
          (98% documented)
+      </p>
+    
+      <p class="header-col--secondary">
+        <form role="search" action="search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
       </p>
     
         <p class="header-col header-col--secondary">
@@ -91,10 +101,10 @@
                 <a class="nav-group-task-link" href="Enums/OAuth2Error.html">OAuth2Error</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Errors &amp; Types.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a>
+                <a class="nav-group-task-link" href="Errors &amp; Types.html#/s:6OAuth20A4JSONa">OAuth2JSON</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Errors &amp; Types.html#/s:6OAuth216OAuth2StringDict">OAuth2StringDict</a>
+                <a class="nav-group-task-link" href="Errors &amp; Types.html#/s:6OAuth20A10StringDicta">OAuth2StringDict</a>
               </li>
             </ul>
           </li>
@@ -120,7 +130,7 @@
                 <a class="nav-group-task-link" href="Classes/OAuth2Response.html">OAuth2Response</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Requests.html#/s:6OAuth213OAuth2Headers">OAuth2Headers</a>
+                <a class="nav-group-task-link" href="Requests.html#/s:6OAuth20A7Headersa">OAuth2Headers</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/OAuth2RequestParams.html">OAuth2RequestParams</a>
@@ -243,7 +253,7 @@
             <a class="nav-group-name-link" href="Other Functions.html">Other Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Other Functions.html#/s:F6OAuth216callOnMainThreadFFT_T_T_">callOnMainThread(_:)</a>
+                <a class="nav-group-task-link" href="Other Functions.html#/s:6OAuth216callOnMainThreadyyyyXEF">callOnMainThread(_:)</a>
               </li>
             </ul>
           </li>
@@ -265,9 +275,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:P6OAuth218OAuth2AuthorizerUI"></a>
+                    <a name="/s:6OAuth20A12AuthorizerUIP"></a>
                     <a name="//apple_ref/swift/Protocol/OAuth2AuthorizerUI" class="dashAnchor"></a>
-                    <a class="token" href="#/s:P6OAuth218OAuth2AuthorizerUI">OAuth2AuthorizerUI</a>
+                    <a class="token" href="#/s:6OAuth20A12AuthorizerUIP">OAuth2AuthorizerUI</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -283,7 +293,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">OAuth2AuthorizerUI</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">OAuth2AuthorizerUI</span></code></pre>
 
                         </div>
                       </div>
@@ -297,9 +307,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:C6OAuth216OAuth2Authorizer"></a>
+                    <a name="/s:6OAuth20A10AuthorizerC"></a>
                     <a name="//apple_ref/swift/Class/OAuth2Authorizer" class="dashAnchor"></a>
-                    <a class="token" href="#/s:C6OAuth216OAuth2Authorizer">OAuth2Authorizer</a>
+                    <a class="token" href="#/s:6OAuth20A10AuthorizerC">OAuth2Authorizer</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -318,7 +328,7 @@ customize appearance.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">class</span> <span class="kt">OAuth2Authorizer</span><span class="p">:</span> <span class="kt"><a href="Protocols/OAuth2AuthorizerUI.html">OAuth2AuthorizerUI</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">class</span> <span class="kt">OAuth2Authorizer</span> <span class="p">:</span> <span class="kt"><a href="Protocols/OAuth2AuthorizerUI.html">OAuth2AuthorizerUI</a></span></code></pre>
 
                         </div>
                       </div>
@@ -332,9 +342,9 @@ customize appearance.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:P6OAuth224OAuth2CustomAuthorizerUI"></a>
+                    <a name="/s:6OAuth20A18CustomAuthorizerUIP"></a>
                     <a name="//apple_ref/swift/Protocol/OAuth2CustomAuthorizerUI" class="dashAnchor"></a>
-                    <a class="token" href="#/s:P6OAuth224OAuth2CustomAuthorizerUI">OAuth2CustomAuthorizerUI</a>
+                    <a class="token" href="#/s:6OAuth20A18CustomAuthorizerUIP">OAuth2CustomAuthorizerUI</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -350,7 +360,7 @@ customize appearance.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">OAuth2CustomAuthorizerUI</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">OAuth2CustomAuthorizerUI</span></code></pre>
 
                         </div>
                       </div>
@@ -364,9 +374,9 @@ customize appearance.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:C6OAuth222OAuth2CustomAuthorizer"></a>
+                    <a name="/s:6OAuth20A16CustomAuthorizerC"></a>
                     <a name="//apple_ref/swift/Class/OAuth2CustomAuthorizer" class="dashAnchor"></a>
-                    <a class="token" href="#/s:C6OAuth222OAuth2CustomAuthorizer">OAuth2CustomAuthorizer</a>
+                    <a class="token" href="#/s:6OAuth20A16CustomAuthorizerC">OAuth2CustomAuthorizer</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -383,7 +393,7 @@ controller.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2CustomAuthorizer</span><span class="p">:</span> <span class="kt"><a href="Protocols/OAuth2CustomAuthorizerUI.html">OAuth2CustomAuthorizerUI</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2CustomAuthorizer</span> <span class="p">:</span> <span class="kt"><a href="Protocols/OAuth2CustomAuthorizerUI.html">OAuth2CustomAuthorizerUI</a></span></code></pre>
 
                         </div>
                       </div>
@@ -397,9 +407,9 @@ controller.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:C6OAuth218OAuth2ContextStore"></a>
+                    <a name="/s:6OAuth20A12ContextStoreC"></a>
                     <a name="//apple_ref/swift/Class/OAuth2ContextStore" class="dashAnchor"></a>
-                    <a class="token" href="#/s:C6OAuth218OAuth2ContextStore">OAuth2ContextStore</a>
+                    <a class="token" href="#/s:6OAuth20A12ContextStoreC">OAuth2ContextStore</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -415,7 +425,7 @@ controller.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">class</span> <span class="kt">OAuth2ContextStore</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">class</span> <span class="kt">OAuth2ContextStore</span></code></pre>
 
                         </div>
                       </div>
@@ -429,9 +439,9 @@ controller.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:V6OAuth221OAuth2KeychainAccount"></a>
+                    <a name="/s:6OAuth20A15KeychainAccountV"></a>
                     <a name="//apple_ref/swift/Struct/OAuth2KeychainAccount" class="dashAnchor"></a>
-                    <a class="token" href="#/s:V6OAuth221OAuth2KeychainAccount">OAuth2KeychainAccount</a>
+                    <a class="token" href="#/s:6OAuth20A15KeychainAccountV">OAuth2KeychainAccount</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -447,7 +457,7 @@ controller.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">struct</span> <span class="kt">OAuth2KeychainAccount</span><span class="p">:</span> <span class="kt">KeychainGenericPasswordType</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">struct</span> <span class="kt">OAuth2KeychainAccount</span> <span class="p">:</span> <span class="kt">KeychainGenericPasswordType</span></code></pre>
 
                         </div>
                       </div>
@@ -461,9 +471,9 @@ controller.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:C6OAuth223OAuth2WebViewController"></a>
+                    <a name="/c:@M@OAuth2@objc(cs)OAuth2WebViewController"></a>
                     <a name="//apple_ref/swift/Class/OAuth2WebViewController" class="dashAnchor"></a>
-                    <a class="token" href="#/s:C6OAuth223OAuth2WebViewController">OAuth2WebViewController</a>
+                    <a class="token" href="#/c:@M@OAuth2@objc(cs)OAuth2WebViewController">OAuth2WebViewController</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -479,7 +489,8 @@ controller.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2WebViewController</span><span class="p">:</span> <span class="kt">NSViewController</span><span class="p">,</span> <span class="kt">WKNavigationDelegate</span><span class="p">,</span> <span class="kt">NSWindowDelegate</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@available(OSX 10.10, *)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuth2WebViewController</span> <span class="p">:</span> <span class="kt">NSViewController</span><span class="p">,</span> <span class="kt">WKNavigationDelegate</span><span class="p">,</span> <span class="kt">NSWindowDelegate</span></code></pre>
 
                         </div>
                       </div>
@@ -493,9 +504,9 @@ controller.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:C6OAuth235OAuth2DataLoaderSessionTaskDelegate"></a>
+                    <a name="/c:@M@OAuth2@objc(cs)OAuth2DataLoaderSessionTaskDelegate"></a>
                     <a name="//apple_ref/swift/Class/OAuth2DataLoaderSessionTaskDelegate" class="dashAnchor"></a>
-                    <a class="token" href="#/s:C6OAuth235OAuth2DataLoaderSessionTaskDelegate">OAuth2DataLoaderSessionTaskDelegate</a>
+                    <a class="token" href="#/c:@M@OAuth2@objc(cs)OAuth2DataLoaderSessionTaskDelegate">OAuth2DataLoaderSessionTaskDelegate</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -512,7 +523,7 @@ redirected request.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">class</span> <span class="kt">OAuth2DataLoaderSessionTaskDelegate</span><span class="p">:</span> <span class="kt">NSObject</span><span class="p">,</span> <span class="kt">URLSessionTaskDelegate</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">class</span> <span class="kt">OAuth2DataLoaderSessionTaskDelegate</span> <span class="p">:</span> <span class="kt">NSObject</span><span class="p">,</span> <span class="kt">URLSessionTaskDelegate</span></code></pre>
 
                         </div>
                       </div>
@@ -527,8 +538,8 @@ redirected request.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2017 <a class="link" href="https://github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2017-02-28)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>&copy; 2019 <a class="link" href="https://github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2019-01-10)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
 </div>

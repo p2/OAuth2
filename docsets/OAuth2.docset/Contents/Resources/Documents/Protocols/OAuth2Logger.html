@@ -8,6 +8,9 @@
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
     
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
   </head>
   <body>
 
@@ -21,6 +24,12 @@
           OAuth2 Docs
         </a>
          (98% documented)
+      </p>
+    
+      <p class="header-col--secondary">
+        <form role="search" action="../search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
       </p>
     
         <p class="header-col header-col--secondary">
@@ -92,10 +101,10 @@
                 <a class="nav-group-task-link" href="../Enums/OAuth2Error.html">OAuth2Error</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Errors &amp; Types.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a>
+                <a class="nav-group-task-link" href="../Errors &amp; Types.html#/s:6OAuth20A4JSONa">OAuth2JSON</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Errors &amp; Types.html#/s:6OAuth216OAuth2StringDict">OAuth2StringDict</a>
+                <a class="nav-group-task-link" href="../Errors &amp; Types.html#/s:6OAuth20A10StringDicta">OAuth2StringDict</a>
               </li>
             </ul>
           </li>
@@ -121,7 +130,7 @@
                 <a class="nav-group-task-link" href="../Classes/OAuth2Response.html">OAuth2Response</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Requests.html#/s:6OAuth213OAuth2Headers">OAuth2Headers</a>
+                <a class="nav-group-task-link" href="../Requests.html#/s:6OAuth20A7Headersa">OAuth2Headers</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/OAuth2RequestParams.html">OAuth2RequestParams</a>
@@ -244,7 +253,7 @@
             <a class="nav-group-name-link" href="../Other Functions.html">Other Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Other Functions.html#/s:F6OAuth216callOnMainThreadFFT_T_T_">callOnMainThread(_:)</a>
+                <a class="nav-group-task-link" href="../Other Functions.html#/s:6OAuth216callOnMainThreadyyyyXEF">callOnMainThread(_:)</a>
               </li>
             </ul>
           </li>
@@ -257,7 +266,7 @@
             <h1>OAuth2Logger</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">OAuth2Logger</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">OAuth2Logger</span></code></pre>
 
                 </div>
               </div>
@@ -276,9 +285,9 @@ and set your logger on the <code><a href="../Classes/OAuth2.html">OAuth2</a></co
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vP6OAuth212OAuth2Logger5levelOS_14OAuth2LogLevel"></a>
+                    <a name="/s:6OAuth20A6LoggerP5levelAA0A8LogLevelOvp"></a>
                     <a name="//apple_ref/swift/Property/level" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vP6OAuth212OAuth2Logger5levelOS_14OAuth2LogLevel">level</a>
+                    <a class="token" href="#/s:6OAuth20A6LoggerP5levelAA0A8LogLevelOvp">level</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -293,7 +302,7 @@ and set your logger on the <code><a href="../Classes/OAuth2.html">OAuth2</a></co
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">level</span><span class="p">:</span> <span class="kt"><a href="../Enums/OAuth2LogLevel.html">OAuth2LogLevel</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">level</span><span class="p">:</span> <span class="kt"><a href="../Enums/OAuth2LogLevel.html">OAuth2LogLevel</a></span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -303,121 +312,12 @@ and set your logger on the <code><a href="../Classes/OAuth2.html">OAuth2</a></co
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP6OAuth212OAuth2Logger5traceFTGSqSS_8filenameGSqSS_4lineGSqSi_8functionGSqSS_3msgKT_SS_T_"></a>
-                    <a name="//apple_ref/swift/Method/trace(_:filename:line:function:msg:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP6OAuth212OAuth2Logger5traceFTGSqSS_8filenameGSqSS_4lineGSqSi_8functionGSqSS_3msgKT_SS_T_">trace(_:filename:line:function:msg:)</a>
-                    </code>
-                      <span class="declaration-note">
-                        Default implementation
-                      </span>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Log a message at the trace level.</p>
-
-                      </div>
-                      <h4>Default Implementation</h4>
-                      <div class="default_impl abstract">
-                        <p>Log a message at the trace level.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">trace</span><span class="p">(</span><span class="n">_</span> <span class="nv">module</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">filename</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">line</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?,</span> <span class="nv">function</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">msg</span><span class="p">:</span> <span class="kd">@autoclosure</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">String</span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FP6OAuth212OAuth2Logger5debugFTGSqSS_8filenameGSqSS_4lineGSqSi_8functionGSqSS_3msgKT_SS_T_"></a>
-                    <a name="//apple_ref/swift/Method/debug(_:filename:line:function:msg:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP6OAuth212OAuth2Logger5debugFTGSqSS_8filenameGSqSS_4lineGSqSi_8functionGSqSS_3msgKT_SS_T_">debug(_:filename:line:function:msg:)</a>
-                    </code>
-                      <span class="declaration-note">
-                        Default implementation
-                      </span>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Standard debug logging.</p>
-
-                      </div>
-                      <h4>Default Implementation</h4>
-                      <div class="default_impl abstract">
-                        <p>Standard debug logging.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">debug</span><span class="p">(</span><span class="n">_</span> <span class="nv">module</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">filename</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">line</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?,</span> <span class="nv">function</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">msg</span><span class="p">:</span> <span class="kd">@autoclosure</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">String</span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FP6OAuth212OAuth2Logger4warnFTGSqSS_8filenameGSqSS_4lineGSqSi_8functionGSqSS_3msgKT_SS_T_"></a>
-                    <a name="//apple_ref/swift/Method/warn(_:filename:line:function:msg:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP6OAuth212OAuth2Logger4warnFTGSqSS_8filenameGSqSS_4lineGSqSi_8functionGSqSS_3msgKT_SS_T_">warn(_:filename:line:function:msg:)</a>
-                    </code>
-                      <span class="declaration-note">
-                        Default implementation
-                      </span>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Log warning messages.</p>
-
-                      </div>
-                      <h4>Default Implementation</h4>
-                      <div class="default_impl abstract">
-                        <p>Log warning messages.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">warn</span><span class="p">(</span><span class="n">_</span> <span class="nv">module</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">filename</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">line</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?,</span> <span class="nv">function</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">msg</span><span class="p">:</span> <span class="kd">@autoclosure</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">String</span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FE6OAuth2PS_12OAuth2Logger3logFTOS_14OAuth2LogLevel6moduleGSqSS_8filenameGSqSS_4lineGSqSi_8functionGSqSS_3msgKT_SS_T_"></a>
+                    <a name="/s:6OAuth20A6LoggerP3log_6module8filename4line8function3msgyAA0A8LogLevelO_SSSgALSiSgALSSyXKtF"></a>
                     <a name="//apple_ref/swift/Method/log(_:module:filename:line:function:msg:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FE6OAuth2PS_12OAuth2Logger3logFTOS_14OAuth2LogLevel6moduleGSqSS_8filenameGSqSS_4lineGSqSi_8functionGSqSS_3msgKT_SS_T_">log(_:module:filename:line:function:msg:)</a>
+                    <a class="token" href="#/s:6OAuth20A6LoggerP3log_6module8filename4line8function3msgyAA0A8LogLevelO_SSSgALSiSgALSSyXKtF">log(_:module:filename:line:function:msg:)</a>
                     </code>
                       <span class="declaration-note">
-                        Extension method
+                        Default implementation
                       </span>
                   </div>
                   <div class="height-container">
@@ -425,15 +325,128 @@ and set your logger on the <code><a href="../Classes/OAuth2.html">OAuth2</a></co
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
+                        <p>This is made a protocol method so it can be implemented in <code>extension OAuth2Logger</code> <strong>and</strong> you&rsquo;re able to create your own class
+that overrides this method so you can write your own implementation.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
                         <p>The main log method, figures out whether to log the given message based on the receiver&rsquo;s logging level, then just uses <code>print</code>. Ignores
-filename, line and function.</p>
+filename, line and function.
+If you override this method in your own logger there&rsquo;s no need to override the <code>trace</code>, <code>debug</code> and <code>warn</code> methods implemented below as
+they all call out to this one.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">log</span><span class="p">(</span><span class="n">_</span> <span class="nv">atLevel</span><span class="p">:</span> <span class="kt"><a href="../Enums/OAuth2LogLevel.html">OAuth2LogLevel</a></span><span class="p">,</span> <span class="nv">module</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">filename</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">line</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?,</span> <span class="nv">function</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">msg</span><span class="p">:</span> <span class="kd">@autoclosure</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">log</span><span class="p">(</span><span class="n">_</span> <span class="nv">atLevel</span><span class="p">:</span> <span class="kt"><a href="../Enums/OAuth2LogLevel.html">OAuth2LogLevel</a></span><span class="p">,</span> <span class="nv">module</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">filename</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">line</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?,</span> <span class="nv">function</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">msg</span><span class="p">:</span> <span class="kd">@autoclosure</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6OAuth20A6LoggerP5trace_8filename4line8function3msgySSSg_AISiSgAISSyXKtF"></a>
+                    <a name="//apple_ref/swift/Method/trace(_:filename:line:function:msg:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6OAuth20A6LoggerP5trace_8filename4line8function3msgySSSg_AISiSgAISSyXKtF">trace(_:filename:line:function:msg:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Log a message at the trace level.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Log a message at the trace level.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">trace</span><span class="p">(</span><span class="n">_</span> <span class="nv">module</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">filename</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">line</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?,</span> <span class="nv">function</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">msg</span><span class="p">:</span> <span class="kd">@autoclosure</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6OAuth20A6LoggerP5debug_8filename4line8function3msgySSSg_AISiSgAISSyXKtF"></a>
+                    <a name="//apple_ref/swift/Method/debug(_:filename:line:function:msg:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6OAuth20A6LoggerP5debug_8filename4line8function3msgySSSg_AISiSgAISSyXKtF">debug(_:filename:line:function:msg:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Standard debug logging.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Standard debug logging.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">debug</span><span class="p">(</span><span class="n">_</span> <span class="nv">module</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">filename</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">line</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?,</span> <span class="nv">function</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">msg</span><span class="p">:</span> <span class="kd">@autoclosure</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6OAuth20A6LoggerP4warn_8filename4line8function3msgySSSg_AISiSgAISSyXKtF"></a>
+                    <a name="//apple_ref/swift/Method/warn(_:filename:line:function:msg:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6OAuth20A6LoggerP4warn_8filename4line8function3msgySSSg_AISiSgAISSyXKtF">warn(_:filename:line:function:msg:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Log warning messages.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Log warning messages.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">warn</span><span class="p">(</span><span class="n">_</span> <span class="nv">module</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">filename</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">line</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?,</span> <span class="nv">function</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">msg</span><span class="p">:</span> <span class="kd">@autoclosure</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">String</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -448,8 +461,8 @@ filename, line and function.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2017 <a class="link" href="https://github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2017-02-28)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>&copy; 2019 <a class="link" href="https://github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2019-01-10)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
 </div>
