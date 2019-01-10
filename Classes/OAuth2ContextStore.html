@@ -8,6 +8,9 @@
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
     
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
   </head>
   <body>
 
@@ -21,6 +24,12 @@
           OAuth2 Docs
         </a>
          (98% documented)
+      </p>
+    
+      <p class="header-col--secondary">
+        <form role="search" action="../search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
       </p>
     
         <p class="header-col header-col--secondary">
@@ -92,10 +101,10 @@
                 <a class="nav-group-task-link" href="../Enums/OAuth2Error.html">OAuth2Error</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Errors &amp; Types.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a>
+                <a class="nav-group-task-link" href="../Errors &amp; Types.html#/s:6OAuth20A4JSONa">OAuth2JSON</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Errors &amp; Types.html#/s:6OAuth216OAuth2StringDict">OAuth2StringDict</a>
+                <a class="nav-group-task-link" href="../Errors &amp; Types.html#/s:6OAuth20A10StringDicta">OAuth2StringDict</a>
               </li>
             </ul>
           </li>
@@ -121,7 +130,7 @@
                 <a class="nav-group-task-link" href="../Classes/OAuth2Response.html">OAuth2Response</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Requests.html#/s:6OAuth213OAuth2Headers">OAuth2Headers</a>
+                <a class="nav-group-task-link" href="../Requests.html#/s:6OAuth20A7Headersa">OAuth2Headers</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/OAuth2RequestParams.html">OAuth2RequestParams</a>
@@ -244,7 +253,7 @@
             <a class="nav-group-name-link" href="../Other Functions.html">Other Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Other Functions.html#/s:F6OAuth216callOnMainThreadFFT_T_T_">callOnMainThread(_:)</a>
+                <a class="nav-group-task-link" href="../Other Functions.html#/s:6OAuth216callOnMainThreadyyyyXEF">callOnMainThread(_:)</a>
               </li>
             </ul>
           </li>
@@ -257,7 +266,7 @@
             <h1>OAuth2ContextStore</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="n">open</span> <span class="kd">class</span> <span class="kt">OAuth2ContextStore</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">class</span> <span class="kt">OAuth2ContextStore</span></code></pre>
 
                 </div>
               </div>
@@ -273,9 +282,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC6OAuth218OAuth2ContextStore11redirectURLGSqSS_"></a>
+                    <a name="/s:6OAuth20A12ContextStoreC11redirectURLSSSgvp"></a>
                     <a name="//apple_ref/swift/Property/redirectURL" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC6OAuth218OAuth2ContextStore11redirectURLGSqSS_">redirectURL</a>
+                    <a class="token" href="#/s:6OAuth20A12ContextStoreC11redirectURLSSSgvp">redirectURL</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -290,7 +299,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="k">var</span> <span class="nv">redirectURL</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">redirectURL</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -300,9 +309,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC6OAuth218OAuth2ContextStore6_stateSS"></a>
+                    <a name="/s:6OAuth20A12ContextStoreC6_stateSSvp"></a>
                     <a name="//apple_ref/swift/Property/_state" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC6OAuth218OAuth2ContextStore6_stateSS">_state</a>
+                    <a class="token" href="#/s:6OAuth20A12ContextStoreC6_stateSSvp">_state</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -317,7 +326,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">internal</span> <span class="k">var</span> <span class="nv">_state</span> <span class="o">=</span> <span class="s">""</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">internal</span> <span class="k">var</span> <span class="nv">_state</span><span class="p">:</span> <span class="kt">String</span></code></pre>
 
                         </div>
                       </div>
@@ -327,9 +336,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC6OAuth218OAuth2ContextStore5stateSS"></a>
+                    <a name="/s:6OAuth20A12ContextStoreC5stateSSvp"></a>
                     <a name="//apple_ref/swift/Property/state" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC6OAuth218OAuth2ContextStore5stateSS">state</a>
+                    <a class="token" href="#/s:6OAuth20A12ContextStoreC5stateSSvp">state</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -339,14 +348,14 @@
                       <div class="abstract">
                         <p>The state sent to the server when requesting a token.</p>
 
-<p>We internally generate a UUID and use the first 8 chars if <code><a href="../Classes/OAuth2ContextStore.html#/s:vC6OAuth218OAuth2ContextStore6_stateSS">_state</a></code> is empty.</p>
+<p>We internally generate a UUID and use the first 8 chars if <code><a href="../Classes/OAuth2ContextStore.html#/s:6OAuth20A12ContextStoreC6_stateSSvp">_state</a></code> is empty.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="k">var</span> <span class="nv">state</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">state</span><span class="p">:</span> <span class="kt">String</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -356,9 +365,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth218OAuth2ContextStore12matchesStateFGSqSS_Sb"></a>
+                    <a name="/s:6OAuth20A12ContextStoreC12matchesStateySbSSSgF"></a>
                     <a name="//apple_ref/swift/Method/matchesState(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth218OAuth2ContextStore12matchesStateFGSqSS_Sb">matchesState(_:)</a>
+                    <a class="token" href="#/s:6OAuth20A12ContextStoreC12matchesStateySbSSSgF">matchesState(_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -373,7 +382,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">matchesState</span><span class="p">(</span><span class="n">_</span> <span class="nv">state</span><span class="p">:</span> <span class="kt">String</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">matchesState</span><span class="p">(</span><span class="n">_</span> <span class="nv">state</span><span class="p">:</span> <span class="kt">String</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -390,7 +399,6 @@
                               <td>
                                 <div>
                                   <p>The state to check (may be nil)</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -400,7 +408,6 @@
                       <div>
                         <h4>Return Value</h4>
                         <p>true if state matches, false otherwise or if given state is nil.</p>
-
                       </div>
                     </section>
                   </div>
@@ -408,9 +415,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth218OAuth2ContextStore10resetStateFT_T_"></a>
+                    <a name="/s:6OAuth20A12ContextStoreC10resetStateyyF"></a>
                     <a name="//apple_ref/swift/Method/resetState()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth218OAuth2ContextStore10resetStateFT_T_">resetState()</a>
+                    <a class="token" href="#/s:6OAuth20A12ContextStoreC10resetStateyyF">resetState()</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -425,7 +432,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">resetState</span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">resetState</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -440,8 +447,8 @@
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2017 <a class="link" href="https://github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2017-02-28)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>&copy; 2019 <a class="link" href="https://github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2019-01-10)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
 </div>

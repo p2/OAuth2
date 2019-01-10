@@ -8,6 +8,9 @@
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
     
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
   </head>
   <body>
 
@@ -21,6 +24,12 @@
           OAuth2 Docs
         </a>
          (98% documented)
+      </p>
+    
+      <p class="header-col--secondary">
+        <form role="search" action="../search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
       </p>
     
         <p class="header-col header-col--secondary">
@@ -92,10 +101,10 @@
                 <a class="nav-group-task-link" href="../Enums/OAuth2Error.html">OAuth2Error</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Errors &amp; Types.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a>
+                <a class="nav-group-task-link" href="../Errors &amp; Types.html#/s:6OAuth20A4JSONa">OAuth2JSON</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Errors &amp; Types.html#/s:6OAuth216OAuth2StringDict">OAuth2StringDict</a>
+                <a class="nav-group-task-link" href="../Errors &amp; Types.html#/s:6OAuth20A10StringDicta">OAuth2StringDict</a>
               </li>
             </ul>
           </li>
@@ -121,7 +130,7 @@
                 <a class="nav-group-task-link" href="../Classes/OAuth2Response.html">OAuth2Response</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Requests.html#/s:6OAuth213OAuth2Headers">OAuth2Headers</a>
+                <a class="nav-group-task-link" href="../Requests.html#/s:6OAuth20A7Headersa">OAuth2Headers</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/OAuth2RequestParams.html">OAuth2RequestParams</a>
@@ -244,7 +253,7 @@
             <a class="nav-group-name-link" href="../Other Functions.html">Other Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Other Functions.html#/s:F6OAuth216callOnMainThreadFFT_T_T_">callOnMainThread(_:)</a>
+                <a class="nav-group-task-link" href="../Other Functions.html#/s:6OAuth216callOnMainThreadyyyyXEF">callOnMainThread(_:)</a>
               </li>
             </ul>
           </li>
@@ -257,7 +266,7 @@
             <h1>CharacterSet</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">struct</span> <span class="kt">CharacterSet</span> <span class="p">:</span> <span class="kt">ReferenceConvertible</span><span class="p">,</span> <span class="kt">Equatable</span><span class="p">,</span> <span class="kt">Hashable</span><span class="p">,</span> <span class="kt">SetAlgebra</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">struct</span> <span class="kt">CharacterSet</span> <span class="p">:</span> <span class="kt">ReferenceConvertible</span><span class="p">,</span> <span class="kt">Equatable</span><span class="p">,</span> <span class="kt">Hashable</span><span class="p">,</span> <span class="kt">SetAlgebra</span></code></pre>
 
                 </div>
               </div>
@@ -272,9 +281,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ZvE6OAuth2V10Foundation12CharacterSet31wwwFormURLPlusSpaceCharacterSetS1_"></a>
+                    <a name="/s:10Foundation12CharacterSetV6OAuth2E019wwwFormURLPlusSpacebC0ACvpZ"></a>
                     <a name="//apple_ref/swift/Variable/wwwFormURLPlusSpaceCharacterSet" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZvE6OAuth2V10Foundation12CharacterSet31wwwFormURLPlusSpaceCharacterSetS1_">wwwFormURLPlusSpaceCharacterSet</a>
+                    <a class="token" href="#/s:10Foundation12CharacterSetV6OAuth2E019wwwFormURLPlusSpacebC0ACvpZ">wwwFormURLPlusSpaceCharacterSet</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -289,11 +298,14 @@ YOU are responsible for replacing spaces &ldquo; <q>with the plus sign</q>+&rdqu
 <a href="http://www.w3.org/TR/html5/forms.html#application/x-www-form-urlencoded-encoding-algorithm">http://www.w3.org/TR/html5/forms.html#application/x-www-form-urlencoded-encoding-algorithm</a></p>
 
 <blockquote>
-<p>If the byte is 0x20 (U+0020 SPACE if interpreted as ASCII):
-- Replace the byte with a single 0x2B byte (<q>+</q> (U+002B) character if interpreted as ASCII).
+<p>If the byte is 0x20 (U+0020 SPACE if interpreted as ASCII):</p>
+
+<ul>
+<li>Replace the byte with a single 0x2B byte (<q>+</q> (U+002B) character if interpreted as ASCII).
 If the byte is in the range 0x2A (*), 0x2D (-), 0x2E (.), 0x30 to 0x39 (0-9), 0x41 to 0x5A (A-Z), 0x5F (_),
-0x61 to 0x7A (a-z)
-- Leave byte as-is</p>
+0x61 to 0x7A (a-z)</li>
+<li>Leave byte as-is</li>
+</ul>
 </blockquote>
 
                       </div>
@@ -301,7 +313,7 @@ If the byte is in the range 0x2A (*), 0x2D (-), 0x2E (.), 0x30 to 0x39 (0-9), 0x
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">static</span> <span class="k">var</span> <span class="nv">wwwFormURLPlusSpaceCharacterSet</span><span class="p">:</span> <span class="kt">CharacterSet</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">static</span> <span class="k">var</span> <span class="nv">wwwFormURLPlusSpaceCharacterSet</span><span class="p">:</span> <span class="kt">CharacterSet</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -316,8 +328,8 @@ If the byte is in the range 0x2A (*), 0x2D (-), 0x2E (.), 0x30 to 0x39 (0-9), 0x
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2017 <a class="link" href="https://github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2017-02-28)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>&copy; 2019 <a class="link" href="https://github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2019-01-10)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
 </div>

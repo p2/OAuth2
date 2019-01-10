@@ -8,6 +8,9 @@
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
     
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
   </head>
   <body>
 
@@ -21,6 +24,12 @@
           OAuth2 Docs
         </a>
          (98% documented)
+      </p>
+    
+      <p class="header-col--secondary">
+        <form role="search" action="../search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
       </p>
     
         <p class="header-col header-col--secondary">
@@ -92,10 +101,10 @@
                 <a class="nav-group-task-link" href="../Enums/OAuth2Error.html">OAuth2Error</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Errors &amp; Types.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a>
+                <a class="nav-group-task-link" href="../Errors &amp; Types.html#/s:6OAuth20A4JSONa">OAuth2JSON</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Errors &amp; Types.html#/s:6OAuth216OAuth2StringDict">OAuth2StringDict</a>
+                <a class="nav-group-task-link" href="../Errors &amp; Types.html#/s:6OAuth20A10StringDicta">OAuth2StringDict</a>
               </li>
             </ul>
           </li>
@@ -121,7 +130,7 @@
                 <a class="nav-group-task-link" href="../Classes/OAuth2Response.html">OAuth2Response</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Requests.html#/s:6OAuth213OAuth2Headers">OAuth2Headers</a>
+                <a class="nav-group-task-link" href="../Requests.html#/s:6OAuth20A7Headersa">OAuth2Headers</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/OAuth2RequestParams.html">OAuth2RequestParams</a>
@@ -244,7 +253,7 @@
             <a class="nav-group-name-link" href="../Other Functions.html">Other Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Other Functions.html#/s:F6OAuth216callOnMainThreadFFT_T_T_">callOnMainThread(_:)</a>
+                <a class="nav-group-task-link" href="../Other Functions.html#/s:6OAuth216callOnMainThreadyyyyXEF">callOnMainThread(_:)</a>
               </li>
             </ul>
           </li>
@@ -257,23 +266,22 @@
             <h1>OAuth2Response</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="n">open</span> <span class="kd">class</span> <span class="kt">OAuth2Response</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">class</span> <span class="kt">OAuth2Response</span></code></pre>
 
                 </div>
               </div>
             <p>Encapsulates a URLResponse to a URLRequest.</p>
 
 <p>Instances of this class are returned from <code><a href="../Classes/OAuth2Requestable.html">OAuth2Requestable</a></code> calls, they can be used like so:</p>
-
-<pre class="highlight plaintext"><code>perform(request: req) { response in
-    do {
-        let data = try response.responseData()
-        // do what you must with `data` as Data and `response.response` as HTTPURLResponse
-    }
-    catch let error {
-        // the request failed because of `error`
-    }
-}
+<pre class="highlight swift"><code><span class="nf">perform</span><span class="p">(</span><span class="nv">request</span><span class="p">:</span> <span class="n">req</span><span class="p">)</span> <span class="p">{</span> <span class="n">response</span> <span class="k">in</span>
+    <span class="k">do</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="nv">data</span> <span class="o">=</span> <span class="k">try</span> <span class="n">response</span><span class="o">.</span><span class="nf">responseData</span><span class="p">()</span>
+        <span class="c1">// do what you must with `data` as Data and `response.response` as HTTPURLResponse</span>
+    <span class="p">}</span>
+    <span class="k">catch</span> <span class="k">let</span> <span class="nv">error</span> <span class="p">{</span>
+        <span class="c1">// the request failed because of `error`</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </code></pre>
 
           </div>
@@ -286,9 +294,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC6OAuth214OAuth2Response4dataGSqV10Foundation4Data_"></a>
+                    <a name="/s:6OAuth20A8ResponseC4data10Foundation4DataVSgvp"></a>
                     <a name="//apple_ref/swift/Property/data" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC6OAuth214OAuth2Response4dataGSqV10Foundation4Data_">data</a>
+                    <a class="token" href="#/s:6OAuth20A8ResponseC4data10Foundation4DataVSgvp">data</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -303,7 +311,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="k">var</span> <span class="nv">data</span><span class="p">:</span> <span class="kt">Data</span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">data</span><span class="p">:</span> <span class="kt">Data</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -313,9 +321,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC6OAuth214OAuth2Response7requestV10Foundation10URLRequest"></a>
+                    <a name="/s:6OAuth20A8ResponseC7request10Foundation10URLRequestVvp"></a>
                     <a name="//apple_ref/swift/Property/request" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC6OAuth214OAuth2Response7requestV10Foundation10URLRequest">request</a>
+                    <a class="token" href="#/s:6OAuth20A8ResponseC7request10Foundation10URLRequestVvp">request</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -330,7 +338,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="k">var</span> <span class="nv">request</span><span class="p">:</span> <span class="kt">URLRequest</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">request</span><span class="p">:</span> <span class="kt">URLRequest</span></code></pre>
 
                         </div>
                       </div>
@@ -340,9 +348,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC6OAuth214OAuth2Response8responseCSo15HTTPURLResponse"></a>
+                    <a name="/s:6OAuth20A8ResponseC8responseSo17NSHTTPURLResponseCvp"></a>
                     <a name="//apple_ref/swift/Property/response" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC6OAuth214OAuth2Response8responseCSo15HTTPURLResponse">response</a>
+                    <a class="token" href="#/s:6OAuth20A8ResponseC8responseSo17NSHTTPURLResponseCvp">response</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -357,7 +365,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="k">var</span> <span class="nv">response</span><span class="p">:</span> <span class="kt">HTTPURLResponse</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">response</span><span class="p">:</span> <span class="kt">HTTPURLResponse</span></code></pre>
 
                         </div>
                       </div>
@@ -367,9 +375,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC6OAuth214OAuth2Response5errorGSqPs5Error__"></a>
+                    <a name="/s:6OAuth20A8ResponseC5errors5Error_pSgvp"></a>
                     <a name="//apple_ref/swift/Property/error" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC6OAuth214OAuth2Response5errorGSqPs5Error__">error</a>
+                    <a class="token" href="#/s:6OAuth20A8ResponseC5errors5Error_pSgvp">error</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -384,7 +392,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="k">var</span> <span class="nv">error</span><span class="p">:</span> <span class="kt">Error</span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">error</span><span class="p">:</span> <span class="kt">Error</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -394,9 +402,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth214OAuth2ResponsecFT4dataGSqV10Foundation4Data_7requestVS1_10URLRequest8responseCSo15HTTPURLResponse5errorGSqPs5Error___S0_"></a>
+                    <a name="/s:6OAuth20A8ResponseC4data7request8response5errorAC10Foundation4DataVSg_AH10URLRequestVSo17NSHTTPURLResponseCs5Error_pSgtcfc"></a>
                     <a name="//apple_ref/swift/Method/init(data:request:response:error:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth214OAuth2ResponsecFT4dataGSqV10Foundation4Data_7requestVS1_10URLRequest8responseCSo15HTTPURLResponse5errorGSqPs5Error___S0_">init(data:request:response:error:)</a>
+                    <a class="token" href="#/s:6OAuth20A8ResponseC4data7request8response5errorAC10Foundation4DataVSg_AH10URLRequestVSo17NSHTTPURLResponseCs5Error_pSgtcfc">init(data:request:response:error:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -411,7 +419,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="kt">Data</span><span class="p">?,</span> <span class="nv">request</span><span class="p">:</span> <span class="kt">URLRequest</span><span class="p">,</span> <span class="nv">response</span><span class="p">:</span> <span class="kt">HTTPURLResponse</span><span class="p">,</span> <span class="nv">error</span><span class="p">:</span> <span class="kt">Error</span><span class="p">?)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="kt">Data</span><span class="p">?,</span> <span class="nv">request</span><span class="p">:</span> <span class="kt">URLRequest</span><span class="p">,</span> <span class="nv">response</span><span class="p">:</span> <span class="kt">HTTPURLResponse</span><span class="p">,</span> <span class="nv">error</span><span class="p">:</span> <span class="kt">Error</span><span class="p">?)</span></code></pre>
 
                         </div>
                       </div>
@@ -428,7 +436,6 @@
                               <td>
                                 <div>
                                   <p>Data that was returned</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -441,7 +448,6 @@
                               <td>
                                 <div>
                                   <p>The request to which we responded</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -454,7 +460,6 @@
                               <td>
                                 <div>
                                   <p>The <code>HTTPURLResponse</code> to be represented by this instance</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -467,7 +472,6 @@
                               <td>
                                 <div>
                                   <p>Error that occurred when handling our request</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -491,9 +495,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth214OAuth2Response12responseDataFzT_V10Foundation4Data"></a>
+                    <a name="/s:6OAuth20A8ResponseC12responseData10Foundation0D0VyKF"></a>
                     <a name="//apple_ref/swift/Method/responseData()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth214OAuth2Response12responseDataFzT_V10Foundation4Data">responseData()</a>
+                    <a class="token" href="#/s:6OAuth20A8ResponseC12responseData10Foundation0D0VyKF">responseData()</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -505,7 +509,6 @@
 request callbacks.</p>
 
 <p>If data is returned but the status code is &gt;= 400, nothing will be raised <strong>except</strong> if there&rsquo;s a 401 or 403.</p>
-
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
     Specific OAuth2Errors (.requestCancelled, .unauthorizedClient, .noDataInResponse) or any Error returned from the request
@@ -517,14 +520,13 @@ request callbacks.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">responseData</span><span class="p">()</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Data</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">responseData</span><span class="p">()</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Data</span></code></pre>
 
                         </div>
                       </div>
                       <div>
                         <h4>Return Value</h4>
                         <p>Response data</p>
-
                       </div>
                     </section>
                   </div>
@@ -532,9 +534,9 @@ request callbacks.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC6OAuth214OAuth2Response12responseJSONFzT_GVs10DictionarySSP__"></a>
+                    <a name="/s:6OAuth20A8ResponseC12responseJSONSDySSypGyKF"></a>
                     <a name="//apple_ref/swift/Method/responseJSON()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC6OAuth214OAuth2Response12responseJSONFzT_GVs10DictionarySSP__">responseJSON()</a>
+                    <a class="token" href="#/s:6OAuth20A8ResponseC12responseJSONSDySSypGyKF">responseJSON()</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -542,11 +544,10 @@ request callbacks.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Uses <code><a href="../Classes/OAuth2Response.html#/s:FC6OAuth214OAuth2Response12responseDataFzT_V10Foundation4Data">responseData()</a></code>, then decodes JSON using <code>Foundation.JSONSerialization</code> on the resulting data (if there was any).</p>
-
+                        <p>Uses <code><a href="../Classes/OAuth2Response.html#/s:6OAuth20A8ResponseC12responseData10Foundation0D0VyKF">responseData()</a></code>, then decodes JSON using <code>Foundation.JSONSerialization</code> on the resulting data (if there was any).</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    Any error thrown by <code><a href="../Classes/OAuth2Response.html#/s:FC6OAuth214OAuth2Response12responseDataFzT_V10Foundation4Data">responseData()</a></code>, plus .jsonParserError if JSON did not decode into <code>[String: Any]</code>
+    Any error thrown by <code><a href="../Classes/OAuth2Response.html#/s:6OAuth20A8ResponseC12responseData10Foundation0D0VyKF">responseData()</a></code>, plus .jsonParserError if JSON did not decode into <code>[String: Any]</code>
 
 </div>
 
@@ -555,14 +556,13 @@ request callbacks.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">responseJSON</span><span class="p">()</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth210OAuth2JSON">OAuth2JSON</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">responseJSON</span><span class="p">()</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Errors & Types.html#/s:6OAuth20A4JSONa">OAuth2JSON</a></span></code></pre>
 
                         </div>
                       </div>
                       <div>
                         <h4>Return Value</h4>
                         <p>OAuth2JSON on success</p>
-
                       </div>
                     </section>
                   </div>
@@ -575,8 +575,8 @@ request callbacks.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2017 <a class="link" href="https://github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2017-02-28)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>&copy; 2019 <a class="link" href="https://github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2019-01-10)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
 </div>
