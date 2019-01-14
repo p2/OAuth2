@@ -477,7 +477,7 @@ The preferred way is to use _git_ directly or _Carthage_.
 Installation via Carthage is easy enough:
 
 ```ruby
-github "p2/OAuth2" ~> 3.0
+github "p2/OAuth2" ~> 4.2
 ```
 
 #### git
@@ -514,7 +514,7 @@ If you're unfamiliar with CocoaPods, read [using CocoaPods](http://guides.cocoap
 platform :ios, '8.0'          # or platform :osx, '10.9'
 use_frameworks!
 target `YourApp` do
-  pod 'p2.OAuth2', '~> 3.0'
+  pod 'p2.OAuth2', '~> 4.2'
 end
 ```
 
