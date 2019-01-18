@@ -40,6 +40,8 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 	/// Used to store the `SFSafariViewControllerDelegate`.
 	private var safariViewDelegate: AnyObject?
 	
+    /// Used to store the authentication session.
+    private var authenticationSession: AnyObject?
 	
 	public init(oauth2: OAuth2) {
 		self.oauth2 = oauth2
@@ -73,8 +75,12 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 	- parameter at:   The authorize URL to open
 	*/
 	public func authorizeEmbedded(with config: OAuth2AuthConfig, at url: URL) throws {
-        if #available(iOS 12, *), config.ui.useAuthenticationSession {
-            authenticationSessionEmbedded(at: url)
+        if #available(iOS 11, *), config.ui.useAuthenticationSession {
+            guard let redirect = oauth2.redirect else {
+                throw OAuth2Error.noRedirectURL
+            }
+
+            authenticationSessionEmbedded(at: url, withRedirect: redirect)
         } else {
             guard let controller = config.authorizeContext as? UIViewController else {
                 throw (nil == config.authorizeContext) ? OAuth2Error.noAuthorizationContext : OAuth2Error.invalidAuthorizationContext
@@ -109,10 +115,12 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 	open func willPresent(viewController: UIViewController, in naviController: UINavigationController?) {
 	}
 	
-    // MARK: - ASWebAuthenticationSession
+    // MARK: - SFAuthenticationSession / ASWebAuthenticationSession
 
     /**
-     Uses ASWebAuthenticationSession to manage authorisation.
+     Use SFAuthenticationSession or ASWebAuthenticationSession to manage authorisation.
+     
+     On iOS 11, use SFAuthenticationSession. On iOS 12+, use ASWebAuthenticationSession.
      
      The mechanism works just like when you're using Safari itself to log the user in, hence you **need to implement**
      `application(application:openURL:sourceApplication:annotation:)` in your application delegate.
@@ -122,10 +130,10 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
      - parameter at:   The authorize URL to open
      - returns:        A Boolean value indicating whether the web authentication session starts successfully.
      */
-    @available(iOS 12.0, *)
+    @available(iOS 11.0, *)
     @discardableResult
-    public func authenticationSessionEmbedded(at url: URL) -> Bool {
-        let session = ASWebAuthenticationSession.init(url: url, callbackURLScheme: oauth2.redirect!) { url, error in
+    public func authenticationSessionEmbedded(at url: URL, withRedirect redirect: String) -> Bool {
+        let completionHandler: (URL?, Error?) -> Void = { url, error in
             if let url = url {
                 do {
                     try self.oauth2.handleRedirectURL(url as URL)
@@ -136,8 +144,16 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
             } else {
                 self.oauth2.didFail(with: nil)
             }
+            self.authenticationSession = nil
         }
-        return session.start()
+        
+        if #available(iOS 12, *) {
+            authenticationSession = ASWebAuthenticationSession(url: url, callbackURLScheme: redirect, completionHandler: completionHandler)
+            return (authenticationSession as! ASWebAuthenticationSession).start()
+        } else {
+            authenticationSession = SFAuthenticationSession(url: url, callbackURLScheme: redirect, completionHandler: completionHandler)
+            return (authenticationSession as! SFAuthenticationSession).start()
+        }
     }
     
     
