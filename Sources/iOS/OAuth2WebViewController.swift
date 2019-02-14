@@ -149,11 +149,11 @@ open class OAuth2WebViewController: UIViewController, WKNavigationDelegate {
 	}
 	
 	func showLoadingIndicator() {
-        	loadingView = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+        	loadingView = UIActivityIndicatorView(style: .gray)
         	loadingView?.startAnimating()
         	loadingView?.center = self.view.center
         	self.view.addSubview(loadingView!)
-        	self.view.bringSubview(toFront: loadingView!)
+        	self.view.bringSubviewToFront(loadingView!)
 	}
 	
 	func hideLoadingIndicator() {
