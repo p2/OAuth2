@@ -140,8 +140,8 @@ open class OAuth2WebViewController: UIViewController, WKNavigationDelegate {
 	
 	func showHideBackButton(_ show: Bool) {
 		if show {
-			let bb = backButton ?? UIBarButtonItem(barButtonSystemItem: .rewind, target: self, action: #selector(OAuth2WebViewController.goBack(_:)))
-			navigationItem.leftBarButtonItem = bb
+			//let bb = backButton ?? UIBarButtonItem(barButtonSystemItem: .rewind, target: self, action: #selector(OAuth2WebViewController.goBack(_:)))
+			//navigationItem.leftBarButtonItem = bb
 		}
 		else {
 			navigationItem.leftBarButtonItem = nil
