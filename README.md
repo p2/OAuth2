@@ -368,7 +368,7 @@ The main configuration you'll use with `oauth2.authConfig` is whether or not to 
 
     oauth2.authConfig.authorizeEmbedded = true
 
-Similarly, if you want to take care of dismissing the login screen yourself:
+Similarly, if you want to take care of dismissing the login screen yourself (not possible with the newer authorization sessions mentioned below):
 
     oauth2.authConfig.authorizeEmbeddedAutoDismiss = false
 
@@ -394,6 +394,10 @@ Similar is how you specify custom HTTP headers:
     "headers": ["Accept": "application/json, text/plain"]
 
 Starting with version 2.0.1 on iOS 9, `SFSafariViewController` will be used for embedded authorization.
+Starting after version 4.2, on iOS 11 (`SFAuthenticationSession`) and iOS 12 (`ASWebAuthenticationSession`), you can opt-in to these newer authorization session view controllers:
+
+    oauth2.authConfig.ui.useAuthenticationSession = true
+
 To revert to the old custom `OAuth2WebViewController`:
 
     oauth2.authConfig.ui.useSafariView = false
