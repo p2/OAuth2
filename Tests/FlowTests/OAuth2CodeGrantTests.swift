@@ -280,6 +280,12 @@ class OAuth2CodeGrantTests: XCTestCase {
 		let body3 = String(data: req3.httpBody!, encoding: String.Encoding.utf8)
 		let query3 = OAuth2CodeGrant.params(fromQuery: body3!)
 		XCTAssertEqual(query3["bar"], "hat", "Expecting key `bar` to be `hat`")
+
+		oauth.authParameters = ["hat": "trick"]
+
+		// in authorize request
+		let req4 = try! oauth.authorizeRequest(withRedirect: "pp", scope: nil, params: nil)
+		XCTAssertEqual(req4.params["hat"], "trick", "Expecting key `hat` to be `trick`")
 	}
 	
 	func testCustomAuthParametersInit() {

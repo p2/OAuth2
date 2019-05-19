@@ -285,6 +285,7 @@ open class OAuth2: OAuth2Base {
 		if clientConfig.safariCancelWorkaround {
 			req.params["swa"] = "\(Date.timeIntervalSinceReferenceDate)" // Safari issue workaround
 		}
+		req.add(params: authParameters)
 		req.add(params: params)
 		
 		return req
