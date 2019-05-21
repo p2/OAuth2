@@ -99,17 +99,17 @@ extension OAuth2Logger {
 	
 	/** Log a message at the trace level. */
 	public func trace(_ module: String? = "OAuth2", filename: String? = #file, line: Int? = #line, function: String? = #function, msg: @autoclosure() -> String) {
-		log(.trace, module: module, filename: filename, line: line, function: function, msg: msg)
+		log(.trace, module: module, filename: filename, line: line, function: function, msg: msg())
 	}
 	
 	/** Standard debug logging. */
 	public func debug(_ module: String? = "OAuth2", filename: String? = #file, line: Int? = #line, function: String? = #function, msg: @autoclosure() -> String) {
-		log(.debug, module: module, filename: filename, line: line, function: function, msg: msg)
+		log(.debug, module: module, filename: filename, line: line, function: function, msg: msg())
 	}
 	
 	/** Log warning messages. */
 	public func warn(_ module: String? = "OAuth2", filename: String? = #file, line: Int? = #line, function: String? = #function, msg: @autoclosure() -> String) {
-		log(.warn, module: module, filename: filename, line: line, function: function, msg: msg)
+		log(.warn, module: module, filename: filename, line: line, function: function, msg: msg())
 	}
 }
 

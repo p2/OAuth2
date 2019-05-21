@@ -12,7 +12,7 @@ OAuth2 frameworks for **macOS**, **iOS** and **tvOS** written in Swift 4.2.
 - [📱 Sample iOS app](https://github.com/p2/OAuth2PodApp) (using CocoaPods)
 - [📖 Technical Documentation](https://p2.github.io/OAuth2)
 
-OAuth2 requires Xcode 8, the built framework can be used on **OS X 10.9** or **iOS 8** and later.
+OAuth2 requires Xcode 8, the built framework can be used on **OS X 10.11** or **iOS 8** and later.
 Happy to accept pull requests, please see [CONTRIBUTING.md](./CONTRIBUTING.md)
 
 ### Swift Version
