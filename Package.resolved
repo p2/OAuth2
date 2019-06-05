@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "SwiftKeychain",
+        "repositoryURL": "https://github.com/hermanbanken/SwiftKeychain.git",
+        "state": {
+          "branch": null,
+          "revision": "bdd183f17741f351dd6d201b73b236db3e143775",
+          "version": "1.0.1"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
