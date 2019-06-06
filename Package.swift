@@ -1,4 +1,4 @@
-// swift-tools-version:4.0
+// swift-tools-version:5.0
 //
 //  Package.swift
 //  OAuth2
@@ -22,15 +22,21 @@
 import PackageDescription
 
 let package = Package(
-    name: "OAuth2",
-    dependencies: [
-        // SwiftKeychain is not yet available as a Package, so we symlink to /Sources and make it a Target
-        .package(url: "https://github.com/hermanbanken/SwiftKeychain.git", from: "1.0.1"),
-    ],
-	targets: [
-		.target(name: "Base", dependencies: ["SwiftKeychain"]),
-		.target(name: "macOS", dependencies: [.target(name: "Base")]),
-		.target(name: "Flows", dependencies: [.target(name: "macOS")]),
-		.target(name: "DataLoader", dependencies: [.target(name: "Flows")]),
-	]
+  name: "OAuth2",
+  platforms: [
+    .macOS(.v10_10), .iOS(.v8), .tvOS(.v9), .watchOS(.v3)
+  ],
+  products: [
+    .library(name: "OAuth2", targets: ["Base"]),
+  ],
+  dependencies: [
+    // SwiftKeychain is not yet available as a Package, so we symlink to /Sources and make it a Target
+    .package(url: "https://github.com/hermanbanken/SwiftKeychain.git", from: "1.0.1"),
+  ],
+  targets: [
+    .target(name: "Base", dependencies: ["SwiftKeychain"]),
+    .target(name: "macOS", dependencies: [.target(name: "Base")]),
+    .target(name: "Flows", dependencies: [.target(name: "macOS")]),
+    .target(name: "DataLoader", dependencies: [.target(name: "Flows")]),
+  ]
 )
