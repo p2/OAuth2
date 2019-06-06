@@ -30,7 +30,6 @@ let package = Package(
     .library(name: "OAuth2", targets: ["Base", "Flows", "DataLoader"]),
   ],
   dependencies: [
-    // SwiftKeychain is not yet available as a Package, so we symlink to /Sources and make it a Target
     .package(url: "https://github.com/hermanbanken/SwiftKeychain.git", from: "1.0.1"),
   ],
   targets: [
