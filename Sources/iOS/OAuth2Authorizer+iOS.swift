@@ -23,6 +23,7 @@ import UIKit
 import SafariServices
 #if !NO_MODULE_IMPORT
 import Base
+import Flows
 #endif
 
 
