@@ -27,7 +27,7 @@ let package = Package(
     .macOS(.v10_10), .iOS(.v8), .tvOS(.v9), .watchOS(.v3)
   ],
   products: [
-    .library(name: "OAuth2", targets: ["Base"]),
+    .library(name: "OAuth2", targets: ["Base", "Flows", "DataLoader"]),
   ],
   dependencies: [
     // SwiftKeychain is not yet available as a Package, so we symlink to /Sources and make it a Target
