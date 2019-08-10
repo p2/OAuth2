@@ -397,7 +397,7 @@ open class OAuth2: OAuth2Base {
 	- parameter callback: The callback to call on the main thread; if both json and error is nil no registration was attempted; error is nil
 	                      on success
 	*/
-	func registerClientIfNeeded(callback: @escaping ((OAuth2JSON?, OAuth2Error?) -> Void)) {
+	public func registerClientIfNeeded(callback: @escaping ((OAuth2JSON?, OAuth2Error?) -> Void)) {
 		if nil != clientId || !type(of: self).clientIdMandatory {
 			callOnMainThread() {
 				callback(nil, nil)

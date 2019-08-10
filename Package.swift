@@ -27,17 +27,22 @@ let package = Package(
 		.macOS(.v10_11), .iOS(.v8), .tvOS(.v9), .watchOS(.v3)
 	],
 	products: [
-		.library(name: "OAuth2", targets: ["Base", "Flows", "DataLoader"]),
+		.library(name: "OAuth2", targets: ["OAuth2"]),
 	],
 	dependencies: [
 		// SwiftKeychain is not yet available as a Package, so we symlink to /Sources and make it a Target
 		//.package(url: "https://github.com/yankodimitrov/SwiftKeychain.git", majorVersion: 1),
 	],
 	targets: [
+		.target(name: "OAuth2",
+			dependencies: ["Base", "Flows", "DataLoader"]),
 		.target(name: "SwiftKeychain"),
 		.target(name: "Base", dependencies: [.target(name: "SwiftKeychain")]),
 		.target(name: "macOS", dependencies: [.target(name: "Base")]),
-		.target(name: "Flows", dependencies: [.target(name: "macOS")]),
+		.target(name: "iOS", dependencies: [.target(name: "Base")]),
+		.target(name: "tvOS", dependencies: [.target(name: "Base")]),
+		.target(name: "Flows", dependencies: [
+			.target(name: "macOS"), .target(name: "iOS"), .target(name: "tvOS")]),
 		.target(name: "DataLoader", dependencies: [.target(name: "Flows")]),
 		.testTarget(name: "BaseTests", dependencies: [.target(name: "Base"), .target(name: "Flows")]),
 		.testTarget(name: "FlowTests", dependencies: [.target(name: "Flows")]),

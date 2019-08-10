@@ -32,7 +32,7 @@ A simple iOS web view controller that allows you to display the login/authorizat
 open class OAuth2WebViewController: UIViewController, WKNavigationDelegate {
 	
 	/// Handle to the OAuth2 instance in play, only used for debug lugging at this time.
-	var oauth: OAuth2?
+	var oauth: OAuth2Base?
 	
 	/// The URL to load on first show.
 	open var startURL: URL? {
