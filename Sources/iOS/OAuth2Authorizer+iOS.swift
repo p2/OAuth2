@@ -43,7 +43,7 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 	/// Used to store the authentication session.
 	private var authenticationSession: AnyObject?
 	
-	public init(oauth2: OAuth2) {
+	public init(oauth2: OAuth2Base) {
 		self.oauth2 = oauth2
 	}
 	

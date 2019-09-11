@@ -4,6 +4,10 @@ Changelog
 Version numbering represents the Swift version, plus a running number representing updates, fixes and new features at the same time.
 You can also refer to commit logs to get details on what was implemented, fixed and improved.
 
+### 5.1.0
+
+- Update Swift package configuration for use with XCode 11.
+
 ### 5.0.0
 
 - Swift 5.0 support.
