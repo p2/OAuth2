@@ -404,6 +404,7 @@
 				EEDB8625193FAAE500C4EEA1 /* Products */,
 			);
 			sourceTree = "<group>";
+			usesTabs = 1;
 		};
 		EEDB8625193FAAE500C4EEA1 /* Products */ = {
 			isa = PBXGroup;
