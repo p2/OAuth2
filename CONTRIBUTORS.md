@@ -3,6 +3,7 @@ Contributors
 
 Contributors to the codebase, in reverse chronological order:
 
+- Larry Brunet, @larrybrunet
 - Dave Carlson, @drdavec
 - Sam Oakley, @blork
 - David Jennes, @davidjennes

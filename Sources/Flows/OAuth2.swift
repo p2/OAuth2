@@ -285,6 +285,11 @@ open class OAuth2: OAuth2Base {
 		if clientConfig.safariCancelWorkaround {
 			req.params["swa"] = "\(Date.timeIntervalSinceReferenceDate)" // Safari issue workaround
 		}
+		if clientConfig.useProofKeyForCodeExchange {
+			context.generateCodeVerifier()
+			req.params["code_challenge"] = context.codeChallenge()
+			req.params["code_challenge_method"] = context.codeChallengeMethod
+		}
 		req.add(params: params)
 		
 		return req

@@ -452,6 +452,12 @@ dynreg.register(client: oauth2) { params, error in
 }
 ```
 
+PKCE
+----
+
+PKCE support is controlled by the `useProofKeyForCodeExchange` property, and the "use_pkce" setting.
+It is disabled by default. When enabled, a new code verifier string is generated for every authorization request. 
+
 
 Keychain
 --------

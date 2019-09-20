@@ -97,6 +97,26 @@ class OAuth2CodeGrantTests: XCTestCase {
 		XCTAssertTrue(8 == (query["state"]!).count, "Expecting an auto-generated UUID for `state`")
 	}
 	
+	func testAuthorizeURIWithPKCE() {
+		let oauth = OAuth2CodeGrant(settings: [
+			"client_id": "abc",
+			"authorize_uri": "https://auth.ful.io",
+			"token_uri": "https://token.ful.io",
+			"keychain": false,
+			"use_pkce" : true,
+			])
+		XCTAssertNotNil(oauth.authURL, "Must init `authorize_uri`")
+		
+		let comp = URLComponents(url: try! oauth.authorizeURL(withRedirect: "oauth2://callback", scope: nil, params: nil), resolvingAgainstBaseURL: true)!
+		XCTAssertEqual(comp.host!, "auth.ful.io", "Correct host")
+		let query = OAuth2CodeGrant.params(fromQuery: comp.percentEncodedQuery!)
+		XCTAssertEqual(query["client_id"]!, "abc", "Expecting correct `client_id`")
+		XCTAssertNotNil(query["code_challenge"], "Must have `code_challenge`")
+		XCTAssertEqual(query["code_challenge_method"]!, "S256", "Expecting correct `code_challenge_method`")
+		XCTAssertEqual(query["redirect_uri"]!, "oauth2://callback", "Expecting correct `redirect_uri`")
+		XCTAssertTrue(8 == (query["state"]!).count, "Expecting an auto-generated UUID for `state`")
+	}
+	
 	func testRedirectURI() {
 		let oauth = OAuth2CodeGrant(settings: baseSettings)
 		oauth.redirect = "oauth2://callback"
@@ -253,7 +273,50 @@ class OAuth2CodeGrantTests: XCTestCase {
 		XCTAssertEqual(query2["redirect_uri"]!, "oauth2://callback", "Expecting correct `redirect_uri`")
 		XCTAssertNil(query2["state"], "`state` must be empty")
 	}
-
+	
+	func testTokenRequestWithPKCE() {
+		let oauth = OAuth2CodeGrant(settings: [
+			"client_id": "abc",
+			"authorize_uri": "https://auth.ful.io",
+			"token_uri": "https://token.ful.io",
+			"keychain": false,
+			"use_pkce" : true,
+			])
+		oauth.redirect = "oauth2://callback"
+		
+		// no redirect in context - fail
+		do {
+			_ = try oauth.accessTokenRequest(with: "pp")
+			XCTAssertTrue(false, "Should not be here any more")
+		}
+		catch OAuth2Error.noRedirectURL {
+			XCTAssertTrue(true, "Must be here")
+		}
+		catch {
+			XCTAssertTrue(false, "Should not be here")
+		}
+		
+		// with redirect in context - success
+		oauth.context.redirectURL = "oauth2://callback"
+		
+		// initialize code verifier in context
+		oauth.context.generateCodeVerifier()
+		
+		let req = try! oauth.accessTokenRequest(with: "pp").asURLRequest(for: oauth)
+		let comp = URLComponents(url: req.url!, resolvingAgainstBaseURL: true)!
+		XCTAssertEqual(comp.host!, "token.ful.io", "Correct host")
+		
+		let body = String(data: req.httpBody!, encoding: String.Encoding.utf8)
+		let query = OAuth2CodeGrant.params(fromQuery: body!)
+		XCTAssertEqual(query["client_id"]!, "abc", "Expecting correct `client_id`")
+		XCTAssertNil(query["client_secret"], "Must not have `client_secret`")
+		XCTAssertEqual(query["code"]!, "pp", "Expecting correct `code`")
+		XCTAssertEqual(query["grant_type"]!, "authorization_code", "Expecting correct `grant_type`")
+		XCTAssertEqual(query["redirect_uri"]!, "oauth2://callback", "Expecting correct `redirect_uri`")
+		XCTAssertNil(query["state"], "`state` must be empty")
+		XCTAssertNotNil(query["code_verifier"], "Must  have `code_verifier`")
+	}
+	
 	func testCustomAuthParameters() {
 		let oauth = OAuth2CodeGrant(settings: baseSettings)
 		oauth.redirect = "oauth2://callback"

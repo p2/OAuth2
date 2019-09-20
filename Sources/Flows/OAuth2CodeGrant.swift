@@ -67,7 +67,9 @@ open class OAuth2CodeGrant: OAuth2 {
 		req.params["grant_type"] = type(of: self).grantType
 		req.params["redirect_uri"] = redirect
 		req.params["client_id"] = clientId
-		
+		if clientConfig.useProofKeyForCodeExchange {
+			req.params["code_verifier"] = context.codeVerifier
+		}
 		return req
 	}
 	

@@ -87,6 +87,12 @@ open class OAuth2ClientConfig {
 	/// url.
 	open var safariCancelWorkaround = false	
 	
+	/// Use Proof Key for Code Exchange (PKCE)
+	///
+	/// See https://tools.ietf.org/html/rfc7636
+	///
+	open var useProofKeyForCodeExchange = false
+
 	/**
 	Initializer to initialize properties from a settings dictionary.
 	*/
@@ -139,6 +145,11 @@ open class OAuth2ClientConfig {
 		if let assume = settings["token_assume_unexpired"] as? Bool {
 			accessTokenAssumeUnexpired = assume
 		}
+		
+		if let usePKCE = settings["use_pkce"] as? Bool {
+			useProofKeyForCodeExchange = usePKCE
+		}
+		
 	}
 	
 	
