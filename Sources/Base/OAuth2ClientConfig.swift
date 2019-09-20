@@ -146,7 +146,7 @@ open class OAuth2ClientConfig {
 			accessTokenAssumeUnexpired = assume
 		}
 		
-		if let usePKCE = settings["use_PKCE"] as? Bool {
+		if let usePKCE = settings["use_pkce"] as? Bool {
 			useProofKeyForCodeExchange = usePKCE
 		}
 		
