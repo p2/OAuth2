@@ -146,7 +146,11 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 			}
 			self.authenticationSession = nil
 		}
-		
+
+#if targetEnvironment(macCatalyst)
+		authenticationSession = ASWebAuthenticationSession(url: url, callbackURLScheme: redirect, completionHandler: completionHandler)
+		return (authenticationSession as! ASWebAuthenticationSession).start()
+#else
 		if #available(iOS 12, *) {
 			authenticationSession = ASWebAuthenticationSession(url: url, callbackURLScheme: redirect, completionHandler: completionHandler)
 			return (authenticationSession as! ASWebAuthenticationSession).start()
@@ -154,6 +158,7 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 			authenticationSession = SFAuthenticationSession(url: url, callbackURLScheme: redirect, completionHandler: completionHandler)
 			return (authenticationSession as! SFAuthenticationSession).start()
 		}
+#endif
 	}
 	
 	
