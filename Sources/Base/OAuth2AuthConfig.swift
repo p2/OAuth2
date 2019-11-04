@@ -67,7 +67,7 @@ public struct OAuth2AuthConfig {
 	/// Context information for the authorization flow:
 	/// - iOS:   The parent view controller to present from
 	/// - macOS: An NSWindow from which to present a modal sheet _or_ `nil` to present in a new window
-	public var authorizeContext: AnyObject? = nil
+	public weak var authorizeContext: AnyObject? = nil
 	
 	/// UI-specific configuration.
 	public var ui = UI()
