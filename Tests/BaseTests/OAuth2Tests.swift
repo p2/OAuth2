@@ -44,17 +44,17 @@ class OAuth2Tests: XCTestCase {
 		])
 	}
 
-    func refreshOAuth2() -> OAuth2 {
-        return OAuth2(settings: [
-            "client_id": "abc",
-            "authorize_uri": "https://auth.ful.io",
-            "token_uri": "https://token.ful.io",
-            "refresh_uri": "https://refresh.ful.io",
-            "scope": "login",
-            "verbose": true,
-            "keychain": false,
-        ])
-    }
+	func refreshOAuth2() -> OAuth2 {
+		return OAuth2(settings: [
+			"client_id": "abc",
+			"authorize_uri": "https://auth.ful.io",
+			"token_uri": "https://token.ful.io",
+			"refresh_uri": "https://refresh.ful.io",
+			"scope": "login",
+			"verbose": true,
+			"keychain": false,
+		])
+	}
 	
 	func testInit() {
 		var oauth = OAuth2(settings: ["client_id": "def"])
@@ -101,21 +101,21 @@ class OAuth2Tests: XCTestCase {
 		XCTAssertNil(params["state"], "Expecting no `state` in query")
 	}
 
-    func testTokenRefreshRequest() {
-        let oa = refreshOAuth2()
-        oa.verbose = false
-        oa.clientConfig.refreshToken = "abc"
-        let req = try! oa.tokenRequestForTokenRefresh().asURLRequest(for: oa)
-        let auth = req.url!
+	func testTokenRefreshRequest() {
+		let oa = refreshOAuth2()
+		oa.verbose = false
+		oa.clientConfig.refreshToken = "abc"
+		let req = try! oa.tokenRequestForTokenRefresh().asURLRequest(for: oa)
+		let auth = req.url!
 
-        let comp = URLComponents(url: auth, resolvingAgainstBaseURL: true)!
-        XCTAssertEqual("https", comp.scheme!, "Need correct scheme")
-        XCTAssertEqual("refresh.ful.io", comp.host!, "Need correct host")
+		let comp = URLComponents(url: auth, resolvingAgainstBaseURL: true)!
+		XCTAssertEqual("https", comp.scheme!, "Need correct scheme")
+		XCTAssertEqual("refresh.ful.io", comp.host!, "Need correct host")
 
-        let params = OAuth2.params(fromQuery: comp.percentEncodedQuery ?? "")
-        //XCTAssertEqual(params["redirect_uri"]!, "oauth2app://callback", "Expecting correct `redirect_uri` in query")
-        XCTAssertNil(params["state"], "Expecting no `state` in query")
-    }
+		let params = OAuth2.params(fromQuery: comp.percentEncodedQuery ?? "")
+		//XCTAssertEqual(params["redirect_uri"]!, "oauth2app://callback", "Expecting correct `redirect_uri` in query")
+		XCTAssertNil(params["state"], "Expecting no `state` in query")
+	}
 	
 	func testAuthorizeCall() {
 		let oa = genericOAuth2()

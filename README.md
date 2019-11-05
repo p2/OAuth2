@@ -66,6 +66,8 @@ oauth2.authConfig.authorizeEmbedded = true
 oauth2.authConfig.authorizeContext = <# your UIViewController / NSWindow #>
 ```
 
+Need to specify a separate refresh token URI? You can set the `refresh_uri` in the Settings Dictionary. If specified the library will refresh access tokens using the `refresh_uri` you specified, otherwise it will use the `token_uri`.
+
 Need to debug? Use a `.debug` or even a `.trace` logger:
 
 ```swift
@@ -543,4 +545,3 @@ Since there is no `NOTICE` file there is nothing that you have to include in you
 
 
 [sample]: https://github.com/p2/OAuth2App
-
