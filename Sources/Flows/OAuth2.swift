@@ -57,6 +57,7 @@ open class OAuth2: OAuth2Base {
 	- client_secret (String), usually only needed for code grant
 	- authorize_uri (URL-String)
 	- token_uri (URL-String), if omitted the authorize_uri will be used to obtain tokens
+	- refresh_uri (URL-String), if omitted the token_uri will be used to obtain tokens
 	- redirect_uris (Array of URL-Strings)
 	- scope (String)
 	
