@@ -3,6 +3,7 @@ Contributors
 
 Contributors to the codebase, in reverse chronological order:
 
+- Foti Dim, @fotidim
 - Larry Brunet, @larrybrunet
 - Dave Carlson, @drdavec
 - Sam Oakley, @blork

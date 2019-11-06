@@ -57,6 +57,7 @@ open class OAuth2: OAuth2Base {
 	- client_secret (String), usually only needed for code grant
 	- authorize_uri (URL-String)
 	- token_uri (URL-String), if omitted the authorize_uri will be used to obtain tokens
+	- refresh_uri (URL-String), if omitted the token_uri will be used to obtain tokens
 	- redirect_uris (Array of URL-Strings)
 	- scope (String)
 	
@@ -343,7 +344,7 @@ open class OAuth2: OAuth2Base {
 			throw OAuth2Error.noRefreshToken
 		}
 		
-		let req = OAuth2AuthRequest(url: (clientConfig.tokenURL ?? clientConfig.authorizeURL))
+		let req = OAuth2AuthRequest(url: (clientConfig.refreshURL ?? clientConfig.tokenURL ?? clientConfig.authorizeURL))
 		req.params["grant_type"] = "refresh_token"
 		req.params["refresh_token"] = refreshToken
 		if let clientId = clientId {
