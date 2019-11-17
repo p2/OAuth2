@@ -171,6 +171,7 @@ open class OAuth2Base: OAuth2Securable {
 	- secret_in_body (Bool, false by default, forces the flow to use the request body for the client secret)
 	- parameters ([String: String], custom request parameters to be added during authorization)
 	- token_assume_unexpired (Bool, true by default, whether to use access tokens that do not come with an "expires_in" parameter)
+	- use_pkce (Bool, false by default)
 	
 	- verbose (Bool, false by default, applies to client logging)
 	*/
