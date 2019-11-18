@@ -41,6 +41,16 @@ class OAuth2RefreshTokenTests: XCTestCase {
 			"keychain": false,
 		])
 	}
+
+	func refreshOAuth2() -> OAuth2 {
+		return OAuth2(settings: [
+			"client_id": "abc",
+			"authorize_uri": "https://auth.ful.io",
+			"token_uri": "https://token.ful.io",
+			"refresh_uri": "https://refresh.ful.io",
+			"keychain": false,
+		])
+	}
 	
 	func testCannotRefresh() {
 		let oauth = genericOAuth2()
@@ -64,6 +74,28 @@ class OAuth2RefreshTokenTests: XCTestCase {
 		XCTAssertNotNil(req?.url)
 		XCTAssertNotNil(req?.httpBody)
 		XCTAssertEqual("https://token.ful.io", req!.url!.absoluteString)
+		let comp = URLComponents(url: req!.url!, resolvingAgainstBaseURL: true)
+		let params = comp?.percentEncodedQuery
+		XCTAssertNil(params)
+		let body = String(data: req!.httpBody!, encoding: String.Encoding.utf8)
+		XCTAssertNotNil(body)
+		let dict = OAuth2.params(fromQuery: body!)
+		XCTAssertEqual(dict["client_id"], "abc")
+		XCTAssertEqual(dict["refresh_token"], "pov")
+		XCTAssertEqual(dict["grant_type"], "refresh_token")
+		XCTAssertNil(dict["client_secret"])
+		XCTAssertNil(req!.allHTTPHeaderFields?["Authorization"])
+	}
+
+	func testRefreshRequestWithDedicatedRefreshURI() {
+		let oauth = refreshOAuth2()
+		oauth.clientConfig.refreshToken = "pov"
+
+		let req = try? oauth.tokenRequestForTokenRefresh().asURLRequest(for: oauth)
+		XCTAssertNotNil(req)
+		XCTAssertNotNil(req?.url)
+		XCTAssertNotNil(req?.httpBody)
+		XCTAssertEqual("https://refresh.ful.io", req!.url!.absoluteString)
 		let comp = URLComponents(url: req!.url!, resolvingAgainstBaseURL: true)
 		let params = comp?.percentEncodedQuery
 		XCTAssertNil(params)

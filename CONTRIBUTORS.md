@@ -4,6 +4,7 @@ Contributors
 Contributors to the codebase, in reverse chronological order:
 
 - James Addyman, @james-rantmedia
+- Foti Dim, @fotidim
 - Larry Brunet, @larrybrunet
 - Dave Carlson, @drdavec
 - Sam Oakley, @blork
