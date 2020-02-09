@@ -584,6 +584,7 @@
 					};
 					EEDB8623193FAAE500C4EEA1 = {
 						CreatedOnToolsVersion = 6.0;
+						LastSwiftMigration = 1130;
 					};
 					EEE209461942772800736F1A = {
 						CreatedOnToolsVersion = 6.0;
@@ -1007,7 +1008,7 @@
 				PRODUCT_NAME = OAuth2;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -1029,7 +1030,7 @@
 				PRODUCT_NAME = OAuth2;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

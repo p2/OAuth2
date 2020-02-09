@@ -4,14 +4,28 @@ Changelog
 Version numbering represents the Swift version, plus a running number representing updates, fixes and new features at the same time.
 You can also refer to commit logs to get details on what was implemented, fixed and improved.
 
+### 5.2.0
+
+- Separate setting for `refresh_uri`.  
+  [fotiDim](https://github.com/fotiDim)
+  [#330](https://github.com/p2/OAuth2/pull/330)
+- Add Mac Catalyst support.  
+  [telipskiy](https://github.com/telipskiy)
+  [#328](https://github.com/p2/OAuth2/pull/328)
+- Add PKCE support.  
+  [larrybrunet](https://github.com/larrybrunet)
+  [#324](https://github.com/p2/OAuth2/pull/324)
+
 ### 5.1.0
 
 - Update Swift package configuration for use with XCode 11.
 
 ### 5.0.0
 
-- Swift 5.0 support.
-- Add support for Authentication Session.
+- Swift 5.0 support.  
+  [drdavec](https://github.com/drdavec)
+  [#313](https://github.com/p2/OAuth2/pull/313)
+- Add support for Authentication Session.  
   [blork](https://github.com/blork)
   [#305](https://github.com/p2/OAuth2/pull/305)
 
