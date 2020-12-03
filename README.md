@@ -123,6 +123,14 @@ func application(_ app: UIApplication,
 }
 ```
 
+For iOS 13 make the callback in `SceneDelegate.swift`
+
+```swift
+func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+	oauth2?.handleRedirectURL(url)
+}
+```
+
 You’re all set!
 
 ---
