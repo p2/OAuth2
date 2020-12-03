@@ -127,7 +127,9 @@ For iOS 13 make the callback in `SceneDelegate.swift`
 
 ```swift
 func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
-	oauth2?.handleRedirectURL(url)
+	if let url = URLContexts.first?.url {
+		AppDelegate.shared.oauth2?.handleRedirectURL(url)
+	}
 }
 ```
 
