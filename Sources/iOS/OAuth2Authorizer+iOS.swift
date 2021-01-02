@@ -178,17 +178,16 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 	- parameter at:   The authorize URL to open
 	- returns:        SFSafariViewController, being already presented automatically
 	*/
-	@available(iOS 9.0, *)
 	@discardableResult
 	public func authorizeSafariEmbedded(from controller: UIViewController, at url: URL) throws -> SFSafariViewController {
 		safariViewDelegate = OAuth2SFViewControllerDelegate(authorizer: self)
 		let web = SFSafariViewController(url: url)
 		web.title = oauth2.authConfig.ui.title
 		web.delegate = safariViewDelegate as! OAuth2SFViewControllerDelegate
-		if #available(iOS 10.0, *), let barTint = oauth2.authConfig.ui.barTintColor {
+		if let barTint = oauth2.authConfig.ui.barTintColor {
 			web.preferredBarTintColor = barTint
 		}
-		if #available(iOS 10.0, *), let tint = oauth2.authConfig.ui.controlTintColor {
+		if let tint = oauth2.authConfig.ui.controlTintColor {
 			web.preferredControlTintColor = tint
 		}
 		web.modalPresentationStyle = oauth2.authConfig.ui.modalPresentationStyle
@@ -204,7 +203,6 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 	Called from our delegate, which reacts to users pressing "Done". We can assume this is always a cancel as nomally the Safari view
 	controller is dismissed automatically.
 	*/
-	@available(iOS 9.0, *)
 	func safariViewControllerDidCancel(_ safari: SFSafariViewController) {
 		safariViewDelegate = nil
 		oauth2.didFail(with: nil)
