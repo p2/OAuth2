@@ -152,8 +152,16 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 		return (authenticationSession as! ASWebAuthenticationSession).start()
 #else
 		if #available(iOS 12, *) {
-			authenticationSession = ASWebAuthenticationSession(url: url, callbackURLScheme: redirect, completionHandler: completionHandler)
-			return (authenticationSession as! ASWebAuthenticationSession).start()
+            let webAuthenticationSession = ASWebAuthenticationSession(url: url, callbackURLScheme: redirect, completionHandler: completionHandler)
+            
+            if #available(iOS 13, *) {
+                if let presentationContextProvider = self.oauth2.authConfig.authorizeContext as? ASWebAuthenticationPresentationContextProviding {
+                    webAuthenticationSession.presentationContextProvider = presentationContextProvider
+                }
+            }
+            
+			authenticationSession = webAuthenticationSession
+			return webAuthenticationSession.start()
 		} else {
 			authenticationSession = SFAuthenticationSession(url: url, callbackURLScheme: redirect, completionHandler: completionHandler)
 			return (authenticationSession as! SFAuthenticationSession).start()
@@ -274,7 +282,6 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 		return web
 	}
 }
-
 
 /**
 A custom `SFSafariViewControllerDelegate` that we use with the safari view controller.
