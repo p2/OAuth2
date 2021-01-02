@@ -85,8 +85,8 @@ open class OAuth2WebViewController: UIViewController, WKNavigationDelegate {
 	/// Our web view.
 	var webView: WKWebView?
 	
-	/// An overlay view containing a spinner.
-	var loadingView: UIView?
+	/// An spinner.
+	var loadingView: UIActivityIndicatorView?
 	
 	init() {
 		super.init(nibName: nil, bundle: nil)
@@ -140,8 +140,8 @@ open class OAuth2WebViewController: UIViewController, WKNavigationDelegate {
 	
 	func showHideBackButton(_ show: Bool) {
 		if show {
-			let bb = backButton ?? UIBarButtonItem(barButtonSystemItem: .rewind, target: self, action: #selector(OAuth2WebViewController.goBack(_:)))
-			navigationItem.leftBarButtonItem = bb
+			//let bb = backButton ?? UIBarButtonItem(barButtonSystemItem: .rewind, target: self, action: #selector(OAuth2WebViewController.goBack(_:)))
+			//navigationItem.leftBarButtonItem = bb
 		}
 		else {
 			navigationItem.leftBarButtonItem = nil
@@ -149,17 +149,21 @@ open class OAuth2WebViewController: UIViewController, WKNavigationDelegate {
 	}
 	
 	func showLoadingIndicator() {
-		// TODO: implement
+        	loadingView = UIActivityIndicatorView(style: .gray)
+        	loadingView?.startAnimating()
+        	loadingView?.center = self.view.center
+        	self.view.addSubview(loadingView!)
+        	self.view.bringSubviewToFront(loadingView!)
 	}
 	
 	func hideLoadingIndicator() {
-		// TODO: implement
+        	loadingView?.stopAnimating()
+        	loadingView?.removeFromSuperview()
 	}
 	
 	func showErrorMessage(_ message: String, animated: Bool) {
 		NSLog("Error: \(message)")
 	}
-	
 	
 	// MARK: - Actions
 	
