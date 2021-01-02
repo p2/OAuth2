@@ -42,7 +42,10 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 	
 	/// Used to store the authentication session.
 	private var authenticationSession: AnyObject?
-	
+
+	/// Used to store the ASWebAuthenticationPresentationContextProvider
+	private var webAuthenticationPresentationContextProvider: AnyObject?
+
 	public init(oauth2: OAuth2Base) {
 		self.oauth2 = oauth2
 	}
@@ -142,9 +145,10 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 					self.oauth2.logger?.warn("OAuth2", msg: "Cannot intercept redirect URL: \(err)")
 				}
 			} else {
-				self.oauth2.didFail(with: nil)
+				self.oauth2.didFail(with: error?.asOAuth2Error)
 			}
 			self.authenticationSession = nil
+			self.webAuthenticationPresentationContextProvider = nil
 		}
 
 #if targetEnvironment(macCatalyst)
@@ -153,6 +157,10 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 #else
 		if #available(iOS 12, *) {
 			authenticationSession = ASWebAuthenticationSession(url: url, callbackURLScheme: redirect, completionHandler: completionHandler)
+			if #available(iOS 13.0, *) {
+				webAuthenticationPresentationContextProvider = OAuth2ASWebAuthenticationPresentationContextProvider(authorizer: self)
+				(authenticationSession as! ASWebAuthenticationSession).presentationContextProvider = webAuthenticationPresentationContextProvider as! OAuth2ASWebAuthenticationPresentationContextProvider
+			}
 			return (authenticationSession as! ASWebAuthenticationSession).start()
 		} else {
 			authenticationSession = SFAuthenticationSession(url: url, callbackURLScheme: redirect, completionHandler: completionHandler)
@@ -290,6 +298,24 @@ class OAuth2SFViewControllerDelegate: NSObject, SFSafariViewControllerDelegate {
 	@available(iOS 9.0, *)
 	func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
 		authorizer.safariViewControllerDidCancel(controller)
+	}
+}
+
+@available(iOS 13.0, *)
+class OAuth2ASWebAuthenticationPresentationContextProvider: NSObject, ASWebAuthenticationPresentationContextProviding {
+
+	private let authorizer: OAuth2Authorizer
+
+	init(authorizer: OAuth2Authorizer) {
+		self.authorizer = authorizer
+	}
+
+	public func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
+		guard let context = authorizer.oauth2.authConfig.authorizeContext as? ASPresentationAnchor else {
+			fatalError("Invalid authorizeContext -- must be ASPresentationAnchor (AKA, UIWindow)")
+		}
+
+		return context
 	}
 }
 
