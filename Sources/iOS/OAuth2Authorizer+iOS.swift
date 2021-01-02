@@ -130,12 +130,17 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 	
 	This method dismisses the view controller automatically - this cannot be disabled.
 	
-	- parameter at:   The authorize URL to open
-	- returns:        A Boolean value indicating whether the web authentication session starts successfully.
+	- parameter at:       The authorize URL to open
+	- parameter redirect: The full redirect URL to use
+	- returns:            A Boolean value indicating whether the web authentication session starts successfully.
 	*/
 	@available(iOS 11.0, *)
 	@discardableResult
 	public func authenticationSessionEmbedded(at url: URL, withRedirect redirect: String) -> Bool {
+		guard let redirectURL = URL(string: redirect) else {
+			oauth2.logger?.warn("OAuth2", msg: "Unable to parse redirect URL ”(redirect)“")
+			return false
+		}
 		let completionHandler: (URL?, Error?) -> Void = { url, error in
 			if let url = url {
 				do {
@@ -152,11 +157,11 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 		}
 
 #if targetEnvironment(macCatalyst)
-		authenticationSession = ASWebAuthenticationSession(url: url, callbackURLScheme: redirect, completionHandler: completionHandler)
+		authenticationSession = ASWebAuthenticationSession(url: url, callbackURLScheme: redirectURL.scheme, completionHandler: completionHandler)
 		return (authenticationSession as! ASWebAuthenticationSession).start()
 #else
 		if #available(iOS 12, *) {
-			authenticationSession = ASWebAuthenticationSession(url: url, callbackURLScheme: redirect, completionHandler: completionHandler)
+			authenticationSession = ASWebAuthenticationSession(url: url, callbackURLScheme: redirectURL.scheme, completionHandler: completionHandler)
 			if #available(iOS 13.0, *) {
 				webAuthenticationPresentationContextProvider = OAuth2ASWebAuthenticationPresentationContextProvider(authorizer: self)
 				(authenticationSession as! ASWebAuthenticationSession).presentationContextProvider = webAuthenticationPresentationContextProvider as! OAuth2ASWebAuthenticationPresentationContextProvider
@@ -310,7 +315,7 @@ class OAuth2ASWebAuthenticationPresentationContextProvider: NSObject, ASWebAuthe
 
 	public func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
 		guard let context = authorizer.oauth2.authConfig.authorizeContext as? ASPresentationAnchor else {
-			fatalError("Invalid authorizeContext -- must be ASPresentationAnchor (AKA, UIWindow)")
+			fatalError("Invalid authConfig.authorizeContext, must be ASPresentationAnchor but is \(authorizer.oauth2.authConfig.authorizeContext)")
 		}
 
 		return context
