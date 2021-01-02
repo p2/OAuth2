@@ -6,7 +6,7 @@
 bundle exec jazzy \
 	-o "docs" \
 	--min-acl "internal" \
-	--module-version "5.0.0"
+	--module-version "5.3.0"
 
 mkdir docs/assets 2>/dev/null
 cp assets/* docs/assets/
