@@ -55,7 +55,8 @@ See those `redirect_uris`?
 You can use the scheme you want, but you must **a)** declare the scheme you use in your `Info.plist` and **b)** register the very same URI on the authorization server you connect to.
 
 Note that **as of iOS 9**, you _should_ use [Universal Links](https://developer.apple.com/library/content/documentation/General/Conceptual/AppSearch/UniversalLinks.html) as your redirect URL, rather than a custom app scheme.
-This prevents others from re-using your URI scheme and intercept the authorization flow.
+This prevents others from re-using your URI scheme and intercept the authorization flow.  
+If you **target iOS 12 and newer** you should be using `ASWebAuthenticationSession`, which makes using your own local redirect scheme secure.
 
 Want to avoid switching to Safari and pop up a SafariViewController or NSPanel?
 Set this:
@@ -142,7 +143,7 @@ If you want to dig deeper or do authorization yourself, here it goes:
 ### 4. Manually Authorize the User
 
 By default the OS browser will be used for authorization if there is no access token present or in the keychain.
-**Starting with iOS 9**, `SFSafariViewController` will be used when enabling embedded authorization on iOS.
+**Starting with iOS 12**, `ASWebAuthenticationSession` will be used when enabling embedded authorization on iOS (previously, starting with iOS 9, `SFSafariViewController` was used instead).
 
 To start authorization call **`authorize(params:callback:)`** or, to use embedded authorization, the convenience method `authorizeEmbedded(from:callback:)`.
 
@@ -409,7 +410,7 @@ Starting after version 4.2, on iOS 11 (`SFAuthenticationSession`) and iOS 12 (`A
 
     oauth2.authConfig.ui.useAuthenticationSession = true
 
-To revert to the old custom `OAuth2WebViewController`:
+To revert to the old custom `OAuth2WebViewController`, which you _should not do_ because `ASWebAuthenticationSession` is way more secure:
 
     oauth2.authConfig.ui.useSafariView = false
 
