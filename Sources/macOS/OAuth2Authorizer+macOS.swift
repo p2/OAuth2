@@ -150,6 +150,7 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 	@available(macOS 10.10, *)
 	open func presentableAuthorizeViewController(at url: URL) throws -> OAuth2WebViewController {
 		let controller = OAuth2WebViewController()
+		controller.oauth = oauth2
 		controller.startURL = url
 		controller.interceptURLString = oauth2.redirect!
 		controller.onIntercept = { url in
