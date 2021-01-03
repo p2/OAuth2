@@ -150,7 +150,17 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 					self.oauth2.logger?.warn("OAuth2", msg: "Cannot intercept redirect URL: \(err)")
 				}
 			} else {
-				self.oauth2.didFail(with: error?.asOAuth2Error)
+				if let authenticationSessionError = error as? ASWebAuthenticationSessionError {
+					switch authenticationSessionError.code {
+					case .canceledLogin:
+						self.oauth2.didFail(with: .requestCancelled)
+					default:
+						self.oauth2.didFail(with: error?.asOAuth2Error)
+					}
+				}
+				else {
+					self.oauth2.didFail(with: error?.asOAuth2Error)
+				}
 			}
 			self.authenticationSession = nil
 			self.webAuthenticationPresentationContextProvider = nil
