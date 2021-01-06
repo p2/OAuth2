@@ -4,6 +4,12 @@ Changelog
 Version numbering represents the Swift version, plus a running number representing updates, fixes and new features at the same time.
 You can also refer to commit logs to get details on what was implemented, fixed and improved.
 
+#### 5.3.1
+
+- Fix `ASWebAuthenticationSession` implementation even more.  
+  [cgossain](https://github.com/cgossain)
+  [#357](https://github.com/p2/OAuth2/pull/357)
+
 ### 5.3.0
 
 - Fix `ASWebAuthenticationSession` implementation.  
