@@ -150,7 +150,17 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 					self.oauth2.logger?.warn("OAuth2", msg: "Cannot intercept redirect URL: \(err)")
 				}
 			} else {
-				self.oauth2.didFail(with: error?.asOAuth2Error)
+				if let authenticationSessionError = error as? ASWebAuthenticationSessionError {
+					switch authenticationSessionError.code {
+					case .canceledLogin:
+						self.oauth2.didFail(with: .requestCancelled)
+					default:
+						self.oauth2.didFail(with: error?.asOAuth2Error)
+					}
+				}
+				else {
+					self.oauth2.didFail(with: error?.asOAuth2Error)
+				}
 			}
 			self.authenticationSession = nil
 			self.webAuthenticationPresentationContextProvider = nil
@@ -314,11 +324,11 @@ class OAuth2ASWebAuthenticationPresentationContextProvider: NSObject, ASWebAuthe
 	}
 
 	public func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
-		guard let context = authorizer.oauth2.authConfig.authorizeContext as? ASPresentationAnchor else {
-			fatalError("Invalid authConfig.authorizeContext, must be ASPresentationAnchor but is \(String(describing: authorizer.oauth2.authConfig.authorizeContext))")
+		guard let context = authorizer.oauth2.authConfig.authorizeContext as? UIViewController else {
+			fatalError("Invalid authConfig.authorizeContext, must be a UIViewController but is \(String(describing: authorizer.oauth2.authConfig.authorizeContext))")
 		}
 
-		return context
+		return context.view.window!
 	}
 }
 
