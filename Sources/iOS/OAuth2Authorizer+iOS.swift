@@ -83,7 +83,7 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 				throw OAuth2Error.noRedirectURL
 			}
 			
-			authenticationSessionEmbedded(at: url, withRedirect: redirect)
+			authenticationSessionEmbedded(at: url, withRedirect: redirect, prefersEphemeralWebBrowserSession: config.ui.prefersEphemeralWebBrowserSession)
 		} else {
 			guard let controller = config.authorizeContext as? UIViewController else {
 				throw (nil == config.authorizeContext) ? OAuth2Error.noAuthorizationContext : OAuth2Error.invalidAuthorizationContext
@@ -132,11 +132,12 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 	
 	- parameter at:       The authorize URL to open
 	- parameter redirect: The full redirect URL to use
+	- parameter prefersEphemeralWebBrowserSession: may be passed through to [ASWebAuthenticationSession](https://developer.apple.com/documentation/authenticationservices/aswebauthenticationsession/3237231-prefersephemeralwebbrowsersessio).
 	- returns:            A Boolean value indicating whether the web authentication session starts successfully.
 	*/
 	@available(iOS 11.0, *)
 	@discardableResult
-	public func authenticationSessionEmbedded(at url: URL, withRedirect redirect: String) -> Bool {
+	public func authenticationSessionEmbedded(at url: URL, withRedirect redirect: String, prefersEphemeralWebBrowserSession prefersEphemeralWebBrowserSession: Bool = false) -> Bool {
 		guard let redirectURL = URL(string: redirect) else {
 			oauth2.logger?.warn("OAuth2", msg: "Unable to parse redirect URL ”(redirect)“")
 			return false
@@ -174,7 +175,10 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 			authenticationSession = ASWebAuthenticationSession(url: url, callbackURLScheme: redirectURL.scheme, completionHandler: completionHandler)
 			if #available(iOS 13.0, *) {
 				webAuthenticationPresentationContextProvider = OAuth2ASWebAuthenticationPresentationContextProvider(authorizer: self)
-				(authenticationSession as! ASWebAuthenticationSession).presentationContextProvider = webAuthenticationPresentationContextProvider as! OAuth2ASWebAuthenticationPresentationContextProvider
+				if let session = authenticationSession as? ASWebAuthenticationSession {
+					session.presentationContextProvider = webAuthenticationPresentationContextProvider as! OAuth2ASWebAuthenticationPresentationContextProvider
+					session.prefersEphemeralWebBrowserSession = prefersEphemeralWebBrowserSession
+				}
 			}
 			return (authenticationSession as! ASWebAuthenticationSession).start()
 		} else {

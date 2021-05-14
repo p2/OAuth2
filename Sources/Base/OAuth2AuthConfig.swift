@@ -46,6 +46,9 @@ public struct OAuth2AuthConfig {
 		/// Starting with iOS 12, `ASWebAuthenticationSession` can be used for embedded authorization instead of our custom class. You can turn this on here.
 		public var useAuthenticationSession = false
 		
+		/// May be passed through to [ASWebAuthenticationSession](https://developer.apple.com/documentation/authenticationservices/aswebauthenticationsession/3237231-prefersephemeralwebbrowsersessio).
+		public var prefersEphemeralWebBrowserSession = false
+		
 		#if os(iOS)
 		/// By assigning your own style you can configure how the embedded authorization is presented.
 		public var modalPresentationStyle = UIModalPresentationStyle.fullScreen
