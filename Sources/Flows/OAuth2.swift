@@ -378,6 +378,9 @@ open class OAuth2: OAuth2Base {
 						throw OAuth2Error.generic("Failed with status \(response.response.statusCode)")
 					}
 					self.logger?.debug("OAuth2", msg: "Did use refresh token for access token [\(nil != self.clientConfig.accessToken)]")
+					if (self.useKeychain) {
+						self.storeTokensToKeychain()
+					}
 					callback(json, nil)
 				}
 				catch let error {
