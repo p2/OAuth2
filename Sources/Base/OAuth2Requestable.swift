@@ -218,7 +218,7 @@ public func callOnMainThread(_ callback: (() -> Void)) {
 		callback()
 	}
 	else {
-		DispatchQueue.main.sync(execute: callback)
+		DispatchQueue.main.async(execute: callback)
 	}
 }
 
