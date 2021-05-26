@@ -165,6 +165,9 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 			if #available(iOS 13.0, *) {
 				webAuthenticationPresentationContextProvider = OAuth2ASWebAuthenticationPresentationContextProvider(authorizer: self)
 				(authenticationSession as! ASWebAuthenticationSession).presentationContextProvider = webAuthenticationPresentationContextProvider as! OAuth2ASWebAuthenticationPresentationContextProvider
+				if oauth2 is OAuth2ImplicitGrant {
+					(authenticationSession as! ASWebAuthenticationSession).prefersEphemeralWebBrowserSession = true
+				}
 			}
 			return (authenticationSession as! ASWebAuthenticationSession).start()
 		} else {
