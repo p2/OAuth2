@@ -35,6 +35,7 @@ public protocol OAuth2AuthorizerUI {
 	- parameter url: The authorize URL to open
 	- throws:        UnableToOpenAuthorizeURL on failure
 	*/
+    @available(iOSApplicationExtension, unavailable)
 	func openAuthorizeURLInBrowser(_ url: URL) throws
 	
 	/**
