@@ -826,9 +826,10 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MARKETING_VERSION = 5.3.2;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_SWIFT_FLAGS = "-DNO_KEYCHAIN_IMPORT -DNO_MODULE_IMPORT";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.chip.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_BUNDLE_IDENTIFIER = com.github.p2.OAuth2;
 				PRODUCT_NAME = OAuth2;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
@@ -853,9 +854,10 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MARKETING_VERSION = 5.3.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_SWIFT_FLAGS = "-DNO_KEYCHAIN_IMPORT -DNO_MODULE_IMPORT";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.chip.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_BUNDLE_IDENTIFIER = com.github.p2.OAuth2;
 				PRODUCT_NAME = OAuth2;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
@@ -995,6 +997,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MARKETING_VERSION = 5.3.2;
 				OTHER_SWIFT_FLAGS = "-DNO_KEYCHAIN_IMPORT -DNO_MODULE_IMPORT";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.github.p2.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = OAuth2;
@@ -1017,6 +1020,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MARKETING_VERSION = 5.3.2;
 				OTHER_SWIFT_FLAGS = "-DNO_KEYCHAIN_IMPORT -DNO_MODULE_IMPORT";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.github.p2.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = OAuth2;
@@ -1039,6 +1043,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MARKETING_VERSION = 5.3.2;
 				OTHER_SWIFT_FLAGS = "-DNO_KEYCHAIN_IMPORT -DNO_MODULE_IMPORT";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.github.p2.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = OAuth2;
@@ -1062,6 +1067,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MARKETING_VERSION = 5.3.2;
 				OTHER_SWIFT_FLAGS = "-DNO_KEYCHAIN_IMPORT -DNO_MODULE_IMPORT";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.github.p2.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = OAuth2;

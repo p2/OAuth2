@@ -4,6 +4,15 @@ Changelog
 Version numbering represents the Swift version, plus a running number representing updates, fixes and new features at the same time.
 You can also refer to commit logs to get details on what was implemented, fixed and improved.
 
+#### 5.3.2
+
+- Fix tvOS build.
+  [m4p](https://github.com/m4p)
+  [#372](https://github.com/p2/OAuth2/pull/372)
+- Fix `ASWebAuthenticationSession` for SwiftUI.
+  [longinius](https://github.com/longinius)
+  [#361](https://github.com/p2/OAuth2/pull/361)
+
 #### 5.3.1
 
 - Fix `ASWebAuthenticationSession` implementation even more.  

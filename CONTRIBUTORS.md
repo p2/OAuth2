@@ -3,6 +3,8 @@ Contributors
 
 Contributors to the codebase, in reverse chronological order:
 
+- Martin Pittenauer, @m4p
+- Lars, @longinius
 - Christian Gossain, @cgossain
 - James Addyman, @james-rantmedia
 - Foti Dim, @fotidim

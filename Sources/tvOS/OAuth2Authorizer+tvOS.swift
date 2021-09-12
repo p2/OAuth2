@@ -30,14 +30,11 @@ public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 	/// The OAuth2 instance this authorizer belongs to.
 	public unowned let oauth2: OAuth2Base
 	
-	
 	public init(oauth2: OAuth2Base) {
 		self.oauth2 = oauth2
 	}
 	
-	
 	// no webview or webbrowser available on tvOS
-	
 	public func openAuthorizeURLInBrowser(_ url: URL) throws {
 		throw OAuth2Error.generic("Not implemented")
 	}
