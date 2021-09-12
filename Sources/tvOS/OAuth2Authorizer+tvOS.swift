@@ -31,7 +31,7 @@ public final class OAuth2Authorizer: OAuth2AuthorizerUI {
 	public unowned let oauth2: OAuth2Base
 	
 	
-	init(oauth2: OAuth2) {
+	public init(oauth2: OAuth2Base) {
 		self.oauth2 = oauth2
 	}
 	
