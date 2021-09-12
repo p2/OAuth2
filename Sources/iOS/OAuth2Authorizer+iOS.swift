@@ -328,11 +328,15 @@ class OAuth2ASWebAuthenticationPresentationContextProvider: NSObject, ASWebAuthe
 	}
 
 	public func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
-		guard let context = authorizer.oauth2.authConfig.authorizeContext as? UIViewController else {
-			fatalError("Invalid authConfig.authorizeContext, must be a UIViewController but is \(String(describing: authorizer.oauth2.authConfig.authorizeContext))")
-		}
+        if let context = authorizer.oauth2.authConfig.authorizeContext as? ASPresentationAnchor {
+            return context
+        }
 
-		return context.view.window!
+        if let context = authorizer.oauth2.authConfig.authorizeContext as? UIViewController {
+            return context.view.window!
+        }
+
+        fatalError("Invalid authConfig.authorizeContext, must be an ASPresentationAnchor but is \(String(describing: authorizer.oauth2.authConfig.authorizeContext))")
 	}
 }
 
