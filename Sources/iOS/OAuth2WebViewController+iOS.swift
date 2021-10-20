@@ -112,8 +112,12 @@ open class OAuth2WebViewController: UIViewController, WKNavigationDelegate {
 			navigationItem.rightBarButtonItem = cancelButton
 		}
 		
+		// Use an ephemeral session
+		let config = WKWebViewConfiguration()
+		config.websiteDataStore = WKWebsiteDataStore.nonPersistent()
+		
 		// create a web view
-		let web = WKWebView()
+		let web = WKWebView(frame: view.bounds, configuration: config)
 		web.translatesAutoresizingMaskIntoConstraints = false
 		web.scrollView.decelerationRate = UIScrollView.DecelerationRate.normal
 		web.navigationDelegate = self
