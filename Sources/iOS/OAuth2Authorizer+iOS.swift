@@ -38,7 +38,7 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 	public unowned let oauth2: OAuth2Base
 	
 	/// Used to store the `SFSafariViewControllerDelegate`.
-	private var safariViewDelegate: AnyObject?
+	private weak var safariViewDelegate: AnyObject?
 	
 	/// Used to store the authentication session.
 	private var authenticationSession: AnyObject?
@@ -205,7 +205,7 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 		safariViewDelegate = OAuth2SFViewControllerDelegate(authorizer: self)
 		let web = SFSafariViewController(url: url)
 		web.title = oauth2.authConfig.ui.title
-		web.delegate = safariViewDelegate as! OAuth2SFViewControllerDelegate
+		web.delegate = safariViewDelegate as? OAuth2SFViewControllerDelegate
 		if let barTint = oauth2.authConfig.ui.barTintColor {
 			web.preferredBarTintColor = barTint
 		}
