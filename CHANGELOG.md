@@ -4,6 +4,10 @@ Changelog
 Version numbering represents the Swift version, plus a running number representing updates, fixes and new features at the same time.
 You can also refer to commit logs to get details on what was implemented, fixed and improved.
 
+#### 5.3.3
+
+- Fixed issue with wrong states on dismiss via pull down gesture.
+
 #### 5.3.2
 
 - Fix tvOS build.
