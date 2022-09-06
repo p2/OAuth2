@@ -323,11 +323,11 @@ class OAuth2SFViewControllerDelegate: NSObject, SFSafariViewControllerDelegate, 
 		authorizer?.safariViewControllerDidCancel(controller)
 	}
 
-	// called in case ViewController is dismissed via pulling down the presented sheet.
-	func presentationControllerWillDismiss(_ presentationController: UIPresentationController) {
-		guard let safariViewController = presentationController.presentedViewController as? SFSafariViewController else { return }
-		authorizer?.safariViewControllerDidCancel(safariViewController)
-	}
+    // called in case ViewController is dismissed via pulling down the presented sheet.
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        guard let safariViewController = presentationController.presentedViewController as? SFSafariViewController else { return }
+        authorizer?.safariViewControllerDidCancel(safariViewController)
+    }
 }
 #endif
 
