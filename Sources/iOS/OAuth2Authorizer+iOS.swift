@@ -167,12 +167,8 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 			self.webAuthenticationPresentationContextProvider = nil
 		}
 		
-		#if targetEnvironment(macCatalyst)
 		authenticationSession = ASWebAuthenticationSession(url: url, callbackURLScheme: redirectURL.scheme, completionHandler: completionHandler)
-		return (authenticationSession as! ASWebAuthenticationSession).start()
-		#else
-		authenticationSession = ASWebAuthenticationSession(url: url, callbackURLScheme: redirectURL.scheme, completionHandler: completionHandler)
-		if #available(iOS 13.0, *) {
+		if #available(iOS 13.0, macCatalyst 13.1, *) {
 			webAuthenticationPresentationContextProvider = OAuth2ASWebAuthenticationPresentationContextProvider(authorizer: self)
 			if let session = authenticationSession as? ASWebAuthenticationSession {
 				session.presentationContextProvider = webAuthenticationPresentationContextProvider as! OAuth2ASWebAuthenticationPresentationContextProvider
@@ -180,7 +176,6 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 			}
 		}
 		return (authenticationSession as! ASWebAuthenticationSession).start()
-		#endif
 	}
 	
 	
