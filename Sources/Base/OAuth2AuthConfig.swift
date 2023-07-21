@@ -72,6 +72,9 @@ public struct OAuth2AuthConfig {
 	/// - macOS: An NSWindow from which to present a modal sheet _or_ `nil` to present in a new window
 	public weak var authorizeContext: AnyObject? = nil
 	
+	/// Whether to use the `id_token` instead of the `access_token` for signed requests
+	public var requestUsingIDToken = false
+	
 	/// UI-specific configuration.
 	public var ui = UI()
 }

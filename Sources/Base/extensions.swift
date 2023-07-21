@@ -93,10 +93,17 @@ extension URLRequest {
 	- parameter oauth2: The OAuth2 instance providing the access token to sign the request
 	*/
 	public mutating func sign(with oauth2: OAuth2Base) throws {
-		guard let access = oauth2.clientConfig.accessToken, !access.isEmpty else {
-			throw OAuth2Error.noAccessToken
+		if oauth2.authConfig.requestUsingIDToken {
+			guard let idToken = oauth2.clientConfig.idToken, !idToken.isEmpty else {
+				throw OAuth2Error.noAccessToken
+			}
+			setValue("Bearer \(idToken)", forHTTPHeaderField: "Authorization")
+		} else {
+			guard let access = oauth2.clientConfig.accessToken, !access.isEmpty else {
+				throw OAuth2Error.noAccessToken
+			}
+			setValue("Bearer \(access)", forHTTPHeaderField: "Authorization")
 		}
-		setValue("Bearer \(access)", forHTTPHeaderField: "Authorization")
 	}
 	
 	/**
