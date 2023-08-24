@@ -36,15 +36,23 @@ public struct OAuth2AuthConfig {
 		
 		/// By assigning your own UIBarButtonItem (!) you can override the back button that is shown in the iOS embedded web view (does NOT apply to `SFSafariViewController`).
 		public var backButton: AnyObject? = nil
+        
+        /// If true it makes the login cancellable, otherwise the cancel button is not shown in the embedded web view.
+        public var showCancelButton = true
 		
-		/// If true it makes the login cancellable, otherwise the cancel button is not shown in the embedded web view.
-		public var showCancelButton = true
-		
+        #if os(visionOS) // Must come first per Apple documentation
 		/// Starting with iOS 9, `SFSafariViewController` will be used for embedded authorization instead of our custom class. You can turn this off here.
-		public var useSafariView = true
+		public var useSafariView = false
 		
 		/// Starting with iOS 12, `ASWebAuthenticationSession` can be used for embedded authorization instead of our custom class. You can turn this on here.
-		public var useAuthenticationSession = false
+		public var useAuthenticationSession = true
+        #else
+        /// Starting with iOS 9, `SFSafariViewController` will be used for embedded authorization instead of our custom class. You can turn this off here.
+        public var useSafariView = true
+        
+        /// Starting with iOS 12, `ASWebAuthenticationSession` can be used for embedded authorization instead of our custom class. You can turn this on here.
+        public var useAuthenticationSession = false
+        #endif
 		
 		/// May be passed through to [ASWebAuthenticationSession](https://developer.apple.com/documentation/authenticationservices/aswebauthenticationsession/3237231-prefersephemeralwebbrowsersessio).
 		public var prefersEphemeralWebBrowserSession = false

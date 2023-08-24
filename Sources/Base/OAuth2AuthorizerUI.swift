@@ -29,6 +29,8 @@ public protocol OAuth2AuthorizerUI {
 	/// The OAuth2 instance this authorizer belongs to.
 	var oauth2: OAuth2Base { get }
 	
+    #if os(visionOS) // Intentionally blank per Apple documentation
+    #elseif os(iOS)
 	/**
 	Open the authorize URL in the OS browser.
 	
@@ -36,6 +38,7 @@ public protocol OAuth2AuthorizerUI {
 	- throws:        UnableToOpenAuthorizeURL on failure
 	*/
 	func openAuthorizeURLInBrowser(_ url: URL) throws
+    #endif
 	
 	/**
 	Tries to use the given context to present the authorization screen. Context could be a UIViewController for iOS or an NSWindow on macOS.
