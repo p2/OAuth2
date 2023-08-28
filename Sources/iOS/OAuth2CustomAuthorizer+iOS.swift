@@ -17,8 +17,7 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 //
-#if os(iOS)
-
+#if os(visionOS) || os(iOS)
 import Foundation
 import UIKit
 #if !NO_MODULE_IMPORT
@@ -30,9 +29,7 @@ import Base
 An iOS and tvOS-specific implementation of the `OAuth2CustomAuthorizerUI` protocol which modally presents the login controller.
 */
 public class OAuth2CustomAuthorizer: OAuth2CustomAuthorizerUI {
-	
 	private var presentingController: UIViewController?
-	
 	public init() {  }
 	
 	

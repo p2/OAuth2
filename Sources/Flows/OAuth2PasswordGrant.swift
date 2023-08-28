@@ -23,7 +23,7 @@ import Foundation
  import Base
  #if os(macOS)
   import macOS
- #elseif os(iOS)
+ #elseif os(iOS) || os(visionOS)
   import iOS
  #elseif os(tvOS)
   import tvOS
@@ -68,7 +68,6 @@ open class OAuth2PasswordGrant: OAuth2 {
 	
 	/// Properties used to handle the native controller.
 	open lazy var customAuthorizer: OAuth2CustomAuthorizerUI = OAuth2CustomAuthorizer()
-	
 	/**
 	If credentials are unknown when trying to authorize, the delegate will be asked a login controller to present.
 	
