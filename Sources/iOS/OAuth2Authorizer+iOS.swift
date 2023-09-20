@@ -37,11 +37,11 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 	/// The OAuth2 instance this authorizer belongs to.
 	public unowned let oauth2: OAuth2Base
 	
-    #if os(visionOS) // Intentionally blank per Apple documentation
-    #elseif os(iOS)
+	#if os(visionOS) // Intentionally blank per Apple documentation
+	#elseif os(iOS)
 	/// Used to store the `SFSafariViewControllerDelegate`.
 	private var safariViewDelegate: AnyObject?
-    #endif
+	#endif
 	
 	/// Used to store the authentication session.
 	private var authenticationSession: AnyObject?
@@ -56,8 +56,8 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 	
 	// MARK: - OAuth2AuthorizerUI
 	
-    #if os(visionOS) // Intentionally blank per Apple documentation
-    #elseif os(iOS)
+	#if os(visionOS) // Intentionally blank per Apple documentation
+	#elseif os(iOS)
 	/**
 	Uses `UIApplication` to open the authorize URL in iOS's browser.
 	
@@ -74,8 +74,8 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 		throw OAuth2Error.unableToOpenAuthorizeURL
 		#endif
 	}
-    #endif
-    
+	#endif
+	
 	/**
 	Tries to use the current auth config context, which on iOS should be a UIViewController, to present the authorization screen.
 	
@@ -84,14 +84,14 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 	- parameter at:   The authorize URL to open
 	*/
 	public func authorizeEmbedded(with config: OAuth2AuthConfig, at url: URL) throws {
-        #if os(visionOS) // visionOS must be first per Apple documentation
-        // On visionOS we can only use authentication session, so ignore any configs that say otherwise.
-        guard let redirect = oauth2.redirect else {
-            throw OAuth2Error.noRedirectURL
-        }
-        
-        authenticationSessionEmbedded(at: url, withRedirect: redirect, prefersEphemeralWebBrowserSession: config.ui.prefersEphemeralWebBrowserSession)
-        #elseif os(iOS)
+		#if os(visionOS) // visionOS must be first per Apple documentation
+		// On visionOS we can only use authentication session, so ignore any configs that say otherwise.
+		guard let redirect = oauth2.redirect else {
+			throw OAuth2Error.noRedirectURL
+		}
+		
+		authenticationSessionEmbedded(at: url, withRedirect: redirect, prefersEphemeralWebBrowserSession: config.ui.prefersEphemeralWebBrowserSession)
+		#elseif os(iOS)
 		if #available(iOS 11, *), config.ui.useAuthenticationSession {
 			guard let redirect = oauth2.redirect else {
 				throw OAuth2Error.noRedirectURL
@@ -120,7 +120,7 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 				}
 			}
 		}
-        #endif
+		#endif
 	}
 	
 	/**
@@ -200,8 +200,8 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 	
 	
 	// MARK: - Safari Web View Controller
-    #if os(visionOS) // Intentionally blank per Apple documentation
-    #elseif os(iOS)
+	#if os(visionOS) // Intentionally blank per Apple documentation
+	#elseif os(iOS)
 	/**
 	Presents a Safari view controller from the supplied view controller, loading the authorize URL.
 	
@@ -309,7 +309,7 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 		
 		return web
 	}
-    #endif
+	#endif
 }
 
 

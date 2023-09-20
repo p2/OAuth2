@@ -103,10 +103,10 @@ open class OAuth2WebViewController: UIViewController, WKNavigationDelegate {
 	override open func loadView() {
 		edgesForExtendedLayout = .all
 		extendedLayoutIncludesOpaqueBars = true
-        #if os(visionOS) // Intentionally blank per Apple documentation
-        #elseif os(iOS)
+		#if os(visionOS) // Intentionally blank per Apple documentation
+		#elseif os(iOS)
 		automaticallyAdjustsScrollViewInsets = true
-        #endif
+		#endif
 		
 		super.loadView()
 		view.backgroundColor = UIColor.white
