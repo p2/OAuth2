@@ -221,7 +221,6 @@ open class OAuth2: OAuth2Base {
 	*/
 	open func doAuthorize(params: OAuth2StringDict? = nil) throws {
 		#if os(visionOS) // Must come first per Apple documentation
-//        authorizer.authenticationSessionEmbedded
 		try doAuthorizeEmbedded(with: authConfig, params: params)
 		#elseif os(iOS)
 		if authConfig.authorizeEmbedded {

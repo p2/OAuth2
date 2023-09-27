@@ -29,7 +29,9 @@ import Base
 An iOS and tvOS-specific implementation of the `OAuth2CustomAuthorizerUI` protocol which modally presents the login controller.
 */
 public class OAuth2CustomAuthorizer: OAuth2CustomAuthorizerUI {
+
 	private var presentingController: UIViewController?
+	
 	public init() {  }
 	
 	

@@ -68,6 +68,7 @@ open class OAuth2PasswordGrant: OAuth2 {
 	
 	/// Properties used to handle the native controller.
 	open lazy var customAuthorizer: OAuth2CustomAuthorizerUI = OAuth2CustomAuthorizer()
+	
 	/**
 	If credentials are unknown when trying to authorize, the delegate will be asked a login controller to present.
 	
