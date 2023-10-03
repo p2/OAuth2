@@ -98,7 +98,7 @@ open class OAuth2: OAuth2Base {
 	
 	- parameter params:   Optional key/value pairs to pass during authorization and token refresh
 	- parameter callback: The callback to call when authorization finishes (parameters will be non-nil but may be an empty dict), fails or
-                      is canceled (error will be non-nil, e.g. `.requestCancelled` if auth was aborted)
+	                      is canceled (error will be non-nil, e.g. `.requestCancelled` if auth was aborted)
 	*/
 	public final func authorize(params: OAuth2StringDict? = nil, callback: @escaping ((OAuth2JSON?, OAuth2Error?) -> Void)) {
 		if isAuthorizing {
@@ -142,7 +142,7 @@ open class OAuth2: OAuth2Base {
 	- parameter from:     The context to start authorization from, depends on platform (UIViewController or NSWindow, see `authorizeContext`)
 	- parameter params:   Optional key/value pairs to pass during authorization
 	- parameter callback: The callback to call when authorization finishes (parameters will be non-nil but may be an empty dict), fails or
-                      is canceled (error will be non-nil, e.g. `.requestCancelled` if auth was aborted)
+	                      is canceled (error will be non-nil, e.g. `.requestCancelled` if auth was aborted)
 	*/
 	open func authorizeEmbedded(from context: AnyObject, params: OAuth2StringDict? = nil, callback: @escaping ((_ authParameters: OAuth2JSON?, _ error: OAuth2Error?) -> Void)) {
 		if isAuthorizing {		// `authorize()` will check this, but we want to exit before changing `authConfig`
@@ -181,7 +181,7 @@ open class OAuth2: OAuth2Base {
 	
 	- parameter params:   Optional key/value pairs to pass during authorization
 	- parameter callback: The callback to call once the client knows whether it has an access token or not; if `success` is true an
-                      access token is present
+	                      access token is present
 	*/
 	open func tryToObtainAccessTokenIfNeeded(params: OAuth2StringDict? = nil, callback: @escaping ((OAuth2JSON?, OAuth2Error?) -> Void)) {
 		if hasUnexpiredAccessToken() {
@@ -268,7 +268,7 @@ open class OAuth2: OAuth2Base {
 	Method that creates the OAuth2AuthRequest instance used to create the authorize URL
 	
 	- parameter redirect: The redirect URI string to supply. If it is nil, the first value of the settings' `redirect_uris` entries is
-                      used. Must be present in the end!
+	                      used. Must be present in the end!
 	- parameter scope:    The scope to request
 	- parameter params:   Any additional parameters as dictionary with string keys and values that will be added to the query part
 	- returns:            OAuth2AuthRequest to be used to call to the authorize endpoint
@@ -318,7 +318,7 @@ open class OAuth2: OAuth2Base {
 	Convenience method to be overridden by and used from subclasses.
 	
 	- parameter redirect: The redirect URI string to supply. If it is nil, the first value of the settings' `redirect_uris` entries is
-                      used. Must be present in the end!
+	                      used. Must be present in the end!
 	- parameter scope:    The scope to request
 	- parameter params:   Any additional parameters as dictionary with string keys and values that will be added to the query part
 	- returns:            NSURL to be used to start the OAuth dance
@@ -412,7 +412,7 @@ open class OAuth2: OAuth2Base {
 	If both are nil, instantiates a blank `OAuth2DynReg` instead, then attempts client registration.
 	
 	- parameter callback: The callback to call on the main thread; if both json and error is nil no registration was attempted; error is nil
-                      on success
+	                      on success
 	*/
 	public func registerClientIfNeeded(callback: @escaping ((OAuth2JSON?, OAuth2Error?) -> Void)) {
 		if nil != clientId || !type(of: self).clientIdMandatory {
