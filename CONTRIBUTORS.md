@@ -3,6 +3,7 @@ Contributors
 
 Contributors to the codebase, in reverse chronological order:
 
+- Joseph Quigley, @josephquigley
 - Martin Pittenauer, @m4p
 - Lars, @longinius
 - Christian Gossain, @cgossain
