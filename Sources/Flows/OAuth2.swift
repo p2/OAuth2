@@ -391,6 +391,9 @@ open class OAuth2: OAuth2Base {
 					callback(json, nil)
 				}
 				catch let error {
+					// Fixes [Issue #367](https://github.com/p2/OAuth2/issues/367)
+					// Refresh token needs to be cleared out upon error, otherwise re-authorizing will not ocurr because the library thinks it has a valid refresh token and tries to fetch a new access token with an expired refresh token.
+					self.clientConfig.refreshToken = nil
 					self.logger?.debug("OAuth2", msg: "Error refreshing access token: \(error)")
 					callback(nil, error.asOAuth2Error)
 				}
