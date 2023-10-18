@@ -23,7 +23,7 @@ import Foundation
  import Base
  #if os(macOS)
   import macOS
- #elseif os(iOS)
+ #elseif os(iOS) || os(visionOS)
   import iOS
  #elseif os(tvOS)
   import tvOS
@@ -220,14 +220,20 @@ open class OAuth2: OAuth2Base {
 	- parameter params: Optional key/value pairs to pass during authorization
 	*/
 	open func doAuthorize(params: OAuth2StringDict? = nil) throws {
+		#if os(visionOS) // Must come first per Apple documentation
+		try doAuthorizeEmbedded(with: authConfig, params: params)
+		#elseif os(iOS)
 		if authConfig.authorizeEmbedded {
 			try doAuthorizeEmbedded(with: authConfig, params: params)
 		}
 		else {
 			try doOpenAuthorizeURLInBrowser(params: params)
 		}
+		#endif
 	}
 	
+	#if os(visionOS) // Intentionally blank per Apple documentation
+	#elseif os(iOS)
 	/**
 	Open the authorize URL in the OS's browser. Forwards to the receiver's `authorizer`, which is a platform-dependent implementation of
 	`OAuth2AuthorizerUI`.
@@ -240,6 +246,7 @@ open class OAuth2: OAuth2Base {
 		logger?.debug("OAuth2", msg: "Opening authorize URL in system browser: \(url)")
 		try authorizer.openAuthorizeURLInBrowser(url)
 	}
+	#endif
 	
 	/**
 	Tries to use the current auth config context, which on iOS should be a UIViewController and on OS X a NSViewController, to present the
