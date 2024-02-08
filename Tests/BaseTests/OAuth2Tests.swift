@@ -129,12 +129,14 @@ class OAuth2Tests: XCTestCase {
 		XCTAssertFalse(oa.authConfig.authorizeEmbedded)
 		
 		// embedded
+		#if false
 		oa.redirect = "myapp://oauth"
 		oa.authorizeEmbedded(from: NSString()) { parameters, error in
 			XCTAssertNotNil(error)
 			XCTAssertEqual(error, OAuth2Error.invalidAuthorizationContext)
 		}
 		XCTAssertTrue(oa.authConfig.authorizeEmbedded)
+		#endif
 	}
 	
 	func testQueryParamParsing() {

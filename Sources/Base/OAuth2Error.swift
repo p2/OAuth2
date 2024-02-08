@@ -64,6 +64,9 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 	/// The authorization context is invalid.
 	case invalidAuthorizationContext
 	
+	/// The auth configuration is invalid.
+	case invalidAuthorizationConfiguration(String)
+	
 	/// The redirect URL is invalid; with explanation.
 	case invalidRedirectURL(String)
 	
@@ -222,6 +225,8 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 			return "No authorization context present"
 		case .invalidAuthorizationContext:
 			return "Invalid authorization context"
+		case .invalidAuthorizationConfiguration(let reason):
+			return "Invalid authorization configuration: \(reason)"
 		case .invalidRedirectURL(let url):
 			return "Invalid redirect URL: \(url)"
 		case .noAccessToken:
@@ -299,6 +304,7 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 		case (.alreadyAuthorizing, .alreadyAuthorizing):             return true
 		case (.noAuthorizationContext, .noAuthorizationContext):                 return true
 		case (.invalidAuthorizationContext, .invalidAuthorizationContext):       return true
+		case (.invalidAuthorizationConfiguration(let l), .invalidAuthorizationConfiguration(let r)):	return l == r
 		case (.invalidRedirectURL(let lhu), .invalidRedirectURL(let rhu)):       return lhu == rhu
 		case (.noAccessToken, .noAccessToken):                       return true
 		case (.noRefreshToken, .noRefreshToken):                     return true

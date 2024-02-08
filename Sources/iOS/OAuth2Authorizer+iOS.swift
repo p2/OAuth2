@@ -37,11 +37,8 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 	/// The OAuth2 instance this authorizer belongs to.
 	public unowned let oauth2: OAuth2Base
 	
-	#if os(visionOS) // Intentionally blank per Apple documentation
-	#elseif os(iOS)
 	/// Used to store the `SFSafariViewControllerDelegate`.
 	private var safariViewDelegate: AnyObject?
-	#endif
 	
 	/// Used to store the authentication session.
 	private var authenticationSession: AnyObject?
@@ -56,8 +53,6 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 	
 	// MARK: - OAuth2AuthorizerUI
 	
-	#if os(visionOS) // Intentionally blank per Apple documentation
-	#elseif os(iOS)
 	/**
 	Uses `UIApplication` to open the authorize URL in iOS's browser.
 	
@@ -66,15 +61,19 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 	*/
 	public func openAuthorizeURLInBrowser(_ url: URL) throws {
 		
-		#if !P2_APP_EXTENSIONS
-		if !UIApplication.shared.openURL(url) {
+		#if !P2_APP_EXTENSIONS && !os(visionOS)
+		guard UIApplication.shared.canOpenURL(url) else {
 			throw OAuth2Error.unableToOpenAuthorizeURL
+		}
+		UIApplication.shared.open(url) { didOpen in
+			if !didOpen {
+				self.oauth2.logger?.warn("OAuth2", msg: "Unable to open authorize URL")
+			}
 		}
 		#else
 		throw OAuth2Error.unableToOpenAuthorizeURL
 		#endif
 	}
-	#endif
 	
 	/**
 	Tries to use the current auth config context, which on iOS should be a UIViewController, to present the authorization screen.
@@ -84,30 +83,25 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 	- parameter at:   The authorize URL to open
 	*/
 	public func authorizeEmbedded(with config: OAuth2AuthConfig, at url: URL) throws {
-		#if os(visionOS) // visionOS must be first per Apple documentation
-		// On visionOS we can only use authentication session, so ignore any configs that say otherwise.
-		guard let redirect = oauth2.redirect else {
-			throw OAuth2Error.noRedirectURL
-		}
-		
-		authenticationSessionEmbedded(at: url, withRedirect: redirect, prefersEphemeralWebBrowserSession: config.ui.prefersEphemeralWebBrowserSession)
-		#elseif os(iOS)
-		if #available(iOS 11, *), config.ui.useAuthenticationSession {
+		if config.ui.useAuthenticationSession {
 			guard let redirect = oauth2.redirect else {
 				throw OAuth2Error.noRedirectURL
 			}
 			
 			authenticationSessionEmbedded(at: url, withRedirect: redirect, prefersEphemeralWebBrowserSession: config.ui.prefersEphemeralWebBrowserSession)
 		} else {
+			#if os(visionOS)
+			throw OAuth2Error.invalidAuthorizationConfiguration("visionOS only supports ASWebAuthenticationSession")
+			#else
 			guard let controller = config.authorizeContext as? UIViewController else {
 				throw (nil == config.authorizeContext) ? OAuth2Error.noAuthorizationContext : OAuth2Error.invalidAuthorizationContext
 			}
 			
-			if #available(iOS 9, *), config.ui.useSafariView {
+			if config.ui.useSafariView {
 				let web = try authorizeSafariEmbedded(from: controller, at: url)
 				if config.authorizeEmbeddedAutoDismiss {
 					oauth2.internalAfterAuthorizeOrFail = { wasFailure, error in
-						safariViewDelegate = nil
+						self.safariViewDelegate = nil
 						web.dismiss(animated: true)
 					}
 				}
@@ -120,8 +114,8 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 					}
 				}
 			}
+			#endif
 		}
-		#endif
 	}
 	
 	/**
@@ -183,12 +177,8 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 			self.webAuthenticationPresentationContextProvider = nil
 		}
 		
-		#if targetEnvironment(macCatalyst)
 		authenticationSession = ASWebAuthenticationSession(url: url, callbackURLScheme: redirectURL.scheme, completionHandler: completionHandler)
-		return (authenticationSession as! ASWebAuthenticationSession).start()
-		#else
-		authenticationSession = ASWebAuthenticationSession(url: url, callbackURLScheme: redirectURL.scheme, completionHandler: completionHandler)
-		if #available(iOS 13.0, *) {
+		if #available(iOS 13.0, macCatalyst 13.1, *) {
 			webAuthenticationPresentationContextProvider = OAuth2ASWebAuthenticationPresentationContextProvider(authorizer: self)
 			if let session = authenticationSession as? ASWebAuthenticationSession {
 				session.presentationContextProvider = webAuthenticationPresentationContextProvider as! OAuth2ASWebAuthenticationPresentationContextProvider
@@ -196,7 +186,6 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 			}
 		}
 		return (authenticationSession as! ASWebAuthenticationSession).start()
-		#endif
 	}
 	
 	
@@ -352,7 +341,7 @@ class OAuth2ASWebAuthenticationPresentationContextProvider: NSObject, ASWebAuthe
 			return context.view.window!
 		}
 		
-		fatalError("Invalid authConfig.authorizeContext, must be an ASPresentationAnchor but is \(String(describing: authorizer.oauth2.authConfig.authorizeContext))")
+		fatalError("Invalid authConfig.authorizeContext, must be an ASPresentationAnchor but is \(type(of: authorizer.oauth2.authConfig.authorizeContext))")
 	}
 }
 
