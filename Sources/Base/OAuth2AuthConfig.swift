@@ -62,6 +62,7 @@ public struct OAuth2AuthConfig {
 	}
 	
 	/// Whether to use an embedded web view for authorization (true) or the OS browser (false, the default).
+	@available(*, deprecated, message: "This will be removed in v6.")
 	public var authorizeEmbedded = false
 	
 	/// Whether to automatically dismiss the auto-presented authorization screen.

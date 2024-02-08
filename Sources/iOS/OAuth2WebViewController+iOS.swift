@@ -30,6 +30,7 @@ import Base
 /**
 A simple iOS web view controller that allows you to display the login/authorization screen.
 */
+@available(*, deprecated, message: "Use ASWebAuthenticationSession (preferred) or SFSafariWebViewController. This will be removed in v6.")
 open class OAuth2WebViewController: UIViewController, WKNavigationDelegate {
 	
 	/// Handle to the OAuth2 instance in play, only used for debug lugging at this time.

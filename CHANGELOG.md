@@ -4,6 +4,11 @@ Changelog
 Version numbering represents the Swift version, plus a running number representing updates, fixes and new features at the same time.
 You can also refer to commit logs to get details on what was implemented, fixed and improved.
 
+#### 5.3.3
+
+- Minor maintenance
+- Add deprecation notices to embedded auth, which will be removed in v 6.
+
 #### 5.3.2
 
 - Fix tvOS build.

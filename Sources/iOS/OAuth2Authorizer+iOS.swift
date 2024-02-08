@@ -250,6 +250,7 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 	- parameter at:   The authorize URL to open
 	- returns: OAuth2WebViewController, embedded in a UINavigationController being presented automatically
 	*/
+	@available(*, deprecated, message: "Use ASWebAuthenticationSession (preferred) or SFSafariWebViewController. This will be removed in v6.")
 	public func authorizeEmbedded(from controller: UIViewController, at url: URL) throws -> OAuth2WebViewController {
 		guard let redirect = oauth2.redirect else {
 			throw OAuth2Error.noRedirectURL
