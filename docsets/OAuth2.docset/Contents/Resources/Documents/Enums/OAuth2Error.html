@@ -21,27 +21,27 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="../index.html">
-          OAuth2 Docs
+          OAuth2 5.3.3 Docs
         </a>
-         (98% documented)
+         (97% documented)
       </p>
     
-      <p class="header-col--secondary">
+      <div class="header-col--secondary">
         <form role="search" action="../search.json">
           <input type="text" placeholder="Search documentation" data-typeahead>
         </form>
-      </p>
+      </div>
     
         <p class="header-col header-col--secondary">
           <a class="header-link" href="https://github.com/p2/OAuth2">
-            <img class="header-icon" src="../img/gh.png"/>
+            <img class="header-icon" src="../img/gh.png" alt="GitHub"/>
             View on GitHub
           </a>
         </p>
     
         <p class="header-col header-col--secondary">
-          <a class="header-link" href="dash-feed://https%3A%2F%2Fp2%2Egithub%2Eio%2Fdocsets%2FOAuth2%2Exml">
-            <img class="header-icon" src="../img/dash.png"/>
+          <a class="header-link" href="dash-feed://https%3A%2F%2Fp2.github.io%2FOAuth2%2Fdocsets%2FOAuth2.xml">
+            <img class="header-icon" src="../img/dash.png" alt="Dash"/>
             Install in Dash
           </a>
         </p>
@@ -49,7 +49,7 @@
 
     <p class="breadcrumbs">
       <a class="breadcrumb" href="../index.html">OAuth2 Reference</a>
-      <img class="carat" src="../img/carat.png" />
+      <img class="carat" src="../img/carat.png" alt=""/>
       OAuth2Error Enumeration Reference
     </p>
 
@@ -95,16 +95,16 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a class="nav-group-name-link" href="../Errors &amp; Types.html">Errors &amp; Types</a>
+            <a class="nav-group-name-link" href="../Errors%20%26%20Types.html">Errors &amp; Types</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/OAuth2Error.html">OAuth2Error</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Errors &amp; Types.html#/s:6OAuth20A4JSONa">OAuth2JSON</a>
+                <a class="nav-group-task-link" href="../Errors%20%26%20Types.html#/s:6OAuth20A4JSONa">OAuth2JSON</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Errors &amp; Types.html#/s:6OAuth20A10StringDicta">OAuth2StringDict</a>
+                <a class="nav-group-task-link" href="../Errors%20%26%20Types.html#/s:6OAuth20A10StringDicta">OAuth2StringDict</a>
               </li>
             </ul>
           </li>
@@ -147,7 +147,7 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a class="nav-group-name-link" href="../Dyn Reg.html">Dyn Reg</a>
+            <a class="nav-group-name-link" href="../Dyn%20Reg.html">Dyn Reg</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Classes/OAuth2DynReg.html">OAuth2DynReg</a>
@@ -181,7 +181,7 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a class="nav-group-name-link" href="../Logging &amp; Debugging.html">Logging &amp; Debugging</a>
+            <a class="nav-group-name-link" href="../Logging%20%26%20Debugging.html">Logging &amp; Debugging</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Protocols/OAuth2Logger.html">OAuth2Logger</a>
@@ -227,7 +227,7 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a class="nav-group-name-link" href="../Other Extensions.html">Other Extensions</a>
+            <a class="nav-group-name-link" href="../Other%20Extensions.html">Other Extensions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Extensions/CharacterSet.html">CharacterSet</a>
@@ -239,9 +239,6 @@
                 <a class="nav-group-task-link" href="../Extensions/HTTPURLResponse.html">HTTPURLResponse</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Extensions/KeychainGenericPasswordType.html">KeychainGenericPasswordType</a>
-              </li>
-              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Extensions/String.html">String</a>
               </li>
               <li class="nav-group-task">
@@ -250,10 +247,10 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a class="nav-group-name-link" href="../Other Functions.html">Other Functions</a>
+            <a class="nav-group-name-link" href="../Other%20Functions.html">Other Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Other Functions.html#/s:6OAuth216callOnMainThreadyyyyXEF">callOnMainThread(_:)</a>
+                <a class="nav-group-task-link" href="../Other%20Functions.html#/s:6OAuth216callOnMainThreadyyyyXEF">callOnMainThread(_:)</a>
               </li>
             </ul>
           </li>
@@ -262,10 +259,11 @@
       <article class="main-content">
 
         <section class="section">
-          <div class="section-content">
+          <div class="section-content top-matter">
             <h1>OAuth2Error</h1>
               <div class="declaration">
                 <div class="language">
+                  
                   <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OAuth2Error</span> <span class="p">:</span> <span class="kt">Error</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
 
                 </div>
@@ -286,7 +284,7 @@
                     <code>
                     <a name="/s:6OAuth20A5ErrorO7genericyACSScACmF"></a>
                     <a name="//apple_ref/swift/Element/generic(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:6OAuth20A5ErrorO7genericyACSScACmF">generic(_:)</a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO7genericyACSScACmF">generic(_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -313,7 +311,7 @@
                     <code>
                     <a name="/s:6OAuth20A5ErrorO02nsB0yACSo7NSErrorCcACmF"></a>
                     <a name="//apple_ref/swift/Element/nsError(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:6OAuth20A5ErrorO02nsB0yACSo7NSErrorCcACmF">nsError(_:)</a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO02nsB0yACSo7NSErrorCcACmF">nsError(_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -340,7 +338,7 @@
                     <code>
                     <a name="/s:6OAuth20A5ErrorO20invalidURLComponentsyAC10Foundation0D0VcACmF"></a>
                     <a name="//apple_ref/swift/Element/invalidURLComponents(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:6OAuth20A5ErrorO20invalidURLComponentsyAC10Foundation0D0VcACmF">invalidURLComponents(_:)</a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO20invalidURLComponentsyAC10Foundation0D0VcACmF">invalidURLComponents(_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -368,9 +366,11 @@
               <div class="task-name-container">
                 <a name="/Client%20errors"></a>
                 <a name="//apple_ref/swift/Section/Client errors" class="dashAnchor"></a>
-                <a href="#/Client%20errors">
-                  <h3 class="section-name">Client errors</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Client%20errors"></a>
+                  <h3 class="section-name"><span>Client errors</span>
+</h3>
+                </div>
               </div>
               <ul class="item-container">
                 <li class="item">
@@ -592,9 +592,36 @@
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:6OAuth20A5ErrorO33invalidAuthorizationConfigurationyACSScACmF"></a>
+                    <a name="//apple_ref/swift/Element/invalidAuthorizationConfiguration(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO33invalidAuthorizationConfigurationyACSScACmF">invalidAuthorizationConfiguration(_:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The auth configuration is invalid.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="nf">invalidAuthorizationConfiguration</span><span class="p">(</span><span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:6OAuth20A5ErrorO18invalidRedirectURLyACSScACmF"></a>
                     <a name="//apple_ref/swift/Element/invalidRedirectURL(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:6OAuth20A5ErrorO18invalidRedirectURLyACSScACmF">invalidRedirectURL(_:)</a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO18invalidRedirectURLyACSScACmF">invalidRedirectURL(_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -702,7 +729,7 @@
                     <code>
                     <a name="/s:6OAuth20A5ErrorO22invalidLoginControlleryACSS_SStcACmF"></a>
                     <a name="//apple_ref/swift/Element/invalidLoginController(actualType:expectedType:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:6OAuth20A5ErrorO22invalidLoginControlleryACSS_SStcACmF">invalidLoginController(actualType:expectedType:)</a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO22invalidLoginControlleryACSS_SStcACmF">invalidLoginController(actualType:<wbr>expectedType:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -757,9 +784,11 @@
               <div class="task-name-container">
                 <a name="/Request%20errors"></a>
                 <a name="//apple_ref/swift/Section/Request errors" class="dashAnchor"></a>
-                <a href="#/Request%20errors">
-                  <h3 class="section-name">Request errors</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Request%20errors"></a>
+                  <h3 class="section-name"><span>Request errors</span>
+</h3>
+                </div>
               </div>
               <ul class="item-container">
                 <li class="item">
@@ -821,7 +850,7 @@
                     <code>
                     <a name="/s:6OAuth20A5ErrorO14invalidRequestyACSSSgcACmF"></a>
                     <a name="//apple_ref/swift/Element/invalidRequest(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:6OAuth20A5ErrorO14invalidRequestyACSSSgcACmF">invalidRequest(_:)</a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO14invalidRequestyACSSSgcACmF">invalidRequest(_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -876,9 +905,11 @@
               <div class="task-name-container">
                 <a name="/Response%20Errors"></a>
                 <a name="//apple_ref/swift/Section/Response Errors" class="dashAnchor"></a>
-                <a href="#/Response%20Errors">
-                  <h3 class="section-name">Response Errors</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Response%20Errors"></a>
+                  <h3 class="section-name"><span>Response Errors</span>
+</h3>
+                </div>
               </div>
               <ul class="item-container">
                 <li class="item">
@@ -913,7 +944,7 @@
                     <code>
                     <a name="/s:6OAuth20A5ErrorO20unsupportedTokenTypeyACSScACmF"></a>
                     <a name="//apple_ref/swift/Element/unsupportedTokenType(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:6OAuth20A5ErrorO20unsupportedTokenTypeyACSScACmF">unsupportedTokenType(_:)</a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO20unsupportedTokenTypeyACSScACmF">unsupportedTokenType(_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -967,7 +998,7 @@
                     <code>
                     <a name="/s:6OAuth20A5ErrorO18prerequisiteFailedyACSScACmF"></a>
                     <a name="//apple_ref/swift/Element/prerequisiteFailed(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:6OAuth20A5ErrorO18prerequisiteFailedyACSScACmF">prerequisiteFailed(_:)</a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO18prerequisiteFailedyACSScACmF">prerequisiteFailed(_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1130,9 +1161,11 @@
               <div class="task-name-container">
                 <a name="/OAuth2%20errors"></a>
                 <a name="//apple_ref/swift/Section/OAuth2 errors" class="dashAnchor"></a>
-                <a href="#/OAuth2%20errors">
-                  <h3 class="section-name">OAuth2 errors</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/OAuth2%20errors"></a>
+                  <h3 class="section-name"><span>OAuth2 errors</span>
+</h3>
+                </div>
               </div>
               <ul class="item-container">
                 <li class="item">
@@ -1140,7 +1173,7 @@
                     <code>
                     <a name="/s:6OAuth20A5ErrorO18unauthorizedClientyACSSSgcACmF"></a>
                     <a name="//apple_ref/swift/Element/unauthorizedClient(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:6OAuth20A5ErrorO18unauthorizedClientyACSSSgcACmF">unauthorizedClient(_:)</a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO18unauthorizedClientyACSSSgcACmF">unauthorizedClient(_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1221,7 +1254,7 @@
                     <code>
                     <a name="/s:6OAuth20A5ErrorO12accessDeniedyACSSSgcACmF"></a>
                     <a name="//apple_ref/swift/Element/accessDenied(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:6OAuth20A5ErrorO12accessDeniedyACSSSgcACmF">accessDenied(_:)</a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO12accessDeniedyACSSSgcACmF">accessDenied(_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1248,7 +1281,7 @@
                     <code>
                     <a name="/s:6OAuth20A5ErrorO23unsupportedResponseTypeyACSSSgcACmF"></a>
                     <a name="//apple_ref/swift/Element/unsupportedResponseType(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:6OAuth20A5ErrorO23unsupportedResponseTypeyACSSSgcACmF">unsupportedResponseType(_:)</a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO23unsupportedResponseTypeyACSSSgcACmF">unsupportedResponseType(_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1275,7 +1308,7 @@
                     <code>
                     <a name="/s:6OAuth20A5ErrorO12invalidScopeyACSSSgcACmF"></a>
                     <a name="//apple_ref/swift/Element/invalidScope(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:6OAuth20A5ErrorO12invalidScopeyACSSSgcACmF">invalidScope(_:)</a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO12invalidScopeyACSSSgcACmF">invalidScope(_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1329,7 +1362,7 @@
                     <code>
                     <a name="/s:6OAuth20A5ErrorO22temporarilyUnavailableyACSSSgcACmF"></a>
                     <a name="//apple_ref/swift/Element/temporarilyUnavailable(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:6OAuth20A5ErrorO22temporarilyUnavailableyACSSSgcACmF">temporarilyUnavailable(_:)</a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO22temporarilyUnavailableyACSSSgcACmF">temporarilyUnavailable(_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1356,7 +1389,7 @@
                     <code>
                     <a name="/s:6OAuth20A5ErrorO12invalidGrantyACSSSgcACmF"></a>
                     <a name="//apple_ref/swift/Element/invalidGrant(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:6OAuth20A5ErrorO12invalidGrantyACSSSgcACmF">invalidGrant(_:)</a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO12invalidGrantyACSSSgcACmF">invalidGrant(_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1383,7 +1416,7 @@
                     <code>
                     <a name="/s:6OAuth20A5ErrorO08responseB0yACSScACmF"></a>
                     <a name="//apple_ref/swift/Element/responseError(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:6OAuth20A5ErrorO08responseB0yACSScACmF">responseError(_:)</a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO08responseB0yACSScACmF">responseError(_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1410,7 +1443,7 @@
                     <code>
                     <a name="/s:6OAuth20A5ErrorO012fromResponseB0_11description8fallbackACSS_SSSgAGtFZ"></a>
                     <a name="//apple_ref/swift/Method/fromResponseError(_:description:fallback:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:6OAuth20A5ErrorO012fromResponseB0_11description8fallbackACSS_SSSgAGtFZ">fromResponseError(_:description:fallback:)</a>
+                    <a class="token" href="#/s:6OAuth20A5ErrorO012fromResponseB0_11description8fallbackACSS_SSSgAGtFZ">fromResponseError(_:<wbr>description:<wbr>fallback:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1441,7 +1474,7 @@
                               </td>
                               <td>
                                 <div>
-                                  <p>The code, like <q>access_denied</q>, that should be interpreted</p>
+                                  <p>The code, like &ldquo;access_denied&rdquo;, that should be interpreted</p>
                                 </div>
                               </td>
                             </tr>
@@ -1512,9 +1545,11 @@
               <div class="task-name-container">
                 <a name="/Equatable"></a>
                 <a name="//apple_ref/swift/Section/Equatable" class="dashAnchor"></a>
-                <a href="#/Equatable">
-                  <h3 class="section-name">Equatable</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Equatable"></a>
+                  <h3 class="section-name"><span>Equatable</span>
+</h3>
+                </div>
               </div>
               <ul class="item-container">
                 <li class="item">
@@ -1522,7 +1557,7 @@
                     <code>
                     <a name="/s:SQ2eeoiySbx_xtFZ"></a>
                     <a name="//apple_ref/swift/Method/==(_:_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:SQ2eeoiySbx_xtFZ">==(_:_:)</a>
+                    <a class="token" href="#/s:SQ2eeoiySbx_xtFZ">==(_:<wbr>_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1551,9 +1586,8 @@
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2019 <a class="link" href="https://github.com/p2" target="_blank" rel="external">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2019-01-10)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>&copy; 2024 <a class="link" href="https://github.com/p2" target="_blank" rel="external noopener">Pascal Pfiffner</a>. All rights reserved. (Last updated: 2024-02-08)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>
-</div>
 </html>
