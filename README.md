@@ -83,7 +83,7 @@ Starting with version 3.0, there is an `OAuth2DataLoader` class that you can use
 It will automatically start authorization if needed and will ensure that this works even if you have multiple calls going on.
 For details on how to configure authorization see step 4 below, in this example we'll use "embedded" authorization, meaning we'll show a SFSafariViewController on iOS if the user needs to log in.
 
-[This wiki page has all you need](https://github.com/p2/OAuth2/wiki/Alamofire-4) to easily use OAuth2 with Alamofire instead.
+[This wiki page has all you need](https://github.com/p2/OAuth2/wiki/Alamofire-5) to easily use OAuth2 with Alamofire instead.
 
 ```swift
 let base = URL(string: "https://api.github.com")!
