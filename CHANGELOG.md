@@ -6,8 +6,9 @@ You can also refer to commit logs to get details on what was implemented, fixed 
 
 #### 5.3.3
 
+- Make ASWebAuthenticationSession work on macOS
 - Minor maintenance
-- Add deprecation notices to embedded auth, which will be removed in v 6.
+- Add deprecation notices to using the custom web view controller on iOS, which will be removed in v 6.
 
 #### 5.3.2
 

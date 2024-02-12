@@ -263,6 +263,7 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 	
 	- returns: OAuth2WebViewController, embedded in a UINavigationController being presented automatically
 	*/
+	@available(*, deprecated, message: "Use ASWebAuthenticationSession (preferred) or SFSafariWebViewController. This will be removed in v6.")
 	final func presentAuthorizeView(forURL url: URL, intercept: String, from controller: UIViewController) -> OAuth2WebViewController {
 		let web = OAuth2WebViewController()
 		web.title = oauth2.authConfig.ui.title
@@ -342,7 +343,7 @@ class OAuth2ASWebAuthenticationPresentationContextProvider: NSObject, ASWebAuthe
 			return context.view.window!
 		}
 		
-		fatalError("Invalid authConfig.authorizeContext, must be an ASPresentationAnchor but is \(type(of: authorizer.oauth2.authConfig.authorizeContext))")
+		fatalError("Invalid authConfig.authorizeContext, must be an ASPresentationAnchor or UIViewController but is \(type(of: authorizer.oauth2.authConfig.authorizeContext))")
 	}
 }
 
