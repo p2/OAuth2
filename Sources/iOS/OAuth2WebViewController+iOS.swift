@@ -17,7 +17,8 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 //
-#if os(iOS)
+#if os(visionOS) // Intentionally blank per Apple documentation
+#elseif os(iOS)
 
 import UIKit
 import WebKit
@@ -29,6 +30,7 @@ import Base
 /**
 A simple iOS web view controller that allows you to display the login/authorization screen.
 */
+@available(*, deprecated, message: "Use ASWebAuthenticationSession (preferred) or SFSafariWebViewController. This will be removed in v6.")
 open class OAuth2WebViewController: UIViewController, WKNavigationDelegate {
 	
 	/// Handle to the OAuth2 instance in play, only used for debug lugging at this time.
@@ -102,7 +104,10 @@ open class OAuth2WebViewController: UIViewController, WKNavigationDelegate {
 	override open func loadView() {
 		edgesForExtendedLayout = .all
 		extendedLayoutIncludesOpaqueBars = true
+		#if os(visionOS) // Intentionally blank per Apple documentation
+		#elseif os(iOS)
 		automaticallyAdjustsScrollViewInsets = true
+		#endif
 		
 		super.loadView()
 		view.backgroundColor = UIColor.white

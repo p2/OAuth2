@@ -1,4 +1,4 @@
-// swift-tools-version:5.0
+// swift-tools-version:5.3
 //
 //  Package.swift
 //  OAuth2
@@ -24,7 +24,7 @@ import PackageDescription
 let package = Package(
 	name: "OAuth2",
 	platforms: [
-		.macOS(.v10_13), .iOS(.v12), .tvOS(.v12), .watchOS(.v5)
+		.macOS(.v10_15), .iOS(.v12), .tvOS(.v12), .watchOS(.v5)
 	],
 	products: [
 		.library(name: "OAuth2", targets: ["OAuth2"]),

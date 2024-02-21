@@ -23,7 +23,9 @@ import Cocoa
 #if !NO_MODULE_IMPORT
 import Base
 #endif
-
+#if canImport(AuthenticationServices)
+import AuthenticationServices
+#endif
 
 /**
 The authorizer to use when on the macOS platform.
@@ -39,6 +41,10 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 	/// Stores the default `NSWindowController` created to contain the web view controller.
 	var windowController: NSWindowController?
 	
+	/// Used to store the authentication session.
+	var authenticationSession: AnyObject?
+	
+	var webAuthenticationPresentationContextProvider: AnyObject?
 	
 	/**
 	Designated initializer.
@@ -74,8 +80,15 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 	- throws:         Can throw OAuth2Error if the method is unable to show the authorize screen
 	*/
 	public func authorizeEmbedded(with config: OAuth2AuthConfig, at url: URL) throws {
-		guard #available(macOS 10.10, *) else {
-			throw OAuth2Error.generic("Embedded authorizing is only available in OS X 10.10 and later")
+		if #available(macOS 10.15, *), config.ui.useAuthenticationSession {
+			guard let redirect = oauth2.redirect else {
+				throw OAuth2Error.noRedirectURL
+			}
+			
+			try startAuthenticationSession(at: url,
+										   withRedirect: redirect,
+										   prefersEphemeralWebBrowserSession: config.ui.prefersEphemeralWebBrowserSession)
+			return
 		}
 		
 		// present as sheet
@@ -99,6 +112,53 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 			}
 		}
 	}
+	
+	#if canImport(AuthenticationServices)
+	@available(macOS 10.15, *)
+	@discardableResult
+	public func startAuthenticationSession(
+		at url: URL,
+		withRedirect redirect: String,
+		prefersEphemeralWebBrowserSession: Bool = false
+	) throws -> Bool {
+		guard let redirectURL = URL(string: redirect) else {
+			throw OAuth2Error.invalidRedirectURL(redirect)
+		}
+		
+		let completionHandler: (URL?, Error?) -> Void = { url, error in
+			if let url {
+				do {
+					try self.oauth2.handleRedirectURL(url)
+				} catch let err {
+					self.oauth2.logger?.warn("OAuth2", msg: "Cannot intercept redirect URL: \(err)")
+				}
+			} else {
+				if let authenticationSessionError = error as? ASWebAuthenticationSessionError {
+					switch authenticationSessionError.code {
+					case .canceledLogin:
+						self.oauth2.didFail(with: .requestCancelled)
+					default:
+						self.oauth2.didFail(with: error?.asOAuth2Error)
+					}
+				} else {
+					self.oauth2.didFail(with: error?.asOAuth2Error)
+				}
+			}
+			self.authenticationSession = nil
+			self.webAuthenticationPresentationContextProvider = nil
+		}
+		
+		authenticationSession = ASWebAuthenticationSession(url: url,
+														   callbackURLScheme: redirectURL.scheme,
+														   completionHandler: completionHandler)
+		webAuthenticationPresentationContextProvider = OAuth2ASWebAuthenticationPresentationContextProvider(authorizer: self)
+		if let session = authenticationSession as? ASWebAuthenticationSession {
+			session.presentationContextProvider = webAuthenticationPresentationContextProvider as! OAuth2ASWebAuthenticationPresentationContextProvider
+			session.prefersEphemeralWebBrowserSession = prefersEphemeralWebBrowserSession
+		}
+		return (authenticationSession as! ASWebAuthenticationSession).start()
+	}
+	#endif
 	
 	
 	// MARK: - Window Creation
@@ -195,5 +255,24 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 		return windowController
 	}
 }
+
+#if canImport(AuthenticationServices)
+@available(macOS 10.15, *)
+class OAuth2ASWebAuthenticationPresentationContextProvider: NSObject, ASWebAuthenticationPresentationContextProviding {
+	
+	private let authorizer: OAuth2Authorizer
+	
+	init(authorizer: OAuth2Authorizer) {
+		self.authorizer = authorizer
+	}
+	
+	public func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
+		if let context = authorizer.oauth2.authConfig.authorizeContext as? ASPresentationAnchor {
+			return context
+		}
+		fatalError("Invalid authConfig.authorizeContext, must be an ASPresentationAnchor but is \(type(of: authorizer.oauth2.authConfig.authorizeContext))")
+	}
+}
+#endif
 
 #endif

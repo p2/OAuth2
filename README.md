@@ -1,17 +1,17 @@
 OAuth2
 ======
 
-[![Build Status](https://travis-ci.org/p2/OAuth2.svg?branch=master)](https://travis-ci.org/p2/OAuth2)
+[![Build Status](https://travis-ci.org/p2/OAuth2.svg?branch=main)](https://travis-ci.org/p2/OAuth2)
 [![License](https://img.shields.io/:license-apache-blue.svg)](LICENSE.txt)
 
-OAuth2 frameworks for **macOS**, **iOS** and **tvOS** written in Swift 5.0.
+OAuth2 frameworks for **macOS**, **iOS** and **tvOS** written in Swift 5.
 
 - [⤵️ Installation](#installation)
 - [🛠 Usage](#usage)
 - [🖥 Sample macOS app][sample] (with data loader examples)
 - [📖 Technical Documentation](https://p2.github.io/OAuth2)
 
-OAuth2 requires Xcode 10.2, the built framework can be used on **OS X 10.11** or **iOS 8** and later.
+OAuth2 requires Xcode 12.4, the built framework can be used on **OS X 10.15** or **iOS 12** and later.
 Happy to accept pull requests, please see [CONTRIBUTING.md](./CONTRIBUTING.md)
 
 ### Swift Version
@@ -83,7 +83,7 @@ Starting with version 3.0, there is an `OAuth2DataLoader` class that you can use
 It will automatically start authorization if needed and will ensure that this works even if you have multiple calls going on.
 For details on how to configure authorization see step 4 below, in this example we'll use "embedded" authorization, meaning we'll show a SFSafariViewController on iOS if the user needs to log in.
 
-[This wiki page has all you need](https://github.com/p2/OAuth2/wiki/Alamofire-4) to easily use OAuth2 with Alamofire instead.
+[This wiki page has all you need](https://github.com/p2/OAuth2/wiki/Alamofire-5) to easily use OAuth2 with Alamofire instead.
 
 ```swift
 let base = URL(string: "https://api.github.com")!
@@ -206,7 +206,7 @@ let task = oauth2.session.dataTaskWithRequest(req) { data, response, error in
 task.resume()
 ```
 
-Of course you can use your own `URLSession` with these requests, you don't have to use `oauth2.session`; use [OAuth2DataLoader](https://github.com/p2/OAuth2/blob/master/Sources/Base/OAuth2DataLoader.swift), as shown in step 2, or hand it over to _Alamofire_.
+Of course you can use your own `URLSession` with these requests, you don't have to use `oauth2.session`; use [OAuth2DataLoader](https://github.com/p2/OAuth2/blob/main/Sources/Base/OAuth2DataLoader.swift), as shown in step 2, or hand it over to _Alamofire_.
 [Here's all you need](https://github.com/p2/OAuth2/wiki/Alamofire-4) to easily use OAuth2 with Alamofire.
 
 ### 7. Cancel Authorization
