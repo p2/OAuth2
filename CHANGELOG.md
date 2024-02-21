@@ -4,11 +4,16 @@ Changelog
 Version numbering represents the Swift version, plus a running number representing updates, fixes and new features at the same time.
 You can also refer to commit logs to get details on what was implemented, fixed and improved.
 
+#### 5.3.4
+
+- Fixed issue with wrong states on dismiss via pull down gesture.
+
 #### 5.3.3
 
 - Make ASWebAuthenticationSession work on macOS
 - Minor maintenance
 - Add deprecation notices to using the custom web view controller on iOS, which will be removed in v 6.
+
 
 #### 5.3.2
 
