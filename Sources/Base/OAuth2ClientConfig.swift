@@ -96,6 +96,9 @@ open class OAuth2ClientConfig {
 	///
 	open var useProofKeyForCodeExchange = false
 
+	/// Optional custom User-Agent string for embedded mode.
+	open var customUserAgent: String?
+
 	/**
 	Initializer to initialize properties from a settings dictionary.
 	*/
@@ -156,6 +159,7 @@ open class OAuth2ClientConfig {
 			useProofKeyForCodeExchange = usePKCE
 		}
 		
+		customUserAgent = settings["custom_user_agent"] as? String
 	}
 	
 	

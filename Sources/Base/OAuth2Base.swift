@@ -120,6 +120,12 @@ open class OAuth2Base: OAuth2Securable {
 		get { return clientConfig.customParameters }
 		set { clientConfig.customParameters = newValue }
 	}
+
+	/// The optional User-Agent string to use for embedded mode.
+	public final var customUserAgent: String? {
+		get { return clientConfig.customUserAgent }
+		set { clientConfig.customUserAgent = newValue }
+	}
 	
 	
 	/// This closure is internally used with `authorize(params:callback:)` and only exposed for subclassing reason, do not mess with it!
@@ -158,7 +164,8 @@ open class OAuth2Base: OAuth2Securable {
 	- refresh_uri (URL-String), if omitted the token_uri will be used to obtain tokens
 	- redirect_uris (Array of URL-Strings)
 	- scope (String)
-	
+	- custom_user_agent (String)
+
 	- client_name (String)
 	- registration_uri (URL-String)
 	- logo_uri (URL-String)

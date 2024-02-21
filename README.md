@@ -405,6 +405,12 @@ Similar is how you specify custom HTTP headers:
     // or in your settings:
     "headers": ["Accept": "application/json, text/plain"]
 
+Some sites (e.g. Slack) validate the User-Agent string against supported browser versions, which may not match WebKit's default in embedded mode. The embedded mode User-Agent may be overriden with:
+
+    oauth2.customUserAgent = "Version/15.6.1 Safari"
+    // or in your settings:
+    "custom_user_agent": "Your string of choice"
+
 Starting with version 2.0.1 on iOS 9, `SFSafariViewController` will be used for embedded authorization.
 Starting after version 4.2, on iOS 11 (`SFAuthenticationSession`) and iOS 12 (`ASWebAuthenticationSession`), you can opt-in to these newer authorization session view controllers:
 

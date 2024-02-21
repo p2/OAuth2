@@ -125,6 +125,7 @@ public class OAuth2WebViewController: NSViewController, WKNavigationDelegate, NS
 		web.translatesAutoresizingMaskIntoConstraints = false
 		web.navigationDelegate = self
 		web.alphaValue = 0.0
+		web.customUserAgent = oauth?.customUserAgent
 		webView = web
 		
 		view.addSubview(web)
