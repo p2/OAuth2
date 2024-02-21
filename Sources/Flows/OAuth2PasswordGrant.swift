@@ -23,7 +23,7 @@ import Foundation
  import Base
  #if os(macOS)
   import macOS
- #elseif os(iOS)
+ #elseif os(iOS) || os(visionOS)
   import iOS
  #elseif os(tvOS)
   import tvOS
@@ -34,7 +34,7 @@ import Foundation
 /**
 An object adopting this protocol is responsible of the creation of the login controller
 */
-public protocol OAuth2PasswordGrantDelegate: class {
+public protocol OAuth2PasswordGrantDelegate: AnyObject {
 	
 	/**
 	Instantiates and configures the login controller to present.

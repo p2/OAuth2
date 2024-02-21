@@ -37,16 +37,6 @@
          </BuildableReference>
       </MacroExpansion>
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "EEE209A119427DFE00736F1A"
-               BuildableName = "OAuth2Tests.xctest"
-               BlueprintName = "OAuth2Tests"
-               ReferencedContainer = "container:OAuth2.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

@@ -12,6 +12,6 @@ end
 
 # For releasing to GitHub
 group :release do
-	gem 'cocoapods', '~> 1.6.0.beta.2'
+	gem 'cocoapods'
 	gem 'jazzy'
 end

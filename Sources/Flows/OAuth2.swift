@@ -23,7 +23,7 @@ import Foundation
  import Base
  #if os(macOS)
   import macOS
- #elseif os(iOS)
+ #elseif os(iOS) || os(visionOS)
   import iOS
  #elseif os(tvOS)
   import tvOS
@@ -144,6 +144,7 @@ open class OAuth2: OAuth2Base {
 	- parameter callback: The callback to call when authorization finishes (parameters will be non-nil but may be an empty dict), fails or
 	                      is canceled (error will be non-nil, e.g. `.requestCancelled` if auth was aborted)
 	*/
+	@available(*, deprecated, message: "Use ASWebAuthenticationSession (preferred) or SFSafariWebViewController. This will be removed in v6.")
 	open func authorizeEmbedded(from context: AnyObject, params: OAuth2StringDict? = nil, callback: @escaping ((_ authParameters: OAuth2JSON?, _ error: OAuth2Error?) -> Void)) {
 		if isAuthorizing {		// `authorize()` will check this, but we want to exit before changing `authConfig`
 			callback(nil, OAuth2Error.alreadyAuthorizing)
@@ -378,6 +379,9 @@ open class OAuth2: OAuth2Base {
 						throw OAuth2Error.generic("Failed with status \(response.response.statusCode)")
 					}
 					self.logger?.debug("OAuth2", msg: "Did use refresh token for access token [\(nil != self.clientConfig.accessToken)]")
+					if (self.useKeychain) {
+						self.storeTokensToKeychain()
+					}
 					callback(json, nil)
 				}
 				catch let error {
