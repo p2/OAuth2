@@ -26,6 +26,9 @@ open class OAuth2ClientConfig {
 	/// The URL to authorize against.
 	public final let authorizeURL: URL
 	
+	/// The URL to obtain the device code.
+	public final var deviceAuthorizeURL: URL?
+	
 	/// The URL where we can exchange a code for a token.
 	public final var tokenURL: URL?
 
@@ -114,9 +117,12 @@ open class OAuth2ClientConfig {
 		}
 		authorizeURL = aURL ?? URL(string: "https://localhost/p2.OAuth2.defaultAuthorizeURI")!
 		
-		// token, registration and logo URLs
+		// token, device code, registration and logo URLs
 		if let token = settings["token_uri"] as? String {
 			tokenURL = URL(string: token)
+		}
+		if let deviceAuthorize = settings["device_authorize_uri"] as? String {
+			deviceAuthorizeURL = URL(string: deviceAuthorize)
 		}
 		if let refresh = settings["refresh_uri"] as? String {
 			refreshURL = URL(string: refresh)
