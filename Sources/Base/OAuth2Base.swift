@@ -64,6 +64,11 @@ open class OAuth2Base: OAuth2Securable {
 	public final var authURL: URL {
 		get { return clientConfig.authorizeURL }
 	}
+    
+	/// The URL to obtain the device code.
+	public final var deviceAuthorizeURL: URL? {
+		get { return clientConfig.deviceAuthorizeURL }
+	}
 
 	/// The URL string where we can exchange a code for a token; if nil `authURL` will be used.
 	public final var tokenURL: URL? {

@@ -46,6 +46,9 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 	/// There is no client secret.
 	case noClientSecret
 	
+	/// There is no device code URL.
+	case noDeviceCodeURL
+	
 	/// There is no redirect URL.
 	case noRedirectURL
 	
@@ -159,7 +162,16 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 
 	/// Invalid grant. Passes the underlying error_description.
 	case invalidGrant(String?)
-
+	
+	/// The authorization request is still pending. Passes the underlying error_description.
+	case authorizationPending(String?)
+	
+	/// The authorization request is still pending, but the polling interval MUST be increased by 5 seconds. Passes the underlying error_description.
+	case slowDown(String?)
+	
+	/// The "device_code" has expired. Passes the underlying error_description.
+	case expiredToken(String?)
+	
 	/// Other response error, as defined in its String.
 	case responseError(String)
 	
@@ -190,6 +202,12 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 			return .temporarilyUnavailable(description)
 		case "invalid_grant":
 			return .invalidGrant(description)
+		case "authorization_pending":
+			return .authorizationPending(description)
+		case "slow_down":
+			return .slowDown(description)
+		case "expired_token":
+			return .expiredToken(description)
 		default:
 			return .responseError(description ?? fallback ?? "Authorization error: \(code)")
 		}
@@ -209,6 +227,8 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 			return "Client id not set"
 		case .noClientSecret:
 			return "Client secret not set"
+		case .noDeviceCodeURL:
+			return "Device code URL not set"
 		case .noRedirectURL:
 			return "Redirect URL not set"
 		case .noUsername:
@@ -282,6 +302,12 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 			return message ?? "The authorization server is currently unable to handle the request due to a temporary overloading or maintenance of the server."
 		case .invalidGrant(let message):
 			return message ?? "The authorization grant or refresh token is invalid, expired, revoked, does not match the redirection URI used in the authorization request, or was issued to another client."
+		case .authorizationPending(let message):
+			return message ?? "The authorization request is still pending as the end user hasn't yet completed the user-interaction steps."
+		case .slowDown(let message):
+			return message ?? "The authorization request is still pending and polling should continue, but the interval must be increased by 5 seconds for this and all subsequent requests."
+		case .expiredToken(let message):
+			return message ?? "The \"device_code\" has expired, and the device authorization session has concluded."
 		case .responseError(let message):
 			return message
 		}
@@ -298,6 +324,7 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 		
 		case (.noClientId, .noClientId):                             return true
 		case (.noClientSecret, .noClientSecret):                     return true
+		case (.noDeviceCodeURL, .noDeviceCodeURL):                   return true
 		case (.noRedirectURL, .noRedirectURL):                       return true
 		case (.noUsername, .noUsername):                             return true
 		case (.noPassword, .noPassword):                             return true
@@ -332,6 +359,9 @@ public enum OAuth2Error: Error, CustomStringConvertible, Equatable {
 		case (.serverError, .serverError):                           return true
 		case (.temporarilyUnavailable(let lhm), .temporarilyUnavailable(let rhm)):     return lhm == rhm
 		case (.invalidGrant(let lhm), .invalidGrant(let rhm)):       return lhm == rhm
+		case (.authorizationPending, .authorizationPending):         return true
+		case (.slowDown, .slowDown):                                 return true
+		case (.expiredToken, .expiredToken):                         return true
 		case (.responseError(let lhm), .responseError(let rhm)):     return lhm == rhm
 		default:                                                     return false
 		}
