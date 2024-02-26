@@ -4,6 +4,12 @@ Changelog
 Version numbering represents the Swift version, plus a running number representing updates, fixes and new features at the same time.
 You can also refer to commit logs to get details on what was implemented, fixed and improved.
 
+#### 5.3.4
+
+- Support OAuth2 Device Grant via `OAuth2DeviceGrant`
+  [DominikPalo](https://github.com/DominikPalo)
+  [#416](https://github.com/p2/OAuth2/pull/416)
+
 #### 5.3.3
 
 - Make ASWebAuthenticationSession work on macOS
