@@ -37,8 +37,8 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 	/// The OAuth2 instance this authorizer belongs to.
 	public unowned let oauth2: OAuth2Base
 	
-	/// Used to store the `SFSafariViewControllerDelegate`.
-	private var safariViewDelegate: AnyObject?
+	/// Used to store the `SFSafariViewControllerDelegate` || `UIAdaptivePresentationControllerDelegate`
+	private var safariViewDelegate: OAuth2SFViewControllerDelegate?
 	
 	/// Used to store the authentication session.
 	private var authenticationSession: AnyObject?
@@ -211,7 +211,7 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 		safariViewDelegate = OAuth2SFViewControllerDelegate(authorizer: self)
 		let web = SFSafariViewController(url: url)
 		web.title = oauth2.authConfig.ui.title
-		web.delegate = safariViewDelegate as! OAuth2SFViewControllerDelegate
+		web.delegate = safariViewDelegate
 		if let barTint = oauth2.authConfig.ui.barTintColor {
 			web.preferredBarTintColor = barTint
 		}
@@ -222,7 +222,7 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 		
 		willPresent(viewController: web, in: nil)
 		controller.present(web, animated: true, completion: nil)
-		
+		web.presentationController?.delegate = safariViewDelegate
 		return web
 	}
 	
@@ -310,9 +310,9 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 /**
 A custom `SFSafariViewControllerDelegate` that we use with the safari view controller.
 */
-class OAuth2SFViewControllerDelegate: NSObject, SFSafariViewControllerDelegate {
+class OAuth2SFViewControllerDelegate: NSObject, SFSafariViewControllerDelegate, UIAdaptivePresentationControllerDelegate {
 	
-	let authorizer: OAuth2Authorizer
+	weak var authorizer: OAuth2Authorizer?
 	
 	init(authorizer: OAuth2Authorizer) {
 		self.authorizer = authorizer
@@ -320,8 +320,14 @@ class OAuth2SFViewControllerDelegate: NSObject, SFSafariViewControllerDelegate {
 	
 	@available(iOS 9.0, *)
 	func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
-		authorizer.safariViewControllerDidCancel(controller)
+		authorizer?.safariViewControllerDidCancel(controller)
 	}
+
+    // called in case ViewController is dismissed via pulling down the presented sheet.
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        guard let safariViewController = presentationController.presentedViewController as? SFSafariViewController else { return }
+        authorizer?.safariViewControllerDidCancel(safariViewController)
+    }
 }
 #endif
 

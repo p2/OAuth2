@@ -9,6 +9,9 @@ You can also refer to commit logs to get details on what was implemented, fixed 
 - Support OAuth2 Device Grant via `OAuth2DeviceGrant`
   [DominikPalo](https://github.com/DominikPalo)
   [#416](https://github.com/p2/OAuth2/pull/416)
+- Fixed issue with wrong states on dismiss via pull down gesture.
+  [cbruns1985](https://github.com/cbruns1985)
+  [#415](https://github.com/p2/OAuth2/pull/415)
 
 #### 5.3.3
 
