@@ -37,8 +37,10 @@ open class OAuth2Authorizer: OAuth2AuthorizerUI {
 	/// The OAuth2 instance this authorizer belongs to.
 	public unowned let oauth2: OAuth2Base
 	
+#if !os(visionOS)
 	/// Used to store the `SFSafariViewControllerDelegate` || `UIAdaptivePresentationControllerDelegate`
 	private var safariViewDelegate: OAuth2SFViewControllerDelegate?
+#endif
 	
 	/// Used to store the authentication session.
 	private var authenticationSession: AnyObject?
