@@ -432,12 +432,15 @@ open class OAuth2Base: OAuth2Securable {
 	This method checks `state`, throws `OAuth2Error.missingState` or `OAuth2Error.invalidState`. Resets state if it matches.
 	*/
 	public final func assureMatchesState(_ params: OAuth2JSON) throws {
-		guard let state = params["state"] as? String, !state.isEmpty else {
-			throw OAuth2Error.missingState
-		}
-		logger?.trace("OAuth2", msg: "Checking state, got “\(state)”, expecting “\(context.state)”")
-		if !context.matchesState(state) {
-			throw OAuth2Error.invalidState
+		if let state = params["state"] as? String, !state.isEmpty {
+			logger?.trace("OAuth2", msg: "Checking state, got “\(state)”, expecting “\(context.state)”")
+			if !context.matchesState(state) {
+				throw OAuth2Error.invalidState
+			}
+		} else {
+			if !clientConfig.stateParameterOptional {
+				throw OAuth2Error.missingState
+			}
 		}
 		context.resetState()
 	}
